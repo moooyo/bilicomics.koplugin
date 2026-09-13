@@ -1,0 +1,39 @@
+{
+  "checks": {
+    "all_recorded_processes_terminal": true,
+    "completed_real_candidate_run": true,
+    "copied_input_remains_absent": true,
+    "every_deletion_target_prevalidated": true,
+    "exact_dedicated_work_root": true,
+    "live_private_directory_empty": true,
+    "no_identified_process_uses_private_work": true,
+    "nonoptimized_authorized_wsl_user": true,
+    "offline_launcher_terminal": true,
+    "online_launcher_terminal": true,
+    "preflight_private_targets_absent": true,
+    "public_reports_tests_and_candidate_unchanged": true,
+    "targets_within_only_this_work": true,
+    "visible_profile_and_original_input_outside_scope": true,
+    "work_and_private_owned_and_restricted": true
+  },
+  "code_sha256": {
+    "archive": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+    "candidate_production_manifest": "a8c7e93eae557ec9f59f1404848d7fc82de5282c7fd4ef989c760ba3d136d21e",
+    "candidate_results": "cdebac914aac891c5c6abe7d28231fc7ff8d80b1e8fbbf7c93de65ebbeb621df",
+    "cleanup_script": "db7746de490c96e899b66f44fb9caf9586cad000dc51e69721e725565490be8e",
+    "live_results": "a454bb0955f3fb04de2b8306ad5321eb7b0e0c009687dc8224ab2d7971168ecc",
+    "source_production_manifest": "6b326bf5ca777176c25a5972938921ca43331e441f821fcf7d3f595f479f82f7"
+  },
+  "counts": {
+    "matching_recorded_processes": 0,
+    "other_process_environments_unreadable": 2,
+    "preserved_public_and_code_files": 269,
+    "private_directories_removed": 36,
+    "private_files_removed": 193,
+    "private_process_references": 0,
+    "process_record_files": 1,
+    "process_records": 49,
+    "remaining_private_targets": 0
+  },
+  "passed": true
+}

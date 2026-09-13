@@ -4,10 +4,12 @@ Date: 2026-09-13. Version: `0.1.0-dev`.
 
 Current follow-up: [architecture stabilization](architecture-stabilization.md)
 has completed the reviewed dispatch/completion fixes, all 34 unified remote
-suites, canonical packaging, and a real 45-page online/offline run against the
-matching production tree. Live QR confirmation/renewal and physical-device
-acceptance remain open. The user confirmed that the Scribe is currently
-unavailable. Actual purchasing remains separately unauthorized.
+suites, canonical packaging, and real 45-page online/offline runs against the
+matching production tree on test-env and local WSL KOReader. Real QR confirmation,
+private saving, process restart and a normal session check passed. The user
+replaced the physical Scribe gate with local KOReader acceptance and explicitly
+deferred credential rotation/old-token confirmation after the service returned
+refresh=false. Actual purchasing remains separately unauthorized.
 
 ## Historical implementation and evidence
 

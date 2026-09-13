@@ -1,4 +1,4 @@
-"""Validate a private session or select one bounded free chapter on test-env.
+"""Validate a private session or select one bounded free chapter on a selected host.
 
 The source and driver hashes bind public booleans and counts to the exact code.
 Credentials, chapter identities, source paths and raw logs stay in private files.
@@ -13,7 +13,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from run_live_reading import code_manifest, digest, manifest_digest, mkdir_private, protected_inputs, regular_path, write_json
+from run_live_reading import code_manifest, digest, execution_context, manifest_digest, mkdir_private, protected_inputs, regular_path, write_json
 
 
 def main():
@@ -24,11 +24,12 @@ def main():
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--session", type=Path, required=True)
     parser.add_argument("--select", action="store_true")
+    parser.add_argument("--execution-host", choices=("test-env", "local-wsl"), default="test-env")
     args = parser.parse_args()
     report = {"passed": False, "checks": {}, "counts": {}}
     trusted_work = None
     try:
-        assert sys.platform == "linux" and os.geteuid() == 0
+        report["execution"] = execution_context(args.execution_host)
         args.runtime = args.runtime.resolve(strict=True)
         args.source = args.source.resolve(strict=True)
         assert not args.work.exists() and not args.work.is_symlink()

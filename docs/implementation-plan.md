@@ -272,6 +272,12 @@ M0 can validate authenticated reading and quote contracts without spending. A re
 
 Run tests and runtime verification only through `ssh test-env` unless the user explicitly authorizes local verification for the current task. Use synthetic fixtures for repeatable core behavior and authorized account content for integration. Do not turn a mock quote or simulated file arrival into a claim of successful production payment or networking.
 
+Task-specific acceptance revision on 2026-09-13: the user explicitly authorized
+local KOReader verification and removed physical Scribe execution as a gate for
+the current stabilization task. Use the actual local WSL/WSLg KOReader runtime
+with isolated profiles for that acceptance. This does not declare physical
+Kindle compatibility or change the independent actual-purchase authorization.
+
 Current authorization, updated by the user on 2026-09-13: operations other than actual purchasing are allowed. Read-only quote, eligibility and wallet investigation may use the provided session. Synthetic purchase-state and request-construction tests may run with artificial account data, an explicitly injected in-memory transport and network isolation; they must not reach a real purchase endpoint or consume real assets. Actual purchases, including zero-price purchase requests or coupon spending, remain prohibited. Recharge, new rental/item entitlements and automatic-purchase-setting changes remain outside the product scope. The earlier reading-only reports omitted quote and wallet reads under their narrower scope; they are historical evidence, not the current authorization. Purchase implementation remains required, and simulated results must never be presented as successful real transactions.
 
 Required groups:

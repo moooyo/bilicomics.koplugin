@@ -1,0 +1,46 @@
+{
+  "environment": "User-authorized local Debian WSL2 with visible WSLg X11 windows",
+  "runtime_version": "v2026.07.1",
+  "runtime_luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "archive_sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+  "packaged_files": 101,
+  "existing_profiles_touched": false,
+  "real_purchases": 0,
+  "session_imported": false,
+  "profile": "/home/moooyo/.local/share/bilicomics-acceptance/candidate-45385c6f-rg5l4bo5/profile",
+  "phases": [
+    {
+      "width": 720,
+      "height": 960,
+      "video_driver": "x11",
+      "native_ui_ready": true,
+      "selected_archive_files_match": true,
+      "provider_patch_matches": true,
+      "native_exit_completed": true,
+      "pid": 23464,
+      "anonymous_screenshots": 2
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "video_driver": "x11",
+      "native_ui_ready": true,
+      "selected_archive_files_match": true,
+      "provider_patch_matches": true,
+      "native_exit_completed": true,
+      "pid": 23507,
+      "anonymous_screenshots": 2
+    }
+  ],
+  "source_sha256": {
+    "launch_koreader.py": "5a952e6210554d1b37274c1f435b7ebf1d4349315aa590b932139441dd0f2515",
+    "verify_candidate.py": "56cccc7f2636fea0dfaea1eaecd59d538dee6e2bb916d9cec3536c7ae7921255",
+    "startup.lua": "d3e3df29a9d652763c205bc4654ef5e1f1c2ee74b9b96540fd3a18562396d80c",
+    "readonly_guard.lua": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73"
+  },
+  "passed": true,
+  "profile_marker_preserved": true,
+  "visible_candidate_left_running": true,
+  "live_account_acceptance_completed": false,
+  "completed_at": "2026-09-13T03:22:19.724417+00:00"
+}

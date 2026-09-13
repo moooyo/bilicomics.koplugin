@@ -1,7 +1,7 @@
 -- Acceptance-only request restrictions; installed before any account Runtime exists.
 local Guard = {}
 local function denied()
-    return { kind = "verification_guard", message = "Local non-purchase acceptance permits approved read operations only.",
+    return { kind = "verification_guard", message = "Local acceptance permits approved authentication and read operations only.",
         transmitted = false, retryable = false }
 end
 local function keys(names)
@@ -30,6 +30,66 @@ local quote_paths = {
     ["/twirp/comic.v1.Comic/GetComicFreeGoldCard"] = true,
 }
 local resource_headers = keys("accept,referer,user-agent,accept-encoding")
+local auth_headers = keys("accept,referer,user-agent,origin,cookie,content-type")
+local auth_methods = keys("generateQR,pollQR,cookieInfo,refreshSession,confirmRefresh")
+local function fields(text, expected)
+    if type(text) ~= "string" or #text == 0 or #text > 16384 or text:sub(1, 1) == "&"
+        or text:sub(-1) == "&" or text:find("&&", 1, true) then return nil end
+    local result = {}
+    for part in text:gmatch("[^&]+") do
+        local key, value = part:match("^([%w_]+)=([%w%%%.~_-]*)$")
+        if not key or not expected[key] or result[key] ~= nil then return nil end
+        local malformed = value:gsub("%%%x%x", "")
+        if malformed:find("%%") then return nil end
+        value = value:gsub("%%(%x%x)", function(hex) return string.char(tonumber(hex, 16)) end)
+        if #value == 0 or #value > 8192 or value:find("[%c%s]") then return nil end
+        result[key] = value
+    end
+    for key in pairs(expected) do if result[key] == nil then return nil end end
+    return result
+end
+local function authRequest(request, host, path, query)
+    if request.output_path ~= nil or request.max_bytes ~= nil
+        and (type(request.max_bytes) ~= "number" or request.max_bytes <= 0 or request.max_bytes > 1048576) then return false end
+    local headers = {}
+    for key, value in pairs(request.headers or {}) do
+        key = tostring(key):lower()
+        if not auth_headers[key] or headers[key] ~= nil or type(value) ~= "string" or #value > 32768
+            or value:find("[%c]") then return false end
+        headers[key] = value
+    end
+    if headers.referer ~= "https://www.bilibili.com/" or headers.origin ~= "https://www.bilibili.com" then return false end
+    local credential = type(headers.cookie) == "string" and #headers.cookie > 0
+    local parsed
+    if host == "passport.bilibili.com" then
+        if path == "/x/passport-login/web/qrcode/generate" then
+            parsed = fields(query:sub(2), keys("source,go_url"))
+            return request.method == "GET" and request.body == nil and not headers.cookie and parsed
+                and parsed.source == "main_web" and parsed.go_url == "https://manga.bilibili.com/"
+        elseif path == "/x/passport-login/web/qrcode/poll" then
+            parsed = fields(query:sub(2), keys("qrcode_key,source"))
+            return request.method == "GET" and request.body == nil and not headers.cookie and parsed
+                and parsed.source == "main_web" and #parsed.qrcode_key <= 128 and parsed.qrcode_key:match("^[%w_-]+$") ~= nil
+        elseif path == "/x/passport-login/web/cookie/info" then
+            parsed = fields(query:sub(2), keys("csrf"))
+            return request.method == "GET" and request.body == nil and credential and parsed and #parsed.csrf <= 512
+        elseif path == "/x/passport-login/web/cookie/refresh" then
+            parsed = fields(request.body, keys("csrf,refresh_csrf,source,refresh_token"))
+            return request.method == "POST" and query == "" and credential and parsed
+                and headers["content-type"] == "application/x-www-form-urlencoded" and parsed.source == "main_web"
+                and #parsed.csrf <= 512 and #parsed.refresh_csrf <= 512 and #parsed.refresh_token <= 4096
+        elseif path == "/x/passport-login/web/confirm/refresh" then
+            parsed = fields(request.body, keys("csrf,refresh_token"))
+            return request.method == "POST" and query == "" and credential and parsed
+                and headers["content-type"] == "application/x-www-form-urlencoded"
+                and #parsed.csrf <= 512 and #parsed.refresh_token <= 4096
+        end
+    elseif host == "www.bilibili.com" then
+        local challenge = path:match("^/correspond/1/([0-9a-f]+)$")
+        return request.method == "GET" and query == "" and request.body == nil and credential and challenge and #challenge == 256
+    end
+    return false
+end
 local function safePath(path, encoded)
     if encoded then
         path = path:gsub("%%(%x%x)", function(hex) return string.char(tonumber(hex, 16)) end)
@@ -116,6 +176,7 @@ function Guard.install(profile)
             or request.kind == "library" or request.kind == "download_page" or request.kind == "download_cover"
             or request.kind == "source_index" or request.kind == "verify_source_page"
             or request.kind == "quote" or request.kind == "reconcile_purchase"
+            or request.kind == "auth" and auth_methods[request.method]
             or request.kind == "diagnostics")
         if not allowed then
             if callback then UIManager:nextTick(callback, nil, denied()) end
@@ -129,7 +190,9 @@ function Guard.install(profile)
         if not host or not safePath(path, true) or (query ~= "" and query:sub(1, 1) ~= "?") then return nil, denied() end
         if request.output_path and (type(request.output_path) ~= "string" or request.output_path:sub(1, #profile + 1) ~= profile .. "/"
             or not safePath(request.output_path, false)) then return nil, denied() end
-        if host == "api.bilibili.com" and path == "/x/web-interface/nav" then
+        if host == "passport.bilibili.com" or host == "www.bilibili.com" then
+            if not authRequest(request, host, path, query) then return nil, denied() end
+        elseif host == "api.bilibili.com" and path == "/x/web-interface/nav" then
             if request.method ~= "GET" or request.body or query ~= "" then return nil, denied() end
         elseif host == "manga.bilibili.com" and routes[path] then
             if request.method ~= "POST" or type(request.body) ~= "string" or #request.body > 262144 then return nil, denied() end

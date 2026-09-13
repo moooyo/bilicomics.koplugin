@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "environment_optimization_rejected": true,
+    "explicit_optimization_rejected": true,
+    "interrupt": true,
+    "term": true
+  },
+  "code_sha256": {
+    "spec/integration/prepare_live_reading.lua": "1d9eef5fb4be3e8bb4638378c434077f81f8706c699322e464ffeb6dbb0411d8",
+    "spec/integration/prepare_live_reading.py": "97d809835687ae8a1da1a9c72ed76b9c539ef2ef5a5b0f549e83ae1b1dfa38f7",
+    "spec/integration/run_live_reading.py": "f09b78bd62c12e0397eb74c5384c76e30aaf71f8cb81b195f0766b2ff785a67d",
+    "spec/local/live_reading_wrapper_spec.py": "b35d1e965eba64e86d505c7397395a4766e75a0f4f0c4bcfd3d111df1b02847c",
+    "spec/local/run_live_reading.py": "a170da1c6ebc1edfe9ccb557ef6f18187e4cd3dec29d9d806fe430a6b2ee617e"
+  },
+  "counts": {
+    "cases": 4
+  },
+  "network_isolated": true,
+  "passed": true,
+  "production_responses_used": false
+}

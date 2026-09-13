@@ -1,0 +1,400 @@
+{
+  "binder_credential_contents_read": false,
+  "binder_execution": "ordinary local Debian WSL user",
+  "binder_network_requests": 0,
+  "binder_private_profiles_read": false,
+  "bound_at": "2026-09-13T03:33:57.914760+00:00",
+  "candidate": {
+    "all_package_entries_rehashed": true,
+    "archive": "dist/bilicomics-0.1.0-dev.zip",
+    "archive_bytes": 2466094,
+    "archive_sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+    "current_full_production_identical_to_stabilization_candidate": true,
+    "full_production_files": 201,
+    "omitted_native_build_source_files": 100,
+    "packaged_files": 101,
+    "packaged_manifest_sha256": "a8c7e93eae557ec9f59f1404848d7fc82de5282c7fd4ef989c760ba3d136d21e",
+    "production_manifest_sha256": "6b326bf5ca777176c25a5972938921ca43331e441f821fcf7d3f595f479f82f7"
+  },
+  "guard_regression": {
+    "actual_purchase_executed": false,
+    "assertions": 279,
+    "cases": 162,
+    "execution": "test-env with strict fake originals and isolated networking",
+    "passed": true,
+    "real_network_requests": 0
+  },
+  "harness_provenance": {
+    "later_wrapper_regression": [
+      {
+        "current_sha256": "1d9eef5fb4be3e8bb4638378c434077f81f8706c699322e464ffeb6dbb0411d8",
+        "executed_sha256": "1d9eef5fb4be3e8bb4638378c434077f81f8706c699322e464ffeb6dbb0411d8",
+        "matches_current": true,
+        "path": "spec/integration/prepare_live_reading.lua"
+      },
+      {
+        "current_sha256": "97d809835687ae8a1da1a9c72ed76b9c539ef2ef5a5b0f549e83ae1b1dfa38f7",
+        "executed_sha256": "97d809835687ae8a1da1a9c72ed76b9c539ef2ef5a5b0f549e83ae1b1dfa38f7",
+        "matches_current": true,
+        "path": "spec/integration/prepare_live_reading.py"
+      },
+      {
+        "current_sha256": "f09b78bd62c12e0397eb74c5384c76e30aaf71f8cb81b195f0766b2ff785a67d",
+        "executed_sha256": "f09b78bd62c12e0397eb74c5384c76e30aaf71f8cb81b195f0766b2ff785a67d",
+        "matches_current": true,
+        "path": "spec/integration/run_live_reading.py"
+      },
+      {
+        "current_sha256": "b35d1e965eba64e86d505c7397395a4766e75a0f4f0c4bcfd3d111df1b02847c",
+        "executed_sha256": "b35d1e965eba64e86d505c7397395a4766e75a0f4f0c4bcfd3d111df1b02847c",
+        "matches_current": true,
+        "path": "spec/local/live_reading_wrapper_spec.py"
+      },
+      {
+        "current_sha256": "a170da1c6ebc1edfe9ccb557ef6f18187e4cd3dec29d9d806fe430a6b2ee617e",
+        "executed_sha256": "a170da1c6ebc1edfe9ccb557ef6f18187e4cd3dec29d9d806fe430a6b2ee617e",
+        "matches_current": true,
+        "path": "spec/local/run_live_reading.py"
+      }
+    ],
+    "local_full_reading": [
+      {
+        "current_sha256": "1497a88e2c44b3a7ff11070cdddfc34acd128ce82c736560228eb56520526c6c",
+        "executed_sha256": "1497a88e2c44b3a7ff11070cdddfc34acd128ce82c736560228eb56520526c6c",
+        "matches_current": true,
+        "path": "spec/integration/live_reading.lua"
+      },
+      {
+        "current_sha256": "f09b78bd62c12e0397eb74c5384c76e30aaf71f8cb81b195f0766b2ff785a67d",
+        "executed_sha256": "ac383a8ec2ac5495e573924864695d13da1172a93889df935a7c51d6d415a56e",
+        "matches_current": false,
+        "path": "spec/integration/run_live_reading.py"
+      },
+      {
+        "current_sha256": "4b806a1602f314494ca33443b1c1df12f4e53ed558d62d25bc2892bb185e0114",
+        "executed_sha256": "4b806a1602f314494ca33443b1c1df12f4e53ed558d62d25bc2892bb185e0114",
+        "matches_current": true,
+        "path": "research/protocol/live-reading-guard.lua"
+      }
+    ],
+    "local_native_session": [
+      {
+        "current_sha256": "4a62c3a01ab647709addfa6fe9f13493ba3e809868d3fb2451d44d7e14075aca",
+        "executed_sha256": "4a62c3a01ab647709addfa6fe9f13493ba3e809868d3fb2451d44d7e14075aca",
+        "matches_current": true,
+        "path": "spec/local/verify_native_session.py"
+      },
+      {
+        "current_sha256": "8b33b6b75356c725479aa6b20c880e837b67e0bd11051f4ac49ec61e71b60160",
+        "executed_sha256": "0945b1fcc3d7a39e3b8a65ad0997422179be51d817fdc7bb53ff13caa51f64d0",
+        "matches_current": false,
+        "path": "spec/local/launch_koreader.py"
+      },
+      {
+        "current_sha256": "3745553c0d60b425029b2c47c43a0a973ca4e82e7dfeaa9ce5046a4cd0acb9cd",
+        "executed_sha256": "f0fbd435852302580ba36862fbeed02863b0239d380192aecda1f7336daacf2c",
+        "matches_current": false,
+        "path": "spec/local/startup.lua"
+      },
+      {
+        "current_sha256": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+        "executed_sha256": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+        "matches_current": true,
+        "path": "spec/local/readonly_guard.lua"
+      }
+    ],
+    "local_native_startup": [
+      {
+        "current_sha256": "8b33b6b75356c725479aa6b20c880e837b67e0bd11051f4ac49ec61e71b60160",
+        "executed_sha256": "5a952e6210554d1b37274c1f435b7ebf1d4349315aa590b932139441dd0f2515",
+        "matches_current": false,
+        "path": "spec/local/launch_koreader.py"
+      },
+      {
+        "current_sha256": "56cccc7f2636fea0dfaea1eaecd59d538dee6e2bb916d9cec3536c7ae7921255",
+        "executed_sha256": "56cccc7f2636fea0dfaea1eaecd59d538dee6e2bb916d9cec3536c7ae7921255",
+        "matches_current": true,
+        "path": "spec/local/verify_candidate.py"
+      },
+      {
+        "current_sha256": "3745553c0d60b425029b2c47c43a0a973ca4e82e7dfeaa9ce5046a4cd0acb9cd",
+        "executed_sha256": "d3e3df29a9d652763c205bc4654ef5e1f1c2ee74b9b96540fd3a18562396d80c",
+        "matches_current": false,
+        "path": "spec/local/startup.lua"
+      },
+      {
+        "current_sha256": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+        "executed_sha256": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+        "matches_current": true,
+        "path": "spec/local/readonly_guard.lua"
+      }
+    ],
+    "local_renewable_online": [
+      {
+        "current_sha256": "3e9e73a70b6df907d226bb9f2f8e0be3c8ff43d9e9784cd372c8d7e026c9c024",
+        "executed_sha256": "3e9e73a70b6df907d226bb9f2f8e0be3c8ff43d9e9784cd372c8d7e026c9c024",
+        "matches_current": true,
+        "path": "spec/local/record_renewable_online.py"
+      },
+      {
+        "current_sha256": "8b33b6b75356c725479aa6b20c880e837b67e0bd11051f4ac49ec61e71b60160",
+        "executed_sha256": "8b33b6b75356c725479aa6b20c880e837b67e0bd11051f4ac49ec61e71b60160",
+        "matches_current": true,
+        "path": "spec/local/launch_koreader.py"
+      },
+      {
+        "current_sha256": "3745553c0d60b425029b2c47c43a0a973ca4e82e7dfeaa9ce5046a4cd0acb9cd",
+        "executed_sha256": "3745553c0d60b425029b2c47c43a0a973ca4e82e7dfeaa9ce5046a4cd0acb9cd",
+        "matches_current": true,
+        "path": "spec/local/startup.lua"
+      },
+      {
+        "current_sha256": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+        "executed_sha256": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+        "matches_current": true,
+        "path": "spec/local/readonly_guard.lua"
+      },
+      {
+        "current_sha256": "df9c73ca09a196d025e73fa6e9c61067e868caa5e5fc2c765e6b209a3740df14",
+        "executed_sha256": "df9c73ca09a196d025e73fa6e9c61067e868caa5e5fc2c765e6b209a3740df14",
+        "matches_current": true,
+        "path": "spec/local/renewable_online.lua"
+      }
+    ],
+    "local_wrapper_at_full_reading": [
+      {
+        "current_sha256": "a170da1c6ebc1edfe9ccb557ef6f18187e4cd3dec29d9d806fe430a6b2ee617e",
+        "executed_sha256": "886b7e924d7d25533ef061d0ffca7d4437836289c9ee95cc0e732c7f7c22bc48",
+        "matches_current": false,
+        "path": "spec/local/run_live_reading.py"
+      }
+    ],
+    "remote_qr_login": [
+      {
+        "current_sha256": "061d1f8b91b2dd556d61ed8fe12d357cee0817fe0a1c9f208d8278855a3e7081",
+        "executed_sha256": "061d1f8b91b2dd556d61ed8fe12d357cee0817fe0a1c9f208d8278855a3e7081",
+        "matches_current": true,
+        "path": "spec/integration/live_authentication.lua"
+      },
+      {
+        "current_sha256": "8fb0eead694f3fdb3c5d710dd8d18862f0596e59af72a3d5e035b98f30e8b2ce",
+        "executed_sha256": "8fb0eead694f3fdb3c5d710dd8d18862f0596e59af72a3d5e035b98f30e8b2ce",
+        "matches_current": true,
+        "path": "spec/integration/run_live_authentication.py"
+      }
+    ],
+    "remote_session_restart": [
+      {
+        "current_sha256": "061d1f8b91b2dd556d61ed8fe12d357cee0817fe0a1c9f208d8278855a3e7081",
+        "executed_sha256": "061d1f8b91b2dd556d61ed8fe12d357cee0817fe0a1c9f208d8278855a3e7081",
+        "matches_current": true,
+        "path": "spec/integration/live_authentication.lua"
+      },
+      {
+        "current_sha256": "8fb0eead694f3fdb3c5d710dd8d18862f0596e59af72a3d5e035b98f30e8b2ce",
+        "executed_sha256": "8fb0eead694f3fdb3c5d710dd8d18862f0596e59af72a3d5e035b98f30e8b2ce",
+        "matches_current": true,
+        "path": "spec/integration/run_live_authentication.py"
+      }
+    ]
+  },
+  "harness_scope_note": "Each report retains the hashes actually executed. Native startup, native import, full reading, and later helper tests used different harness revisions. A passing later helper test does not replace the historical full-read test identity.",
+  "historical_evidence": {
+    "candidate_commit": "7cfdc660bf7c21256bf900ea82d36ae5cae80c01",
+    "historical_flags_preserved": true,
+    "path": "spec/package/stabilization-source-evidence.json",
+    "sha256": "ae5f4ca33c63537ae7c0ced26949782ed5c77f31a93286c70442e2cc1a2380ef"
+  },
+  "later_wrapper_regression": {
+    "cases": 4,
+    "checks": {
+      "environment_optimization_rejected": true,
+      "explicit_optimization_rejected": true,
+      "interrupt": true,
+      "term": true
+    },
+    "current_recorded_source_hashes_match": true,
+    "network_isolated": true,
+    "passed": true,
+    "production_responses_used": false,
+    "scope_note": "These later helper tests cover SIGTERM, SIGINT, explicit -O, and PYTHONOPTIMIZE. They do not represent another real full-chapter run."
+  },
+  "local_full_reading": {
+    "candidate_and_standalone_reports_are_same_run": true,
+    "completed_pages": 45,
+    "executed_candidate_matches_101_file_package": true,
+    "image_bytes": 92022101,
+    "offline_checks": 30,
+    "offline_transport_requests": 0,
+    "offline_workers_started": 0,
+    "online_checks": 51,
+    "ordinary_wsl_user_and_network_namespace_verified": true,
+    "pages_completed_after_reader_close": 43,
+    "passed": true,
+    "real_complete_chapter_runs": 1,
+    "same_private_profile_as_native_session_proven": false,
+    "scope_note": "The full-read reports bind package and production bytes. They do not record the original input or profile identity, so this addendum does not join their private session to the interactive native profile.",
+    "source_matches_full_201_file_map": true
+  },
+  "local_full_reading_cleanup": {
+    "all_recorded_processes_terminal": true,
+    "cleanup_script_sha256_as_executed": "db7746de490c96e899b66f44fb9caf9586cad000dc51e69721e725565490be8e",
+    "dedicated_work_only": true,
+    "other_process_environments_unreadable": 2,
+    "passed": true,
+    "private_directories_removed": 36,
+    "private_files_removed": 193,
+    "public_reports_and_candidate_preserved": true,
+    "remaining_private_targets": 0,
+    "scope_note": "This addendum verifies the cleanup report and its exact reading-report identities. It does not read the private work directory or interactive profile.",
+    "visible_profile_and_original_input_outside_scope": true
+  },
+  "local_native_acceptance": {
+    "anonymous_framebuffer_images_rehashed": 4,
+    "anonymous_layout_review_passed": true,
+    "first_online_after_reopen": {
+      "business_requests_succeeded": 3,
+      "callback_count": 1,
+      "guard_rejections": 0,
+      "incidental_cover_failure_origin": "Existing production Transport encoded-byte response limit; Controller requests a 4 MiB cover bound",
+      "incidental_cover_failures": {
+        "response_size": 1
+      },
+      "observer_disabled_in_retained_window_at_recording": true,
+      "passed": true,
+      "production_runner": true,
+      "real_request_sequence": [
+        "cookie_info",
+        "navigation",
+        "favorites"
+      ],
+      "response_injection": false,
+      "server_refresh_required": false,
+      "workers_settled": true
+    },
+    "local_qr_scan_claimed": false,
+    "native_exit_and_session_restoration_verified": true,
+    "native_import_of_current_scan_session_verified": true,
+    "native_plugin_and_provider_selection_verified": true,
+    "private_mode_0600_and_one_time_input_removal_verified": true,
+    "same_candidate_profile_across_native_import_and_first_online_check": true,
+    "visible_x11_startup_sizes": [
+      [
+        720,
+        960
+      ],
+      [
+        600,
+        800
+      ]
+    ]
+  },
+  "passed": true,
+  "remote_authentication": {
+    "actual_cookie_refresh_requests": 0,
+    "identity_validation_and_private_save_verified": true,
+    "login_terminal_code": 20,
+    "note": "The refreshSession method handled the no-refresh maintenance branch. Its method count is not a credential rotation count. QR cleanup resets qr_ready after a successful login.",
+    "old_refresh_token_confirmation_requests": 0,
+    "real_qr_login_verified": true,
+    "refreshSession_worker_calls_during_restart": 1,
+    "restart_terminal_code": 21,
+    "separate_restart_load_verified": true,
+    "server_no_refresh_required_branch_verified": true
+  },
+  "reports": {
+    "authentication_guard": {
+      "passed": true,
+      "path": "spec/local/authentication-guard-results.json",
+      "sha256": "250fb06feea8bc4c20e61ef7b700a9e5010f543b0f0dfb6c848325ac0dcb2e54"
+    },
+    "local_full_chapter": {
+      "passed": true,
+      "path": "spec/local/live-reading-results.json",
+      "sha256": "a454bb0955f3fb04de2b8306ad5321eb7b0e0c009687dc8224ab2d7971168ecc"
+    },
+    "local_full_chapter_candidate": {
+      "passed": true,
+      "path": "spec/local/live-reading-candidate-results.json",
+      "sha256": "cdebac914aac891c5c6abe7d28231fc7ff8d80b1e8fbbf7c93de65ebbeb621df"
+    },
+    "local_full_chapter_offline": {
+      "passed": true,
+      "path": "spec/local/live-reading-offline-results.json",
+      "sha256": "44afd5c4f9142fd2e1105542f792cd91ed30add7a3a2a5721d48a4ce8a3b13c6"
+    },
+    "local_full_chapter_online": {
+      "passed": true,
+      "path": "spec/local/live-reading-online-results.json",
+      "sha256": "7dba155ba1f399455fae43248b4783bd5faa3c8ddc84ba1723fa73c3ef8d7af0"
+    },
+    "local_full_reading_cleanup": {
+      "passed": true,
+      "path": "spec/local/live-reading-cleanup.json",
+      "sha256": "9301df1d49844a705d3f0ba43d0cf0f5d1e469b93255f415363b3e0b25ea0ae0"
+    },
+    "local_native_layout": {
+      "passed": true,
+      "path": "spec/local/candidate-layout-review.json",
+      "sha256": "f383bf74e173f677495f77ce422e02b6d7d40cc14458bd80294947e3432634a2"
+    },
+    "local_native_session": {
+      "passed": true,
+      "path": "spec/local/native-session-result.json",
+      "sha256": "a27cda84db1271c3845f6ec7d5b501467a08ff7ee87920daef4c0617226d56c8"
+    },
+    "local_native_startup": {
+      "passed": true,
+      "path": "spec/local/candidate-startup-result.json",
+      "sha256": "59332c1ca104be11db67390715f21082337d5599681f07c5ba9a0e9c5cc5b3cb"
+    },
+    "local_renewable_online": {
+      "passed": true,
+      "path": "spec/local/renewable-online-result.json",
+      "sha256": "17cd9de3d0c4d953d0ce9f8b08ac621889c1a3f03d5461360e85b773c6a76a54"
+    },
+    "local_wrapper_regression": {
+      "passed": true,
+      "path": "spec/local/live-reading-wrapper-results.json",
+      "sha256": "df74a409499ccb20a823a232e5e4f46469a4106002563cc9eab8f0a3d168b7ef"
+    },
+    "remote_qr_login": {
+      "passed": true,
+      "path": "spec/integration/stabilization-auth-login-results.json",
+      "sha256": "3ae087d880ee2a72d085fbbb07b70f49f388cea874161cdede0905510335bb45"
+    },
+    "remote_session_restart": {
+      "passed": true,
+      "path": "spec/integration/stabilization-auth-restart-results.json",
+      "sha256": "a3075d7682de0ab7c2e796c44163c70954d47ea2bb91c48dc56113562bbceff9"
+    }
+  },
+  "scope": "Read-only evidence addendum for the user-authorized local acceptance scope; prior stabilization evidence remains historical",
+  "scope_decisions": {
+    "actual_payment": {
+      "deferred": true,
+      "performed": false
+    },
+    "coupon_consumption_verified": false,
+    "credential_rotation": {
+      "deferred_by_user": true,
+      "verified": false
+    },
+    "local_required_scope_completed": true,
+    "local_verification_authorized_by_user": true,
+    "long_term_renewal_verified": false,
+    "old_credential_confirmation": {
+      "deferred_by_user": true,
+      "verified": false
+    },
+    "physical_device_gate_removed_by_user": true,
+    "physical_device_verified": false
+  },
+  "suites_rerun": false,
+  "user_required_gates": {
+    "actual_payment": false,
+    "credential_rotation": false,
+    "local_acceptance": true,
+    "physical_device_acceptance": false
+  }
+}

@@ -1,5 +1,51 @@
 # Local native KOReader acceptance
 
+## Current candidate acceptance
+
+On 2026-09-13 the user explicitly authorized local verification for this task and
+selected actual local KOReader acceptance instead of a physical Scribe gate.
+The current canonical candidate is the 101-file archive with SHA256
+`45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342`.
+
+- [Visible startup and native restart](candidate-startup-result.json) passed in
+  WSLg at 720x960 and 600x800; [anonymous layout review](candidate-layout-review.json)
+  found no clipped or overlapping controls.
+- [Native session acceptance](native-session-result.json) used the newly
+  confirmed real QR session, production import/validation, a private 0600 save,
+  native exit and a new-process restart. Its one-time input was removed.
+- [The first online request after restoration](renewable-online-result.json)
+  completed real cookie information, identity validation and favorites reads.
+  The server required no credential rotation. The final visible process has
+  the temporary observer and import hook disabled.
+- [Complete local reading](live-reading.md) passed 51 online and 30 independent
+  offline checks for 45 real pages, using the exact packaged candidate as an
+  ordinary WSL user. Its profile is separate from the visible application.
+- The updated [authentication guard](authentication-guard-results.json) passed
+  162 cases and 279 assertions. It permits only the exact supported
+  authentication routes and approved reads; real purchases remain blocked.
+
+The authenticated visible instance uses the isolated profile
+`/home/moooyo/.local/share/bilicomics-acceptance/candidate-45385c6f-rg5l4bo5/profile`.
+The historical default profile was not changed. To reopen this specific instance,
+use the current local launcher with that explicit profile:
+
+```powershell
+wsl.exe -d Debian -u moooyo --exec python3 /mnt/d/Code/bilicomics.koplugin/spec/local/launch_koreader.py --runtime /home/moooyo/.local/share/bilicomics-acceptance/runtime-v2026.07.1/lib/koreader --plugin /mnt/d/Code/bilicomics.koplugin/dist/bilicomics-0.1.0-dev.zip --profile /home/moooyo/.local/share/bilicomics-acceptance/candidate-45385c6f-rg5l4bo5/profile
+```
+
+The user explicitly deferred actual credential rotation and old-token
+confirmation after the live service returned `refresh=false`. Local acceptance
+does not establish physical Kindle behavior or successful real payment.
+The [final source/evidence addendum](../package/local-acceptance-source-evidence.json)
+records completion of the revised local task and keeps those deferred claims
+separate from the passing checks.
+
+## Historical setup and evidence
+
+The sections below retain their original runtime, archive and authorization
+snapshots. References to an earlier "current" build apply to that recorded
+snapshot, not to the canonical candidate above.
+
 These acceptance-only helpers use the unchanged official Linux KOReader runtime under WSLg. They are not production plugin modules and do not inject UI records, protocol responses or chapter images. The user requested local KOReader acceptance, authorizing local execution for this task. The initial visible startup passed: the real Chinese plugin UI rendered at 720x960, the guarded process remained running, and all 87 staged production files matched the then-current prefetch archive. See [the sanitized startup result](startup-result.json). The visible app was not automatically replaced with later recovery builds. No session was imported by the launcher, and no purchase test was executed. Local live-account reading remains manual; the earlier complete account workflow was verified on `test-env`.
 
 The Windows entry is [start-local-koreader.ps1](../../tools/start-local-koreader.ps1). It prepares the digest-pinned official runtime if needed and starts, inspects or stops this isolated app:

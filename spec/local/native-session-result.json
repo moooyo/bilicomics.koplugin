@@ -1,0 +1,36 @@
+{
+  "environment": "User-authorized local Debian WSL2 with visible WSLg X11",
+  "archive_sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+  "packaged_files": 101,
+  "runtime_version": "v2026.07.1",
+  "existing_profiles_touched": false,
+  "real_purchases": 0,
+  "authenticated_screenshots_saved": false,
+  "source_sha256": {
+    "verify_native_session.py": "4a62c3a01ab647709addfa6fe9f13493ba3e809868d3fb2451d44d7e14075aca",
+    "launch_koreader.py": "0945b1fcc3d7a39e3b8a65ad0997422179be51d817fdc7bb53ff13caa51f64d0",
+    "startup.lua": "f0fbd435852302580ba36862fbeed02863b0239d380192aecda1f7336daacf2c",
+    "readonly_guard.lua": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73"
+  },
+  "import": {
+    "succeeded": true,
+    "account_changed": true,
+    "validation_worker_submissions": 1,
+    "production_runner": true,
+    "session_present": true,
+    "session_valid": true,
+    "renewable_session": true
+  },
+  "private_session_saved_with_mode_0600": true,
+  "one_time_input_removed": true,
+  "native_exit_after_import": {
+    "native_exit_requested": true,
+    "runtime_closed": true
+  },
+  "passed": true,
+  "session_restored_after_native_exit": true,
+  "selected_archive_files_match": true,
+  "visible_authenticated_candidate_left_running": true,
+  "profile": "/home/moooyo/.local/share/bilicomics-acceptance/candidate-45385c6f-rg5l4bo5/profile",
+  "completed_at": "2026-09-13T03:24:52.727892+00:00"
+}

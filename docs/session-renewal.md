@@ -2,6 +2,16 @@
 
 Date: 2026-09-13. This development change adds native QR sign-in and account-session maintenance. It does not promise a fixed or unlimited credential lifetime. Server revocation, incomplete renewal transactions, or an expired session after a long offline period can still require a new sign-in.
 
+Subsequent live acceptance: [phone QR confirmation and private saving](../spec/integration/stabilization-auth-login-results.json)
+and [independent-process restart/session checks](../spec/integration/stabilization-auth-restart-results.json)
+passed on the current candidate production tree. Local KOReader also passed
+[native import, private saving and restart](../spec/local/native-session-result.json)
+with that newly scanned session. The server returned `refresh=false`; the
+`refreshSession` method call in the report performed validation without a
+`cookie/refresh` request. The user explicitly deferred actual credential rotation
+and old-token confirmation to later acceptance. Earlier limits below describe
+the original implementation snapshot; see [current status](architecture-stabilization.md).
+
 ## Sign-in
 
 Account and settings exposes **Sign in with QR code**. The official QR URL is rendered by KOReader's existing QRWidget, without a remote QR-image service. Polling starts only after the previous request completes and waits three seconds between requests. The server determines expiry; no fixed countdown is invented. Closing the dialog, starting another sign-in/import, suspending, or switching accounts retires pending callbacks. A confirmed response must include session and CSRF cookies plus a renewal credential, and the official navigation endpoint must verify the identity before a private save and account switch.

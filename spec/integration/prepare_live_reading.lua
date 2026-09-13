@@ -1,4 +1,4 @@
--- Run only on the authorized remote host; never print private inputs or responses.
+-- Run only on the authorized Linux host; never print private inputs or responses.
 require("setupkoenv")
 local source, work, session_path, mode = assert(arg[1]), assert(arg[2]), assert(arg[3]), assert(arg[4])
 package.path = source .. "/?.lua;" .. source .. "/?/init.lua;" .. package.path
@@ -83,7 +83,7 @@ local function check(name, condition)
 end
 local ok = pcall(function()
     check("known_mode", mode == "validate" or mode == "select")
-    check("remote_linux", require("ffi").os == "Linux")
+    check("linux_runtime", require("ffi").os == "Linux")
     report.checks.readonly_transport_guard = true
     local session = Session.parse(Files.read(session_path, 131072))
     check("session_parsed", session ~= nil)

@@ -1,4 +1,4 @@
-"""Stage or explicitly execute one authorized live-reading probe on test-env.
+"""Stage or explicitly execute one authorized live-reading probe on a selected host.
 
 Preparation compiles code without opening selection or session contents. Live
 execution requires --execute-live-read and runs the offline phase in a new
@@ -56,6 +56,18 @@ class PrivateArgumentParser(argparse.ArgumentParser):
 def require(condition):
     if not condition:
         raise ProbeError("A launcher precondition failed")
+
+
+def execution_context(host):
+    require(__debug__)
+    require(sys.platform == "linux")
+    wsl = "microsoft" in Path("/proc/sys/kernel/osrelease").read_text().lower()
+    if host == "local-wsl":
+        require(wsl and os.geteuid() != 0)
+    else:
+        require(host == "test-env" and os.geteuid() == 0)
+    return {"host": host, "effective_uid": os.geteuid(), "wsl": wsl,
+            "offline_namespace": "user_and_network" if host == "local-wsl" else "network"}
 
 
 def digest(path):
@@ -522,12 +534,16 @@ def run_phase(args, package, tests, phase):
         BILI_CHILD_PID_FILE=str(private / (phase + "-children.jsonl")),
         BILI_STOP_FILE=str(private / (phase + "-stop")),
     )
+    if args.execution_host == "local-wsl":
+        environment.update(SDL_VIDEODRIVER="x11", SDL_RENDER_DRIVER="software")
     if phase == "online":
         environment["BILI_LIVE_AUTHORIZED"] = "1"
     command = ["xvfb-run", "-a", str(args.runtime / "luajit"), str(tests / "live_reading.lua"),
                str(package), str(args.work), phase, str(args.selection), str(args.guard), str(args.session)]
     if phase == "offline":
-        command = ["unshare", "-n", "--"] + command
+        namespace = (["unshare", "--user", "--map-current-user", "--net", "--"]
+                     if args.execution_host == "local-wsl" else ["unshare", "-n", "--"])
+        command = namespace + command
     log = private / (phase + ".log")
     monitor = None
     process = None
@@ -600,6 +616,7 @@ def parse_arguments():
     parser.add_argument("--guard", type=Path)
     parser.add_argument("--session", type=Path)
     parser.add_argument("--timeout", type=int, default=900)
+    parser.add_argument("--execution-host", choices=("test-env", "local-wsl"), default="test-env")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--execute-live-read", action="store_true")
     mode.add_argument("--prepare-only", action="store_true")
@@ -639,8 +656,8 @@ def main():
     trusted_work = False
     package = tests = None
     try:
-        require(sys.platform == "linux" and os.geteuid() == 0)
         args = parse_arguments()
+        report["execution"] = execution_context(args.execution_host)
         require(1 <= args.timeout <= 1800)
         report["status"]["live_requested"] = args.execute_live_read
         require(not args.work.is_symlink())

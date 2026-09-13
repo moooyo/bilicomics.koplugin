@@ -1,0 +1,85 @@
+{
+  "passed": true,
+  "environment": "User-authorized local Debian WSL2 and visible WSLg X11",
+  "runtime_version": "v2026.07.1",
+  "archive_sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+  "packaged_files": 101,
+  "profile": "/home/moooyo/.local/share/bilicomics-acceptance/candidate-45385c6f-rg5l4bo5/profile",
+  "same_profile_as_native_import": true,
+  "native_import_report_sha256": "a27cda84db1271c3845f6ec7d5b501467a08ff7ee87920daef4c0617226d56c8",
+  "first_online_request_after_reopen": true,
+  "native": {
+    "no_pending_rotation": true,
+    "workers_settled": true,
+    "worker_submissions": 4,
+    "same_active_account": true,
+    "callback_count": 1,
+    "session_valid": true,
+    "renewable_session": true,
+    "production_runner": true,
+    "callback_succeeded": true,
+    "session_manager_ready": true,
+    "maintenance_checked": true
+  },
+  "request_counts": {
+    "cookie_info": 1,
+    "navigation": 1,
+    "favorites": 1,
+    "cover_or_asset": 1
+  },
+  "events": [
+    {
+      "response_received": true,
+      "business_code": 0,
+      "refresh_required": false,
+      "category": "cookie_info",
+      "http_status": 200
+    },
+    {
+      "response_received": true,
+      "business_code": 0,
+      "category": "navigation",
+      "logged_in": true,
+      "http_status": 200
+    },
+    {
+      "category": "favorites",
+      "response_received": true,
+      "http_status": 200
+    },
+    {
+      "error_kind": "response_size",
+      "category": "cover_or_asset",
+      "response_received": false
+    }
+  ],
+  "business_requests_succeeded": 3,
+  "incidental_cover_failures": {
+    "response_size": 1
+  },
+  "incidental_cover_failure_origin": "Existing production Transport encoded-byte response limit; Controller requests a 4 MiB cover bound",
+  "guard_rejections": 0,
+  "actual_credential_rotation": false,
+  "wallet_requests": 0,
+  "purchase_requests": 0,
+  "response_injection": false,
+  "authenticated_screenshots_saved": false,
+  "temporary_observer_process_exited": true,
+  "normal_visible_window_running": true,
+  "retained_window_observer_disabled": true,
+  "final_process": {
+    "pid": 24095,
+    "pgid": 24095,
+    "start_time": "32323189",
+    "uid": 1000,
+    "state": "S"
+  },
+  "source_sha256": {
+    "record_renewable_online.py": "3e9e73a70b6df907d226bb9f2f8e0be3c8ff43d9e9784cd372c8d7e026c9c024",
+    "launch_koreader.py": "8b33b6b75356c725479aa6b20c880e837b67e0bd11051f4ac49ec61e71b60160",
+    "startup.lua": "3745553c0d60b425029b2c47c43a0a973ca4e82e7dfeaa9ce5046a4cd0acb9cd",
+    "readonly_guard.lua": "b12dc3a425970b2bfe62c4e601ccc97b23ebcb5ca33a493898ab7c3d85a9fc73",
+    "renewable_online.lua": "df9c73ca09a196d025e73fa6e9c61067e868caa5e5fc2c765e6b209a3740df14"
+  },
+  "completed_at": "2026-09-13T03:32:28.978316+00:00"
+}

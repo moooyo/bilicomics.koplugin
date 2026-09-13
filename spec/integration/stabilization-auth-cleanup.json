@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "all_historical_native_pids_individually_verified": false,
+    "both_phases_recorded_cleaned_children": true,
+    "both_phases_recorded_closed_workers": true,
+    "cleanup_lock_held_through_removal": true,
+    "current_process_work_references_absent": true,
+    "descriptor_relative_removal_used": true,
+    "exact_private_path_verified": true,
+    "latest_recorded_supervisor_not_live": true,
+    "local_profiles_touched": false,
+    "network_requests_sent": false,
+    "other_remote_work_directories_touched": false,
+    "private_directory_empty": true,
+    "private_directory_identity_preserved": true,
+    "private_directory_mode_0700": true,
+    "private_export_removed": true,
+    "private_tree_had_no_symbolic_or_hard_links": true,
+    "process_scan_had_no_permission_errors": true,
+    "public_authentication_reports_unchanged": true,
+    "remote_credentials_removed": true,
+    "source_bundle_and_external_files_unchanged": true
+  },
+  "code": 1,
+  "counts": {
+    "kernel_threads_excluded": 181,
+    "preserved_external_files": 207,
+    "processes_inspected": 72,
+    "removed_import_exports": 1,
+    "removed_private_directories": 77,
+    "removed_private_files": 133,
+    "removed_session_files": 1
+  },
+  "passed": true,
+  "preserved_external_manifest_sha256": "4cf8e46b501a36bfa4e5c08fa76a6808312c490d3c69ffa97845903e05d04832",
+  "public_report_sha256": {
+    "login": "3ae087d880ee2a72d085fbbb07b70f49f388cea874161cdede0905510335bb45",
+    "restart": "a3075d7682de0ab7c2e796c44163c70954d47ea2bb91c48dc56113562bbceff9"
+  },
+  "schema": 1
+}

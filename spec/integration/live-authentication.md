@@ -106,8 +106,10 @@ renewal; `22` restart renewed and confirmed; `23` offline rehearsal passed;
 `49` harness/precondition failure. Always inspect `passed` and cleanup booleans;
 the status code alone is not a completion claim.
 
-No live execution evidence is included merely by adding or preparing this
-harness. Full acceptance still needs real phone confirmation, a successful
-separate-process restart, and a naturally required renewal. Kindle Scribe
-startup, suspend/resume, refresh quality and memory behavior require a separate
-physical-device session.
+No live execution evidence is established merely by adding or preparing this
+harness. The subsequent [real login](stabilization-auth-login-results.json) and
+[independent restart](stabilization-auth-restart-results.json) passed on the
+current candidate production tree. The server returned refresh=false, so a
+naturally required rotation and confirmation remain unobserved. The user has
+replaced the physical Scribe gate for this task with local KOReader acceptance;
+physical-device compatibility is not established by that change.

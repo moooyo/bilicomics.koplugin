@@ -7,8 +7,12 @@ A Bilibili Comics plugin with its own comic library UI and KOReader's native rea
 The current [architecture stabilization](docs/architecture-stabilization.md)
 fixes purchase dispatch expiry and download completion during persistent storage
 failures. All 34 unified remote suites pass, and the matching production tree
-passes a real 45-page online/download/offline workflow. Live QR confirmation,
-real renewal, actual payment, and physical Scribe acceptance remain open.
+passes real 45-page online/download/offline workflows remotely and on local
+KOReader under WSL. Real QR login, private saving and independent-process login
+restoration also pass. The user selected local KOReader acceptance instead of a
+physical Scribe gate and deferred actual credential rotation after the service
+reported that renewal was unnecessary. Actual payment and physical-device
+compatibility are not claimed.
 Historical results below retain their original source snapshots.
 
 The plugin is a development implementation, not a completed release. A complete real free chapter passes [native online reading, prefetch, retained download and new-process offline reopening](docs/reading-only-test-report.md): 45 pages, 92,022,101 image bytes, 51 online checks and 30 offline checks. Downloading continued after reader closure; offline reopening restored the source anchor with no session, no network routes and zero worker activity.
@@ -19,7 +23,7 @@ The integrated [quote-selection adapter](docs/quote-selection-implementation.md)
 
 The target first release includes online reading with prefetch, complete offline downloads, and explicit purchases using existing account assets. Recharge and automatic purchasing are excluded. No WeRead implementation is reused.
 
-QR sign-in and session renewal are now implemented in the development source. A dedicated account session manager serializes renewal, saves replacement credentials before confirmation, and preserves business receipts independently of cookie persistence. See [the authentication implementation and verification boundaries](docs/session-renewal.md). Real mobile-app sign-in and authenticated renewal still require acceptance; synthetic checks do not establish an unlimited login lifetime.
+QR sign-in and session renewal are implemented in the development source. A dedicated account session manager serializes renewal, saves replacement credentials before confirmation, and preserves business receipts independently of cookie persistence. See [the authentication implementation and verification boundaries](docs/session-renewal.md). Real mobile-app sign-in, private persistence, restart and the normal session check have passed. The service returned `refresh=false`; actual rotation and old-token confirmation remain deferred acceptance, and no unlimited login lifetime is promised.
 
 ## Installation target
 
@@ -58,7 +62,10 @@ identify the verified candidate. It includes authentication and the dispatch and
 completion fixes. The earlier 96-file integrated build and
 `bilicomics-0.1.0-dev-auth.zip` are historical candidates; their older reports do
 not describe this archive. No session, acquired comic content or diagnostic
-loader is included. See [remaining acceptance gates](docs/architecture-stabilization.md).
+loader is included. The [local acceptance addendum](spec/package/local-acceptance-source-evidence.json)
+also binds the successful real QR login, local native import/restart, first
+online request and complete online/offline reading to this candidate. See
+[completed task scope and deferred release work](docs/architecture-stabilization.md).
 
 The archive retains the session file importer, reader prefetch policy and previously live-tested image protocol fixes. Same-snapshot recovery verifies historical image bytes before updating mutable addresses. Unknown or changed content requires the separate [new-version confirmation](docs/partial-download-recovery.md): both versions remain pinned and independently removable, the new version starts from the beginning, and the old version reads cached pages only. The current [ordinal range contract](docs/ordinal-range-contract.md) has focused construction, UI and transaction-recovery evidence. The complete live reading workflow was not repeated for this revision, and synthetic purchase outcomes do not establish real charging behavior.
 

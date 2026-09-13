@@ -89,6 +89,10 @@ def main() -> int:
     parser.add_argument("--height", type=int, default=960)
     parser.add_argument("--video-driver", choices=("x11", "dummy"), default="x11",
                         help="Keep x11 for the visible app; dummy is for disposable headless checks")
+    parser.add_argument("--capture-account", action="store_true", help="Capture the anonymous native account screen for acceptance")
+    parser.add_argument("--autoclose", type=int, default=0, help="Exit through the native menu after 1 to 30 seconds")
+    parser.add_argument("--import-session-file", type=Path, help="Consume this candidate profile's one-time fresh authentication input")
+    parser.add_argument("--refresh-favorites-once", action="store_true", help="Observe one production favorites refresh after native startup")
     action = parser.add_mutually_exclusive_group()
     action.add_argument("--status", action="store_true")
     action.add_argument("--stop", action="store_true")
@@ -124,6 +128,17 @@ def main() -> int:
         raise RuntimeError("The official KOReader runtime was not found")
     if not (480 <= args.width <= 900 and 640 <= args.height <= 1200):
         raise RuntimeError("Use a visible desktop window between 480x640 and 900x1200")
+    if args.autoclose < 0 or args.autoclose > 30:
+        raise RuntimeError("Use an acceptance auto-close delay from 0 through 30 seconds")
+    import_file = None
+    if args.import_session_file:
+        import_file = args.import_session_file.expanduser()
+        expected = profile.parent / "fresh-auth-input.json"
+        details = import_file.lstat()
+        if import_file.is_symlink() or import_file.resolve() != expected or details.st_uid != os.getuid() \
+                or not stat.S_ISREG(details.st_mode) or stat.S_IMODE(details.st_mode) != 0o600 or details.st_nlink != 1 \
+                or not 0 < details.st_size <= 131072:
+            raise RuntimeError("Use this candidate's private, singly linked fresh-auth-input.json with mode 0600")
     plugin = stage_plugin(source, profile)
     home = private_directory(profile / "data")
     patches = private_directory(home / "patches")
@@ -132,6 +147,8 @@ def main() -> int:
     local_source = Path(__file__).resolve().parent
     shutil.copyfile(local_source / "readonly_guard.lua", support / "readonly_guard.lua")
     shutil.copyfile(local_source / "startup.lua", patches / "2-00-local-acceptance.lua")
+    if args.refresh_favorites_once:
+        shutil.copyfile(local_source / "renewable_online.lua", support / "renewable_online.lua")
     settings = home / "settings.reader.lua"
     if not settings.exists():
         disabled = ",".join(f"[{json.dumps(path.name[:-9])}]=true" for path in (runtime / "plugins").glob("*.koplugin"))
@@ -144,7 +161,11 @@ def main() -> int:
     environment.update(KO_HOME=str(home), DISPLAY=environment.get("DISPLAY") or ":0", SDL_VIDEODRIVER=args.video_driver,
         SDL_AUDIODRIVER="dummy", EMULATE_READER_W=str(args.width), EMULATE_READER_H=str(args.height),
         BILICOMICS_ACCEPTANCE_ID=token, BILICOMICS_ACCEPTANCE_PROFILE=str(profile),
-        BILICOMICS_ACCEPTANCE_PLUGIN=str(plugin))
+        BILICOMICS_ACCEPTANCE_PLUGIN=str(plugin),
+        BILICOMICS_ACCEPTANCE_CAPTURE_ACCOUNT="1" if args.capture_account else "0",
+        BILICOMICS_ACCEPTANCE_AUTOCLOSE=str(args.autoclose),
+        BILICOMICS_ACCEPTANCE_IMPORT_FILE=str(import_file) if import_file else "",
+        BILICOMICS_ACCEPTANCE_REFRESH_FAVORITES="1" if args.refresh_favorites_once else "0")
     if args.video_driver == "dummy":
         environment["SDL_RENDER_DRIVER"] = "software"
     for key in ("LUA_PATH", "LUA_CPATH", "LD_PRELOAD"):
@@ -152,11 +173,17 @@ def main() -> int:
     for key in ("XDG_DATA_HOME", "XDG_CONFIG_HOME", "XDG_CACHE_HOME"):
         environment[key] = str(private_directory(profile / key.lower()))
     log_path = profile / "koreader-private.log"
-    for name in ("native-ui-ready.json", "native-ui-before-import.png"):
+    for name in ("native-ui-ready.json", "native-ui-before-import.png", "native-account-before-import.png", "native-ui-closed.json"):
         previous = profile / name
         if previous.is_symlink():
             raise RuntimeError("The previous acceptance marker must not be a symbolic link")
         previous.unlink(missing_ok=True)
+    if args.refresh_favorites_once:
+        for name in ("renewable-online-events.jsonl", "renewable-online-native.json"):
+            previous = profile / name
+            if previous.is_symlink():
+                raise RuntimeError("The acceptance observation must not be a symbolic link")
+            previous.unlink(missing_ok=True)
     with log_path.open("ab", buffering=0) as log:
         process = subprocess.Popen([str(runtime / "luajit"), "reader.lua"], cwd=runtime, env=environment,
             stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)

@@ -1,0 +1,25 @@
+{
+  "archive_sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+  "review": "Manual visual review of native anonymous framebuffer captures",
+  "findings": [],
+  "passed": true,
+  "scope": "Chinese Continue and Account screens at 720x960 and 600x800; QR sign-in entry visible; no clipping or overlapping controls observed",
+  "images": [
+    {
+      "file": "600x800-native-account-before-import.png",
+      "sha256": "d5811a6817a18f58def049dad9db48c51491c89c840673d5683f3ce3b0d43f2e"
+    },
+    {
+      "file": "600x800-native-ui-before-import.png",
+      "sha256": "3cafefa161dfd5c0cceacec7817f8f7f824aad3c026e6c81c1db8cbbb438a41f"
+    },
+    {
+      "file": "720x960-native-account-before-import.png",
+      "sha256": "aa6854b5c435d90512f9393d63deda6526ea73a19c174b8cfc2e64186b63f0a9"
+    },
+    {
+      "file": "720x960-native-ui-before-import.png",
+      "sha256": "9added0ab16c7ba5d68688c89c4efedf45727decacf87409a4345d94cf5a778c"
+    }
+  ]
+}

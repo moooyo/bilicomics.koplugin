@@ -1,0 +1,939 @@
+{
+  "code_sha256": {
+    "guard": "4b806a1602f314494ca33443b1c1df12f4e53ed558d62d25bc2892bb185e0114",
+    "production": {
+      "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac",
+      "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+      "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+      "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+      "bilicomics/controller.lua": "5e8eda4ca2e3d0742c737c6ffe90839d3c4a26c5a09a730b1df78e73327ee1e0",
+      "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+      "bilicomics/jobs/download_service.lua": "5c1a99cf6c144d10f252242632799b87bd04744567a41587c515414f0b48ed58",
+      "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+      "bilicomics/jobs/session_runner.lua": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0",
+      "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+      "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+      "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+      "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+      "bilicomics/protocol/README.md": "6b392a92887c6c7548a659c27594633fb6cbac473e4bf092def00aed8903a248",
+      "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+      "bilicomics/protocol/auth.lua": "9257e2efc00448e651c6cb4feef2e525b23606bea6241945b31f6ecd53f9ad7a",
+      "bilicomics/protocol/auth_crypto.lua": "d09cca5a7660f94863a7aec42c62369525167ff58ef8a9dd41bfa5b7fc9180bf",
+      "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+      "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+      "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+      "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+      "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+      "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+      "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+      "bilicomics/protocol/native/README.md": "68d0a254c63717fc6ea75efdc97f47dd27500a5d21f6a5adee9f819b3f410301",
+      "bilicomics/protocol/native/bin/android-arm64-v8a/libbilicrypto.so": "7bcdeabd8916fbdff8a645a09398eb601c449eae10575e2da60d7979eb94c849",
+      "bilicomics/protocol/native/bin/android-arm64-v8a/libbiliwasm.so": "ca890ba1e7e0065579fa5aea3bb19a9f9971830711ad0611aba742b9ffb87f4d",
+      "bilicomics/protocol/native/bin/android-armeabi-v7a/libbilicrypto.so": "f6f06f4ea99f4ca0c4b4c68d4d6e18120c0d1dd403147768da166f123e5e1f2a",
+      "bilicomics/protocol/native/bin/android-armeabi-v7a/libbiliwasm.so": "45961992fc646cbf9679f8959ab28b049f0b06504c1aac77eec1a88d471e60b4",
+      "bilicomics/protocol/native/bin/android-x86/libbilicrypto.so": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94",
+      "bilicomics/protocol/native/bin/android-x86/libbiliwasm.so": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4",
+      "bilicomics/protocol/native/bin/android-x86_64/libbilicrypto.so": "b6bb8460cfb2877b5492b9926d4a8a05a9ec7692ac2d1ec60118f7bf1d7fd39d",
+      "bilicomics/protocol/native/bin/android-x86_64/libbiliwasm.so": "5a0a4ab94c9faa3e33b21a002d3ea74e3d529329f37840a6464c363c34df31e2",
+      "bilicomics/protocol/native/bin/linux-aarch64/libbilicrypto.so": "21bfe78cd9a114e423a34e5b87008337624ac55e11f8c5f87417f3c50ed330e7",
+      "bilicomics/protocol/native/bin/linux-aarch64/libbiliwasm.so": "989a95fa445482e71fbb554a7d56d956d057aa05f9f2992218f735dd32912cf6",
+      "bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f",
+      "bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d",
+      "bilicomics/protocol/native/bin/linux-x86_64/libbilicrypto.so": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+      "bilicomics/protocol/native/bin/linux-x86_64/libbiliwasm.so": "00f3200a8e276ea851722d3526105c84d0d13e5d0ebabe436227c9007149dc2d",
+      "bilicomics/protocol/native/legacy_v5/NOTICE": "a2736aee1d083931e3949ce0e3304772d6f6dfe4f056afec7ded36a00982f0fc",
+      "bilicomics/protocol/native/legacy_v5/README.md": "29bd1e0af3ea32a93ca8d47297fabba084127fa0a96d755bd65200b6f8f9b02e",
+      "bilicomics/protocol/native/legacy_v5/dependency.json": "374c14e7a614072184f1da25754a9f9e418df289feb48e380acb61dc32bb0567",
+      "bilicomics/protocol/native/legacy_v5/upstream-sha256.json": "f63631211895c25ffaa92188a5ce9c4194bda457e3b30ed8744c1cc2960b2bcb",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/LICENSE": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b",
+      "bilicomics/protocol/native/legacy_v5/vendored-sha256.json": "846131617d29db8a32c73d4b58b50bc2b6db88183880f3c995bde1824dc05ba3",
+      "bilicomics/protocol/native/licenses/android-ndk-NOTICE": "4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323",
+      "bilicomics/protocol/native/licenses/android-ndk-NOTICE.toolchain": "cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e",
+      "bilicomics/protocol/native/licenses/cJSON-LICENSE": "a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c",
+      "bilicomics/protocol/native/licenses/wasm3-LICENSE": "c67aa5c0d77ea831c9a9a025fcbdb69d8241da5d7c673243ae34b1a660afcda2",
+      "bilicomics/protocol/native/licenses/zig-LICENSE": "5c537d6853e005298a285d508cff9ac7192cea23576c840d485b2b586a7ff177",
+      "bilicomics/protocol/native/manifest.json": "fca424d7a36fc59c6446025cc63a9eb6993aed92bbefa1c03825bfe9b5a95c5f",
+      "bilicomics/protocol/native/portable/README.md": "38dd6f533c61f7b333e4d49e7b92a7f6ecb4394031e25a41814efece1013a9ca",
+      "bilicomics/protocol/native/portable/manifest.json": "44551fefc40baed96b5770631bfe3d0c85c178881eeaef7e729d1702c019cb6b",
+      "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+      "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+      "bilicomics/protocol/normalize.lua": "1358072c2095922872509faab3bd4823bc5c7e28d390234671eb50bbe1464087",
+      "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+      "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+      "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+      "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+      "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+      "bilicomics/purchase/README.md": "4255bb17ed1e72382f0f119f420f4abfd6ca40fd9c46d7c8ebb7e1df74c65039",
+      "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+      "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+      "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+      "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+      "bilicomics/purchase/selection-contract.md": "6290d77e3e0ca3cc63ac352137b060200608243f6fcab747c5dc35b7656b33fd",
+      "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+      "bilicomics/purchase/service.lua": "6eac520fbbc9d140b6f9f503a6cfa5623743e0b6b2ce8be9d2b0f46fdcf51296",
+      "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+      "bilicomics/reader/README.md": "fd60a58c27d7e6a1f7d4dad5daf189e7f6b81a36c46fcf095625649058dde3fd",
+      "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+      "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+      "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+      "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+      "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+      "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+      "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+      "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+      "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+      "bilicomics/session_manager.lua": "a5fb493670d4418842f8a5d3556b67486e885437c61384133f8da37275c4a8d6",
+      "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+      "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+      "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+      "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+      "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+      "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+      "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+      "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+      "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+      "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+      "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+      "bilicomics/ui/model.lua": "965abaa32c74bf3defde60c7cb9e48bb36be7bef4a18ac355d963f1d04de9261",
+      "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+      "bilicomics/ui/screens.lua": "676a23cb530555a15867f26141914cf9b9826f1864566a6f54f5aee01390d977",
+      "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+      "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+      "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+      "l10n/bilicomics_zh_CN.lua": "2d8427b559508dcbb3bf42d3e8a23ded1aaacef926d4c0cd6192014a2288b9d2",
+      "main.lua": "503afa4127abd1d45acd1eabc9e917abac705c6ce9b7b2900b0c54e24f4ce817",
+      "patches/2-bilicomics-provider.lua": "0385ec5135d8edfee278c7fe0c789053cbb94aef2f1808eb67e4041d69f32834"
+    },
+    "production_manifest": "a8c7e93eae557ec9f59f1404848d7fc82de5282c7fd4ef989c760ba3d136d21e",
+    "runtime": {
+      "ffi/mupdf.lua": "1d6627890135a97ecb22e725400c91645c4d21b43eca4eb8088d1e0cf6c1896d",
+      "frontend/apps/reader/readerui.lua": "54290763c2593dd853c15ff2f6bfa15f5f73cce721dd2447f84ca8ea842138b7",
+      "frontend/document/document.lua": "fbc8a11e4a5321c4b86742f9d699839a56ebe125edf6030f85f8ef57789c4129",
+      "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c"
+    },
+    "tests": {
+      "live_reading.lua": "1497a88e2c44b3a7ff11070cdddfc34acd128ce82c736560228eb56520526c6c",
+      "run_live_reading.py": "ac383a8ec2ac5495e573924864695d13da1172a93889df935a7c51d6d415a56e"
+    }
+  },
+  "counts": {
+    "isolated_sessions_removed": 0,
+    "lua_files_compiled": 70,
+    "native_cache_entries_removed": 3
+  },
+  "execution": {
+    "effective_uid": 1000,
+    "host": "local-wsl",
+    "offline_namespace": "user_and_network",
+    "wsl": true
+  },
+  "offline": {
+    "checks": {
+      "all_index_paths_match_approved_order": true,
+      "all_network_requests_pass_readonly_guard": true,
+      "all_pages_within_existing_reader_limits": true,
+      "application_data_is_private_to_this_run": true,
+      "controller_callbacks_succeed": true,
+      "descriptor_bytes_unchanged": true,
+      "descriptor_path_and_bytes_unchanged": true,
+      "entire_chapter_complete": true,
+      "entire_chapter_pinned": true,
+      "exactly_one_chapter_descriptor": true,
+      "fresh_process_has_no_session": true,
+      "no_out_of_scope_workers": true,
+      "no_reader_errors": true,
+      "no_rejected_live_index": true,
+      "offline_dispatches_zero_workers": true,
+      "offline_has_no_network_routes": true,
+      "offline_native_anchor_restored": true,
+      "offline_network_namespace_isolated": true,
+      "offline_real_native_pixels_rendered": true,
+      "offline_same_descriptor": true,
+      "one_bounded_complete_chapter_selected": true,
+      "phase_within_deadline": true,
+      "production_controller_and_screens_available": true,
+      "production_main_initializes": true,
+      "reader_budget_unchanged": true,
+      "same_descriptor_as_online": true,
+      "server_index_is_the_complete_approved_chapter": true,
+      "test_session_copy_removed": true,
+      "worker_lifetimes_closed": true,
+      "workflow_finished": true
+    },
+    "counts": {
+      "completed_pages": 45,
+      "heartbeat_count": 3,
+      "image_bytes": 92022101,
+      "transport_requests": 0,
+      "worker_starts": 0,
+      "worker_submissions": 0
+    },
+    "dimensions": [
+      {
+        "height": 2900,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2001
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 3000,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 1975
+      }
+    ],
+    "launcher": {
+      "children_cleaned": true,
+      "forced_cleanup": false,
+      "pid_records_valid": true,
+      "process_completed": true,
+      "processes_observed": 3,
+      "within_deadline": true
+    },
+    "passed": true,
+    "report_schema_valid": true
+  },
+  "online": {
+    "checks": {
+      "all_acquisition_runs_in_real_children": true,
+      "all_downloaded_pages_have_real_token_approval": true,
+      "all_index_paths_match_approved_order": true,
+      "all_network_requests_pass_readonly_guard": true,
+      "all_pages_within_existing_reader_limits": true,
+      "application_data_is_private_to_this_run": true,
+      "controller_callbacks_succeed": true,
+      "descriptor_bytes_unchanged": true,
+      "descriptor_path_and_bytes_unchanged": true,
+      "entire_chapter_complete": true,
+      "entire_chapter_pinned": true,
+      "exactly_one_chapter_descriptor": true,
+      "explicit_download_not_failed_or_paused": true,
+      "first_actual_image_replaces_placeholder": true,
+      "fresh_account_storage": true,
+      "guard_accepts_this_complete_live_index": true,
+      "live_index_episode_matches_selection": true,
+      "live_index_keeps_complete_page_count": true,
+      "live_index_observation_accepted": true,
+      "live_index_paths_are_ordered_and_unique": true,
+      "new_image_workers_start_after_close": true,
+      "no_out_of_scope_workers": true,
+      "no_reader_errors": true,
+      "no_rejected_live_index": true,
+      "one_bounded_complete_chapter_selected": true,
+      "one_explicit_chapter_download": true,
+      "opening_has_forward_progress": true,
+      "phase_within_deadline": true,
+      "production_connectivity_available": true,
+      "production_controller_and_screens_available": true,
+      "production_main_initializes": true,
+      "reader_budget_unchanged": true,
+      "reader_close_keeps_explicit_download": true,
+      "reader_opens_before_first_image": true,
+      "reading_starts_before_chapter_completion": true,
+      "real_image_child_waits_before_transport": true,
+      "real_main_attached_to_native_reader": true,
+      "real_native_scroll_anchor_saved": true,
+      "real_next_image_prefetch_without_navigation": true,
+      "real_session_import_validated": true,
+      "real_token_results_were_guard_approved": true,
+      "remaining_pages_complete_after_reader_close": true,
+      "selected_chapter_is_really_free": true,
+      "server_index_is_the_complete_approved_chapter": true,
+      "session_copy_is_test_private": true,
+      "session_copy_removed_before_restart": true,
+      "test_session_copy_removed": true,
+      "transport_request_count_is_bounded": true,
+      "ui_remains_responsive_before_image": true,
+      "worker_lifetimes_closed": true,
+      "workflow_finished": true
+    },
+    "counts": {
+      "approved_image_tokens": 45,
+      "completed_pages": 45,
+      "gate_heartbeats": 14,
+      "heartbeat_count": 604,
+      "image_bytes": 92022101,
+      "image_workers_started_after_close": 42,
+      "live_index_observations": 1,
+      "pages_completed_after_reader_close": 43,
+      "token_approval_batches": 45,
+      "transport_requests": 95,
+      "worker_starts": 49,
+      "worker_submissions": 50
+    },
+    "dimensions": [
+      {
+        "height": 2900,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2001
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 3000,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 1975
+      }
+    ],
+    "launcher": {
+      "children_cleaned": true,
+      "forced_cleanup": false,
+      "pid_records_valid": true,
+      "process_completed": true,
+      "processes_observed": 54,
+      "within_deadline": true
+    },
+    "opening_observation": {
+      "account_available": true,
+      "active_integration_current": false,
+      "active_integration_exists": false,
+      "connected": true,
+      "controller_closed": false,
+      "controller_suspended": false,
+      "document_is_open": false,
+      "download_failures": 0,
+      "download_requests": 0,
+      "download_requests_without_task": 0,
+      "first_image_gate_exists": false,
+      "first_page_missing": false,
+      "first_page_ready": false,
+      "image_submission_attempts": 0,
+      "integration_exists": false,
+      "opened_generation_matches": false,
+      "pending_tasks": 2,
+      "queued_tasks": 0,
+      "reader_instance_exists": false,
+      "rejected_worker_attempts": 0,
+      "response_received": false,
+      "runner_suspended": false,
+      "session_valid": true
+    },
+    "passed": true,
+    "report_schema_valid": true
+  },
+  "passed": true,
+  "status": {
+    "cancelled": false,
+    "guard_unchanged": true,
+    "isolated_sessions_absent": true,
+    "live_requested": true,
+    "lua_syntax_valid": true,
+    "native_cache_cleared_before_offline": true,
+    "offline_executed": true,
+    "online_driver_removed_session": true,
+    "online_executed": true,
+    "python_syntax_valid": true,
+    "runtime_unchanged": true,
+    "source_unchanged": true,
+    "staged": true,
+    "staged_source_unchanged": true,
+    "tests_unchanged": true,
+    "unexpected_error": false
+  }
+}

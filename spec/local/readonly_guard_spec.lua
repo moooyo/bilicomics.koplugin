@@ -188,6 +188,61 @@ local bad_host = rpc("user.v1.User/GetWallet", {}); bad_host.url = bad_host.url:
 blocked("wrong_rpc_host", bad_host)
 
 allowed("existing_nav_read", { url = "https://api.bilibili.com/x/web-interface/nav", method = "GET" })
+local auth_origin = { referer = "https://www.bilibili.com/", origin = "https://www.bilibili.com" }
+local function authRequest(path, body, host, credentials)
+    local headers = {}; for key, value in pairs(auth_origin) do headers[key] = value end
+    if credentials then headers.cookie = "SESSDATA=synthetic; bili_jct=synthetic" end
+    if body then headers["content-type"] = "application/x-www-form-urlencoded" end
+    return { url = "https://" .. (host or "passport.bilibili.com") .. path,
+        method = body and "POST" or "GET", body = body, headers = headers, max_bytes = 262144 }
+end
+local auth_generate = "/x/passport-login/web/qrcode/generate?source=main_web&go_url=https%3A%2F%2Fmanga.bilibili.com%2F"
+local auth_poll = "/x/passport-login/web/qrcode/poll?qrcode_key=synthetic_key&source=main_web"
+local auth_info = "/x/passport-login/web/cookie/info?csrf=synthetic"
+local auth_refresh = "/x/passport-login/web/cookie/refresh"
+local auth_confirm = "/x/passport-login/web/confirm/refresh"
+local refresh_body = "csrf=synthetic&refresh_csrf=synthetic&source=main_web&refresh_token=synthetic"
+local confirm_body = "csrf=synthetic&refresh_token=synthetic"
+allowed("auth_qr_generate", authRequest(auth_generate))
+allowed("auth_qr_poll", authRequest(auth_poll))
+allowed("auth_cookie_info", authRequest(auth_info, nil, nil, true))
+allowed("auth_correspondence", authRequest("/correspond/1/" .. string.rep("a", 256), nil, "www.bilibili.com", true))
+allowed("auth_refresh", authRequest(auth_refresh, refresh_body, nil, true))
+allowed("auth_confirm", authRequest(auth_confirm, confirm_body, nil, true))
+for _, path in ipairs({ auth_generate .. "&source=main_web", auth_generate .. "&pay_amount=0",
+    auth_poll .. "&refresh_token=synthetic", auth_poll:gsub("synthetic_key", "bad%%0Akey"),
+    auth_info .. "&csrf=duplicate", "/x/passport-login/web/logout", "/x/passport-login/web/cookie/refresh/extra" }) do
+    blocked("auth_rejects_path_or_query_" .. (#report.tests + 1), authRequest(path))
+end
+for _, body in ipairs({ refresh_body .. "&buy_method=3", refresh_body .. "&csrf=duplicate",
+    refresh_body:gsub("source=main_web", "source=other"), refresh_body:gsub("refresh_token=synthetic", "refresh_token="),
+    refresh_body:gsub("refresh_token=synthetic", "refresh_token=bad%%0Avalue"),
+    refresh_body:gsub("refresh_token=synthetic", "refresh_token=bad%%GG"),
+    "csrf=synthetic&refresh_token=synthetic", "{}" }) do
+    blocked("auth_rejects_refresh_form_" .. (#report.tests + 1), authRequest(auth_refresh, body, nil, true))
+end
+blocked("auth_info_requires_cookies", authRequest(auth_info))
+blocked("auth_generate_rejects_cookies", authRequest(auth_generate, nil, nil, true))
+blocked("auth_refresh_requires_cookies", authRequest(auth_refresh, refresh_body))
+blocked("auth_confirm_rejects_extra_fields", authRequest(auth_confirm, confirm_body .. "&source=main_web", nil, true))
+blocked("auth_challenge_rejects_short_hex", authRequest("/correspond/1/abcd", nil, "www.bilibili.com", true))
+blocked("auth_challenge_rejects_query", authRequest("/correspond/1/" .. string.rep("a", 256) .. "?csrf=x", nil, "www.bilibili.com", true))
+local invalid_auth = authRequest(auth_refresh, refresh_body, nil, true)
+invalid_auth.headers.origin = "https://unrelated.invalid"
+blocked("auth_rejects_foreign_origin", invalid_auth)
+invalid_auth = authRequest(auth_refresh, refresh_body, nil, true); invalid_auth.output_path = output .. "/auth.json"
+blocked("auth_rejects_output_file", invalid_auth)
+invalid_auth = authRequest(auth_refresh, refresh_body, nil, true); invalid_auth.headers.authorization = "synthetic"
+blocked("auth_rejects_unexpected_header", invalid_auth)
+invalid_auth = authRequest(auth_refresh, refresh_body, nil, true); invalid_auth.method = "GET"
+blocked("auth_rejects_wrong_method", invalid_auth)
+for _, method in ipairs({ "generateQR", "pollQR", "cookieInfo", "refreshSession", "confirmRefresh" }) do
+    test("runner_admits_auth_" .. method, false, true, function()
+        local before = original_runner_calls
+        check("approved authentication job reaches the original", runner:submit({ kind = "auth", method = method }, {}, function() end) ~= nil
+            and original_runner_calls == before + 1)
+    end)
+end
 allowed("existing_library_read", rpc("bookshelf.v1.Bookshelf/ListFavorite",
     { page_num = 1, page_size = 20, order = 1, wait_free = 0, time_limit_free = 0, type = 0, from = "web", source = "web" }))
 allowed("existing_signed_index", rpc("comic.v1.Comic/GetImageIndex", { ep_id = 101, m2 = "synthetic" }, "&cpx=1&ultra_sign=synthetic"))
@@ -238,6 +293,7 @@ for _, kind in ipairs({ "quote", "reconcile_purchase", "library", "download_page
     end)
 end
 for _, request in ipairs({ { kind = "purchase_submit" }, { kind = "set_favorite" }, { kind = "unknown" },
+    { kind = "auth", method = "logout" }, { kind = "auth", method = "buyEpisode" }, { kind = "auth" },
     { kind = "client", method = "buyEpisode" }, { kind = "client", method = "addHistory" },
     { kind = "client", method = "setFavorite" }, { kind = "client", method = "unknown" }, {} }) do
     test("runner_rejects_" .. tostring(request.kind) .. "_" .. tostring(request.method), false, false, function()
