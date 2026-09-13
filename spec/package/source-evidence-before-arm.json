@@ -1,0 +1,36 @@
+{
+  "archive_sha256": "2f337b48d80e5fdae547124851c45f64902fb6e9433c1ca82896218cdcf3fe7d",
+  "packaged_files": 91,
+  "archive_bytes": 2421925,
+  "baseline_archive_sha256": "641041ce5df61e82f93374f6560e1be79d2f960862d94afd2d5b6e562b055b0e",
+  "integration_modules_match_tested_source": true,
+  "integration_evidence": "/tmp/bili-version-workflow-waqSS3Li/run3/results.json",
+  "ui_files_match_frozen_test_snapshot": {
+    "bilicomics/ui/screens.lua": "3b195e023c3b38cce4c5d0289423e14b36009785c1fec5613f86a4853408344c",
+    "bilicomics/ui/model.lua": "113db2aabcceb483b9a731253c9753da4b2890e3d0083c58b4e50e47a6ba7256",
+    "l10n/bilicomics_zh_CN.lua": "fe7acf3cd3cef6d626dd39b025fcf470a02d2a262d132f02d94e6d0224dcefce"
+  },
+  "ui_snapshot": "/tmp/bilicomics-version-replacement-ui/plugin",
+  "unchanged_entrypoints": [
+    "_meta.lua",
+    "main.lua",
+    "patches/2-bilicomics-provider.lua"
+  ],
+  "changed_or_added_since_previous_package": [
+    "bilicomics/catalog/init.lua",
+    "bilicomics/controller.lua",
+    "bilicomics/jobs/download_service.lua",
+    "bilicomics/jobs/source_refresh.lua",
+    "bilicomics/jobs/version_replacement.lua",
+    "bilicomics/storage/page_store.lua",
+    "bilicomics/storage/store.lua",
+    "bilicomics/storage/version_replacement.lua",
+    "bilicomics/ui/model.lua",
+    "bilicomics/ui/screens.lua",
+    "l10n/bilicomics_zh_CN.lua"
+  ],
+  "unchanged_files": 80,
+  "live_account_workflow_rerun": false,
+  "purchase_testing": false,
+  "scope": "Source identity binds focused synthetic reading evidence; it does not establish all module behavior or live payment contracts"
+}

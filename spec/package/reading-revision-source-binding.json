@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "bound": true,
+  "packages": {
+    "reading": {
+      "archive_file": "bilicomics-0.1.0-dev.zip",
+      "archive_sha256": "1aa7c223470d0a366d0209a22938ba8dd3d4399f42154ed8ad8388f728442d22",
+      "archive_bytes": 2423766,
+      "packaged_files": 91,
+      "baseline_archive_sha256": "b7b27290dda31834d593bd0e4234079602f807e7093be5b396d78d18a35691b4",
+      "changed_paths": [
+        "bilicomics/controller.lua",
+        "bilicomics/jobs/download_service.lua",
+        "bilicomics/jobs/runner.lua",
+        "bilicomics/ui/model.lua",
+        "bilicomics/ui/screens.lua",
+        "l10n/bilicomics_zh_CN.lua"
+      ],
+      "unchanged_files": 85,
+      "all_packaged_bytes_match_staging": true,
+      "syntax_checked_files": {
+        "bilicomics/controller.lua": "b4941fe48eda9685c0e4984dcc0539374ed9d3ce0dcee0c26a89fc5c19508025",
+        "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+        "bilicomics/jobs/runner.lua": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991",
+        "bilicomics/ui/model.lua": "14f48d18669ad872fe29e5fd3b445c6854905cccacf489291e6605f5dcd304a1",
+        "bilicomics/ui/screens.lua": "3dba24d8ce82a94d8181817861f5565af54f30d87e81c6cbe3ea5697fcbf7353",
+        "l10n/bilicomics_zh_CN.lua": "dc91fd01115830c708fca76b234581f0868e26aaf66c93168031c5ce87198c35"
+      },
+      "package_result": "/tmp/bilicomics-reading-revision-hXqhbLDp/reading-package/result.json",
+      "package_result_sha256": "c3cced2770cbee39a88f3575c564ab80b3cc8a818c51ed094e6d3157d0b529cf"
+    },
+    "preview": {
+      "archive_file": "bilicomics-quote-preview.zip",
+      "archive_sha256": "38a01da12c74271a631af57e9ac45c9e90b48472e390bd4aae5ded42e37f8383",
+      "archive_bytes": 2440890,
+      "packaged_files": 95,
+      "baseline_archive_sha256": "37127a655a2da25417cb29a8a6871a0ea8de78a97e328f1a2807bc5d8e8a537e",
+      "changed_paths": [
+        "bilicomics/controller.lua",
+        "bilicomics/jobs/download_service.lua",
+        "bilicomics/jobs/runner.lua",
+        "bilicomics/ui/model.lua",
+        "bilicomics/ui/screens.lua",
+        "l10n/bilicomics_zh_CN.lua"
+      ],
+      "unchanged_files": 89,
+      "all_packaged_bytes_match_staging": true,
+      "syntax_checked_files": {
+        "bilicomics/controller.lua": "5ae6d7c13751cc67a2684131d84a2bbdb0930dbc879a4f693931512947a84b72",
+        "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+        "bilicomics/jobs/runner.lua": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991",
+        "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+        "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+        "l10n/bilicomics_zh_CN.lua": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f"
+      },
+      "package_result": "/tmp/bilicomics-reading-revision-hXqhbLDp/preview-package/result.json",
+      "package_result_sha256": "251ab761f8d2d46d32dfc816c048d9152014978eb98f895302493c84165e0735"
+    }
+  },
+  "staging_receipt": "/tmp/bilicomics-reading-revision-hXqhbLDp/stage/staging.json",
+  "staging_receipt_sha256": "c367270a15ecd41d24752618ac5874e2a928a4e39b8ff5c6ca6dec15d96cd87d",
+  "syntax_evidence": "/tmp/bilicomics-reading-revision-hXqhbLDp/syntax/syntax.json",
+  "syntax_evidence_sha256": "78e158770a6c798f97d3562d8cae56d1a3bca97f7096842ae680ec02af3031ae",
+  "focused_evidence": [
+    {
+      "kind": "connectivity",
+      "path": "/tmp/bili-download-connectivity-HSBOktRP/run2/results.json",
+      "sha256": "5e8af3d8b8fab8f254880600cd198d0a97e026d9b82b9d11217585c63f9312aa",
+      "scope": "Focused connectivity gates and lifecycle; real SQLite/Controller with controlled runner, separate real fork Runner with synthetic worker; not live-service acceptance",
+      "matching_source_sha256": {
+        "bilicomics/controller.lua": "5ae6d7c13751cc67a2684131d84a2bbdb0930dbc879a4f693931512947a84b72",
+        "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+        "bilicomics/jobs/runner.lua": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991"
+      }
+    },
+    {
+      "kind": "entitlement_display",
+      "path": "/tmp/bilicomics-entitlement-display/run-1/entitlement-display-verification.json",
+      "sha256": "d8117cfbafa60dfc6fb2049560a8c7a7b6179d71c1ab4c8bff0b60601661b9ee",
+      "scope": null,
+      "matching_source_sha256": {
+        "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+        "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+        "l10n/bilicomics_zh_CN.lua": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f"
+      }
+    }
+  ],
+  "reading_provenance": {
+    "bilicomics/jobs/download_service.lua": {
+      "mode": "whole_file",
+      "baseline_files_identical": true
+    },
+    "bilicomics/jobs/runner.lua": {
+      "mode": "whole_file",
+      "baseline_files_identical": true
+    },
+    "bilicomics/controller.lua": {
+      "mode": "selected_functions",
+      "functions": [
+        {
+          "symbol": "Controller:_openAccount",
+          "baseline_function_sha256": "355b7283995e4f6dd46f1f0366d0f85c0e44acc9ca492fe0fe222d4b5fb38e77",
+          "source_function_sha256": "19febee04158668a7c2d392aba67e21f3e5fb2931bc302842b4cd97697a815d7",
+          "baseline_functions_identical": true
+        },
+        {
+          "symbol": "Controller:prepareEpisode",
+          "baseline_function_sha256": "0fa6d064939b483fac905311ac976114fe4303b86333de97330ff90772e5ce25",
+          "source_function_sha256": "4a9ec0e97167516952cd793370c26a9516433ed07ae422cd3184c591865ea2c9",
+          "baseline_functions_identical": true
+        }
+      ],
+      "outside_selected_changes_is_baseline": true
+    },
+    "bilicomics/ui/model.lua": {
+      "mode": "selected_functions",
+      "functions": [],
+      "outside_selected_changes_is_baseline": true,
+      "inserted_helpers": [
+        {
+          "symbol": "Model.entitlementExpiry",
+          "before_symbol": "Model.storage",
+          "source_function_sha256": "4984cd3c9a302e400efb8287078ee4124f80a1e0ddf6e0ab34650699841d4890",
+          "absent_from_both_baselines": true
+        }
+      ]
+    },
+    "bilicomics/ui/screens.lua": {
+      "mode": "selected_functions",
+      "functions": [
+        {
+          "symbol": "Screens:_chapterRow",
+          "baseline_function_sha256": "7fee484b40f49328f7d0a534e84c787a23eb638f0b1aa60fbcc1253bdba0dc3f",
+          "source_function_sha256": "8f0803de0495cfaa4bfd8a0dd470ff8771c92bbeb368d904885238b1ce7bdd98",
+          "baseline_functions_identical": true
+        },
+        {
+          "symbol": "Screens:_comic",
+          "baseline_function_sha256": "fd540f804db32b3ec7f58c918e13c0aef9a165c2cb87815af1361baad8b40a1e",
+          "source_function_sha256": "93cc615f3f7ba85608dfb21b8b8371e35f558f590568b5f6c4eab507e4d1829e",
+          "baseline_functions_identical": true
+        }
+      ],
+      "outside_selected_changes_is_baseline": true
+    },
+    "l10n/bilicomics_zh_CN.lua": {
+      "mode": "new_reading_locale_entries",
+      "entries": [
+        {
+          "key": "Temporary access expiry is unknown.",
+          "source_entry_sha256": "bfa7cdd80f4fed7effae3fcb848aebc4e67891f8bf7fe03c3f22e829933426fc"
+        },
+        {
+          "key": "Temporary access expires: %s (UTC)",
+          "source_entry_sha256": "f8e53fc9b275b72b72fba308a28e6bb901d17f70427133bd049c8dd4a4bf202f"
+        }
+      ],
+      "all_previous_entries_unchanged": true
+    }
+  },
+  "reading_excludes_preview_only_files": [
+    "bilicomics/purchase/candidate.lua",
+    "bilicomics/purchase/quote_fetch.lua",
+    "bilicomics/purchase/selection-contract.md",
+    "bilicomics/purchase/selection.lua"
+  ],
+  "entrypoints_and_native_libraries_unchanged": true,
+  "preview_keeps_full_working_allowlist": true,
+  "focused_components_match_tested_source": true,
+  "whole_archive_runtime_verified": false,
+  "live_account_workflow_rerun": false,
+  "live_quote_contract_verified": false,
+  "payment_ui_behavior_verified": false,
+  "real_payment_verified": false,
+  "purchase_tests_executed": false,
+  "device_verified": false,
+  "local_visible_window_verified": false,
+  "dist_modified": false,
+  "remote_host": "test-env",
+  "binding_script_sha256": "24570cd32a9d29f4edd303f12531b644021c7f7934a4f649fbcf2f5cab1e3d24",
+  "scope": "Exact baseline, selected-function, focused-source and syntax provenance for the bounded reading revision; prior evidence keeps its original scope and no full live workflow acceptance is claimed"
+}

@@ -1,0 +1,455 @@
+{
+  "run_id": "cc032de4351f4f958f9ca878b119ff68",
+  "host": "test-env",
+  "adb_port": 5038,
+  "serial": "emulator-5580",
+  "plugin": "/sdcard/koreader/plugins/bili-native-probe.koplugin",
+  "source_sha256": {
+    "bilicomics/jobs/runner.lua": "a56c1ae56c3a3aabb20f65cc23f28edf32013e2dbd71ed4013c488ed0efca3d2",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07"
+  },
+  "probe_sha256": "b76e94712af9fa48680aa547a33bfe2f455c75afe7550c7ddcdac4f673950b18",
+  "apk_modified": false,
+  "production_modified": false,
+  "research_main_restored": true,
+  "boot_completed": "1",
+  "abi_list": "x86,armeabi-v7a,armeabi",
+  "selinux": "Enforcing",
+  "android_api": "30",
+  "apk_version_name": "v2026.07.1",
+  "apk_version_code": 119463,
+  "installed_apk_sha256": "3cd979cc6474308ce37c408a8753fce27898249599e6ec6875d34ecd9b3d4144",
+  "report": {
+    "plugin_root": "/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin",
+    "run_id": "cc032de4351f4f958f9ca878b119ff68",
+    "ok": true,
+    "phase": "complete",
+    "research_only": true,
+    "synthetic_workers_only": true,
+    "ordinary_apk_process": true,
+    "private_run_root": "/data/user/0/org.koreader.launcher/files/bili-jobs-probe-cc032de4351f4f958f9ca878b119ff68",
+    "ffi_arch": "x86",
+    "ffi_os": "Linux",
+    "uid": 10167,
+    "pid": 7968,
+    "source_sha256": {
+      "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+      "bilicomics/jobs/runner.lua": "a56c1ae56c3a3aabb20f65cc23f28edf32013e2dbd71ed4013c488ed0efca3d2",
+      "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b"
+    },
+    "loaded_runner_source": "@/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin/bilicomics/jobs/runner.lua",
+    "assertions": [
+      {
+        "name": "Probe runs in the ordinary Android application UID",
+        "detail": {
+          "arch": "x86",
+          "context": "u:r:untrusted_app:s0:c167,c256,c512,c768\u0000",
+          "uid": 10167
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Runner is loaded from the staged unchanged production source",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Production source digest matches deployment: bilicomics/storage/codec.lua",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Production source digest matches deployment: bilicomics/jobs/runner.lua",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Production source digest matches deployment: bilicomics/util.lua",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Response is larger than the measured kernel pipe capacity",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "The same real child remains blocked throughout the heartbeat window",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "The real UI event loop continues while its worker is blocked",
+        "detail": {
+          "interval": 0.3500699996948242,
+          "beats": 14,
+          "maximum_gap": 0.08177495002746582
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Large response returns successfully",
+        "detail": false,
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "The full 1 MiB payload is preserved",
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Large payload came from an actual app-UID child",
+        "detail": {
+          "pid": 8003,
+          "uid": 10167
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Pipe drainage does not block the UI event loop",
+        "detail": {
+          "maximum_gap": 0.08177495002746582
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Large-response child was already reaped by Runner",
+        "detail": {
+          "pid": 8003,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "All Runner standby ownership is balanced after cleanup",
+        "detail": {
+          "acquired": 1,
+          "released": 1,
+          "held": 0
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Real UIManager standby count returns to its baseline",
+        "detail": {
+          "before": 0,
+          "after": 0
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Final response and cleanup retain the UI heartbeat bound",
+        "detail": {
+          "maximum_gap": 0.08177495002746582
+        },
+        "scenario": "large_pipe_and_ui_heartbeat",
+        "passed": true
+      },
+      {
+        "name": "Started child accepts cancellation",
+        "scenario": "cancel_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Canceled child reports one canceled outcome",
+        "detail": {
+          "retryable": false,
+          "kind": "canceled",
+          "transmitted": true,
+          "message": "The operation was canceled."
+        },
+        "scenario": "cancel_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Canceled child was already reaped by Runner",
+        "detail": {
+          "pid": 8010,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "cancel_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Cancellation callback is not duplicated",
+        "scenario": "cancel_and_reap",
+        "passed": true
+      },
+      {
+        "name": "All Runner standby ownership is balanced after cleanup",
+        "detail": {
+          "acquired": 1,
+          "released": 1,
+          "held": 0
+        },
+        "scenario": "cancel_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Real UIManager standby count returns to its baseline",
+        "detail": {
+          "before": 0,
+          "after": 0
+        },
+        "scenario": "cancel_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Started slow child reports timeout",
+        "detail": {
+          "retryable": true,
+          "kind": "timeout",
+          "transmitted": true,
+          "message": "The background operation timed out."
+        },
+        "scenario": "timeout_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Timeout applies to a child that entered its worker",
+        "scenario": "timeout_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Timed-out child was already reaped by Runner",
+        "detail": {
+          "pid": 8011,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "timeout_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Timeout settles once",
+        "scenario": "timeout_and_reap",
+        "passed": true
+      },
+      {
+        "name": "All Runner standby ownership is balanced after cleanup",
+        "detail": {
+          "acquired": 1,
+          "released": 1,
+          "held": 0
+        },
+        "scenario": "timeout_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Real UIManager standby count returns to its baseline",
+        "detail": {
+          "before": 0,
+          "after": 0
+        },
+        "scenario": "timeout_and_reap",
+        "passed": true
+      },
+      {
+        "name": "Suspended child was already reaped by Runner",
+        "detail": {
+          "pid": 8015,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Suspended read retains only its queue entry",
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Suspended queue does not poll through UIManager",
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Resumed read returns the second actual attempt",
+        "detail": false,
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Resumed child was already reaped by Runner",
+        "detail": {
+          "pid": 8016,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Resume changes child PID and settles once",
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "All Runner standby ownership is balanced after cleanup",
+        "detail": {
+          "acquired": 2,
+          "released": 2,
+          "held": 0
+        },
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Real UIManager standby count returns to its baseline",
+        "detail": {
+          "before": 0,
+          "after": 0
+        },
+        "scenario": "read_suspend_and_resume",
+        "passed": true
+      },
+      {
+        "name": "Purchase retains its original child across suspend and urgent work",
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "Synthetic purchase succeeds from its only attempt",
+        "detail": false,
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "Urgent synthetic read eventually succeeds",
+        "detail": false,
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "Purchase is never resent and completes before queued read",
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "Purchase-order child 1 was already reaped by Runner",
+        "detail": {
+          "pid": 8017,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "Purchase-order child 2 was already reaped by Runner",
+        "detail": {
+          "pid": 8021,
+          "errno": 10,
+          "waitpid": -1
+        },
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "All Runner standby ownership is balanced after cleanup",
+        "detail": {
+          "acquired": 2,
+          "released": 2,
+          "held": 0
+        },
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      },
+      {
+        "name": "Real UIManager standby count returns to its baseline",
+        "detail": {
+          "before": 0,
+          "after": 0
+        },
+        "scenario": "purchase_suspend_does_not_resubmit",
+        "passed": true
+      }
+    ],
+    "scenarios": [
+      {
+        "standby_acquired": 1,
+        "standby_released": 1,
+        "name": "large_pipe_and_ui_heartbeat",
+        "passed": true,
+        "evidence": {
+          "pipe_capacity_bytes": 65536,
+          "response_payload_bytes": 1048576
+        },
+        "callbacks": 1,
+        "heartbeats": 27,
+        "maximum_heartbeat_gap_seconds": 0.08177495002746582,
+        "elapsed_seconds": 0.7723641395568848
+      },
+      {
+        "standby_acquired": 1,
+        "standby_released": 1,
+        "name": "cancel_and_reap",
+        "passed": true,
+        "evidence": {},
+        "callbacks": 1,
+        "heartbeats": 4,
+        "maximum_heartbeat_gap_seconds": 0.02518296241760254,
+        "elapsed_seconds": 0.11719012260437012
+      },
+      {
+        "standby_acquired": 1,
+        "standby_released": 1,
+        "name": "timeout_and_reap",
+        "passed": true,
+        "evidence": {},
+        "callbacks": 1,
+        "heartbeats": 11,
+        "maximum_heartbeat_gap_seconds": 0.0250091552734375,
+        "elapsed_seconds": 0.2786431312561035
+      },
+      {
+        "standby_acquired": 2,
+        "standby_released": 2,
+        "name": "read_suspend_and_resume",
+        "passed": true,
+        "evidence": {},
+        "callbacks": 1,
+        "heartbeats": 9,
+        "maximum_heartbeat_gap_seconds": 0.025190114974975586,
+        "elapsed_seconds": 0.23614192008972168
+      },
+      {
+        "standby_acquired": 2,
+        "standby_released": 2,
+        "name": "purchase_suspend_does_not_resubmit",
+        "passed": true,
+        "evidence": {},
+        "callbacks": 2,
+        "heartbeats": 10,
+        "maximum_heartbeat_gap_seconds": 0.02507805824279785,
+        "elapsed_seconds": 0.2374250888824463
+      }
+    ],
+    "selinux_context": "u:r:untrusted_app:s0:c167,c256,c512,c768\u0000"
+  },
+  "passed": true,
+  "app_process_row": [
+    "  7968 10167 org.koreader.launcher"
+  ],
+  "restored_files": [
+    "bilicomics/jobs/runner.lua",
+    "bilicomics/util.lua",
+    "bilicomics/storage/codec.lua",
+    "main.lua"
+  ],
+  "removed_probe_files": [
+    "jobs-probe-input.json"
+  ]
+}

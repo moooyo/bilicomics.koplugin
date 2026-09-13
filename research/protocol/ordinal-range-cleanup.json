@@ -1,0 +1,25 @@
+{
+  "scope": "Cleanup of the fixed private ordinal-range observation workspace after both launchers reaped their children and public evidence was copied",
+  "target": "/tmp/bili-range-live-NZvtNRY5",
+  "files_removed": 225,
+  "directories_removed_including_root": 60,
+  "bytes_removed": 18886666,
+  "launchers": [
+    {
+      "phase": "run1",
+      "returncode": 1,
+      "credential_copy_removed": true
+    },
+    {
+      "phase": "run2",
+      "returncode": 0,
+      "credential_copy_removed": true
+    }
+  ],
+  "business_http_requests": 8,
+  "quote_http_requests": 4,
+  "public_asset_http_requests": 1,
+  "actual_buy_endpoint_requests": 0,
+  "original_windows_input_modified_by_agent": false,
+  "target_absent": true
+}

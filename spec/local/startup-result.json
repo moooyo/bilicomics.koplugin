@@ -1,0 +1,19 @@
+{
+  "environment": "User-requested local Debian WSL2 with WSLg",
+  "runtime_version": "v2026.07.1",
+  "native_plugin_ui_opened": true,
+  "readonly_guard_installed": true,
+  "recorded_application_running": true,
+  "staged_production_files_match_archive": true,
+  "archive_sha256": "65b38f158e3170dbd028703e62ace39707da21ba08e0c8e7ea773a7ac82f04ae",
+  "packaged_files": 87,
+  "framebuffer": {
+    "width": 720,
+    "height": 960,
+    "anonymous_before_import": true
+  },
+  "session_imported_by_launcher": false,
+  "purchase_tests_executed": false,
+  "scope": "Actual native startup and anonymous UI rendering; live account reading remains manual",
+  "passed": true
+}

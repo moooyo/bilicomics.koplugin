@@ -1,0 +1,7 @@
+{
+  "cleanup_success": true,
+  "synthetic_store_and_profiles_removed": true,
+  "image_and_derived_cache_removed": true,
+  "only_scripts_and_sanitized_results_remain": true,
+  "original_input_files_untouched": true
+}

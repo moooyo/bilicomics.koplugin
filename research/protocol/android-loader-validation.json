@@ -1,0 +1,24 @@
+{
+  "staging": {
+    "cases": [
+      "both libraries use distinct retained verified FDs and stable cache hits",
+      "source leaf symlinks are rejected even when their bytes match",
+      "private directory symlinks are not traversed",
+      "private cache directories with broad permissions are rejected",
+      "existing destination symlinks are rejected without changing their target",
+      "unexpected cache hardlinks are rejected",
+      "cache digest mismatch is rejected without loading or overwriting",
+      "a dlopen failure closes all transient descriptors",
+      "path replacement at dlopen cannot change the verified inode"
+    ],
+    "scope": "Real Linux filesystem operations with an injected Android files directory; dlopen behavior is separately verified in the official APK.",
+    "passed": 9
+  },
+  "concurrency": {
+    "processes": 2,
+    "post_rename_delay_ms": 700,
+    "both_loaded": true,
+    "published_files": 1,
+    "temporary_files": 0
+  }
+}

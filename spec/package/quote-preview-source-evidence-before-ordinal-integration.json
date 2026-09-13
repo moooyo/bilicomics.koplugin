@@ -1,0 +1,27 @@
+{
+  "archive_file": "bilicomics-quote-preview.zip",
+  "archive_sha256": "38a01da12c74271a631af57e9ac45c9e90b48472e390bd4aae5ded42e37f8383",
+  "archive_bytes": 2440890,
+  "packaged_files": 95,
+  "previous_archive_sha256": "37127a655a2da25417cb29a8a6871a0ea8de78a97e328f1a2807bc5d8e8a537e",
+  "changed_since_previous_archive": [
+    "bilicomics/controller.lua",
+    "bilicomics/jobs/download_service.lua",
+    "bilicomics/jobs/runner.lua",
+    "bilicomics/ui/model.lua",
+    "bilicomics/ui/screens.lua",
+    "l10n/bilicomics_zh_CN.lua"
+  ],
+  "unchanged_files": 89,
+  "bound": true,
+  "source_binding": "reading-revision-source-binding.json",
+  "syntax_evidence": "reading-revision-syntax.json",
+  "native_libraries_unchanged": true,
+  "package_checks": 27,
+  "live_account_workflow_rerun": false,
+  "purchase_tests_executed": false,
+  "payment_ui_behavior_verified": false,
+  "device_verified": false,
+  "local_visible_window_verified": false,
+  "scope": "Bounded connectivity and expiry-display update with focused reading evidence; preview coupon display has syntax-only evidence. Prior live, native and quote evidence retains its original scope."
+}

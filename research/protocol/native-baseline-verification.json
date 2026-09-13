@@ -1,0 +1,10 @@
+{
+  "golden_cases": 7,
+  "cli_parity_cases": 7,
+  "host_failure_cases": 7,
+  "repeated_ffi_calls": 100,
+  "rss_before_kib": 31340,
+  "rss_after_kib": 31344,
+  "peak_rss_kib": 31060,
+  "elapsed_seconds": 2.936
+}

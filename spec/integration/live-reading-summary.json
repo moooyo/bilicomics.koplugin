@@ -1,0 +1,95 @@
+{
+  "account_mutation_testing": false,
+  "archive": {
+    "bytes": 2399152,
+    "file": "bilicomics-0.1.0-dev.zip",
+    "files": 87,
+    "sha256": "668d27175642024d78d1da8e379582e57550c490803b6f4a7196c11df8f08c1b"
+  },
+  "completed_responses_by_category": {
+    "cover_image": 3,
+    "metadata": 49,
+    "page_image": 45
+  },
+  "date": "2026-09-12",
+  "environment": "ssh test-env",
+  "full_chapter_access": "free",
+  "guarded_request_starts_by_category": {
+    "cover_image": 44,
+    "metadata": 49,
+    "page_image": 45
+  },
+  "limits": [
+    "No physical Scribe execution",
+    "No live encrypted-container wire observed",
+    "No purchase, quote, wallet or batch acceptance",
+    "No full-chapter page-by-page visual inspection"
+  ],
+  "live_snapshot_files": 186,
+  "omitted_native_build_source_files": 99,
+  "package_files_match_live_tested_source": true,
+  "packaged_files": 87,
+  "phases": {
+    "offline": {
+      "checks": 30,
+      "counts": {
+        "completed_pages": 45,
+        "heartbeat_count": 3,
+        "image_bytes": 92022101,
+        "transport_requests": 0,
+        "worker_starts": 0,
+        "worker_submissions": 0
+      },
+      "launcher": {
+        "children_cleaned": true,
+        "forced_cleanup": false,
+        "pid_records_valid": true,
+        "process_completed": true,
+        "processes_observed": 3,
+        "within_deadline": true
+      },
+      "passed": true
+    },
+    "online": {
+      "checks": 51,
+      "counts": {
+        "approved_image_tokens": 45,
+        "completed_pages": 45,
+        "gate_heartbeats": 14,
+        "heartbeat_count": 1139,
+        "image_bytes": 92022101,
+        "image_workers_started_after_close": 42,
+        "live_index_observations": 1,
+        "pages_completed_after_reader_close": 43,
+        "token_approval_batches": 45,
+        "transport_requests": 138,
+        "worker_starts": 92,
+        "worker_submissions": 50
+      },
+      "launcher": {
+        "children_cleaned": true,
+        "forced_cleanup": false,
+        "pid_records_valid": true,
+        "process_completed": true,
+        "processes_observed": 94,
+        "within_deadline": true
+      },
+      "passed": true
+    }
+  },
+  "protocol_responses": "real, unmodified",
+  "purchase_testing": false,
+  "quote_testing": false,
+  "reports_sha256": {
+    "package-final/result.json": "c98eee3754b9ba50d9e286813d86aae3075c7cdce899647ed2096539e666a412",
+    "page4-fixed/authenticated-readonly-result.json": "75dcfa3824ebbaf9815d962fac5127c49b0044e9b07614ba354e8419acab8063",
+    "run3/offline-results.json": "44afd5c4f9142fd2e1105542f792cd91ed30add7a3a2a5721d48a4ce8a3b13c6",
+    "run3/online-results.json": "e2c447578ee8bae0026d5467d8dba5f52dc6a42004253714c7d0dcf5ac01f57b",
+    "run3/results.json": "89040d41cbcf49beb3ec54cb911f1b2fe08e95cb42c43a0363408b487423b17d"
+  },
+  "response_status_counts": {
+    "200": 94
+  },
+  "runtime": "Official KOReader v2026.07.1 Linux x86_64",
+  "wallet_testing": false
+}

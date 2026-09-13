@@ -1,0 +1,78 @@
+{
+  "android_private_dir": "/data/user/0/org.koreader.launcher/files",
+  "ffi_arch": "x86",
+  "checks": [
+    {
+      "detail": "Both production native backends are available",
+      "name": "production_capabilities",
+      "ok": true
+    },
+    {
+      "detail": "Production Backend signing matches the official oracle",
+      "name": "production_sign_golden",
+      "ok": true
+    },
+    {
+      "detail": "Production PortableCrypto passes the AES-256 vector",
+      "name": "production_aes256_golden",
+      "ok": true
+    },
+    {
+      "detail": "Production key generation and ECDH agree; no key material is logged",
+      "name": "production_ecdh_round_trip",
+      "ok": true
+    },
+    {
+      "detail": "Production v8 transform matches all 49363 PNG bytes using an offline synthetic response",
+      "name": "production_backend_v8_image_golden",
+      "ok": true
+    },
+    {
+      "detail": "Production loader returns digest-specific app-private paths",
+      "name": "production_private_library_records",
+      "ok": true
+    }
+  ],
+  "plugin_root": "/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin",
+  "ok": true,
+  "capabilities": {
+    "encrypted_images": true,
+    "response_decoding": true,
+    "index_challenge": false,
+    "index_error_reporting": true,
+    "encrypted_image_versions": [
+      3,
+      5,
+      6,
+      7,
+      8
+    ],
+    "backend": "wasm3-gojs-local",
+    "platform": "Linux-x86",
+    "binary_target": "android-x86",
+    "request_signing": true,
+    "max_encrypted_image_bytes": 16777216,
+    "image_key_exchange": true
+  },
+  "research_only": true,
+  "production_modules": true,
+  "phase": "complete",
+  "private_libraries": [
+    {
+      "bytes": 348004,
+      "uid": 10167,
+      "sha256": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4",
+      "path": "/data/user/0/org.koreader.launcher/files/bilicomics-native/android-x86/e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4/libbiliwasm.so",
+      "permissions": "rw-------",
+      "name": "libbiliwasm.so"
+    },
+    {
+      "bytes": 75652,
+      "uid": 10167,
+      "sha256": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94",
+      "path": "/data/user/0/org.koreader.launcher/files/bilicomics-native/android-x86/fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94/libbilicrypto.so",
+      "permissions": "rw-------",
+      "name": "libbilicrypto.so"
+    }
+  ]
+}

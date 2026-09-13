@@ -1,0 +1,21 @@
+This directory includes a subset of Mbed TLS 3.6.7.
+
+Copyright The Mbed TLS Contributors.
+The original source files retain their copyright and SPDX notices.
+
+Mbed TLS is offered under Apache-2.0 OR GPL-2.0-or-later. This distribution
+selects Apache-2.0. The complete upstream license is retained at
+vendor/mbedtls/LICENSE. Mbed TLS did not include a separate upstream NOTICE
+file in the pinned archive.
+
+Modified file: vendor/mbedtls/library/ecp.c.
+Change: clear the local recoded P-256 scalar array before the comb-multiply
+function returns. The algorithm, accepted keys, and calculation are unchanged.
+The exact change is recorded in patches/0001-clear-p256-recoded-scalar.patch.
+
+Modified file: vendor/mbedtls/library/gcm.c.
+Change: clear the local GHASH subkey after copying it into the context and on
+the block-cipher error path, clear the local GHASH multiplication arrays, and
+clear the temporary computed authentication tag.
+The algorithm and authentication behavior are unchanged. The exact change is
+recorded in patches/0002-clear-gcm-key-derived-temporaries.patch.

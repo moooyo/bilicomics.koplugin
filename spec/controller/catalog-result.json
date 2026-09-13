@@ -1,0 +1,54 @@
+{
+    "passed": true,
+    "tests": [
+        {
+            "passed": true,
+            "name": "Favorite snapshots remove stale membership while retaining local records and progress"
+        },
+        {
+            "passed": true,
+            "name": "Server history never replaces a local source anchor or current episode"
+        },
+        {
+            "passed": true,
+            "name": "Existing Store.putAnchor progress overrides an earlier server current episode hint"
+        },
+        {
+            "passed": true,
+            "name": "Remote chapter history is useful without inventing a precise page position"
+        },
+        {
+            "passed": true,
+            "name": "Detail refresh preserves local revision and source identity while removing acquisition secrets"
+        },
+        {
+            "passed": true,
+            "name": "Temporary access expires when displayed and never becomes a permanent offline download"
+        },
+        {
+            "passed": true,
+            "name": "Descriptor selection prefers explicit revision then newest download job before legacy fallback"
+        },
+        {
+            "passed": true,
+            "name": "Download status comes from matching page metadata rather than stale completion jobs"
+        },
+        {
+            "passed": true,
+            "name": "Complete automatic cache remains distinct from an explicitly retained download"
+        },
+        {
+            "passed": true,
+            "name": "Native progress supplies UI read state and survives reopening SQLite"
+        },
+        {
+            "passed": true,
+            "name": "Search keeps result order, membership, query filtering, and authoritative anchors independent"
+        },
+        {
+            "passed": true,
+            "name": "Invalid detail and native identities roll back the entire local ingestion"
+        }
+    ],
+    "host": "test-env"
+}

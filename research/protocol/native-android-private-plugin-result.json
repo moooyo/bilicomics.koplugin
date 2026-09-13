@@ -1,0 +1,73 @@
+{
+  "staging_directory_permissions": "rwx------",
+  "staging_directory_uid": 10167,
+  "staged_libraries": [
+    {
+      "permissions": "rw-------",
+      "path": "/data/user/0/org.koreader.launcher/files/bili-native-probe/libbiliwasm.so",
+      "uid": 10167,
+      "bytes": 348004,
+      "identical_bytes": true,
+      "name": "libbiliwasm.so"
+    },
+    {
+      "permissions": "rw-------",
+      "path": "/data/user/0/org.koreader.launcher/files/bili-native-probe/libbilicrypto.so",
+      "uid": 10167,
+      "bytes": 75652,
+      "identical_bytes": true,
+      "name": "libbilicrypto.so"
+    }
+  ],
+  "plugin_root": "/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin",
+  "research_only": true,
+  "data_dir": "/storage/emulated/0/koreader",
+  "package_dir": "/data/data/org.koreader.launcher/files",
+  "android_private_dir": "/data/user/0/org.koreader.launcher/files",
+  "apk_native_library_dir": "/data/app/~~9KLb5hQ686mlm_x8HuOUOw==/org.koreader.launcher-BQ1Y3Pn0ZazcxDnFB41tqQ==/lib/x86",
+  "ffi_os": "Linux",
+  "ffi_arch": "x86",
+  "checks": [
+    {
+      "detail": "Copied and byte-verified both libraries before atomic rename",
+      "name": "stage_libraries_in_private_files",
+      "ok": true
+    },
+    {
+      "detail": true,
+      "name": "dlopen_wasm_from_private_files",
+      "ok": true
+    },
+    {
+      "detail": true,
+      "name": "dlopen_crypto_from_private_files",
+      "ok": true
+    },
+    {
+      "detail": "Official deterministic signature matched",
+      "name": "official_wasm_sign_golden",
+      "ok": true
+    },
+    {
+      "detail": "Official argument error matched",
+      "name": "official_wasm_argument_error",
+      "ok": true
+    },
+    {
+      "detail": "FIPS AES-256 encrypt/decrypt matched",
+      "name": "aes256_ecb_fips_golden",
+      "ok": true
+    },
+    {
+      "detail": "P-256 generator public key and ECDH matched",
+      "name": "p256_public_and_ecdh_golden",
+      "ok": true
+    }
+  ],
+  "ok": true,
+  "selinux_context": "u:r:untrusted_app:s0:c167,c256,c512,c768\u0000",
+  "staging": "android_private_files",
+  "phase": "complete",
+  "native_staging_dir": "/data/user/0/org.koreader.launcher/files/bili-native-probe",
+  "process_uid": "10167"
+}

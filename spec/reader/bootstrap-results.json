@@ -1,0 +1,335 @@
+{
+    "patches_dir": "/tmp/bilicomics-geometry-review-20260912/bootstrap-run-2/data/patches",
+    "mode": "bootstrap",
+    "ok": true,
+    "assertions": [
+        {
+            "passed": true,
+            "name": "bootstrap starts with an empty isolated destination"
+        },
+        {
+            "passed": true,
+            "name": "startup patch installs into real DataStorage"
+        },
+        {
+            "passed": true,
+            "name": "installed patch preserves its owner"
+        },
+        {
+            "passed": true,
+            "name": "installed path is safely quoted"
+        },
+        {
+            "passed": true,
+            "name": "installation does not mutate the packaged source"
+        },
+        {
+            "passed": true,
+            "name": "repeated installation is idempotent"
+        },
+        {
+            "passed": true,
+            "name": "idempotent installation keeps content and inode"
+        },
+        {
+            "passed": true,
+            "name": "successful installation leaves no temporary files"
+        },
+        {
+            "passed": true,
+            "name": "an owned startup patch can be updated"
+        },
+        {
+            "passed": true,
+            "name": "owned update reaches the destination"
+        },
+        {
+            "passed": true,
+            "name": "owned update is subsequently idempotent"
+        },
+        {
+            "passed": true,
+            "name": "a foreign same-name patch is rejected"
+        },
+        {
+            "passed": true,
+            "name": "foreign content is preserved"
+        },
+        {
+            "passed": true,
+            "name": "a destination symlink is rejected"
+        },
+        {
+            "passed": true,
+            "name": "destination symlink and target are preserved"
+        },
+        {
+            "passed": true,
+            "name": "a packaged source symlink is rejected"
+        },
+        {
+            "passed": true,
+            "name": "source symlink rejection writes no destination"
+        },
+        {
+            "passed": true,
+            "name": "a patches directory symlink is rejected"
+        },
+        {
+            "passed": true,
+            "name": "directory symlink rejection preserves the target"
+        },
+        {
+            "passed": true,
+            "name": "isolated user patches initially enabled"
+        },
+        {
+            "passed": true,
+            "name": "native disable marker exists"
+        },
+        {
+            "passed": true,
+            "name": "disabled user patches report a capability limit"
+        },
+        {
+            "passed": true,
+            "name": "disabled installation writes no startup patch"
+        },
+        {
+            "passed": true,
+            "name": "native user patches can be restored"
+        },
+        {
+            "passed": true,
+            "name": "F-Droid reports its startup-patch capability limit"
+        },
+        {
+            "passed": true,
+            "name": "F-Droid installation writes no startup patch"
+        },
+        {
+            "passed": true,
+            "name": "normal capability returns after F-Droid simulation"
+        },
+        {
+            "passed": true,
+            "name": "rejected installations leave no temporary files"
+        },
+        {
+            "passed": true,
+            "name": "default namespace descriptor is owned"
+        },
+        {
+            "passed": true,
+            "name": "explicit namespace descriptor is owned"
+        },
+        {
+            "passed": true,
+            "name": "fallback clears only the owned startup target"
+        },
+        {
+            "passed": true,
+            "name": "fallback preserves the last-document startup preference"
+        },
+        {
+            "passed": true,
+            "name": "fallback removal is persisted"
+        },
+        {
+            "passed": true,
+            "name": "fallback preserves the descriptor identity"
+        },
+        {
+            "passed": true,
+            "name": "fallback preserves native history and source anchors"
+        },
+        {
+            "passed": true,
+            "name": "fallback is idempotent"
+        },
+        {
+            "passed": true,
+            "name": "external comic file is not owned"
+        },
+        {
+            "passed": true,
+            "name": "external comic file is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "external comic content is preserved"
+        },
+        {
+            "passed": true,
+            "name": "ordinary document is not owned"
+        },
+        {
+            "passed": true,
+            "name": "ordinary document is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "other comic filename is not owned"
+        },
+        {
+            "passed": true,
+            "name": "other comic filename is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "wrong namespace layout is not owned"
+        },
+        {
+            "passed": true,
+            "name": "wrong namespace layout is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "namespace prefix collision is not owned"
+        },
+        {
+            "passed": true,
+            "name": "namespace prefix collision is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "parent traversal is not owned"
+        },
+        {
+            "passed": true,
+            "name": "parent traversal is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "embedded NUL is not owned"
+        },
+        {
+            "passed": true,
+            "name": "embedded NUL is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "non-string startup targets are not owned"
+        },
+        {
+            "passed": true,
+            "name": "descriptor symlink is not owned"
+        },
+        {
+            "passed": true,
+            "name": "descriptor symlink is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "fallback preserves the descriptor symlink target"
+        },
+        {
+            "passed": true,
+            "name": "descriptor ancestor symlink is not owned"
+        },
+        {
+            "passed": true,
+            "name": "descriptor ancestor symlink is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "ancestor symlink target is preserved"
+        },
+        {
+            "passed": true,
+            "name": "namespace root symlink is not owned"
+        },
+        {
+            "passed": true,
+            "name": "namespace root symlink is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "namespace root symlink target is preserved"
+        },
+        {
+            "passed": true,
+            "name": "unselected custom namespace is not owned"
+        },
+        {
+            "passed": true,
+            "name": "unselected custom namespace is not cleared"
+        },
+        {
+            "passed": true,
+            "name": "explicit custom namespace is recognized"
+        },
+        {
+            "passed": true,
+            "name": "explicit custom namespace fallback clears its own target"
+        },
+        {
+            "passed": true,
+            "name": "all fallback sentinels remain intact"
+        },
+        {
+            "passed": true,
+            "name": "provider was not previously registered"
+        },
+        {
+            "passed": true,
+            "name": "provider registration succeeds"
+        },
+        {
+            "passed": true,
+            "name": "registration uses the real native registry"
+        },
+        {
+            "passed": true,
+            "name": "registration keeps runtime construction lazy"
+        },
+        {
+            "passed": true,
+            "name": "repeated registration succeeds"
+        },
+        {
+            "passed": true,
+            "name": "registration is idempotent"
+        },
+        {
+            "passed": true,
+            "name": "lazy resolver returns the requested account"
+        },
+        {
+            "passed": true,
+            "name": "lazy resolver rejects another account"
+        },
+        {
+            "passed": true,
+            "name": "lazy resolver rejects a closed controller"
+        },
+        {
+            "passed": true,
+            "name": "lazy resolver handles runtime construction errors"
+        },
+        {
+            "passed": true,
+            "name": "resolver guard recovers after an initialization error"
+        },
+        {
+            "passed": true,
+            "name": "recursive runtime initialization returns the outer services"
+        },
+        {
+            "passed": true,
+            "name": "recursive resolver entry is bounded"
+        },
+        {
+            "passed": true,
+            "name": "bootstrap reload accepts an existing provider"
+        },
+        {
+            "passed": true,
+            "name": "bootstrap reload does not duplicate native providers"
+        },
+        {
+            "passed": true,
+            "name": "bootstrap reload remains lazy"
+        }
+    ]
+}

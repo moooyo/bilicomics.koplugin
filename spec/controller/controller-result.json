@@ -1,0 +1,269 @@
+{
+    "assertions": [
+        {
+            "passed": true,
+            "name": "fresh_account_is_isolated_anonymous"
+        },
+        {
+            "passed": true,
+            "name": "local_getters_do_not_dispatch_network"
+        },
+        {
+            "passed": true,
+            "name": "cache_ui_limit_matches_runtime_limit"
+        },
+        {
+            "passed": true,
+            "name": "session_validation_is_async"
+        },
+        {
+            "passed": true,
+            "name": "account_switch_reaps_old_runner"
+        },
+        {
+            "passed": true,
+            "name": "account_database_has_resolved_namespace"
+        },
+        {
+            "passed": true,
+            "name": "session_is_per_account"
+        },
+        {
+            "passed": true,
+            "name": "settings_do_not_contain_session_secret"
+        },
+        {
+            "passed": true,
+            "name": "rejected_import_does_not_invalidate_active_session"
+        },
+        {
+            "passed": true,
+            "name": "favorites_are_persisted"
+        },
+        {
+            "passed": true,
+            "name": "catalog_and_episodes_are_persisted"
+        },
+        {
+            "passed": true,
+            "name": "empty_search_does_not_dispatch"
+        },
+        {
+            "passed": true,
+            "name": "descriptor_is_immutable_and_excludes_source_urls"
+        },
+        {
+            "passed": true,
+            "name": "source_locator_is_account_page_metadata"
+        },
+        {
+            "passed": true,
+            "name": "direct_descriptor_requires_exact_saved_identity"
+        },
+        {
+            "passed": true,
+            "name": "prepared_image_commits_through_real_page_store"
+        },
+        {
+            "passed": true,
+            "name": "incomplete_descriptor_without_source_requests_recovery"
+        },
+        {
+            "passed": true,
+            "name": "recovered_index_restores_source_metadata"
+        },
+        {
+            "passed": true,
+            "name": "offline_open_does_not_refresh_network"
+        },
+        {
+            "passed": true,
+            "name": "reader_ready_is_not_assumed_synchronously"
+        },
+        {
+            "passed": true,
+            "name": "concurrent_cached_open_is_rejected_without_lost_pin"
+        },
+        {
+            "passed": true,
+            "name": "reader_callback_completes_after_attachment"
+        },
+        {
+            "passed": true,
+            "name": "active_reader_prevents_download_removal"
+        },
+        {
+            "passed": true,
+            "name": "removing_download_preserves_descriptor_and_access"
+        },
+        {
+            "passed": true,
+            "name": "reader_timeout_releases_pending_active_guard"
+        },
+        {
+            "passed": true,
+            "name": "late_reader_cannot_claim_same_path_new_opening"
+        },
+        {
+            "passed": true,
+            "name": "failed_active_acquisition_does_not_leave_busy_or_pin"
+        },
+        {
+            "passed": true,
+            "name": "partial_offline_content_can_open_without_source_metadata"
+        },
+        {
+            "passed": true,
+            "name": "partial_offline_gap_does_not_start_network_worker"
+        },
+        {
+            "passed": true,
+            "name": "partial_offline_content_is_not_marked_downloaded"
+        },
+        {
+            "passed": true,
+            "name": "temporary_descriptor_requires_current_online_grant"
+        },
+        {
+            "passed": true,
+            "name": "complete_temporary_cache_refreshes_online_entitlement"
+        },
+        {
+            "passed": true,
+            "name": "verified_temporary_online_access_opens_complete_cache"
+        },
+        {
+            "passed": true,
+            "name": "chapter_end_marks_local_progress_finished"
+        },
+        {
+            "passed": true,
+            "name": "later_native_anchor_keeps_finished_status"
+        },
+        {
+            "passed": true,
+            "name": "direct_descriptor_open_rejects_expired_temporary_access"
+        },
+        {
+            "passed": true,
+            "name": "resume_waits_for_actual_connectivity"
+        },
+        {
+            "passed": true,
+            "name": "network_connected_resumes_the_runner"
+        },
+        {
+            "passed": true,
+            "name": "quote_build_is_local_after_worker_read"
+        },
+        {
+            "passed": true,
+            "name": "invalid_purchase_purposes_are_rejected"
+        },
+        {
+            "passed": true,
+            "name": "invalid_purpose_never_dispatches_quote_or_payment"
+        },
+        {
+            "passed": true,
+            "name": "confirmation_requires_fresh_quote_request"
+        },
+        {
+            "passed": true,
+            "name": "purchase_is_durable_before_worker_dispatch"
+        },
+        {
+            "passed": true,
+            "name": "purchase_worker_cannot_be_preempted"
+        },
+        {
+            "passed": true,
+            "name": "download_purpose_is_durable_before_submission"
+        },
+        {
+            "passed": true,
+            "name": "uncertain_purchase_persists_without_retry"
+        },
+        {
+            "passed": true,
+            "name": "unknown_purchase_retains_original_download_purpose"
+        },
+        {
+            "passed": true,
+            "name": "timeout_does_not_enqueue_another_buy"
+        },
+        {
+            "passed": true,
+            "name": "wallet_change_does_not_establish_access"
+        },
+        {
+            "passed": true,
+            "name": "exact_entitlement_confirms_purchase_despite_wallet_failure"
+        },
+        {
+            "passed": true,
+            "name": "entitlement_only_confirmation_keeps_purpose_without_payment_receipt"
+        },
+        {
+            "passed": true,
+            "name": "confirmed_download_requires_separate_explicit_enqueue"
+        },
+        {
+            "passed": true,
+            "name": "explicit_purchase_continuation_commits_a_real_offline_chapter"
+        },
+        {
+            "passed": true,
+            "name": "purchase_is_durable_before_worker_dispatch"
+        },
+        {
+            "passed": true,
+            "name": "purchase_worker_cannot_be_preempted"
+        },
+        {
+            "passed": true,
+            "name": "legacy_purchase_callback_keeps_read_purpose"
+        },
+        {
+            "passed": true,
+            "name": "known_response_survives_journal_begin_failure"
+        },
+        {
+            "passed": true,
+            "name": "result_refresh_retries_persistence_without_rebuy"
+        },
+        {
+            "passed": true,
+            "name": "purchase_is_durable_before_worker_dispatch"
+        },
+        {
+            "passed": true,
+            "name": "purchase_worker_cannot_be_preempted"
+        },
+        {
+            "passed": true,
+            "name": "account_switch_closes_old_database_after_runner"
+        },
+        {
+            "passed": true,
+            "name": "obsolete_account_callback_cannot_write_new_catalog"
+        },
+        {
+            "passed": true,
+            "name": "switch_recovers_interrupted_purchase_as_unknown"
+        },
+        {
+            "passed": true,
+            "name": "account_reopen_preserves_durable_download_purpose"
+        },
+        {
+            "passed": true,
+            "name": "public_settings_keep_accounts_separate"
+        },
+        {
+            "passed": true,
+            "name": "controller_close_releases_account_and_runner"
+        }
+    ],
+    "count": 66
+}

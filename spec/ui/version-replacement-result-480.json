@@ -1,0 +1,720 @@
+{
+    "count": 144,
+    "spec": "native-version-replacement",
+    "runtime": "KOReader v2026.07.1",
+    "width": 480,
+    "passed": true,
+    "height": 640,
+    "controller_operations": {
+        "removeDownload": 1,
+        "readDownload": 2,
+        "refreshDownloadSources": 4,
+        "cancelSourceRefresh": 1,
+        "replaceDownloadVersion": 4,
+        "cancelVersionReplacement": 1,
+        "getDownloads": 58,
+        "getComic": 49,
+        "getEpisode": 49,
+        "getStorageSummary": 45,
+        "getAccount": 151
+    },
+    "injected_controller": true,
+    "network_requests": 0,
+    "assertions": [
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "recovery_keeps_source_refresh_alongside_new_version",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "recovery-options_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "recovery-options_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "recovery-options_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 269,
+                "width": 432
+            },
+            "name": "recovery-options_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "recovery-options_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "recovery-options_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "opening_replacement_confirmation_does_not_submit",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "replacement-confirmation_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "replacement-confirmation_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "replacement-confirmation_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 213,
+                "width": 372
+            },
+            "name": "replacement-confirmation_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "replacement-confirmation_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "replacement-confirmation_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "canceling_confirmation_preserves_old_download",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_is_explicit_and_localized",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_explains_version_separation",
+            "passed": true
+        },
+        {
+            "name": "confirmation_submits_the_exact_old_job_once",
+            "passed": true
+        },
+        {
+            "name": "stale_confirmation_cannot_submit_twice",
+            "passed": true
+        },
+        {
+            "name": "preparation_has_explicit_progress_and_cancel",
+            "passed": true
+        },
+        {
+            "name": "preparation_excludes_source_refresh_and_replacement",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "preparing-new-version_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 1,
+            "name": "preparing-new-version_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "preparing-new-version_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "cancel_preparation_uses_exact_job",
+            "passed": true
+        },
+        {
+            "name": "late_success_after_cancel_does_not_reopen_or_create_a_row",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "preparation-canceled_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "preparation-canceled_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "preparation-canceled_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_is_explicit_and_localized",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_explains_version_separation",
+            "passed": true
+        },
+        {
+            "name": "successful_preparation_keeps_two_distinct_jobs",
+            "passed": true
+        },
+        {
+            "name": "old_version_has_a_retained_status",
+            "passed": true
+        },
+        {
+            "name": "old_version_only_exposes_read_and_remove",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "old-and-new-versions_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 3,
+            "name": "old-and-new-versions_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "detail": 2,
+            "name": "old-and-new-versions_action_row_2_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "old-and-new-versions_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "active_filter_excludes_retained_old_version",
+            "passed": true
+        },
+        {
+            "name": "complete_filter_excludes_retained_old_version",
+            "passed": true
+        },
+        {
+            "name": "retained_read_uses_old_job_identity",
+            "passed": true
+        },
+        {
+            "name": "successful_retained_read_closes_business_screen",
+            "passed": true
+        },
+        {
+            "name": "canceling_old_version_removal_keeps_both_rows",
+            "passed": true
+        },
+        {
+            "name": "retained_remove_uses_old_job_identity",
+            "passed": true
+        },
+        {
+            "name": "removing_old_version_does_not_remove_new_download",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "new-version-queue_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 3,
+            "name": "new-version-queue_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "new-version-queue_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "complete_download_also_reads_by_exact_job",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "paused_retained_partial_job_offers_new_version",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "paused-recovery_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "paused-recovery_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "paused-recovery_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 269,
+                "width": 432
+            },
+            "name": "paused-recovery_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "paused-recovery_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "paused-recovery_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "failed_retained_partial_job_offers_new_version",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "failed-recovery_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "failed-recovery_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "failed-recovery_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 269,
+                "width": 432
+            },
+            "name": "failed-recovery_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "failed-recovery_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "failed-recovery_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "canceled_retained_partial_job_offers_new_version",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "canceled-recovery_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "canceled-recovery_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "canceled-recovery_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 269,
+                "width": 432
+            },
+            "name": "canceled-recovery_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "canceled-recovery_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "canceled-recovery_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "missing_revision_cannot_start_new_version",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "removed_cannot_start_new_version",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "unknown_history_source_refresh_remains_available",
+            "passed": true
+        },
+        {
+            "name": "unknown_history_source_refresh_excludes_preparation",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "source-verification-controls_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 2,
+            "name": "source-verification-controls_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "source-verification-controls_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "unknown_history_feedback_opens_direct_new_version_recovery",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "source-error-unknown_history_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "source-error-unknown_history_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "source-error-unknown_history_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 269,
+                "width": 432
+            },
+            "name": "source-error-unknown_history_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "source-error-unknown_history_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "source-error-unknown_history_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "content_changed_source_refresh_remains_available",
+            "passed": true
+        },
+        {
+            "name": "content_changed_source_refresh_excludes_preparation",
+            "passed": true
+        },
+        {
+            "name": "content_changed_feedback_opens_direct_new_version_recovery",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "source-error-content_changed_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "source-error-content_changed_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "source-error-content_changed_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 269,
+                "width": 432
+            },
+            "name": "source-error-content_changed_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "source-error-content_changed_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "source-error-content_changed_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "unverified_position_source_refresh_remains_available",
+            "passed": true
+        },
+        {
+            "name": "unverified_position_source_refresh_excludes_preparation",
+            "passed": true
+        },
+        {
+            "name": "unverified_position_feedback_opens_direct_new_version_recovery",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "source-error-unverified_position_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "source-error-unverified_position_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "source-error-unverified_position_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 295,
+                "width": 432
+            },
+            "name": "source-error-unverified_position_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "source-error-unverified_position_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "source-error-unverified_position_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "existing_source_cancel_remains_effective",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_is_explicit_and_localized",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_explains_version_separation",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_rechecks_source_refresh_exclusion",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "source_confirmation_rechecks_replacement_exclusion",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_is_explicit_and_localized",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_explains_version_separation",
+            "passed": true
+        },
+        {
+            "name": "account_change_invalidates_unsubmitted_confirmation",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_is_explicit_and_localized",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_explains_version_separation",
+            "passed": true
+        },
+        {
+            "name": "old_account_feedback_cannot_replace_current_ui",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 627,
+                "width": 454
+            },
+            "name": "stale-account-feedback_content_fits",
+            "passed": true
+        },
+        {
+            "detail": 4,
+            "name": "stale-account-feedback_action_row_1_fits_four_buttons",
+            "passed": true
+        },
+        {
+            "name": "stale-account-feedback_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_dialog_has_expected_title",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_is_explicit_and_localized",
+            "passed": true
+        },
+        {
+            "name": "replacement_confirmation_explains_version_separation",
+            "passed": true
+        },
+        {
+            "name": "closed_screen_ignores_old_preparation_feedback",
+            "passed": true
+        },
+        {
+            "name": "version_replaced_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "version_replaced_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "source_unavailable_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "source_unavailable_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "version_replacement_interrupted_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "version_replacement_interrupted_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "all_controller_operations_are_allowlisted",
+            "passed": true
+        },
+        {
+            "name": "all_fake_callbacks_are_accounted_for",
+            "passed": true
+        }
+    ],
+    "screens": [
+        "recovery-options.png",
+        "replacement-confirmation.png",
+        "preparing-new-version.png",
+        "preparation-canceled.png",
+        "old-and-new-versions.png",
+        "new-version-queue.png",
+        "paused-recovery.png",
+        "failed-recovery.png",
+        "canceled-recovery.png",
+        "source-verification-controls.png",
+        "source-error-unknown_history.png",
+        "source-error-content_changed.png",
+        "source-error-unverified_position.png",
+        "stale-account-feedback.png"
+    ]
+}

@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "files": [
+    {
+      "path": "bilicomics/protocol/client.lua",
+      "sha256": "4d512c619d3e9a155993877bf99786d327165549d355ee547eb1d561551b845f",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "bilicomics/purchase/service.lua",
+      "sha256": "051ec6d5f55be7c6c9013560a43117646ba44df908f89382db204eacaa1ff841",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "bilicomics/purchase/quote.lua",
+      "sha256": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "bilicomics/purchase/quote_fetch.lua",
+      "sha256": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "bilicomics/purchase/range.lua",
+      "sha256": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "bilicomics/ui/model.lua",
+      "sha256": "18c15b5fb8492dad669153c0780e5fdbd25e1486182fee5cd7aa8b1e100d2eef",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "bilicomics/ui/screens.lua",
+      "sha256": "8f9a1238d124503ce4b9824d7475e628c89671982f60eb4a3bbf5cec325a22dc",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    },
+    {
+      "path": "l10n/bilicomics_zh_CN.lua",
+      "sha256": "8b13bb98692b14c1af6bce5d2ab2be5137b68d5ebb8abcc90ea696e92c0932a2",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "compiler_output": "",
+      "network_namespace_isolated": true,
+      "lua_initialization_disabled": true,
+      "lua_search_paths_pinned_to_runtime": true
+    }
+  ],
+  "application_modules_executed": false,
+  "runtime_version": "v2026.07.1",
+  "luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "scope": "Syntax compilation of the eight changed integrated candidate files only"
+}

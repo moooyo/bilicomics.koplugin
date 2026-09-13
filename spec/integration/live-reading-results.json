@@ -1,0 +1,1018 @@
+{
+  "code_sha256": {
+    "guard": "4b806a1602f314494ca33443b1c1df12f4e53ed558d62d25bc2892bb185e0114",
+    "production": {
+      "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac",
+      "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+      "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+      "bilicomics/catalog/init.lua": "14e53c341b3f86c809799154226e552534a5c77dfd00e2702455b7bf86ee59c6",
+      "bilicomics/controller.lua": "98c0d2f6935f2c2c5c740906459f058bfbe25b0a78072f1c3dd6b9d1882167c5",
+      "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+      "bilicomics/jobs/download_service.lua": "2954477a07dc260b9eb3aedc430fdc5b9d1ab2e3d3cbf79eb3ca072a5f3e8fda",
+      "bilicomics/jobs/runner.lua": "a3fd3dd288885205801a4dbcf44c2be9c309835ead78951bc478e57dd8609cb6",
+      "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+      "bilicomics/jobs/worker.lua": "71c2a15e441306fdb15eef6b69ae84af7088bce9e5d16a3ca1fff9a241803f7e",
+      "bilicomics/protocol/README.md": "6b392a92887c6c7548a659c27594633fb6cbac473e4bf092def00aed8903a248",
+      "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+      "bilicomics/protocol/client.lua": "ac7c3680579a64bee8efb7134537a804179423892e225a4e0edad7609a216b71",
+      "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+      "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+      "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+      "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+      "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+      "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+      "bilicomics/protocol/native/README.md": "05e2b8e9bff2c6627aad5ed2be04b725b1c7bba2dbdb2ef6840ed6f664f1696d",
+      "bilicomics/protocol/native/biliwasm.c": "a614ee2572e283fbf56c7ffd61ad3eae1bad9c30716b5b334f84ae2ce01368f2",
+      "bilicomics/protocol/native/biliwasm.exports.map": "53a04aacff1a72d81ed1849167857f7516fc2fff2f3238c9e7402652db31eead",
+      "bilicomics/protocol/native/biliwasm.h": "c6668541ef3c021100d138bc38931b3c64ba05c222fb61e880f4260dbd10042e",
+      "bilicomics/protocol/native/bin/android-arm64-v8a/libbilicrypto.so": "7bcdeabd8916fbdff8a645a09398eb601c449eae10575e2da60d7979eb94c849",
+      "bilicomics/protocol/native/bin/android-arm64-v8a/libbiliwasm.so": "ca890ba1e7e0065579fa5aea3bb19a9f9971830711ad0611aba742b9ffb87f4d",
+      "bilicomics/protocol/native/bin/android-armeabi-v7a/libbilicrypto.so": "f6f06f4ea99f4ca0c4b4c68d4d6e18120c0d1dd403147768da166f123e5e1f2a",
+      "bilicomics/protocol/native/bin/android-armeabi-v7a/libbiliwasm.so": "45961992fc646cbf9679f8959ab28b049f0b06504c1aac77eec1a88d471e60b4",
+      "bilicomics/protocol/native/bin/android-x86/libbilicrypto.so": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94",
+      "bilicomics/protocol/native/bin/android-x86/libbiliwasm.so": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4",
+      "bilicomics/protocol/native/bin/android-x86_64/libbilicrypto.so": "b6bb8460cfb2877b5492b9926d4a8a05a9ec7692ac2d1ec60118f7bf1d7fd39d",
+      "bilicomics/protocol/native/bin/android-x86_64/libbiliwasm.so": "5a0a4ab94c9faa3e33b21a002d3ea74e3d529329f37840a6464c363c34df31e2",
+      "bilicomics/protocol/native/bin/linux-aarch64/libbilicrypto.so": "21bfe78cd9a114e423a34e5b87008337624ac55e11f8c5f87417f3c50ed330e7",
+      "bilicomics/protocol/native/bin/linux-aarch64/libbiliwasm.so": "989a95fa445482e71fbb554a7d56d956d057aa05f9f2992218f735dd32912cf6",
+      "bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so": "424ac0a6ee2c7d5c4afc28b6b2705751306d015269699ac26ed1c379c248cbd1",
+      "bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so": "df3bb13afbc85a79d229ef57f4f9826d68f4d7715a25d4d50b38ac584278c98d",
+      "bilicomics/protocol/native/bin/linux-x86_64/libbilicrypto.so": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+      "bilicomics/protocol/native/bin/linux-x86_64/libbiliwasm.so": "00f3200a8e276ea851722d3526105c84d0d13e5d0ebabe436227c9007149dc2d",
+      "bilicomics/protocol/native/build-android.sh": "62bf8be13873135419c781a07c73166fdcb667d3641c50f3d070d183d00ca3d2",
+      "bilicomics/protocol/native/build.sh": "aba7d3fc5f3a9d131f3ff32f5e03fb8de512fd5b4adad8385c11204b5fae1522",
+      "bilicomics/protocol/native/legacy_v5/NOTICE": "a2736aee1d083931e3949ce0e3304772d6f6dfe4f056afec7ded36a00982f0fc",
+      "bilicomics/protocol/native/legacy_v5/README.md": "29bd1e0af3ea32a93ca8d47297fabba084127fa0a96d755bd65200b6f8f9b02e",
+      "bilicomics/protocol/native/legacy_v5/bili_mbedtls_config.h": "429bc9660a634151c5ef439c906a8e3f2454bb12e6c5d5d8b366b776c06920ec",
+      "bilicomics/protocol/native/legacy_v5/bili_v5.c": "9ec1ee9b9b9e3e3c24b3fc8c6f78b7841be49687fc182d7ccad427ffa504d6aa",
+      "bilicomics/protocol/native/legacy_v5/bili_v5.exports.map": "efcd0e7485204238b38a5ea4ec38f2f3050b8209119b216a109068df64e7c1dc",
+      "bilicomics/protocol/native/legacy_v5/bili_v5.h": "5233d78702009ee0a55dd08eb84e23ffa09a70c070130adbaf9ed88e6aae4b08",
+      "bilicomics/protocol/native/legacy_v5/build.sh": "dbb65504b6a87ee7d42362ee0895df86bb33a3325755155036b0cddf0d2decaf",
+      "bilicomics/protocol/native/legacy_v5/dependency.json": "374c14e7a614072184f1da25754a9f9e418df289feb48e380acb61dc32bb0567",
+      "bilicomics/protocol/native/legacy_v5/patches/0001-clear-p256-recoded-scalar.patch": "d938011cf0618272476138de93f9507ed37a4d95e79abf039fd7a496d79f972c",
+      "bilicomics/protocol/native/legacy_v5/patches/0002-clear-gcm-key-derived-temporaries.patch": "c56e2ae5e75f77a23efb7039fe13e6203dc8b37a9690ec7972cf1c768723da87",
+      "bilicomics/protocol/native/legacy_v5/sources.list": "4ffeee4ccc885629438e93ef8cf4d529be1dcf6cdf22485340e7f63cbe07e459",
+      "bilicomics/protocol/native/legacy_v5/upstream-sha256.json": "f63631211895c25ffaa92188a5ce9c4194bda457e3b30ed8744c1cc2960b2bcb",
+      "bilicomics/protocol/native/legacy_v5/vendor-files.list": "dd02e9b1b9239af0f9dfa07d13ef4b772054049cb11daf21224da4bd34ff2b7c",
+      "bilicomics/protocol/native/legacy_v5/vendor-refresh.py": "3c3375b8c40f652a2543a16b09342f22d052b92dd30c2288c5fb522db107a182",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/LICENSE": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/aes.h": "ce71f35d91cf1609bddff21d613863c1177bccc97327f7994c39965ebf044b56",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/asn1.h": "bff209b57c95feb92edf78194f77bcc139172ff2c78b5aa0ad25a9739ce570bc",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/asn1write.h": "28187d70e8e6ed663053c748628eff16aa94aacf356664caa646139f30b27ae4",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/bignum.h": "f4167d7a91c3431f37341d0d32c72280fd912dfaf360d6fccb1cd9c5fa9da92c",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/block_cipher.h": "edddbf6b03a54e04b2ae3ee3da00a7e243a7ef3f81db5747c69884b222980898",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/build_info.h": "4bb715278f3199298220b930514ace4f461ed0e9ff27b656d6e2616a1ca3287f",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/chacha20.h": "ebbced7d6162fda31d953b5de77733371375b5bbeba959c14eb8576c18773c2b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/chachapoly.h": "edef9e38e446b87289b20bb7b7db6a9f5792a25ad00beb567732088d4e4ba67f",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/check_config.h": "66696df9cc3f7cbbe84786046937242b18140963b94c34347404f7827c428efa",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/cipher.h": "9dc945cc9ad4a97e656d435ece879c207df249b037d8b7cd1a5d9efeceeeb577",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/cmac.h": "181015eae9af1a0e3ed94f54d42c806ee7897f623968eeece045d7c46cc347e9",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/config_adjust_legacy_crypto.h": "f404960e2878c21c22a5d67caba6cd1d29f382b3d913a56ce856931dd15b2886",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/config_adjust_ssl.h": "2d37a7552566e9fbd8a5a8b3e6cf6d4e21125a5e48a7e24ca30f3c683d141871",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/config_adjust_x509.h": "92909d91c59340f13eb2b447cf44e0075a0ee742a18f22fb7843f6a18c5af5dc",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/constant_time.h": "1f4196abb876364c85bcc044990b01661114e32d5ddeade427259adb58bb0c79",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ecdsa.h": "c4e419b690d0da2631d7c1f6893e392f7ad02a818b8cb24a323b66caea9eada0",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ecjpake.h": "13a7908d6c9193ef176baf4250bd235ae6813b2a44d7c5dc2692294587df5d42",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ecp.h": "f0cb2c6d6962623e7b379bcacb8a188cee24285adb31823b89fe05749187ed36",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/error.h": "ddcb14c1bf9d6fd2f2f1d2eb62117ce9bf05a0f9430c6931d7555b23f9ed3ddb",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/gcm.h": "e28c3e5923269dbc921bc57e83e0ab2a6488a16e1bcbae943e5ad36ccc57d1f4",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/md.h": "89c41b36251ab26facdedc7b379ad5236af8f941cae58941be7f6de690fecd4e",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/md5.h": "21893a1ffcb6d65057178a45977774ed249387ace6d733f32434d8546dd827f7",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/pkcs5.h": "d461711e57754093228a127268303bf03f33522d05aff3d1e0f3915bb5e4e370",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/platform.h": "e6e1edc99d90698acf751d5d837c9b59898d7277deb993bcbf7473172b7a3523",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/platform_util.h": "1237d849e96bc15b479e8086160e4568c1de86563bb51c60eead45b99ad1b4ac",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/poly1305.h": "393389d0f437930fae11e0cc1f325bbd82282723dffd57f080a08f82453d1e6e",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/private_access.h": "c897213b3e534e8d5db83629177f9c01d90461ed6fea57906836262dba87056d",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/psa_util.h": "382c0cc5184a102f7a6ee2ada6ebaf95c327bad7e08d9fa2ff2940e9585dde1b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ripemd160.h": "138b3cd792a3301fb869e5303fe0dd317743b2009b7a8f8423a51511444e23dc",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha1.h": "e644d96d46d44da66e160eb69ad637f13caef1d192e3361616833b342c6a859b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha256.h": "a2ee050ca15b7598a8d227cac0e0ec9fd6c38615b817737a8007e90b3feab0d9",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha3.h": "8cc0b3928976871e2a4847d0f6bf02da4663a94cc0779afdec3438a0c76a5499",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha512.h": "0f77abf1b4dfc18b865725e8a221d5d9279899c274e993005359be182b7574a2",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/threading.h": "5688b2bef81fa61b9d29bca9383931db26b7dcb8a96785dbc957b95e01292b72",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/build_info.h": "9eb0dbed47ac851acee62bd0829ce177aac6fe8515a4ce7e904ecf71829cb3d0",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto.h": "1f5b3a248a348ea39d093208067e377e5c8908718e71e396f9ff4d2c7fb5ebdd",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_builtin_composites.h": "1e2eec329b2b4ec3b5da3f9d5761bc5645833445401a43cbff812fdb76b0ae9e",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_builtin_key_derivation.h": "8b3d5d3174dbd33e5e332f51e5f00d2734716f3e744656631bccb4d355e92bdc",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_builtin_primitives.h": "a3078c5637a4ef2a40ef022f89881b8ca5d3321bcab31f6f550c6154c58543c5",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_compat.h": "0c0396d7f339f9207af3a003e98e9921516367c71d53724cb42e32f0f66142f7",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_common.h": "25207d12a91fc8c0670370596c3306c256ec054b4d6a6d1dd9b5bbb7d5bbe35b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_contexts_composites.h": "9f6bc40047a2d0d48361d82e5a5b05c477d946518b0091a3d4cb8c2cd0c877fd",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_contexts_key_derivation.h": "77c8ef9b7a8fac177a53472c7a39a9835da61bf864df951979cd15f71143796f",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_contexts_primitives.h": "829aaa3fbf90beeb20bf989a9db20829469d4875d514d0cc18591f8748a0ba0c",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_extra.h": "7357e1a806b9cf2fc677d9b0d4890eb1876a9430167955921bca6b8b0b98d2a0",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_platform.h": "26db28657e60ff6c3198b83e10ba86b25ced721cdda1d67e1c0ec679f1f7d041",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_sizes.h": "a2ec8ebd505ba034ea8916cacd10734c9b82850b120a78c0ce7944e26ee0fb2b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_struct.h": "0f5b72d1c0f7ff64a4823998d4641c80f29091a372bce8385261bf7419c81655",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_types.h": "219ac995d8c48ee0a70a35f1bb70c92215151862c2a1c22385c7018c9ccb7aa6",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_values.h": "bbb8fea69782eb077317e973e6ba92d3024e69932f284265041cadc35307f0e3",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/aes.c": "f30e6b7139527b41c32f68cc5430ceafa213e7fdf7a39bf4981f6a20cd0e77a1",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/alignment.h": "e97b8844abfadc4cc2fecce5b040d58cd53f549c42712205a267e00e372efd3d",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum.c": "8aead491e4f7756e4e112e4731cb74f43b3fd736d08e5009443436b7c15f431d",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_core.c": "0881aacce52499184aa33641c24ca6075bf533b31f61c5358923a655490bcfa6",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_core.h": "1df926337d83adddd398a979ed580c037e595b592699c68dbe2867b26eb9003a",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_core_invasive.h": "502ecdb0e785711a5a0cd9a318e9868501856fbff9f4a9a65c051964dba8b215",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_internal.h": "4eba771567115b06edb44e2ac5ad1cdad9be7baab568942beb7a6a62ef23847f",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_mod.c": "de6608fc08ed5e61d22ac11f2369484c5a837ac4e1f58d450befc51d3674e68e",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_mod.h": "734a0ba272bc72ddfae51cc677258e6ef8e8cfcd65b6925cf78f2fea59ae996f",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_mod_raw.c": "77d7b5fa4fe55d982d5a7be330fb0ca2de9bb254736c2a3e7716029fec49d118",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/block_cipher.c": "90d8a053a836d747d5ead61890e711f7150987017912fafc00c4ba08d6a80796",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/block_cipher_internal.h": "cfaf450de93abf79ae6efc3b66f2c97e4389730f48b50abd323929a0e4ce30aa",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bn_mul.h": "245587dbae16540f6109d0e670f544d1a3c512edc3c463541a0d02ccb512aa10",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/common.h": "adfd493f8ecb11f87f7e75f270a97cbd05d1902345ef32db51d39c076e4f8fde",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/constant_time.c": "1a573edd420fece73f996b70cdf6bb58a05a468e434a6ac0c562df592048d3c6",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/constant_time_impl.h": "5afbdaa93eaa2c750c4f3f2d0338409d8e15845823f870a39744d1cc197b4e60",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/constant_time_internal.h": "cb5acff773c6129b5dcc29052dc927d9aa474a2e6b7f7e27e5fac0e7d7023463",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ctr.h": "63331eb36d8ea69b4b4dcd2ec059582bcabf51a8ea891db26d37ab033967789f",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp.c": "8a9ed1e3485fe48c632bdd64edf0098cef85671fe4d064e253ad288575d7fa1c",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp_curves.c": "db2d2c08fd5b7a28d9a082cdce1af6c266bafd5dfbdee0f162183a07fa0bfe86",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp_internal_alt.h": "f6d3594e9e3cab0d3d79bb9c3b054ac2558559ba6456299b6b230b0718c5abda",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp_invasive.h": "f50a6ca7196b8b828ac5a82e4ac5eb262ca7bcf8051e18a39ffeba5e94f46ebd",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/gcm.c": "55cc1ea3e6dc411abed4c03ae49bfb434cdf242886957a9e3c6029fbe8050a11",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/md.c": "5ba79d51ff85951cb4001a22b2428568e4bc1072b367222808f3eac1ad91884d",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/md_wrap.h": "383077e483c60893f8256db246a7bd1fb1fc30bc7dd8e15133d2cb16b9dc5c82",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/pkcs5.c": "1d29edc77054f108a204b7358eb039dbc506ed485871708dc35857d7836eee07",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/platform_util.c": "83051fddcd37171831ff5706613dc3d336b2e53c42e6515f2f14ac0f8aa649f1",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/psa_util_internal.h": "342d2699a1ad757d27325be03b06501b4e3acc46d8e72ddcda6238ecdcca447b",
+      "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/sha512.c": "d5f237a4f40660dd4fcd09ee995a67a2811a62f4e93348f837bc30e3a76693b7",
+      "bilicomics/protocol/native/legacy_v5/vendored-sha256.json": "846131617d29db8a32c73d4b58b50bc2b6db88183880f3c995bde1824dc05ba3",
+      "bilicomics/protocol/native/licenses/android-ndk-NOTICE": "4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323",
+      "bilicomics/protocol/native/licenses/android-ndk-NOTICE.toolchain": "cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e",
+      "bilicomics/protocol/native/licenses/cJSON-LICENSE": "a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c",
+      "bilicomics/protocol/native/licenses/wasm3-LICENSE": "c67aa5c0d77ea831c9a9a025fcbdb69d8241da5d7c673243ae34b1a660afcda2",
+      "bilicomics/protocol/native/licenses/zig-LICENSE": "5c537d6853e005298a285d508cff9ac7192cea23576c840d485b2b586a7ff177",
+      "bilicomics/protocol/native/manifest.json": "a854fac43f3f9f9430dc24badec8c1eb611ff8b65c5909722618964cff831008",
+      "bilicomics/protocol/native/portable/README.md": "35b33213cb66c503882e4e03f65217aa7777bfa73a4fa001c1f91c747dcc411e",
+      "bilicomics/protocol/native/portable/bili_secure.h": "9ef06ea469ed071c5e360a627b40741b479527953cb005af3d9ed76a2c97a866",
+      "bilicomics/protocol/native/portable/bilicrypto.c": "83dfb00cb1021aeb4e4b4d2ccec0587a4edb6a403db8fbe30a54f522c53a7b60",
+      "bilicomics/protocol/native/portable/bilicrypto.exports.map": "38e3171eee0dc038c6ae6e32c9470f20721be2157857eac0fc71250e5c1a656a",
+      "bilicomics/protocol/native/portable/bilicrypto.h": "4b51688f7cf15833f1ecb66c908ae4f0be9be1bea996f016625e4742492c19bf",
+      "bilicomics/protocol/native/portable/build.sh": "4a40c450fe14ffa9e2f79faf4f81027586f55cd09342c31ec4e2e3cb3e249a7f",
+      "bilicomics/protocol/native/portable/manifest.json": "5e70d3e78d45a2994fe5f71572b7cca08b61ea97c6b780f2314aa8f7fa388a83",
+      "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+      "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+      "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+      "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+      "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+      "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+      "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+      "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+      "bilicomics/purchase/README.md": "4ff2b539853487338b098886f3e4b69d89d33a4a08efa622544fb0cb5cd13d27",
+      "bilicomics/purchase/quote.lua": "a370e7644505bbcdab9747f786e4d66c92c777f060f3051d0f1fae92cadfb3c7",
+      "bilicomics/purchase/service.lua": "56254d02b5b468dee2a6a76066695b916e060e527ef285dbe315ae0583f425ba",
+      "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+      "bilicomics/reader/README.md": "fd60a58c27d7e6a1f7d4dad5daf189e7f6b81a36c46fcf095625649058dde3fd",
+      "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+      "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+      "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+      "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+      "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+      "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+      "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+      "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+      "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+      "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+      "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+      "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+      "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+      "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+      "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+      "bilicomics/storage/page_store.lua": "25dc87ced8ddb526493d9b37d5aa8e54943d18e074757e2ab5e0cee2c8323881",
+      "bilicomics/storage/store.lua": "38ffd2068cb639d2da8be5d6afc9d60010447afc609abfe39b376159882b3b98",
+      "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+      "bilicomics/ui/model.lua": "38e83a2aeee9272530c97d683ebe4316602efcfd841593931ea2115c33876db3",
+      "bilicomics/ui/screens.lua": "95043f9521b9730b09f8fe1c22ee1c2b8b123d00b4d44528cb30666d52237f46",
+      "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+      "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+      "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b",
+      "l10n/bilicomics_zh_CN.lua": "aff4eea368c0a70801bd62fbaf15ecdfad9eef75c1f3de8aea28a28fbad01d24",
+      "main.lua": "503afa4127abd1d45acd1eabc9e917abac705c6ce9b7b2900b0c54e24f4ce817",
+      "patches/2-bilicomics-provider.lua": "0385ec5135d8edfee278c7fe0c789053cbb94aef2f1808eb67e4041d69f32834"
+    },
+    "production_manifest": "93fde2bd74f8e76a2c4ea882a6539d77d752b0c5057c6cb12b02d303b36b4966",
+    "runtime": {
+      "ffi/mupdf.lua": "1d6627890135a97ecb22e725400c91645c4d21b43eca4eb8088d1e0cf6c1896d",
+      "frontend/apps/reader/readerui.lua": "54290763c2593dd853c15ff2f6bfa15f5f73cce721dd2447f84ca8ea842138b7",
+      "frontend/document/document.lua": "fbc8a11e4a5321c4b86742f9d699839a56ebe125edf6030f85f8ef57789c4129",
+      "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c"
+    },
+    "tests": {
+      "live_reading.lua": "1497a88e2c44b3a7ff11070cdddfc34acd128ce82c736560228eb56520526c6c",
+      "run_live_reading.py": "fe6743e7bd096fc6f8042af259c1c7d28e60533a6ed0b225459e662ddccc6095"
+    }
+  },
+  "counts": {
+    "isolated_sessions_removed": 0,
+    "lua_files_compiled": 57,
+    "native_cache_entries_removed": 3
+  },
+  "offline": {
+    "checks": {
+      "all_index_paths_match_approved_order": true,
+      "all_network_requests_pass_readonly_guard": true,
+      "all_pages_within_existing_reader_limits": true,
+      "application_data_is_private_to_this_run": true,
+      "controller_callbacks_succeed": true,
+      "descriptor_bytes_unchanged": true,
+      "descriptor_path_and_bytes_unchanged": true,
+      "entire_chapter_complete": true,
+      "entire_chapter_pinned": true,
+      "exactly_one_chapter_descriptor": true,
+      "fresh_process_has_no_session": true,
+      "no_out_of_scope_workers": true,
+      "no_reader_errors": true,
+      "no_rejected_live_index": true,
+      "offline_dispatches_zero_workers": true,
+      "offline_has_no_network_routes": true,
+      "offline_native_anchor_restored": true,
+      "offline_network_namespace_isolated": true,
+      "offline_real_native_pixels_rendered": true,
+      "offline_same_descriptor": true,
+      "one_bounded_complete_chapter_selected": true,
+      "phase_within_deadline": true,
+      "production_controller_and_screens_available": true,
+      "production_main_initializes": true,
+      "reader_budget_unchanged": true,
+      "same_descriptor_as_online": true,
+      "server_index_is_the_complete_approved_chapter": true,
+      "test_session_copy_removed": true,
+      "worker_lifetimes_closed": true,
+      "workflow_finished": true
+    },
+    "counts": {
+      "completed_pages": 45,
+      "heartbeat_count": 3,
+      "image_bytes": 92022101,
+      "transport_requests": 0,
+      "worker_starts": 0,
+      "worker_submissions": 0
+    },
+    "dimensions": [
+      {
+        "height": 2900,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2001
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 3000,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 1975
+      }
+    ],
+    "launcher": {
+      "children_cleaned": true,
+      "forced_cleanup": false,
+      "pid_records_valid": true,
+      "process_completed": true,
+      "processes_observed": 3,
+      "within_deadline": true
+    },
+    "passed": true,
+    "report_schema_valid": true
+  },
+  "online": {
+    "checks": {
+      "all_acquisition_runs_in_real_children": true,
+      "all_downloaded_pages_have_real_token_approval": true,
+      "all_index_paths_match_approved_order": true,
+      "all_network_requests_pass_readonly_guard": true,
+      "all_pages_within_existing_reader_limits": true,
+      "application_data_is_private_to_this_run": true,
+      "controller_callbacks_succeed": true,
+      "descriptor_bytes_unchanged": true,
+      "descriptor_path_and_bytes_unchanged": true,
+      "entire_chapter_complete": true,
+      "entire_chapter_pinned": true,
+      "exactly_one_chapter_descriptor": true,
+      "explicit_download_not_failed_or_paused": true,
+      "first_actual_image_replaces_placeholder": true,
+      "fresh_account_storage": true,
+      "guard_accepts_this_complete_live_index": true,
+      "live_index_episode_matches_selection": true,
+      "live_index_keeps_complete_page_count": true,
+      "live_index_observation_accepted": true,
+      "live_index_paths_are_ordered_and_unique": true,
+      "new_image_workers_start_after_close": true,
+      "no_out_of_scope_workers": true,
+      "no_reader_errors": true,
+      "no_rejected_live_index": true,
+      "one_bounded_complete_chapter_selected": true,
+      "one_explicit_chapter_download": true,
+      "opening_has_forward_progress": true,
+      "phase_within_deadline": true,
+      "production_connectivity_available": true,
+      "production_controller_and_screens_available": true,
+      "production_main_initializes": true,
+      "reader_budget_unchanged": true,
+      "reader_close_keeps_explicit_download": true,
+      "reader_opens_before_first_image": true,
+      "reading_starts_before_chapter_completion": true,
+      "real_image_child_waits_before_transport": true,
+      "real_main_attached_to_native_reader": true,
+      "real_native_scroll_anchor_saved": true,
+      "real_next_image_prefetch_without_navigation": true,
+      "real_session_import_validated": true,
+      "real_token_results_were_guard_approved": true,
+      "remaining_pages_complete_after_reader_close": true,
+      "selected_chapter_is_really_free": true,
+      "server_index_is_the_complete_approved_chapter": true,
+      "session_copy_is_test_private": true,
+      "session_copy_removed_before_restart": true,
+      "test_session_copy_removed": true,
+      "transport_request_count_is_bounded": true,
+      "ui_remains_responsive_before_image": true,
+      "worker_lifetimes_closed": true,
+      "workflow_finished": true
+    },
+    "counts": {
+      "approved_image_tokens": 45,
+      "completed_pages": 45,
+      "gate_heartbeats": 14,
+      "heartbeat_count": 1139,
+      "image_bytes": 92022101,
+      "image_workers_started_after_close": 42,
+      "live_index_observations": 1,
+      "pages_completed_after_reader_close": 43,
+      "token_approval_batches": 45,
+      "transport_requests": 138,
+      "worker_starts": 92,
+      "worker_submissions": 50
+    },
+    "dimensions": [
+      {
+        "height": 2900,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2001
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 2850,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 2000
+      },
+      {
+        "height": 3000,
+        "jpeg": true,
+        "png": false,
+        "webp": false,
+        "width": 1975
+      }
+    ],
+    "launcher": {
+      "children_cleaned": true,
+      "forced_cleanup": false,
+      "pid_records_valid": true,
+      "process_completed": true,
+      "processes_observed": 94,
+      "within_deadline": true
+    },
+    "opening_observation": {
+      "account_available": true,
+      "active_integration_current": false,
+      "active_integration_exists": false,
+      "connected": true,
+      "controller_closed": false,
+      "controller_suspended": false,
+      "document_is_open": false,
+      "download_failures": 0,
+      "download_requests": 0,
+      "download_requests_without_task": 0,
+      "first_image_gate_exists": false,
+      "first_page_missing": false,
+      "first_page_ready": false,
+      "image_submission_attempts": 0,
+      "integration_exists": false,
+      "opened_generation_matches": false,
+      "pending_tasks": 2,
+      "queued_tasks": 0,
+      "reader_instance_exists": false,
+      "rejected_worker_attempts": 0,
+      "response_received": false,
+      "runner_suspended": false,
+      "session_valid": true
+    },
+    "passed": true,
+    "report_schema_valid": true
+  },
+  "passed": true,
+  "status": {
+    "cancelled": false,
+    "guard_unchanged": true,
+    "isolated_sessions_absent": true,
+    "live_requested": true,
+    "lua_syntax_valid": true,
+    "native_cache_cleared_before_offline": true,
+    "offline_executed": true,
+    "online_driver_removed_session": true,
+    "online_executed": true,
+    "python_syntax_valid": true,
+    "runtime_unchanged": true,
+    "source_unchanged": true,
+    "staged": true,
+    "staged_source_unchanged": true,
+    "tests_unchanged": true,
+    "unexpected_error": false
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "passed": true,
+  "scope": "Syntax compilation only; no application or purchase behavior was executed",
+  "runtime_version": "v2026.07.1",
+  "luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "files": [
+    {
+      "path": "bilicomics/controller.lua",
+      "sha256": "f1de12c507d956c5df8aca023673d9f5516d6785c3c81909ba79a4629872be98",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/jobs/worker.lua",
+      "sha256": "29826580e0bcc2d6e66085be26f62c924f6c93420f9c64cb51a130a0123aa215",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/protocol/client.lua",
+      "sha256": "2c43880a1a54d76405ae37c5fb9e3b7742e959f80b2448a24e60d07698215589",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/purchase/quote.lua",
+      "sha256": "228a594dfb21b7a988ff954fe875b53f8ed00de6fb424aa4b9de2397afa2dea6",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/purchase/service.lua",
+      "sha256": "489e2598d5e10302dd905a0701f9e9395ebf7185eeaee2e3ddb136e175d833f9",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/purchase/selection.lua",
+      "sha256": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/purchase/candidate.lua",
+      "sha256": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/purchase/quote_fetch.lua",
+      "sha256": "350ef4fc86d8c01b18c877435c893aca9467a93878fb866b2642cf8e0e921ec8",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/ui/screens.lua",
+      "sha256": "b7adabec67542b62e937ef7d21aa7b049a2c2490efce6a21b1c5c5606a5c67a0",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "bilicomics/ui/model.lua",
+      "sha256": "e42d14b09f07f5d6aec49bbff7b97d7a9bde9bbfc2626abc31c911f6a3f0d5f1",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    },
+    {
+      "path": "l10n/bilicomics_zh_CN.lua",
+      "sha256": "a9d947c10f68aafdd724eba2c0be847a8bb61e22d304162e35138cf894c2bb34",
+      "returncode": 0,
+      "source_unchanged": true,
+      "bytecode_written": true,
+      "mode": "LuaJIT -b compile only",
+      "network_namespace_isolated": true,
+      "compiler_output": ""
+    }
+  ],
+  "modules_executed": false,
+  "purchase_tests_executed": false,
+  "quote_requests": 0,
+  "wallet_requests": 0,
+  "purchase_requests": 0,
+  "launcher_sha256": "d82a07976ca7b20a308d3d38ef9016ce3d6ddf8b4e30c5488df112648e3be09c"
+}

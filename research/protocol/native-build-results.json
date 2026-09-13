@@ -1,0 +1,47 @@
+{
+  "zig_version": "0.13.0",
+  "builds": [
+    {
+      "name": "x86_64-baseline",
+      "target": "x86_64-linux-gnu.2.17",
+      "cc": "/tmp/bili-native-protocol-20260912/zig-build/cc-x86_64-baseline.sh",
+      "cflags": "",
+      "output": "/tmp/bili-native-protocol-20260912/libbiliwasm-x86_64-baseline.so",
+      "exit_code": 0,
+      "elapsed_seconds": 0.25,
+      "log": "/tmp/bili-native-protocol-20260912/zig-build/x86_64-baseline.build.log",
+      "size": 1168744,
+      "sha256": "00f3200a8e276ea851722d3526105c84d0d13e5d0ebabe436227c9007149dc2d",
+      "elf_exit_code": 0,
+      "exports_exit_code": 0
+    },
+    {
+      "name": "armhf",
+      "target": "arm-linux-gnueabihf.2.17",
+      "cc": "/tmp/bili-native-protocol-20260912/zig-build/cc-armhf.sh",
+      "cflags": "-DM3_HAS_TAIL_CALL=0",
+      "output": "/tmp/bili-native-protocol-20260912/libbiliwasm-armhf.so",
+      "exit_code": 0,
+      "elapsed_seconds": 0.25,
+      "log": "/tmp/bili-native-protocol-20260912/zig-build/armhf.build.log",
+      "size": 1717544,
+      "sha256": "df3bb13afbc85a79d229ef57f4f9826d68f4d7715a25d4d50b38ac584278c98d",
+      "elf_exit_code": 0,
+      "exports_exit_code": 0
+    },
+    {
+      "name": "aarch64",
+      "target": "aarch64-linux-gnu.2.17",
+      "cc": "/tmp/bili-native-protocol-20260912/zig-build/cc-aarch64.sh",
+      "cflags": "",
+      "output": "/tmp/bili-native-protocol-20260912/libbiliwasm-aarch64.so",
+      "exit_code": 0,
+      "elapsed_seconds": 0.239,
+      "log": "/tmp/bili-native-protocol-20260912/zig-build/aarch64.build.log",
+      "size": 1252264,
+      "sha256": "989a95fa445482e71fbb554a7d56d956d057aa05f9f2992218f735dd32912cf6",
+      "elf_exit_code": 0,
+      "exports_exit_code": 0
+    }
+  ]
+}

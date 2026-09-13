@@ -1,0 +1,11 @@
+{
+    global:
+        bili_p256_new;
+        bili_p256_public;
+        bili_p256_derive;
+        bili_aes256_ecb_encrypt;
+        bili_aes256_ecb_decrypt;
+        bili_pbkdf2_sha512;
+        bili_aes_gcm_decrypt;
+    local: *;
+};

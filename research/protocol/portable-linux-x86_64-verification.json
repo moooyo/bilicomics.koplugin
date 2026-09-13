@@ -1,0 +1,12 @@
+{
+  "library_sha256": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+  "p256_node_interoperability_cases": 56,
+  "p256_generated_unique_keys": 24,
+  "p256_invalid_scalars_rejected": 4,
+  "p256_invalid_peers_rejected": 5,
+  "p256_failed_outputs_zeroed": true,
+  "aes256_nist_sp800_38a_f1_5_blocks": 4,
+  "aes256_encrypt_decrypt_and_in_place": true,
+  "aes256_invalid_arguments_rejected": true,
+  "result": "passed"
+}

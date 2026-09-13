@@ -1,0 +1,26 @@
+[
+  {
+    "name": "emulator",
+    "url": "https://dl.google.com/android/repository/emulator-linux_x64-15917651.zip",
+    "bytes": 334378080,
+    "sha1": "1b1f78891abf8ec268264356e1365c25519e8379",
+    "path": "/var/tmp/bili-android-emulator-20260912/downloads/emulator-linux_x64-15917651.zip",
+    "sha256": "95771e0ae431897b2a4bd2d97fa095f29a8b0624a7b216baf529f9306161c266"
+  },
+  {
+    "name": "platform-tools",
+    "url": "https://dl.google.com/android/repository/platform-tools_r37.0.1-linux.zip",
+    "bytes": 9054187,
+    "sha1": "477254aa5f903c15cf51001717bdf347fb6b53e0",
+    "path": "/var/tmp/bili-android-emulator-20260912/downloads/platform-tools_r37.0.1-linux.zip",
+    "sha256": "d230f13842f60f782a8645f9c813f8f845bf36089ea7289f28c48f17979313f1"
+  },
+  {
+    "name": "api30-google-apis-x86",
+    "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86-30_r16.zip",
+    "bytes": 1240551553,
+    "sha1": "a58447e540a8581394dd04ee419c6771d62723d8",
+    "path": "/var/tmp/bili-android-emulator-20260912/downloads/x86-30_r16.zip",
+    "sha256": "3e76a22788fc591f279cbcfc9278695c3623a47bd0e3d389ee881c7c88666045"
+  }
+]

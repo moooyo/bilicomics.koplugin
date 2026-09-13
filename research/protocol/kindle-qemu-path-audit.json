@@ -1,0 +1,80 @@
+{
+  "date": "2026-09-12",
+  "scope": "Read-only launcher, existing log, ELF and filesystem metadata audit; this audit executed no QEMU, target, SDK, account or purchase operation",
+  "root": "/var/tmp/bilicomics-kindle-qemu-20260912",
+  "root_minimal_reproduction": "/tmp/bilicomics-kindle-loader-WSAJTBOe/initial/result.json",
+  "production_modified": false,
+  "local_wsl_accessed": false,
+  "observations": {
+    "launcher": {
+      "direct_program": "runtime/koreader/luajit",
+      "pt_interp": "/lib/ld-linux-armhf.so.3",
+      "qemu_prefix_matches_selected_sysroot": true,
+      "host_environment_inherited": false,
+      "guest_ld_library_path": "selected SYSROOT/lib followed by official RUNTIME/libs",
+      "cwd": "official RUNTIME",
+      "qemu_is_filesystem_sandbox": false
+    },
+    "elf": {
+      "official_loader": "ELF32 ARM EABI5 hard-float, ARMv7/VFPv3, SONAME ld-linux-armhf.so.3, DT_VERSYM present",
+      "debian_loader": "ELF32 ARM EABI5 hard-float, ARMv7/VFPv3-D16, SONAME ld-linux-armhf.so.3, DT_VERSYM present",
+      "luajit": "ELF32 ARM EABI5 hard-float, ARMv7/VFPv3, DT_RPATH=$ORIGIN:$ORIGIN/libs",
+      "rapidjson": "DT_RPATH=$ORIGIN:$ORIGIN/libs",
+      "qemu_host": "ELF64 x86-64 static PIE; no PT_INTERP or DT_NEEDED in the inspected file"
+    },
+    "official_symlinks_resolve_inside_sysroot": [
+      "ld-linux-armhf.so.3 -> ld-2.20.so",
+      "libc.so.6 -> libc-2.20.so",
+      "libm.so.6 -> libm-2.20.so",
+      "libdl.so.2 -> libdl-2.20.so",
+      "librt.so.1 -> librt-2.20.so",
+      "libpthread.so.0 -> libpthread-2.20.so"
+    ],
+    "absent_host_overrides": [
+      "/lib/ld-linux-armhf.so.3",
+      "/usr/lib/arm-linux-gnueabihf",
+      "/etc/ld.so.preload"
+    ],
+    "absent_in_both_selected_sysroots": ["etc/ld.so.cache"],
+    "core_library_overrides_in_runtime_or_runtime_libs": [],
+    "debian_trace": {
+      "libc_libm_libdl_libpthread_libgcc_origin": "debian/usr/arm-linux-gnueabihf/lib",
+      "libstdcpp_origin": "runtime/koreader/libs/libstdc++.so.6",
+      "libstdcpp_selected_by": "LuaJIT DT_RPATH before guest LD_LIBRARY_PATH",
+      "guest_cache_or_system_search_lines_seen": false,
+      "debian_libgcc_requires": ["GLIBC_2.34", "GLIBC_2.4"],
+      "official_libgcc_requires": ["GLIBC_2.4"]
+    },
+    "root_minimal_reproduction": {
+      "official_luajit_exit": 127,
+      "official_bare_loader_exit": 127,
+      "official_trace_syscalls": ["writev", "exit_group"],
+      "official_trace_open_or_read_calls": false,
+      "debian_luajit_version_exit": 0,
+      "plugin_loaded": false,
+      "source_unchanged": true
+    }
+  },
+  "conclusions": [
+    "The recorded official-loader failure happens during loader bootstrap before downstream library search; there is no observed core-library mixture explaining this assertion.",
+    "The successful Debian probe intentionally uses Debian core runtime libraries with KOReader's RPATH-selected C++ library. It is not an all-Debian or a Kindle-glibc result.",
+    "The clean explicit process environment prevents inherited host LD_LIBRARY_PATH, LD_PRELOAD and QEMU_LD_PREFIX from explaining this launch.",
+    "QEMU -L is an interpreter/sysroot lookup prefix, not a chroot. Absolute source/runtime paths remain host-visible; no corresponding prefixed duplicate was present in the inspected directories.",
+    "The precise bootstrap assertion cause remains unresolved by this path audit. Root's existing minimal reproduction is sufficient; repeating SDK or crypto probes would not improve this boundary."
+  ],
+  "reproducibility_limits": [
+    "The run script depends on externally staged ROOT/probe.lua and does not record that file's hash.",
+    "The original official execution JSON predates the current expected_glibc argument. Its command is not an exact replay recipe for the current probe, although its failure preceded Lua execution.",
+    "Debian extraction reuses its destination and does not remove extra files from a previous extraction; no conflicting core library was observed in this audit."
+  ],
+  "private_archive_tools": {
+    "archive": "kindlehf.tar.zst",
+    "gdb_executable_entries": [],
+    "objdump_regular_member": "x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/bin/objdump",
+    "objdump_bytes": 1974728,
+    "objdump_alias_hardlink": "x-tools/arm-kindlehf-linux-gnueabihf/bin/arm-kindlehf-linux-gnueabihf-objdump",
+    "other_available_names": ["readelf", "nm", "arm-kindlehf-linux-gnueabihf-addr2line"],
+    "already_extracted": false,
+    "extracted_or_executed_by_this_audit": false
+  }
+}

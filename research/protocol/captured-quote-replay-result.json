@@ -1,0 +1,182 @@
+{
+  "scope": "Pure Fetch/Quote construction with private captured read responses; no Client, transport, worker or submission service execution",
+  "real_payment_verified": false,
+  "actual_purchase_executed": false,
+  "network_modules_blocked": true,
+  "checks": [
+    {
+      "name": "single coin captured reads are accepted",
+      "passed": true
+    },
+    {
+      "name": "single coin does not invent exact-scope proof",
+      "passed": true
+    },
+    {
+      "name": "single coin price vector preserves every offer",
+      "passed": true
+    },
+    {
+      "name": "single coin vector keeps episode and season positions",
+      "passed": true
+    },
+    {
+      "name": "single coin original offer position 1",
+      "passed": true
+    },
+    {
+      "name": "single coin original offer position 2",
+      "passed": true
+    },
+    {
+      "name": "single coin original offer position 3",
+      "passed": true
+    },
+    {
+      "name": "single coin has no adapter error",
+      "passed": true
+    },
+    {
+      "name": "single coin is a confirmable quote",
+      "passed": true
+    },
+    {
+      "name": "single quote preserves the one requested chapter",
+      "passed": true
+    },
+    {
+      "name": "single amount uses the equal present server amounts",
+      "passed": true
+    },
+    {
+      "name": "usable balance is preserved",
+      "passed": true
+    },
+    {
+      "name": "affordability matches the captured response",
+      "passed": true
+    },
+    {
+      "name": "single construction uses only the intended currency method",
+      "passed": true
+    },
+    {
+      "name": "single coupon captured reads are accepted",
+      "passed": true
+    },
+    {
+      "name": "single coupon does not invent exact-scope proof",
+      "passed": true
+    },
+    {
+      "name": "single coupon price vector preserves every offer",
+      "passed": true
+    },
+    {
+      "name": "single coupon vector keeps episode and season positions",
+      "passed": true
+    },
+    {
+      "name": "single coupon original offer position 1",
+      "passed": true
+    },
+    {
+      "name": "single coupon original offer position 2",
+      "passed": true
+    },
+    {
+      "name": "single coupon original offer position 3",
+      "passed": true
+    },
+    {
+      "name": "missing eligible coupon identities are refused",
+      "passed": true
+    },
+    {
+      "name": "positive batch captured reads are accepted",
+      "passed": true
+    },
+    {
+      "name": "positive batch does not invent exact-scope proof",
+      "passed": true
+    },
+    {
+      "name": "positive batch price vector preserves every offer",
+      "passed": true
+    },
+    {
+      "name": "positive batch vector keeps episode and season positions",
+      "passed": true
+    },
+    {
+      "name": "positive batch original offer position 1",
+      "passed": true
+    },
+    {
+      "name": "positive batch original offer position 2",
+      "passed": true
+    },
+    {
+      "name": "positive batch original offer position 3",
+      "passed": true
+    },
+    {
+      "name": "observed batch offer is retained as advisory",
+      "passed": true
+    },
+    {
+      "name": "unproved batch exposes no submission payload",
+      "passed": true
+    },
+    {
+      "name": "remaining batch captured reads are accepted",
+      "passed": true
+    },
+    {
+      "name": "remaining batch does not invent exact-scope proof",
+      "passed": true
+    },
+    {
+      "name": "remaining batch price vector preserves every offer",
+      "passed": true
+    },
+    {
+      "name": "remaining batch vector keeps episode and season positions",
+      "passed": true
+    },
+    {
+      "name": "remaining batch original offer position 1",
+      "passed": true
+    },
+    {
+      "name": "remaining batch original offer position 2",
+      "passed": true
+    },
+    {
+      "name": "remaining batch original offer position 3",
+      "passed": true
+    },
+    {
+      "name": "observed batch offer is retained as advisory",
+      "passed": true
+    },
+    {
+      "name": "unproved batch exposes no submission payload",
+      "passed": true
+    }
+  ],
+  "captured_client_calls": 12,
+  "captured_response_replay": true,
+  "passed": true,
+  "returncode": 0,
+  "network_namespace_isolated": true,
+  "source_sha256": {
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/purchase/service.lua": "489e2598d5e10302dd905a0701f9e9395ebf7185eeaee2e3ddb136e175d833f9",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/quote_fetch.lua": "350ef4fc86d8c01b18c877435c893aca9467a93878fb866b2642cf8e0e921ec8",
+    "bilicomics/purchase/quote.lua": "228a594dfb21b7a988ff954fe875b53f8ed00de6fb424aa4b9de2397afa2dea6",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da"
+  },
+  "replay_sha256": "ca193e877b125cf0bb5790c4406649d1259a37ec0b21ba87ed4b00ff13e252f6"
+}

@@ -1,0 +1,56 @@
+{
+  "scope": "Minimal libc/FFI dlopen isolation, without production Lua modules or algorithm execution",
+  "cases": [
+    {
+      "name": "library_1",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "-E",
+        "LD_DEBUG=libs:versions",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/minimal-native/minimal.lua",
+        "/tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so"
+      ],
+      "returncode": -11,
+      "stdout": "libc=2.20\nbefore_dlopen\n",
+      "stderr_tail": "root/lib/libpthread.so.0 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so [0]\n   1456518:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so [0]\n   1456518:\tchecking for version `GLIBC_2.7' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so [0]\n   1456518:\tchecking for version `GLIBC_2.17' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so [0]\n   1456518:\tchecking for version `GLIBC_2.4' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so [0]\n   1456518:\tchecking for version `GLIBC_2.4' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456518:\tchecking for version `GLIBC_PRIVATE' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456518:\tchecking for version `GLIBC_PRIVATE' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456518:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\nqemu: uncaught target signal 11 (Segmentation fault) - core dumped\n"
+    },
+    {
+      "name": "library_2",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "-E",
+        "LD_DEBUG=libs:versions",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/minimal-native/minimal.lua",
+        "/tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so"
+      ],
+      "returncode": -11,
+      "stdout": "libc=2.20\nbefore_dlopen\n",
+      "stderr_tail": "s-kindle-qemu-20260912/runtime/koreader:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs\t\t(RPATH from file /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit)\n   1456520:\t  trying file=/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libpthread.so.0\n   1456520:\t  trying file=/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs/libpthread.so.0\n   1456520:\t search path=/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib\t\t(LD_LIBRARY_PATH)\n   1456520:\t  trying file=/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0\n   1456520:\t\n   1456520:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so [0]\n   1456520:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so [0]\n   1456520:\tchecking for version `GLIBC_2.4' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456520:\tchecking for version `GLIBC_PRIVATE' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456520:\tchecking for version `GLIBC_PRIVATE' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456520:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\nqemu: uncaught target signal 11 (Segmentation fault) - core dumped\n"
+    }
+  ],
+  "diagnostic_modified_loader": true,
+  "purchase_tests_executed": false,
+  "production_lua_loaded": false,
+  "requested_libraries": [
+    "/tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so",
+    "/tmp/bilicomics-quote-selection-pz9HDA86/source/bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so"
+  ]
+}

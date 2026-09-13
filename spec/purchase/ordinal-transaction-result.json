@@ -1,0 +1,351 @@
+{
+  "passed": true,
+  "runtime_version": "v2026.07.1",
+  "runtime_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "scope": "Real ordinal evidence derivation, synthetic transaction outcomes, same-comic conflict rules and SQLite process restarts",
+  "source_sha256": {
+    "bilicomics/purchase/service.lua": "051ec6d5f55be7c6c9013560a43117646ba44df908f89382db204eacaa1ff841",
+    "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+    "bilicomics/protocol/client.lua": "4d512c619d3e9a155993877bf99786d327165549d355ee547eb1d561551b845f",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c"
+  },
+  "spec_sha256": {
+    "nonspending_entry.lua": "f9d4480500421b317095aef92e3955d82b47b08a879d567e670a16d804c07e39",
+    "ordinal_transaction_spec.lua": "5aff4392abfceccd6f6700d26ffa017aa0d3515259c988e9aad61eeb89d5a9ed",
+    "state_machine.lua": "3497b31d8c42ab519cb6c53ec54b9779c5fc531cafab3af1a3add17a632ec304",
+    "protocol_boundary.lua": "74c65dcd8e1ce47fcf32ebdad4e683d32b01f1111cb1865e49d62b757ebe8f10"
+  },
+  "source_unchanged": true,
+  "driver_sha256": "7c0ca831d6fce05d39fd2c5826b78950b901ef4273fdcf8dbec289fe9ae44a2d",
+  "driver_dependency_sha256": "9bab5874b28c8285ce08000065d97622cd9952694995c77892f56d6fcc5e936d",
+  "runs": [
+    {
+      "name": "state_machine",
+      "returncode": 0,
+      "passed_cases": 34,
+      "case_names": [
+        "single coin uses the server amount and safe payload",
+        "single coupon passes the selected array without coin fallback",
+        "ineligible coupon is rejected",
+        "batch offer fields cannot bypass the missing exact-scope proof",
+        "unverified batch set is never inferred from catalog",
+        "batch pay_gold is not assumed to be final payable total",
+        "unsupported wildcard keys and arbitrary chapter sets are rejected",
+        "batch coupon purchases are not emulated",
+        "explicit confirmation is required without any network call",
+        "insufficient balance preserves quote but sends no purchase",
+        "changed amount requires fresh confirmation",
+        "unverified fresh price blocks the previous confirmation",
+        "tampered payment payload is rejected",
+        "expired quote is not submitted",
+        "journal exists before the network can transmit",
+        "failed journal prevents network transmission",
+        "duplicate confirmation is rejected durably",
+        "account only has one active submission",
+        "restart marks interrupted submission unknown without replay",
+        "definitive rejection needs a new explicit quote",
+        "pretransmission failure cannot consume and is never auto retried",
+        "unclassified exception is unknown and private data is absent",
+        "accepted remains accepted when entitlement refresh fails",
+        "temporary access and wallet changes do not prove ownership",
+        "access confirmation does not fabricate a payment receipt",
+        "historical accepted multi-episode journal preserves unresolved overlap",
+        "stale failure callback does not overwrite accepted state",
+        "cross account callback cannot touch another purchase",
+        "original quote cannot serve as its own refreshed quote",
+        "an unclassified purchase rejection remains uncertain",
+        "accepted write failure survives a delayed failure callback",
+        "rejected write failure can be flushed without network",
+        "confirmed access write failure can be flushed without network",
+        "explicit permanent ownership with zero expiry is confirmed"
+      ],
+      "evidence": {
+        "script": "state_machine",
+        "phase": "",
+        "purpose": "",
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 185,
+        "synthetic_submit_calls": 7,
+        "fake_buy_route_calls": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden"
+      }
+    },
+    {
+      "name": "protocol_boundary",
+      "returncode": 0,
+      "passed_cases": 12,
+      "case_names": [
+        "coin quote passes through the production client",
+        "coupon quote passes without pay_amount",
+        "quoted zero coin amount preserves official omission",
+        "batch metadata cannot reach even the fake BuyEpisode route",
+        "known purchase rejection 1",
+        "known purchase rejection 2",
+        "known purchase rejection 3",
+        "known purchase rejection 4",
+        "known purchase rejection 5",
+        "unknown business result retains unresolved intent",
+        "malformed response retains unresolved intent",
+        "HTTP failure retains unresolved intent"
+      ],
+      "evidence": {
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 0,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 11,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "script": "protocol_boundary",
+        "phase": "",
+        "purpose": ""
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-unit",
+      "returncode": 0,
+      "passed_cases": 12,
+      "case_names": [
+        "positive and zero ordinal requests use recomputed evidence and exact fake wire bodies",
+        "lost ordinal response blocks disjoint same-comic single and ordinal selections",
+        "a pending ordinal range does not block a different comic",
+        "new ordinal selection conflicts with pending same-comic single outcomes",
+        "two disjoint single selections keep their existing narrow conflict rule",
+        "owned intended chapters retain unresolved ordinal outcome and comic lock",
+        "definitive rejection and known non-transmission clear the ordinal flag",
+        "accepted receipt clears the flag but pending access still protects the comic",
+        "late acceptance clears an already readable uncertain range without regression",
+        "intent and range index roll back together after either durable write fails",
+        "a failed outcome index update preserves the old durable pair and observed receipt",
+        "initialized pending refresh uses filtered states and held IDs without history scans"
+      ],
+      "evidence": {
+        "synthetic_read_calls": 182,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 2,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "script": "ordinal_transaction_spec",
+        "phase": "unit",
+        "purpose": "",
+        "ordinal_assertions": 359,
+        "ordinal_quotes_built": 46,
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-seed",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "SQLite commits a zero-range intent before simulated process loss"
+      ],
+      "evidence": {
+        "ordinal_assertions": 16,
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 6,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 0,
+        "script": "ordinal_transaction_spec",
+        "ordinal_quotes_built": 2,
+        "phase": "seed",
+        "purpose": "",
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden"
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-recover",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "SQLite restart preserves the uncertain ordinal flag and same-comic lock"
+      ],
+      "evidence": {
+        "script": "ordinal_transaction_spec",
+        "phase": "recover",
+        "purpose": "",
+        "ordinal_quotes_built": 2,
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 6,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "ordinal_assertions": 20
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-owned",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "SQLite persists readable intended chapters without inventing an ordinal receipt"
+      ],
+      "evidence": {
+        "script": "ordinal_transaction_spec",
+        "phase": "owned",
+        "purpose": "",
+        "ordinal_quotes_built": 0,
+        "ordinal_assertions": 9,
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 0,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden"
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-inspect_pending",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "another process still lists the readable uncertain range as pending"
+      ],
+      "evidence": {
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 6,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "script": "ordinal_transaction_spec",
+        "ordinal_assertions": 20,
+        "phase": "inspect_pending",
+        "purpose": "",
+        "ordinal_quotes_built": 2
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-late_accepted",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "a late receipt clears the persisted lock while retaining readable access"
+      ],
+      "evidence": {
+        "script": "ordinal_transaction_spec",
+        "phase": "late_accepted",
+        "purpose": "",
+        "ordinal_assertions": 18,
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 6,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "ordinal_quotes_built": 2
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-inspect_cleared",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "final SQLite reopen keeps the cleared flag and original readable chapters"
+      ],
+      "evidence": {
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 0,
+        "script": "ordinal_transaction_spec",
+        "fake_buy_route_calls": 0,
+        "phase": "inspect_cleared",
+        "purpose": "",
+        "ordinal_assertions": 10,
+        "ordinal_quotes_built": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "synthetic_submit_calls": 0,
+        "passed": true
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-seed_timeout",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "a real Client fake-transport timeout persists the ordinal intent and index"
+      ],
+      "evidence": {
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 1,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "script": "ordinal_transaction_spec",
+        "phase": "seed_timeout",
+        "purpose": "",
+        "ordinal_assertions": 17,
+        "ordinal_quotes_built": 1,
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 6
+      }
+    },
+    {
+      "name": "ordinal_transaction_spec-recover_timeout",
+      "returncode": 0,
+      "passed_cases": 1,
+      "case_names": [
+        "SQLite restart preserves the uncertain ordinal flag and same-comic lock"
+      ],
+      "evidence": {
+        "passed": true,
+        "network_namespace_isolated": true,
+        "real_transport_attempts": 0,
+        "forbidden_module_attempts": 0,
+        "synthetic_read_calls": 6,
+        "synthetic_submit_calls": 0,
+        "fake_buy_route_calls": 0,
+        "scope": "Synthetic state and request-construction regression; actual HTTP and actual transactions are forbidden",
+        "script": "ordinal_transaction_spec",
+        "ordinal_assertions": 20,
+        "phase": "recover_timeout",
+        "purpose": "",
+        "ordinal_quotes_built": 2
+      }
+    }
+  ],
+  "actual_http_permitted": false,
+  "actual_purchases_permitted": false,
+  "user_session_accessed": false,
+  "server_confirmed_episode_ids_assumed": false,
+  "limits": [
+    "Synthetic catalogs and quote responses only",
+    "No live charge or entitlement delivery",
+    "Range proof comes from production Range/Fetch/Quote; no fabricated approval Boolean"
+  ]
+}

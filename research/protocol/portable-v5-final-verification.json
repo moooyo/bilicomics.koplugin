@@ -1,0 +1,20 @@
+{
+  "status": "pass",
+  "counts": {
+    "upstream_pbkdf2": 4,
+    "nist_gcm": 7,
+    "node_pbkdf2": 5,
+    "node_gcm": 5,
+    "authentication_rejection": 5,
+    "pbkdf2_boundary_rejection": 11,
+    "pbkdf2_overlapping_output": 1,
+    "gcm_boundary_rejection": 16,
+    "gcm_overlapping_output": 1,
+    "gcm_null_empty_output": 1,
+    "official_v5_image_fixture": 2
+  },
+  "seconds": 0.604,
+  "library_sha256": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+  "execution_host": "test-env",
+  "device_execution": false
+}

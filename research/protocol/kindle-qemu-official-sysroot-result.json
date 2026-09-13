@@ -1,0 +1,35 @@
+{
+  "command": [
+    "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+    "-cpu",
+    "cortex-a15",
+    "-L",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot",
+    "-E",
+    "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+    "-E",
+    "LD_DEBUG=libs:versions",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/probe.lua",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/source",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/assets",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/result.json"
+  ],
+  "exit_code": 127,
+  "seconds": 0.006,
+  "qemu_version": "qemu-arm version 10.0.11 (Debian 1:10.0.11+ds-0+deb13u1)",
+  "kindle_runtime_sha256": "8174df8c653d26d9daeed5d1c7f452420d8b4ec81419599d9c65cb6ec44a14ee",
+  "qemu_sha256": "1de890b2dfec9a24ac3a8a566654a6db1e9c4cbb35d056dff022854b688281f9",
+  "sysroot_glibc_sha256": "0c3eacfb379ba98c7bd5b06c72b9aad48cd33071531aff2562470172b3c23d98",
+  "sysroot_loader_sha256": "6f4bbe8b68bf2bf290c6125d4ccee6a44df4451e30866e75beecbcb7f1c4011c",
+  "libraries": {
+    "libbiliwasm.so": "df3bb13afbc85a79d229ef57f4f9826d68f4d7715a25d4d50b38ac584278c98d",
+    "libbilicrypto.so": "424ac0a6ee2c7d5c4afc28b6b2705751306d015269699ac26ed1c379c248cbd1"
+  },
+  "account_requests": 0,
+  "global_installation": false,
+  "binfmt_registration": false,
+  "rebuilt_target_binaries": false,
+  "kindle_firmware_image": false,
+  "device_verified": false
+}

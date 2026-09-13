@@ -1,0 +1,107 @@
+{
+  "scope": "Loader/LuaJIT CLI only, without plugin, session or API execution",
+  "source_sha256": {
+    "qemu": "1de890b2dfec9a24ac3a8a566654a6db1e9c4cbb35d056dff022854b688281f9",
+    "luajit": "8174df8c653d26d9daeed5d1c7f452420d8b4ec81419599d9c65cb6ec44a14ee",
+    "official_loader": "6f4bbe8b68bf2bf290c6125d4ccee6a44df4451e30866e75beecbcb7f1c4011c",
+    "official_libc": "0c3eacfb379ba98c7bd5b06c72b9aad48cd33071531aff2562470172b3c23d98",
+    "debian_loader": "ca2b396825098cf0997921b8f8e89529b662b4814e5619c95c689c93e35b7fa9"
+  },
+  "source_unchanged": true,
+  "host_machine": "x86_64",
+  "host_kernel": "6.12.107+deb13-cloud-amd64",
+  "tools": {
+    "gdb-multiarch": null,
+    "gdb": null,
+    "llvm-objdump": null,
+    "readelf": "/usr/bin/readelf",
+    "objdump": "/usr/bin/objdump",
+    "strace": null
+  },
+  "cases": [
+    {
+      "name": "official_luajit",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "-v"
+      ],
+      "returncode": 127,
+      "seconds": 0.005,
+      "stdout": "",
+      "stderr": "Inconsistency detected by ld.so: do-rel.h: 116: elf_dynamic_do_Rel: Assertion `map->l_info[(34 + 0 + (0x6fffffff - (0x6ffffff0)))] != ((void *)0)' failed!\n"
+    },
+    {
+      "name": "official_loader_only",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib/ld-2.20.so"
+      ],
+      "returncode": 127,
+      "seconds": 0.006,
+      "stdout": "",
+      "stderr": "Inconsistency detected by ld.so: do-rel.h: 116: elf_dynamic_do_Rel: Assertion `map->l_info[(34 + 0 + (0x6fffffff - (0x6ffffff0)))] != ((void *)0)' failed!\n"
+    },
+    {
+      "name": "official_syscalls",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "-strace",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "-v"
+      ],
+      "returncode": 127,
+      "seconds": 0.005,
+      "stdout": "",
+      "stderr": "1455232 writev(2,0x408008b0,0xa)Inconsistency detected by ld.so: do-rel.h: 116: elf_dynamic_do_Rel: Assertion `map->l_info[(34 + 0 + (0x6fffffff - (0x6ffffff0)))] != ((void *)0)' failed!\n = 155\n1455232 exit_group(127)\n"
+    },
+    {
+      "name": "debian_control",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/debian/usr/arm-linux-gnueabihf",
+        "-E",
+        "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/debian/usr/arm-linux-gnueabihf/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "-v"
+      ],
+      "returncode": 0,
+      "seconds": 0.031,
+      "stdout": "LuaJIT 2.1.1783773675 -- Copyright (C) 2005-2026 Mike Pall. https://luajit.org/\n",
+      "stderr": ""
+    }
+  ],
+  "device_verified": false,
+  "purchase_tests_executed": false,
+  "plugin_loaded": false,
+  "network_namespace_isolated": true
+}

@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "command": [
+    "unshare",
+    "-n",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+    "-cpu",
+    "cortex-a15",
+    "-L",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/debian/usr/arm-linux-gnueabihf",
+    "-E",
+    "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/debian/usr/arm-linux-gnueabihf/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+    "-E",
+    "LD_DEBUG=libs:versions",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+    "/tmp/bilicomics-kindle-loader-WSAJTBOe/new-native-241/probe.lua",
+    "/tmp/bilicomics-kindle-loader-WSAJTBOe/new-native-source",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/assets",
+    "/tmp/bilicomics-kindle-loader-WSAJTBOe/new-native-241/probe-result.json",
+    "2.41"
+  ],
+  "returncode": 0,
+  "seconds": 0.601,
+  "probe": {
+    "device_verified": false,
+    "account_requests": 0,
+    "ffi_os": "Linux",
+    "ffi_arch": "arm",
+    "hardfp": true,
+    "glibc": "2.41",
+    "target": "linux-armhf",
+    "checks": [
+      {
+        "ok": true,
+        "name": "production_native_libraries_load"
+      },
+      {
+        "ok": true,
+        "name": "official_signing_wasm_golden"
+      },
+      {
+        "ok": true,
+        "name": "nist_aes256_ecb_golden"
+      },
+      {
+        "ok": true,
+        "name": "portable_p256_generator_and_shared_secret_golden"
+      },
+      {
+        "ok": true,
+        "name": "public_pbkdf2_hmac_sha512_golden"
+      },
+      {
+        "ok": true,
+        "name": "nist_aes128_gcm_decrypt_golden"
+      },
+      {
+        "ok": true,
+        "name": "nist_aes128_gcm_tampered_tag_rejected"
+      },
+      {
+        "ok": true,
+        "name": "nist_aes256_gcm_public_api_and_tag_rejection"
+      },
+      {
+        "ok": true,
+        "name": "portable_p256_fresh_keys_export_and_agreement"
+      }
+    ],
+    "ok": true,
+    "scope": "Official kindlehf LuaJIT under QEMU ARM; bounded native primitives; the runner records the distinct sysroot origin",
+    "passed": 9,
+    "production_modules": true
+  },
+  "scope": "Offline ARM native primitives; distinct sysroot identity and diagnostic loader status are recorded",
+  "expected_glibc": "2.41",
+  "diagnostic_modified_loader": false,
+  "loader_sha256": "ca2b396825098cf0997921b8f8e89529b662b4814e5619c95c689c93e35b7fa9",
+  "libc_sha256": "2f6370faf28af181c727b3817c475888ed108714e57c0076f71081fe3de13e34",
+  "runtime_luajit_sha256": "8174df8c653d26d9daeed5d1c7f452420d8b4ec81419599d9c65cb6ec44a14ee",
+  "probe_sha256": "8ffd3b0e75927fe305d2abc1adf3289371ad886246928959619699d56d4383b3",
+  "libraries": {
+    "libbiliwasm.so": {
+      "sha256": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d",
+      "bytes": 1715052
+    },
+    "libbilicrypto.so": {
+      "sha256": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f",
+      "bytes": 59880
+    }
+  },
+  "libraries_unchanged_during_run": true,
+  "production_libraries_rebuilt": true,
+  "firmware_image_used": false,
+  "device_verified": false,
+  "purchase_tests_executed": false,
+  "account_requests": 0,
+  "network_namespace_isolated": true,
+  "source_protocol_lua_sha256": {
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "2c43880a1a54d76405ae37c5fb9e3b7742e959f80b2448a24e60d07698215589",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb"
+  }
+}

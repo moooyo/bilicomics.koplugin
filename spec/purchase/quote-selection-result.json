@@ -1,0 +1,129 @@
+{
+  "passed": true,
+  "scope": "Fake Client responses and pure quote construction only; no actual transaction or account request",
+  "runtime_version": "v2026.07.1",
+  "luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "archive_sha256": "38a01da12c74271a631af57e9ac45c9e90b48472e390bd4aae5ded42e37f8383",
+  "archive_files": 95,
+  "target_source_sha256": {
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/quote_fetch.lua": "350ef4fc86d8c01b18c877435c893aca9467a93878fb866b2642cf8e0e921ec8",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "228a594dfb21b7a988ff954fe875b53f8ed00de6fb424aa4b9de2397afa2dea6",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9"
+  },
+  "spec_sha256": "c0067258ccd8d01445df6620906bb68a23a7d38d0d4c9176c7e7d45a750e0ede",
+  "driver_sha256": "98f450172cfd48b2c4d64b71065cc809f1b2fad70e2b2408130020d6f51935b9",
+  "source_unchanged": true,
+  "returncode": 0,
+  "result": {
+    "fake_calls": 66,
+    "buy_episode_calls": 0,
+    "forbidden_module_attempts": 0,
+    "transport_safety": "Real Client and transport module loading is blocked; no request-level transport counter is installed",
+    "scope": "Synthetic quote selection and advisory construction; no submission or account activity",
+    "passed": true,
+    "assertions": 259,
+    "groups": [
+      {
+        "passed": true,
+        "name": "selection preserves scope and discount identity without mutable aliases"
+      },
+      {
+        "passed": true,
+        "name": "zero range and fractional ordinals stay query-only selections"
+      },
+      {
+        "passed": true,
+        "name": "malformed and injected selection terms are rejected before fake reads"
+      },
+      {
+        "passed": true,
+        "name": "opaque coupon IDs and their order survive independent copies"
+      },
+      {
+        "passed": true,
+        "name": "basic and scoped reads keep full original offer and price-vector association"
+      },
+      {
+        "passed": true,
+        "name": "fetch captures input selection before a fake response mutates its caller"
+      },
+      {
+        "passed": true,
+        "name": "identity failures stop at the affected fake read"
+      },
+      {
+        "passed": true,
+        "name": "changed or ambiguous batch offers stop before a scoped read"
+      },
+      {
+        "passed": true,
+        "name": "missing original-price evidence never shifts the vector or becomes zero"
+      },
+      {
+        "passed": true,
+        "name": "calculated prices use the exact original amount key"
+      },
+      {
+        "passed": true,
+        "name": "free-gold query uses reported count and does not infer single scope"
+      },
+      {
+        "passed": true,
+        "name": "ordinary, activity and coupon selections request no auxiliary assets"
+      },
+      {
+        "passed": true,
+        "name": "missing methods and fake Client errors remain non-disclosing failures"
+      },
+      {
+        "passed": true,
+        "name": "extra discount amounts remain advisory and separately observed"
+      },
+      {
+        "passed": true,
+        "name": "free-gold totals cannot replace missing scoped credit"
+      },
+      {
+        "passed": true,
+        "name": "duplicate or disappeared scoped identities are rejected"
+      },
+      {
+        "passed": true,
+        "name": "context scope and identity changes cannot construct a usable quote"
+      },
+      {
+        "passed": true,
+        "name": "unknown exact batch membership never creates a payable quote"
+      },
+      {
+        "passed": true,
+        "name": "single coin construction requires matching present prices and balance"
+      },
+      {
+        "passed": true,
+        "name": "fingerprints bind normalized order, amounts and coupon selection"
+      },
+      {
+        "passed": true,
+        "name": "coupon construction and display do not depend on coin metadata"
+      },
+      {
+        "passed": true,
+        "name": "coupon display rejects malformed arrays without using an alternate payload"
+      },
+      {
+        "passed": true,
+        "name": "no real transport, account or submission module was accessed"
+      }
+    ],
+    "network_namespace_isolated": true
+  },
+  "network_namespace_isolated": true,
+  "forbidden_module_attempts": 0,
+  "buy_episode_calls": 0,
+  "user_session_accessed": false
+}

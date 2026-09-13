@@ -1,0 +1,686 @@
+{
+    "purchase_submissions_fake": true,
+    "actual_purchase_executed": false,
+    "network_namespace_isolated": true,
+    "no_network_routes": true,
+    "spec": "native-synthetic-quote-selection",
+    "screens": [
+        "single-candidate.png",
+        "single-candidate-details.png",
+        "range-options-page-1.png",
+        "range-options-page-2.png",
+        "range-options-page-3.png",
+        "range-options-page-4.png",
+        "payment-options-page-1.png",
+        "payment-options-page-2.png",
+        "payment-options-page-3.png",
+        "payment-options-page-4.png",
+        "payment-options-page-5.png",
+        "batch-candidate.png",
+        "batch-candidate-details.png",
+        "coupon-snapshot-details.png",
+        "insufficient-balance.png",
+        "synthetic-single-confirmation.png",
+        "synthetic-submission-result.png"
+    ],
+    "source": "spec/ui/quote_selection_spec.lua",
+    "counts": {
+        "purchase": 1,
+        "getComic": 10,
+        "getAccount": 212,
+        "getEpisodes": 20,
+        "getPendingPurchases": 9,
+        "quotePurchase": 22,
+        "refreshWallet": 2
+    },
+    "runtime": "KOReader v2026.07.1",
+    "passed": true,
+    "width": 600,
+    "fake_purchase_submission_count": 1,
+    "assertions": [
+        {
+            "passed": true,
+            "name": "initial_quote_uses_normalized_complete_selection"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_has_no_confirmation_button"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_has_no_exact_scope_action"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_does_not_claim_exact_scope_or_ownership"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_labels_only_the_display_reference"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_main_dialog_does_not_expand_option_lists"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 437
+            },
+            "passed": true,
+            "name": "single-candidate_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_keeps_amount_observations_separate"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate_blockers_use_fixed_safe_messages"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate-details_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 574,
+                "height": 776
+            },
+            "passed": true,
+            "name": "single-candidate-details_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate-details_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "single-candidate-details_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "range-options_page_1_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-1_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 485
+            },
+            "passed": true,
+            "name": "range-options-page-1_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-1_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-1_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "range-options_page_2_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-2_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 578
+            },
+            "passed": true,
+            "name": "range-options-page-2_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-2_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-2_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "range-options_page_3_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "range-options_disabled_option_does_not_requote_3"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-3_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 578
+            },
+            "passed": true,
+            "name": "range-options-page-3_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-3_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-3_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "range-options_page_4_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-4_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 578
+            },
+            "passed": true,
+            "name": "range-options-page-4_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-4_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "range-options-page-4_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "range-options_all_options_are_reachable"
+        },
+        {
+            "passed": true,
+            "name": "range-options_only_one_complete_selection_is_marked"
+        },
+        {
+            "passed": true,
+            "name": "range-options_unavailable_options_are_disabled"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "payment-options_page_1_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-1_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 361
+            },
+            "passed": true,
+            "name": "payment-options-page-1_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-1_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-1_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "payment-options_page_2_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-2_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 423
+            },
+            "passed": true,
+            "name": "payment-options-page-2_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-2_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-2_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "payment-options_page_3_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "payment-options_disabled_option_does_not_requote_3"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-3_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 423
+            },
+            "passed": true,
+            "name": "payment-options-page-3_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-3_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-3_display_is_safe"
+        },
+        {
+            "detail": 2,
+            "passed": true,
+            "name": "payment-options_page_4_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-4_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 423
+            },
+            "passed": true,
+            "name": "payment-options-page-4_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-4_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-4_display_is_safe"
+        },
+        {
+            "detail": 1,
+            "passed": true,
+            "name": "payment-options_page_5_contains_at_most_two_options"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-5_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 285
+            },
+            "passed": true,
+            "name": "payment-options-page-5_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-5_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "payment-options-page-5_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "payment-options_all_options_are_reachable"
+        },
+        {
+            "passed": true,
+            "name": "payment-options_only_one_complete_selection_is_marked"
+        },
+        {
+            "passed": true,
+            "name": "payment-options_unavailable_options_are_disabled"
+        },
+        {
+            "passed": true,
+            "name": "scope_choice_preserves_full_payment_and_selector"
+        },
+        {
+            "passed": true,
+            "name": "scope_selection_does_not_include_server_amounts"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_has_no_confirmation_button"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_has_no_exact_scope_action"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_does_not_claim_exact_scope_or_ownership"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_labels_only_the_display_reference"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_main_dialog_does_not_expand_option_lists"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 437
+            },
+            "passed": true,
+            "name": "batch-candidate_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_keeps_amount_observations_separate"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate_blockers_use_fixed_safe_messages"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate-details_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 574,
+                "height": 776
+            },
+            "passed": true,
+            "name": "batch-candidate-details_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate-details_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "batch-candidate-details_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "payment_choice_preserves_full_scope_and_discount_identity"
+        },
+        {
+            "passed": true,
+            "name": "batch_expiry_order_requotes_the_same_selection"
+        },
+        {
+            "passed": true,
+            "name": "batch_discount_order_requotes_the_same_selection"
+        },
+        {
+            "passed": true,
+            "name": "returning_to_single_keeps_discount_selection"
+        },
+        {
+            "passed": true,
+            "name": "single_expiry_order_requotes_without_losing_payment"
+        },
+        {
+            "passed": true,
+            "name": "single_discount_order_requotes_without_losing_payment"
+        },
+        {
+            "passed": true,
+            "name": "coupon_choice_preserves_the_scope"
+        },
+        {
+            "passed": true,
+            "name": "coupon_details_use_the_quoted_snapshot"
+        },
+        {
+            "passed": true,
+            "name": "coupon_identifiers_keep_leading_zeroes"
+        },
+        {
+            "passed": true,
+            "name": "coupon-snapshot-details_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 574,
+                "height": 776
+            },
+            "passed": true,
+            "name": "coupon-snapshot-details_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "coupon-snapshot-details_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "coupon-snapshot-details_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "coupon_details_do_not_submit"
+        },
+        {
+            "passed": true,
+            "name": "covered_confirmation_cannot_submit"
+        },
+        {
+            "passed": true,
+            "name": "closed_selection_dialog_cannot_requote"
+        },
+        {
+            "passed": true,
+            "name": "old_confirmation_is_inert_during_requote"
+        },
+        {
+            "passed": true,
+            "name": "old_confirmation_cannot_submit_an_advisory_quote"
+        },
+        {
+            "passed": true,
+            "name": "older_quote_callback_cannot_replace_a_new_selection"
+        },
+        {
+            "passed": true,
+            "name": "insufficient_balance_retains_the_complete_selection"
+        },
+        {
+            "passed": true,
+            "name": "insufficient-balance_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 530
+            },
+            "passed": true,
+            "name": "insufficient-balance_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "insufficient-balance_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "insufficient-balance_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "balance_refresh_requotes_without_resetting_selection"
+        },
+        {
+            "passed": true,
+            "name": "stale_balance_callback_does_not_restore_old_selection"
+        },
+        {
+            "passed": true,
+            "name": "account_generation_invalidates_selection_dialog"
+        },
+        {
+            "passed": true,
+            "name": "same_account_new_generation_ignores_quote_feedback"
+        },
+        {
+            "passed": true,
+            "name": "legacy_supported_scope_remains_selectable"
+        },
+        {
+            "passed": true,
+            "name": "all_preview_scenarios_submit_nothing"
+        },
+        {
+            "passed": true,
+            "name": "final_confirmation_uses_the_exact_server_amount"
+        },
+        {
+            "passed": true,
+            "name": "synthetic-single-confirmation_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 499
+            },
+            "passed": true,
+            "name": "synthetic-single-confirmation_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "synthetic-single-confirmation_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "synthetic-single-confirmation_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "explicit_confirmation_dispatches_one_fake_submission"
+        },
+        {
+            "passed": true,
+            "name": "duplicate_confirmation_cannot_dispatch_again"
+        },
+        {
+            "passed": true,
+            "name": "submission_freezes_all_visible_controls"
+        },
+        {
+            "passed": true,
+            "name": "fake_controller_records_are_deep_snapshots"
+        },
+        {
+            "passed": true,
+            "name": "finished_confirmation_remains_single_submission"
+        },
+        {
+            "passed": true,
+            "name": "synthetic-submission-result_screen_fits"
+        },
+        {
+            "detail": {
+                "width": 564,
+                "height": 333
+            },
+            "passed": true,
+            "name": "synthetic-submission-result_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "synthetic-submission-result_dialog_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "synthetic-submission-result_display_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "all_callbacks_were_synthetic_and_accounted_for"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_1"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_2"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_3"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_4"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_5"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_6"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_7"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_8"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_9"
+        },
+        {
+            "passed": true,
+            "name": "production_module_stays_unloaded_10"
+        }
+    ],
+    "height": 800,
+    "count": 141,
+    "synthetic_only": true
+}

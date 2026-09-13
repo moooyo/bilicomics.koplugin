@@ -1,0 +1,515 @@
+{
+    "no_network_routes": true,
+    "assertions": [
+        {
+            "name": "single_summary_and_exact_details_are_unchanged",
+            "passed": true
+        },
+        {
+            "name": "single-unchanged_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 425,
+                "width": 451
+            },
+            "name": "single-unchanged_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "single-unchanged_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "single-unchanged_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "single_keeps_its_existing_detail_title",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_shows_range_rule_and_separate_total",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_main_list_is_not_an_exact_membership_claim",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 477,
+                "width": 451
+            },
+            "name": "positive-ordinal-range_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_uses_expected_list_wording",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_identifies_the_starting_chapter",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range_lists_current_expected_members_only",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range-details_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 621,
+                "width": 460
+            },
+            "name": "positive-ordinal-range-details_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range-details_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "positive-ordinal-range-details_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "remaining_option_never_claims_zero_chapters",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 243,
+                "width": 451
+            },
+            "name": "remaining-range-option_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_shows_range_rule_and_separate_total",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_main_list_is_not_an_exact_membership_claim",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 477,
+                "width": 451
+            },
+            "name": "remaining-ordinal-range_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_uses_expected_list_wording",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_identifies_the_starting_chapter",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range_lists_current_expected_members_only",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range-details_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 621,
+                "width": 460
+            },
+            "name": "remaining-ordinal-range-details_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range-details_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "remaining-ordinal-range-details_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "zero_limit_is_not_a_zero_chapter_purchase",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_shows_range_rule_and_separate_total",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_main_list_is_not_an_exact_membership_claim",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 477,
+                "width": 451
+            },
+            "name": "legacy-batch-without-proof_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_uses_expected_list_wording",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_identifies_the_starting_chapter",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof_lists_current_expected_members_only",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof-details_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 621,
+                "width": 460
+            },
+            "name": "legacy-batch-without-proof-details_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof-details_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "legacy-batch-without-proof-details_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "unproved_legacy_batch_does_not_claim_the_ordinal_contract",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "contract_mismatch_keeps_expected_list_without_ordinal_claim",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "provenance_mismatch_keeps_expected_list_without_ordinal_claim",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "correct_display_marker_cannot_promote_a_candidate",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "returning_to_single_restores_exact_wording",
+            "passed": true
+        },
+        {
+            "name": "remaining_option_never_claims_zero_chapters",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 243,
+                "width": 451
+            },
+            "name": "remaining-range-option_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "remaining_option_never_claims_zero_chapters",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 243,
+                "width": 451
+            },
+            "name": "remaining-range-option_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "remaining-range-option_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "range_choice_keeps_the_full_selector",
+            "passed": true
+        },
+        {
+            "name": "refresh_does_not_reuse_the_old_confirmation",
+            "passed": true
+        },
+        {
+            "name": "changed_price_requires_a_new_explicit_confirmation",
+            "passed": true
+        },
+        {
+            "name": "changed-price-needs-confirmation_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 477,
+                "width": 451
+            },
+            "name": "changed-price-needs-confirmation_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "changed-price-needs-confirmation_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "changed-price-needs-confirmation_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "new_confirmation_sends_only_the_refreshed_synthetic_quote",
+            "passed": true
+        },
+        {
+            "name": "duplicate_native_callback_cannot_submit_twice",
+            "passed": true
+        },
+        {
+            "name": "pending_range_outcome_takes_precedence_over_payment_evidence",
+            "passed": true
+        },
+        {
+            "name": "range-outcome-pending_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 282,
+                "width": 451
+            },
+            "name": "range-outcome-pending_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "range-outcome-pending_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "range-outcome-pending_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "pending_list_distinguishes_the_unresolved_range",
+            "passed": true
+        },
+        {
+            "name": "pending-purchase-list_background_fits",
+            "passed": true
+        },
+        {
+            "detail": {
+                "height": 189,
+                "width": 432
+            },
+            "name": "pending-purchase-list_dialog_fits",
+            "passed": true
+        },
+        {
+            "name": "pending-purchase-list_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "pending-purchase-list_does_not_expose_proof_or_hash",
+            "passed": true
+        },
+        {
+            "name": "reopened_range_keeps_pending_outcome_and_read_continuation",
+            "passed": true
+        },
+        {
+            "name": "all_synthetic_callbacks_are_accounted_for",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_1",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_2",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_3",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_4",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_5",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_6",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_7",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_8",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_9",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_10",
+            "passed": true
+        },
+        {
+            "name": "production_module_remains_unloaded_11",
+            "passed": true
+        }
+    ],
+    "screens": [
+        "single-unchanged.png",
+        "positive-ordinal-range.png",
+        "positive-ordinal-range-details.png",
+        "remaining-range-option.png",
+        "remaining-ordinal-range.png",
+        "remaining-ordinal-range-details.png",
+        "legacy-batch-without-proof.png",
+        "legacy-batch-without-proof-details.png",
+        "remaining-range-option.png",
+        "remaining-range-option.png",
+        "changed-price-needs-confirmation.png",
+        "range-outcome-pending.png",
+        "pending-purchase-list.png"
+    ],
+    "spec": "native-synthetic-ordinal-range",
+    "runtime": "KOReader v2026.07.1",
+    "passed": true,
+    "width": 480,
+    "counts": {
+        "purchase": 1,
+        "getAccount": 93,
+        "getComic": 2,
+        "getEpisodes": 11,
+        "getPendingPurchases": 2,
+        "quotePurchase": 10
+    },
+    "fake_purchase_submission_count": 1,
+    "height": 640,
+    "count": 106,
+    "synthetic_only": true,
+    "purchase_submissions_fake": true,
+    "actual_purchase_executed": false,
+    "network_namespace_isolated": true
+}

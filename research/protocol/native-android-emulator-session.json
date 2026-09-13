@@ -1,0 +1,82 @@
+{
+  "root": "/var/tmp/bili-android-emulator-20260912",
+  "sdk": "/var/tmp/bili-android-emulator-20260912/sdk",
+  "adb": "/var/tmp/bili-android-emulator-20260912/sdk/platform-tools/adb",
+  "emulator": "/var/tmp/bili-android-emulator-20260912/sdk/emulator/emulator",
+  "avd": "/var/tmp/bili-android-emulator-20260912/avd/bili-koreader-api30-x86.avd",
+  "avd_name": "bili-koreader-api30-x86",
+  "pid": 1154381,
+  "adb_server_port": 5038,
+  "emulator_console_port": 5580,
+  "adb_serial": "emulator-5580",
+  "log": "/var/tmp/bili-android-emulator-20260912/emulator.log",
+  "acceleration": "on",
+  "command": [
+    "/var/tmp/bili-android-emulator-20260912/sdk/emulator/emulator",
+    "-avd",
+    "bili-koreader-api30-x86",
+    "-no-window",
+    "-no-audio",
+    "-no-boot-anim",
+    "-no-snapshot",
+    "-gpu",
+    "swiftshader_indirect",
+    "-accel",
+    "on",
+    "-port",
+    "5580",
+    "-memory",
+    "2048",
+    "-cores",
+    "2"
+  ],
+  "boot_completed": true,
+  "observations": {
+    "api": {
+      "exit_code": 0,
+      "stdout": "30\n",
+      "stderr": ""
+    },
+    "abi_list": {
+      "exit_code": 0,
+      "stdout": "x86,armeabi-v7a,armeabi\n",
+      "stderr": ""
+    },
+    "kernel_arch": {
+      "exit_code": 0,
+      "stdout": "i686\n",
+      "stderr": ""
+    },
+    "selinux": {
+      "exit_code": 0,
+      "stdout": "Enforcing\n",
+      "stderr": ""
+    },
+    "page_size": {
+      "exit_code": 0,
+      "stdout": "4096\n",
+      "stderr": ""
+    },
+    "mounts": {
+      "exit_code": 0,
+      "stdout": "/dev/block/dm-4 / ext4 ro,seclabel,relatime 0 0\ntmpfs /dev tmpfs rw,seclabel,nosuid,relatime,mode=755 0 0\ndevpts /dev/pts devpts rw,seclabel,relatime,mode=600,ptmxmode=000 0 0\nproc /proc proc rw,relatime,gid=3009,hidepid=2 0 0\nsysfs /sys sysfs rw,seclabel,relatime 0 0\nselinuxfs /sys/fs/selinux selinuxfs rw,relatime 0 0\ntmpfs /mnt tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\ntmpfs /mnt/installer tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\ntmpfs /mnt/androidwritable tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\n/dev/block/pci/pci0000:00/0000:00:06.0/by-name/metadata /metadata ext4 rw,seclabel,nosuid,nodev,noatime 0 0\n/dev/block/dm-3 /vendor ext4 ro,seclabel,relatime 0 0\n/dev/block/dm-2 /product ext4 ro,seclabel,relatime 0 0\n/dev/block/dm-1 /system_ext ext4 ro,seclabel,relatime 0 0\ntmpfs /apex tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\ntmpfs /linkerconfig tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\nnone /dev/blkio cgroup rw,nosuid,nodev,noexec,relatime,blkio 0 0\nnone /dev/cg2_bpf cgroup2 rw,nosuid,nodev,noexec,relatime 0 0\nnone /dev/cpuctl cgroup rw,nosuid,nodev,noexec,relatime,cpu 0 0\nnone /acct cgroup rw,nosuid,nodev,noexec,relatime,cpuacct 0 0\nnone /dev/cpuset cgroup rw,nosuid,nodev,noexec,relatime,cpuset,noprefix,release_agent=/sbin/cpuset_release_agent 0 0\nnone /dev/freezer cgroup rw,nosuid,nodev,noexec,relatime,freezer 0 0\nnone /dev/memcg cgroup rw,nosuid,nodev,noexec,relatime,memory 0 0\ntracefs /sys/kernel/tracing tracefs rw,seclabel,relatime 0 0\nbinfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc rw,relatime 0 0\nnone /config configfs rw,nosuid,nodev,noexec,relatime 0 0\nbinder /dev/binderfs binder rw,relatime,max=1048576,stats=global 0 0\nnone /sys/fs/fuse/connections fusectl rw,relatime 0 0\nnone /sys/fs/bpf bpf rw,nosuid,nodev,noexec,relatime 0 0\npstore /sys/fs/pstore pstore rw,seclabel,nosuid,nodev,noexec,relatime 0 0\n/dev/block/dm-5 /data ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\ntmpfs /linkerconfig tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755 0 0\n/dev/block/loop6 /apex/com.android.tethering@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop6 /apex/com.android.tethering ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/dm-5 /data/user/0 ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\ntmpfs /data_mirror tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=700,gid=1000 0 0\n/dev/block/dm-5 /data_mirror/data_ce/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-5 /data_mirror/data_ce/null/0 ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-5 /data_mirror/data_de/null ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/dm-5 /data_mirror/cur_profiles ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n/dev/block/loop7 /apex/com.android.conscrypt@300900703 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop7 /apex/com.android.conscrypt ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop8 /apex/com.android.tzdata@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop8 /apex/com.android.tzdata ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop9 /apex/com.android.ipsec@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop9 /apex/com.android.ipsec ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop10 /apex/com.android.telephony@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop10 /apex/com.android.telephony ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop11 /apex/com.android.os.statsd@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop11 /apex/com.android.os.statsd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop12 /apex/com.android.runtime@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop12 /apex/com.android.runtime ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop13 /apex/com.android.media.swcodec@300900714 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop13 /apex/com.android.media.swcodec ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop14 /apex/com.android.wifi@300900711 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop14 /apex/com.android.wifi ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop15 /apex/com.android.resolv@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop15 /apex/com.android.resolv ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop16 /apex/com.android.sdkext@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop16 /apex/com.android.sdkext ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop17 /apex/com.android.adbd@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop17 /apex/com.android.adbd ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop18 /apex/com.android.vndk.v30@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop18 /apex/com.android.vndk.v30 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop19 /apex/com.android.art@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop19 /apex/com.android.art ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop20 /apex/com.android.cellbroadcast@300900720 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop20 /apex/com.android.cellbroadcast ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop21 /apex/com.android.mediaprovider@300900719 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop21 /apex/com.android.mediaprovider ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop22 /apex/com.android.i18n@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop22 /apex/com.android.i18n ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop23 /apex/com.android.extservices@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop23 /apex/com.android.extservices ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop24 /apex/com.android.media@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop24 /apex/com.android.media ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop25 /apex/com.android.permission@300900706 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop25 /apex/com.android.permission ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop26 /apex/com.android.apex.cts.shim@1 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop26 /apex/com.android.apex.cts.shim ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop27 /apex/com.android.neuralnetworks@300900700 ext4 ro,dirsync,seclabel,nodev,noatime 0 0\n/dev/block/loop27 /apex/com.android.neuralnetworks ext4 ro,dirsync,seclabel,nodev,noatime 0 0\nnsfs /data/vendor/var/run/netns/router nsfs rw 0 0\ntmpfs /storage tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0\n/dev/fuse /storage/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/installer/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/androidwritable/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/fuse /mnt/user/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0\n/dev/block/dm-5 /mnt/pass_through/0/emulated ext4 rw,seclabel,nosuid,nodev,noatime,resgid=1065,errors=panic 0 0\n",
+      "stderr": ""
+    },
+    "apk_install": {
+      "exit_code": 0,
+      "stdout": "Performing Streamed Install\nSuccess\n",
+      "stderr": ""
+    }
+  },
+  "apk_path": "/var/tmp/bili-android-emulator-plan-20260912/koreader-android-x86-v2026.07.1.apk",
+  "apk_sha256": "3cd979cc6474308ce37c408a8753fce27898249599e6ec6875d34ecd9b3d4144",
+  "storage_mount_summary": [
+    "none /sys/fs/fuse/connections fusectl rw,relatime 0 0",
+    "tmpfs /storage tmpfs rw,seclabel,nosuid,nodev,noexec,relatime,mode=755,gid=1000 0 0",
+    "/dev/fuse /storage/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0",
+    "/dev/fuse /mnt/installer/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0",
+    "/dev/fuse /mnt/androidwritable/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0",
+    "/dev/fuse /mnt/user/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0"
+  ],
+  "process_snapshot": "1154381       1 qemu-system-x86 /var/tmp/bili-android-emulator-20260912/sdk/emulator/qemu/linux-x86_64/qemu-system-x86_64-headless -avd bili-koreader-api30-x86 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -accel on -port 5580 -memory 2048 -cores 2"
+}

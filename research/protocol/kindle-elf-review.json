@@ -1,0 +1,560 @@
+{
+  "schema": 1,
+  "review_date": "2026-09-12",
+  "reported_device": {
+    "model": "Kindle Scribe first generation",
+    "firmware": "5.19.3",
+    "device_bytes_inspected": false
+  },
+  "scope": {
+    "target_programs_executed_by_this_review": false,
+    "libraries_loaded_by_this_review": false,
+    "builds_performed": false,
+    "production_modified": false,
+    "credentials_accessed": false
+  },
+  "official_target_mapping": {
+    "source": "https://github.com/koreader/koxtoolchain/blob/2026.08/README.md#L57",
+    "rule": "kindlehf: Any Kindle on firmware >= 5.16.3",
+    "selected_candidate_for_reported_firmware": "kindlehf",
+    "scope": "Official target guidance, not device runtime verification"
+  },
+  "official_release": {
+    "tag": "v2026.07.1",
+    "commit": "9192014d8bd82a91dc1012473be0f238dedfdb54",
+    "archives": [
+      {
+        "family": "kindlehf",
+        "path": "/var/tmp/bilicomics-scribe-abi-20260912/koreader-kindlehf-v2026.07.1.zip",
+        "bytes": 40708065,
+        "sha256": "3343a916d12f36c01b59df1f65bd83ff5616e6c2a4dfbe919e7fa1400b8b1bbb",
+        "official_url": "https://github.com/koreader/koreader/releases/download/v2026.07.1/koreader-kindlehf-v2026.07.1.zip",
+        "bundled_system_runtime_files": [],
+        "extracted_luajit_matches_archive": true
+      },
+      {
+        "family": "kindlepw2",
+        "path": "/var/tmp/bilicomics-scribe-abi-20260912/koreader-kindlepw2-v2026.07.1.zip",
+        "bytes": 40715224,
+        "sha256": "ea1f575c54492a2c679d128b7f3210fd7d6a87e5f5a1ff1f7a7fe2080ff68f86",
+        "official_url": "https://github.com/koreader/koreader/releases/download/v2026.07.1/koreader-kindlepw2-v2026.07.1.zip",
+        "bundled_system_runtime_files": [],
+        "extracted_luajit_matches_archive": true
+      }
+    ]
+  },
+  "elf_records": {
+    "official_kindlehf_luajit": {
+      "path": "/var/tmp/bilicomics-scribe-abi-20260912/koreader-kindlehf-v2026.07.1/koreader/luajit",
+      "bytes": 350168,
+      "sha256": "8174df8c653d26d9daeed5d1c7f452420d8b4ec81419599d9c65cb6ec44a14ee",
+      "elf_attributes": [
+        "Class:                             ELF32",
+        "Data:                              2's complement, little endian",
+        "Machine:                           ARM",
+        "Entry point address:               0x13659",
+        "Flags:                             0x5000400, Version5 EABI, hard-float ABI",
+        "Tag_CPU_name: \"7-A\"",
+        "Tag_CPU_arch: v7",
+        "Tag_FP_arch: VFPv3",
+        "Tag_Advanced_SIMD_arch: NEONv1",
+        "Tag_ABI_VFP_args: VFP registers"
+      ],
+      "interpreter": [
+        "/lib/ld-linux-armhf.so.3"
+      ],
+      "needed": [
+        "libm.so.6",
+        "libdl.so.2",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "undefined_symbols_by_version": {
+        "GCC_3.5": [
+          "_Unwind_Complete",
+          "_Unwind_VRS_Get",
+          "_Unwind_VRS_Set",
+          "__aeabi_unwind_cpp_pr0",
+          "__gnu_unwind_frame"
+        ],
+        "GLIBC_2.4": [
+          "_IO_getc",
+          "_IO_putc",
+          "__errno_location",
+          "__libc_start_main",
+          "abort",
+          "acos",
+          "asin",
+          "atan",
+          "atan2",
+          "clearerr",
+          "clock",
+          "close",
+          "cos",
+          "cosh",
+          "difftime",
+          "dlclose",
+          "dlerror",
+          "dlopen",
+          "dlsym",
+          "exit",
+          "exp",
+          "fclose",
+          "feof",
+          "ferror",
+          "fflush",
+          "fgets",
+          "fmod",
+          "fopen64",
+          "fputc",
+          "fputs",
+          "fread",
+          "frexp",
+          "fscanf",
+          "fseeko64",
+          "ftello64",
+          "fwrite",
+          "getenv",
+          "gmtime_r",
+          "isatty",
+          "ldexp",
+          "localtime_r",
+          "log",
+          "log10",
+          "log2",
+          "memchr",
+          "memcmp",
+          "memcpy",
+          "memmove",
+          "memset",
+          "mkstemp64",
+          "mktime",
+          "mmap64",
+          "modf",
+          "mprotect",
+          "mremap",
+          "munmap",
+          "open64",
+          "pclose",
+          "popen",
+          "pow",
+          "raise",
+          "read",
+          "remove",
+          "rename",
+          "setitimer",
+          "setlocale",
+          "setvbuf",
+          "sigaction",
+          "sigemptyset",
+          "sin",
+          "sinh",
+          "sqrt",
+          "stderr",
+          "stdin",
+          "stdout",
+          "strchr",
+          "strcmp",
+          "strcpy",
+          "strerror",
+          "strftime",
+          "strlen",
+          "strncmp",
+          "strncpy",
+          "strrchr",
+          "strstr",
+          "strtoul",
+          "syscall",
+          "system",
+          "tan",
+          "tanh",
+          "time",
+          "tmpfile64",
+          "ungetc"
+        ],
+        "GCC_3.0": [
+          "_Unwind_DeleteException"
+        ]
+      }
+    },
+    "official_kindlepw2_luajit": {
+      "path": "/var/tmp/bilicomics-scribe-abi-20260912/koreader-kindlepw2-v2026.07.1/koreader/luajit",
+      "bytes": 350168,
+      "sha256": "b830a60c2d0b0e64de37f20d18595990d5e408f945d2af4c0ea3181a13ed7f1c",
+      "elf_attributes": [
+        "Class:                             ELF32",
+        "Data:                              2's complement, little endian",
+        "Machine:                           ARM",
+        "Entry point address:               0x13639",
+        "Flags:                             0x5000200, Version5 EABI, soft-float ABI",
+        "Tag_CPU_name: \"7-A\"",
+        "Tag_CPU_arch: v7",
+        "Tag_FP_arch: VFPv3",
+        "Tag_Advanced_SIMD_arch: NEONv1"
+      ],
+      "interpreter": [
+        "/lib/ld-linux.so.3"
+      ],
+      "needed": [
+        "libm.so.6",
+        "libdl.so.2",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "undefined_symbols_by_version": {
+        "GCC_3.5": [
+          "_Unwind_Complete",
+          "_Unwind_VRS_Get",
+          "_Unwind_VRS_Set",
+          "__aeabi_unwind_cpp_pr0",
+          "__gnu_unwind_frame"
+        ],
+        "GLIBC_2.4": [
+          "_IO_getc",
+          "_IO_putc",
+          "__errno_location",
+          "__libc_start_main",
+          "abort",
+          "acos",
+          "asin",
+          "atan",
+          "atan2",
+          "clearerr",
+          "clock",
+          "close",
+          "cos",
+          "cosh",
+          "difftime",
+          "dlclose",
+          "dlerror",
+          "dlopen",
+          "dlsym",
+          "exit",
+          "exp",
+          "fclose",
+          "feof",
+          "ferror",
+          "fflush",
+          "fgets",
+          "fmod",
+          "fopen64",
+          "fputc",
+          "fputs",
+          "fread",
+          "frexp",
+          "fscanf",
+          "fseeko64",
+          "ftello64",
+          "fwrite",
+          "getenv",
+          "gmtime_r",
+          "isatty",
+          "ldexp",
+          "localtime_r",
+          "log",
+          "log10",
+          "log2",
+          "memchr",
+          "memcmp",
+          "memcpy",
+          "memmove",
+          "memset",
+          "mkstemp64",
+          "mktime",
+          "mmap64",
+          "modf",
+          "mprotect",
+          "mremap",
+          "munmap",
+          "open64",
+          "pclose",
+          "popen",
+          "pow",
+          "raise",
+          "read",
+          "remove",
+          "rename",
+          "setitimer",
+          "setlocale",
+          "setvbuf",
+          "sigaction",
+          "sigemptyset",
+          "sin",
+          "sinh",
+          "sqrt",
+          "stderr",
+          "stdin",
+          "stdout",
+          "strchr",
+          "strcmp",
+          "strcpy",
+          "strerror",
+          "strftime",
+          "strlen",
+          "strncmp",
+          "strncpy",
+          "strrchr",
+          "strstr",
+          "strtoul",
+          "system",
+          "tan",
+          "tanh",
+          "time",
+          "tmpfile64",
+          "ungetc"
+        ],
+        "GCC_3.0": [
+          "_Unwind_DeleteException"
+        ]
+      }
+    },
+    "packaged_armhf_wasm": {
+      "path": "/tmp/bili-native-protocol-20260912/libbiliwasm-armhf.so",
+      "bytes": 1717544,
+      "sha256": "df3bb13afbc85a79d229ef57f4f9826d68f4d7715a25d4d50b38ac584278c98d",
+      "elf_attributes": [
+        "Class:                             ELF32",
+        "Data:                              2's complement, little endian",
+        "Machine:                           ARM",
+        "Entry point address:               0x0",
+        "Flags:                             0x5000400, Version5 EABI, hard-float ABI",
+        "Tag_CPU_arch: v6"
+      ],
+      "interpreter": [],
+      "needed": [
+        "libm.so.6",
+        "libpthread.so.0",
+        "libc.so.6",
+        "ld-linux-armhf.so.3"
+      ],
+      "undefined_symbols_by_version": {
+        "GLIBC_2.4": [
+          "__ctype_b_loc",
+          "__ctype_tolower_loc",
+          "__errno_location",
+          "__fxstat",
+          "__tls_get_addr",
+          "_setjmp",
+          "abort",
+          "calloc",
+          "close",
+          "fclose",
+          "flock",
+          "fopen",
+          "fread",
+          "free",
+          "fseek",
+          "ftell",
+          "fwrite",
+          "longjmp",
+          "malloc",
+          "mmap",
+          "munmap",
+          "nanosleep",
+          "open",
+          "realloc",
+          "rewind",
+          "rint",
+          "rintf",
+          "snprintf",
+          "sprintf",
+          "stderr",
+          "strcmp",
+          "strcpy",
+          "strlen",
+          "strncmp",
+          "strnlen",
+          "strtod",
+          "strtoll",
+          "strtoull",
+          "vsnprintf"
+        ],
+        "GLIBC_2.17": [
+          "clock_gettime"
+        ],
+        "GLIBC_2.7": [
+          "__isoc99_sscanf"
+        ]
+      }
+    },
+    "packaged_armhf_crypto": {
+      "path": "/tmp/bili-portable-crypto-20260912/final-matrix/linux-armhf/libbilicrypto.so",
+      "bytes": 59880,
+      "sha256": "424ac0a6ee2c7d5c4afc28b6b2705751306d015269699ac26ed1c379c248cbd1",
+      "elf_attributes": [
+        "Class:                             ELF32",
+        "Data:                              2's complement, little endian",
+        "Machine:                           ARM",
+        "Entry point address:               0x0",
+        "Flags:                             0x5000400, Version5 EABI, hard-float ABI",
+        "Tag_CPU_arch: v6"
+      ],
+      "interpreter": [],
+      "needed": [
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "undefined_symbols_by_version": {
+        "GLIBC_2.4": [
+          "__errno_location",
+          "calloc",
+          "close",
+          "free",
+          "malloc",
+          "open",
+          "read",
+          "syscall"
+        ]
+      }
+    },
+    "official_toolchain_loader": {
+      "path": "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib/ld-2.20.so",
+      "bytes": 745288,
+      "sha256": "6f4bbe8b68bf2bf290c6125d4ccee6a44df4451e30866e75beecbcb7f1c4011c",
+      "elf_attributes": [
+        "Class:                             ELF32",
+        "Data:                              2's complement, little endian",
+        "Machine:                           ARM",
+        "Entry point address:               0x800",
+        "Flags:                             0x5000400, Version5 EABI, hard-float ABI",
+        "Tag_CPU_name: \"7-A\"",
+        "Tag_CPU_arch: v7",
+        "Tag_FP_arch: VFPv3",
+        "Tag_Advanced_SIMD_arch: NEONv1",
+        "Tag_ABI_VFP_args: VFP registers"
+      ],
+      "interpreter": [],
+      "needed": [],
+      "undefined_symbols_by_version": {}
+    },
+    "official_toolchain_libc": {
+      "path": "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib/libc-2.20.so",
+      "bytes": 8255560,
+      "sha256": "0c3eacfb379ba98c7bd5b06c72b9aad48cd33071531aff2562470172b3c23d98",
+      "elf_attributes": [
+        "Class:                             ELF32",
+        "Data:                              2's complement, little endian",
+        "Machine:                           ARM",
+        "Entry point address:               0x15fc9",
+        "Flags:                             0x5000400, Version5 EABI, hard-float ABI",
+        "Tag_CPU_name: \"7-A\"",
+        "Tag_CPU_arch: v7",
+        "Tag_FP_arch: VFPv3",
+        "Tag_Advanced_SIMD_arch: NEONv1",
+        "Tag_ABI_VFP_args: VFP registers"
+      ],
+      "interpreter": [
+        "/lib/ld-linux-armhf.so.3"
+      ],
+      "needed": [
+        "ld-linux-armhf.so.3"
+      ],
+      "undefined_symbols_by_version": {
+        "GLIBC_2.4": [
+          "__tls_get_addr"
+        ]
+      }
+    }
+  },
+  "existing_native_build": {
+    "compiler": "Zig 0.13.0",
+    "compiler_path": "/tmp/bili-native-protocol-20260912/zig/zig-linux-x86_64-0.13.0/zig",
+    "compiler_archive_sha256": "d45312e61ebcc48032b77bc4cf7fd6915c11fa16e4aad116b66c9468211230ea",
+    "linux_targets": [
+      "x86_64-linux-gnu.2.17",
+      "arm-linux-gnueabihf.2.17",
+      "aarch64-linux-gnu.2.17"
+    ],
+    "wasm_armhf_extra_cflags": [
+      "-DM3_HAS_TAIL_CALL=0"
+    ],
+    "sysroot_origin": "Generic Zig glibc headers, ABI lists, and generated link libraries; no Kindle or firmware sysroot was selected for these builds",
+    "compiler_resources": [
+      "lib/libc/include/generic-glibc",
+      "lib/libc/include/arm-linux-gnueabihf",
+      "lib/libc/glibc/abilists"
+    ],
+    "wasm_dependencies": {
+      "wasm3_commit": "5fe766c933c7595d728d6172bb1a197607d85b4e",
+      "cjson_commit": "c859b25da02955fef659d658b8f324b5cde87be3"
+    },
+    "crypto_dependency": "Pinned Mbed TLS 3.6.7 selected source files, statically included; no device OpenSSL dependency"
+  },
+  "official_runtime_candidate": {
+    "toolchain_release": "2026.08",
+    "target": "arm-kindlehf-linux-gnueabihf",
+    "sysroot_path": "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot",
+    "glibc_version": "2.20",
+    "archived_ctng_configuration": {
+      "source": "The toolchain archive's share/*-ct-ng.config.bz2",
+      "CT_USE_SYSROOT": "y",
+      "CT_SYSROOT_NAME": "sysroot",
+      "CT_SHARED_LIBS": "y",
+      "CT_LIBC_GLIBC": "y",
+      "CT_GLIBC_USE_GNU": "y",
+      "CT_GLIBC_SRC_RELEASE": "y",
+      "CT_GLIBC_VERSION": "2.20",
+      "CT_GLIBC_ENABLE_DEBUG": "y",
+      "CT_GLIBC_MIN_KERNEL": "4.1",
+      "alternative_target_loader_or_libc_in_archive": false,
+      "usr_lib_libc_so_is_linker_script": true
+    },
+    "loader_is_real_target_elf": true,
+    "loader_has_versym": true,
+    "loader_dynamic_version_tags": [
+      "0x6ffffffc (VERDEF)                     0x640",
+      "0x6ffffffd (VERDEFNUM)                  3",
+      "0x6ffffff0 (VERSYM)                     0x604",
+      "0x6ffffffa (RELCOUNT)                   17"
+    ],
+    "required_newer_symbols_found_in_libc": [
+      "269: 000470a9    28 FUNC    GLOBAL DEFAULT   11 __isoc99_sscanf@@GLIBC_2.7",
+      "1623: 0009dbf9    84 FUNC    WEAK   DEFAULT   11 clock_gettime@@GLIBC_2.17"
+    ],
+    "not_a_firmware_image": true
+  },
+  "parent_execution_observation": {
+    "command": [
+      "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+      "-cpu",
+      "cortex-a15",
+      "-L",
+      "/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot",
+      "-E",
+      "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/x-tools/arm-kindlehf-linux-gnueabihf/arm-kindlehf-linux-gnueabihf/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+      "-E",
+      "LD_DEBUG=libs:versions",
+      "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+      "/var/tmp/bilicomics-kindle-qemu-20260912/probe.lua",
+      "/var/tmp/bilicomics-kindle-qemu-20260912/source",
+      "/var/tmp/bilicomics-kindle-qemu-20260912/assets",
+      "/var/tmp/bilicomics-kindle-qemu-20260912/result.json"
+    ],
+    "exit_code": 127,
+    "seconds": 0.006,
+    "qemu_version": "qemu-arm version 10.0.11 (Debian 1:10.0.11+ds-0+deb13u1)",
+    "kindle_runtime_sha256": "8174df8c653d26d9daeed5d1c7f452420d8b4ec81419599d9c65cb6ec44a14ee",
+    "qemu_sha256": "1de890b2dfec9a24ac3a8a566654a6db1e9c4cbb35d056dff022854b688281f9",
+    "sysroot_glibc_sha256": "0c3eacfb379ba98c7bd5b06c72b9aad48cd33071531aff2562470172b3c23d98",
+    "sysroot_loader_sha256": "6f4bbe8b68bf2bf290c6125d4ccee6a44df4451e30866e75beecbcb7f1c4011c",
+    "libraries": {
+      "libbiliwasm.so": "df3bb13afbc85a79d229ef57f4f9826d68f4d7715a25d4d50b38ac584278c98d",
+      "libbilicrypto.so": "424ac0a6ee2c7d5c4afc28b6b2705751306d015269699ac26ed1c379c248cbd1"
+    },
+    "account_requests": 0,
+    "global_installation": false,
+    "binfmt_registration": false,
+    "rebuilt_target_binaries": false,
+    "kindle_firmware_image": false,
+    "device_verified": false
+  },
+  "conclusions": [
+    "The existing linux-armhf libraries match the official kindlehf ARM EABI hard-float calling convention. They do not match the official kindlepw2 soft-float calling convention.",
+    "The WASM host requires clock_gettime@GLIBC_2.17 and __isoc99_sscanf@GLIBC_2.7; the remaining versioned imports are GLIBC_2.4.",
+    "The portable crypto library imports only GLIBC_2.4 symbols, although it was built with the same generic .2.17 target baseline.",
+    "Both plugin libraries need libpthread.so.0 in addition to their other recorded dependencies, even though neither has a pthread_* undefined import.",
+    "The official KOReader LuaJIT version needs do not establish the firmware libc version, and the official ZIPs do not contain a complete system runtime.",
+    "The official toolchain loader has DT_VERSYM and is not an empty linker stub. The parent-observed bootstrap assertion occurs before Lua and plugin loading; its root cause is not established by this static review.",
+    "A successful independent ARM/sysroot fixture run would be compatibility evidence for that userspace, not physical Scribe hardware or a captured firmware-image verification."
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "host_abi": "biliwasm_run-v1",
+  "source_date": "2026-09-12",
+  "wasm3_commit": "5fe766c933c7595d728d6172bb1a197607d85b4e",
+  "cjson_commit": "c859b25da02955fef659d658b8f324b5cde87be3",
+  "toolchain": {
+    "name": "Zig",
+    "version": "0.13.0",
+    "archive_sha256": "d45312e61ebcc48032b77bc4cf7fd6915c11fa16e4aad116b66c9468211230ea"
+  },
+  "android_toolchain": {
+    "name": "Android NDK",
+    "version": "r27c",
+    "revision": "27.2.12479018",
+    "archive_url": "https://dl.google.com/android/repository/android-ndk-r27c-linux.zip",
+    "official_sha1": "090e8083a715fdb1a3e402d0763c388abb03fb4e",
+    "archive_sha256": "59c2f6dc96743b5daf5d1626684640b20a6bd2b1d85b13156b90333741bad5cc"
+  },
+  "portable_crypto_manifest": "portable/manifest.json",
+  "modules": {
+    "sign": {
+      "filename": "efae82c96a7eef44bee5.wasm",
+      "path": "assets/efae82c96a7eef44bee5.wasm",
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/efae82c96a7eef44bee5.wasm",
+      "sha256": "39bc0676953752c461197df592e1f5894f1a7492a29400c946e560fc109a8e2e",
+      "callback": "y1_z2w2a3",
+      "argument_order": ["query", "body", "timestamp"]
+    },
+    "decode": {
+      "filename": "e461bfa6b471a22c06fc.wasm",
+      "path": "assets/e461bfa6b471a22c06fc.wasm",
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/e461bfa6b471a22c06fc.wasm",
+      "sha256": "3b499622e9a5f6181f0709d1485498f533428f9a30ae32694f6f6852ec47184c",
+      "callback": "c1_r9k2m7",
+      "argument_order": ["url", "bytesData", "buvid", "platform", "bodyJSON"]
+    }
+  },
+  "libraries": {
+    "linux-x86_64": {
+      "path": "bin/linux-x86_64/libbiliwasm.so",
+      "sha256": "00f3200a8e276ea851722d3526105c84d0d13e5d0ebabe436227c9007149dc2d",
+      "bytes": 1168744,
+      "target": "x86_64-linux-gnu.2.17",
+      "minimum_glibc": "2.17",
+      "needed": ["libm.so.6", "libpthread.so.0", "libc.so.6", "ld-linux-x86-64.so.2"],
+      "verification": "remote-linux-x86_64-offline-golden",
+      "device_verified": false
+    },
+    "linux-armhf": {
+      "path": "bin/linux-armhf/libbiliwasm.so",
+      "sha256": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d",
+      "bytes": 1715052,
+      "target": "arm-linux-gnueabihf.2.17",
+      "minimum_glibc": "2.17",
+      "cpu": "ARMv6",
+      "float_abi": "hard",
+      "needed": ["libm.so.6", "libpthread.so.0", "libc.so.6", "ld-linux-armhf.so.3"],
+      "verification": "qemu-arm-offline-primitives-glibc2.20-diagnostic-loader-and-glibc2.41",
+      "relocation_layout": "adjacent REL and JMPREL with BIND_NOW and GNU_RELRO",
+      "device_verified": false
+    },
+    "linux-aarch64": {
+      "path": "bin/linux-aarch64/libbiliwasm.so",
+      "sha256": "989a95fa445482e71fbb554a7d56d956d057aa05f9f2992218f735dd32912cf6",
+      "bytes": 1252264,
+      "target": "aarch64-linux-gnu.2.17",
+      "minimum_glibc": "2.17",
+      "needed": ["libm.so.6", "libpthread.so.0", "libc.so.6"],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false
+    },
+    "android-arm64-v8a": {
+      "path": "bin/android-arm64-v8a/libbiliwasm.so",
+      "sha256": "ca890ba1e7e0065579fa5aea3bb19a9f9971830711ad0611aba742b9ffb87f4d",
+      "bytes": 310808,
+      "target": "aarch64-linux-android21",
+      "minimum_android_api": 21,
+      "soname": "libbiliwasm.so",
+      "elf_page_alignment": 16384,
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false
+    },
+    "android-armeabi-v7a": {
+      "path": "bin/android-armeabi-v7a/libbiliwasm.so",
+      "sha256": "45961992fc646cbf9679f8959ab28b049f0b06504c1aac77eec1a88d471e60b4",
+      "bytes": 313396,
+      "target": "armv7a-linux-androideabi21",
+      "minimum_android_api": 21,
+      "soname": "libbiliwasm.so",
+      "elf_page_alignment": 16384,
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false
+    },
+    "android-x86_64": {
+      "path": "bin/android-x86_64/libbiliwasm.so",
+      "sha256": "5a0a4ab94c9faa3e33b21a002d3ea74e3d529329f37840a6464c363c34df31e2",
+      "bytes": 308288,
+      "target": "x86_64-linux-android21",
+      "minimum_android_api": 21,
+      "soname": "libbiliwasm.so",
+      "elf_page_alignment": 16384,
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false
+    },
+    "android-x86": {
+      "path": "bin/android-x86/libbiliwasm.so",
+      "sha256": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4",
+      "bytes": 348004,
+      "target": "i686-linux-android21",
+      "minimum_android_api": 21,
+      "soname": "libbiliwasm.so",
+      "elf_page_alignment": 16384,
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "verification": "remote-android-x86-official-apk-native-golden",
+      "runtime_verification": {
+        "environment": "Android emulator",
+        "android_api": 30,
+        "koreader_version": "v2026.07.1",
+        "scope": "Private loader, official WASM signing, cold and cached loading",
+        "repository_evidence": "research/protocol/native-android-production-final-cold-result.json"
+      },
+      "device_verified": false
+    }
+  }
+}

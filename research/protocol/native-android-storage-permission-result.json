@@ -1,0 +1,150 @@
+{
+  "research_only": true,
+  "synthetic_only": true,
+  "phase": "complete",
+  "android_private_dir": "/data/user/0/org.koreader.launcher/files",
+  "ffi_arch": "x86",
+  "checks": [
+    {
+      "after_fchmod_0600": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/storage/emulated/0/koreader/bili-synthetic-mode-probe.txt",
+        "uid": 10161,
+        "permissions": "rw-------",
+        "gid": 10161,
+        "dev": 40,
+        "ino": 270430
+      },
+      "chmod_0400_return": 0,
+      "after_chmod_0400": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/storage/emulated/0/koreader/bili-synthetic-mode-probe.txt",
+        "uid": 10161,
+        "permissions": "rw-------",
+        "gid": 10161,
+        "dev": 40,
+        "ino": 270430
+      },
+      "chmod_0600_return": 0,
+      "synthetic_file_removed": true,
+      "after_chmod_0600": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/storage/emulated/0/koreader/bili-synthetic-mode-probe.txt",
+        "uid": 10161,
+        "permissions": "rw-------",
+        "gid": 10161,
+        "dev": 40,
+        "ino": 270430
+      },
+      "open_requested_mode": "0600",
+      "permission_changes_enforced": false,
+      "after_open": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/storage/emulated/0/koreader/bili-synthetic-mode-probe.txt",
+        "uid": 10161,
+        "permissions": "rw-------",
+        "gid": 10161,
+        "dev": 40,
+        "ino": 270430
+      },
+      "fd_after_open": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/proc/self/fd/66",
+        "uid": 10161,
+        "permissions": "rw-------",
+        "gid": 10161,
+        "dev": 40,
+        "ino": 270430
+      },
+      "directory": {
+        "octal_permissions": "0700",
+        "mode": "directory",
+        "path": "/storage/emulated/0/koreader",
+        "uid": 10161,
+        "permissions": "rwx------",
+        "gid": 10161,
+        "dev": 40,
+        "ino": 270392
+      },
+      "fchmod_0600_return": 0,
+      "name": "shared_data_storage"
+    },
+    {
+      "after_fchmod_0600": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/data/user/0/org.koreader.launcher/files/bili-synthetic-mode-probe.txt",
+        "uid": 10167,
+        "permissions": "rw-------",
+        "gid": 10167,
+        "dev": 64773,
+        "ino": 131191
+      },
+      "chmod_0400_return": 0,
+      "after_chmod_0400": {
+        "octal_permissions": "0400",
+        "mode": "file",
+        "path": "/data/user/0/org.koreader.launcher/files/bili-synthetic-mode-probe.txt",
+        "uid": 10167,
+        "permissions": "r--------",
+        "gid": 10167,
+        "dev": 64773,
+        "ino": 131191
+      },
+      "chmod_0600_return": 0,
+      "synthetic_file_removed": true,
+      "after_chmod_0600": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/data/user/0/org.koreader.launcher/files/bili-synthetic-mode-probe.txt",
+        "uid": 10167,
+        "permissions": "rw-------",
+        "gid": 10167,
+        "dev": 64773,
+        "ino": 131191
+      },
+      "open_requested_mode": "0600",
+      "permission_changes_enforced": true,
+      "after_open": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/data/user/0/org.koreader.launcher/files/bili-synthetic-mode-probe.txt",
+        "uid": 10167,
+        "permissions": "rw-------",
+        "gid": 10167,
+        "dev": 64773,
+        "ino": 131191
+      },
+      "fd_after_open": {
+        "octal_permissions": "0600",
+        "mode": "file",
+        "path": "/proc/self/fd/66",
+        "uid": 10167,
+        "permissions": "rw-------",
+        "gid": 10167,
+        "dev": 64773,
+        "ino": 131191
+      },
+      "directory": {
+        "octal_permissions": "0700",
+        "mode": "directory",
+        "path": "/data/user/0/org.koreader.launcher/files",
+        "uid": 10167,
+        "permissions": "rwx------",
+        "gid": 10167,
+        "dev": 64773,
+        "ino": 132307
+      },
+      "fchmod_0600_return": 0,
+      "name": "private_android_files"
+    }
+  ],
+  "data_dir": "/storage/emulated/0/koreader",
+  "ok": true,
+  "process_uid": "10167"
+}

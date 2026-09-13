@@ -1,0 +1,110 @@
+{
+    "count": 26,
+    "assertions": [
+        {
+            "name": "real_download_service_started_both_chapters",
+            "passed": true
+        },
+        {
+            "name": "two_readonly_image_tasks_are_live",
+            "passed": true
+        },
+        {
+            "name": "image_authentication_failure_invalidates_active_account",
+            "passed": true
+        },
+        {
+            "name": "known_invalid_session_marker_is_durable",
+            "passed": true
+        },
+        {
+            "name": "all_network_downloads_pause_with_authentication_reason",
+            "passed": true
+        },
+        {
+            "name": "other_image_and_cover_tasks_are_canceled",
+            "passed": true
+        },
+        {
+            "name": "retired_image_and_cover_temporary_files_are_removed",
+            "passed": true
+        },
+        {
+            "name": "metadata_reads_are_retired_without_new_account_data",
+            "passed": true
+        },
+        {
+            "name": "submitted_purchase_is_not_canceled",
+            "passed": true
+        },
+        {
+            "name": "explicit_new_session_validation_is_not_canceled",
+            "passed": true
+        },
+        {
+            "name": "invalid_session_blocks_future_reads_downloads_and_prefetch",
+            "passed": true
+        },
+        {
+            "name": "ordinary_resume_does_not_restore_invalid_session",
+            "passed": true
+        },
+        {
+            "name": "ready_free_and_owned_pages_remain_available_offline",
+            "passed": true
+        },
+        {
+            "name": "known_purchase_response_is_persisted_after_session_failure",
+            "passed": true
+        },
+        {
+            "name": "accepted_purchase_waits_for_authentication_without_rebuy",
+            "passed": true
+        },
+        {
+            "name": "restart_does_not_reenable_known_invalid_private_session",
+            "passed": true
+        },
+        {
+            "name": "restart_and_resume_do_not_send_old_session",
+            "passed": true
+        },
+        {
+            "name": "validated_replacement_creates_a_fresh_download_service",
+            "passed": true
+        },
+        {
+            "name": "late_old_account_authentication_cannot_invalidate_new_account",
+            "passed": true
+        },
+        {
+            "name": "stale_cover_cleanup_uses_only_its_assigned_path",
+            "passed": true
+        },
+        {
+            "name": "failed_current_cover_cleans_its_assigned_path",
+            "passed": true
+        },
+        {
+            "name": "capacity_preflight_failure_is_cached_between_native_hints",
+            "passed": true
+        },
+        {
+            "name": "explicit_retry_rechecks_capacity",
+            "passed": true
+        },
+        {
+            "name": "cache_hits_precede_capacity_checks",
+            "passed": true
+        },
+        {
+            "name": "explicit_resume_works_after_verified_session_import",
+            "passed": true
+        },
+        {
+            "name": "metadata_authentication_failure_also_pauses_image_acquisition",
+            "passed": true
+        }
+    ],
+    "scope": "Production Controller, DownloadService, SQLite and PageStore; controlled asynchronous worker results"
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "libbiliwasm.so",
+    "command": [
+      "sh",
+      "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/native/build.sh"
+    ],
+    "target": "arm-linux-gnueabihf.2.17",
+    "compiler": "/tmp/bili-native-protocol-20260912/zig-build/cc-armhf.sh",
+    "environment_overrides": {
+      "TARGET": "shared",
+      "CFLAGS": "-DM3_HAS_TAIL_CALL=0",
+      "WASM3_ROOT": "/tmp/bili-native-protocol-20260912/wasm3",
+      "CJSON_ROOT": "/tmp/bili-native-protocol-20260912/cJSON",
+      "OUTPUT": "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/output/libbiliwasm.so"
+    },
+    "exit_code": 0,
+    "elapsed_seconds": 2.202,
+    "bytes": 1715052,
+    "sha256": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d",
+    "output": "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/output/libbiliwasm.so"
+  },
+  {
+    "name": "libbilicrypto.so",
+    "command": [
+      "sh",
+      "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/native/portable/build.sh"
+    ],
+    "target": "arm-linux-gnueabihf.2.17",
+    "compiler": "/tmp/bili-native-protocol-20260912/zig-build/cc-armhf.sh",
+    "environment_overrides": {
+      "CC": "/tmp/bili-native-protocol-20260912/zig-build/cc-armhf.sh",
+      "CFLAGS": "",
+      "LDFLAGS": "",
+      "DEPENDENCY_DIR": "/tmp/bili-portable-crypto-20260912/final-source/legacy_v5",
+      "OUTPUT": "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/output/libbilicrypto.so",
+      "ZIG_GLOBAL_CACHE_DIR": "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/zig-global-cache",
+      "ZIG_LOCAL_CACHE_DIR": "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/zig-local-cache"
+    },
+    "exit_code": 0,
+    "elapsed_seconds": 1.456,
+    "bytes": 59880,
+    "sha256": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f",
+    "output": "/var/tmp/bili-arm-relocations-20260912-kxhQC0K1/output/libbilicrypto.so"
+  }
+]

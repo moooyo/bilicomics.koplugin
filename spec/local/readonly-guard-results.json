@@ -1,0 +1,1672 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "timed_out": false,
+  "source_unchanged": true,
+  "guard_sha256": "2832fe41a7f64de9bf8bb5b8b34b33313d64cf7d62c804915d73b40b67fd3c6a",
+  "spec_sha256": "05eba0ec7f8fc5e337b34db6ba456914402aee6f4c42f9f12438956f0c735bd1",
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "ae9e63930089c69a13cdda563f9eaccc12c5346c9608b946cdfcf9238be4a2b3",
+    "bilicomics/controller.lua": "5ae6d7c13751cc67a2684131d84a2bbdb0930dbc879a4f693931512947a84b72",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+    "bilicomics/jobs/runner.lua": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "29826580e0bcc2d6e66085be26f62c924f6c93420f9c64cb51a130a0123aa215",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "4d512c619d3e9a155993877bf99786d327165549d355ee547eb1d561551b845f",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+    "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+    "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/service.lua": "051ec6d5f55be7c6c9013560a43117646ba44df908f89382db204eacaa1ff841",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "18c15b5fb8492dad669153c0780e5fdbd25e1486182fee5cd7aa8b1e100d2eef",
+    "bilicomics/ui/screens.lua": "8f9a1238d124503ce4b9824d7475e628c89671982f60eb4a3bbf5cec325a22dc",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b",
+    "readonly_guard.lua": "2832fe41a7f64de9bf8bb5b8b34b33313d64cf7d62c804915d73b40b67fd3c6a",
+    "readonly_guard_spec.lua": "05eba0ec7f8fc5e337b34db6ba456914402aee6f4c42f9f12438956f0c735bd1"
+  },
+  "launcher_sha256": "1ee5c05232e796736119887c94865a3ed04050702f8e306f06e16500d9a00be3",
+  "suite": {
+    "passed": true,
+    "tests": [
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "wallet_empty_object"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "basic_episode_information"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "scoped_information_type_1"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "scoped_information_type_2"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "scoped_information_type_3"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "single_scope_may_omit_limit"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "full_scope_may_omit_limit"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "discount_list_original_vector"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "discount_price_original_vector"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "free_gold_card_eligibility"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "free_gold_card_zero_remaining_scope"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "bounded_maximum_scope"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "maximum_original_vector"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_wallet"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_basic_info"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_named_single_basic"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_scoped_single"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_scoped_batch"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_discount_list"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_discount_price"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "production_client_wire_free_gold_card"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "valued_discount_flag"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "duplicate_bare_discount_flag"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "flag_on_basic_info"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "scoped_info_without_flag"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "flag_on_wallet"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "flag_on_existing_read"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "duplicate_base_key"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "empty_query_piece"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "signed_parameter_on_plain_quote_read"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "query_challenge_on_wallet"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_32"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_33"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_34"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_35"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_36"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_37"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_38"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_39"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_40"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_41"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_42"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_43"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_44"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_quote_body_45"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_original_vector_46"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_original_vector_47"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_original_vector_48"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_original_vector_49"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_original_vector_50"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "invalid_original_vector_51"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "too_many_original_values"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "unknown_discount_order"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "wrong_discount_id_field"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "wallet_cannot_accept_selection_fields"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "card_scope_requires_count"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "card_scope_cannot_include_asset_use"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "malformed_object_58"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "malformed_object_59"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "malformed_object_60"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "malformed_object_61"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "rpc_cannot_write_an_output_file"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "oversized_rpc_body"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "wrong_wallet_method_GET"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "wrong_wallet_method_PUT"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "wrong_wallet_method_DELETE"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_BuyEpisode"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_SetAutoBuy"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_RentEpisode"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_Recharge"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_AddHistory"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_AddFavorite"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_DeleteFavorite"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "forbidden_route_UnknownRead"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "buy_fields_cannot_enter_read_route"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "malformed_transport_request"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "wrong_rpc_host"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "existing_nav_read"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "existing_library_read"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "existing_signed_index"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "pinned_public_asset"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "public_asset_rejects_cookie"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "public_asset_rejects_body"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "public_asset_rejects_external_output"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "malformed_output_path"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 1,
+        "runner_forward_count": 0,
+        "name": "active_image_rules_remain_intact"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "completed_image_is_not_permanently_authorized"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_credentials"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_path_escape_89"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_path_escape_90"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_path_escape_91"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_path_escape_92"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_path_escape_93"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "active_image_rejects_path_escape_94"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "output_parent_segment_is_rejected"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_validateSession"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_listFavorites"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_listHistory"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_search"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_comicDetail"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_imageIndex"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_imageTokens"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_wallet"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_purchaseInfo"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_discountList"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_discountPrice"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_client_freeGoldCardInfo"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_quote"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_reconcile_purchase"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_library"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_download_page"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_download_cover"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_source_index"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_verify_source_page"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 1,
+        "name": "runner_admits_kind_diagnostics"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_purchase_submit_nil"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_set_favorite_nil"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_unknown_nil"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_client_buyEpisode"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_client_addHistory"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_client_setFavorite"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_client_unknown"
+      },
+      {
+        "passed": true,
+        "transport_forward_count": 0,
+        "runner_forward_count": 0,
+        "name": "runner_rejects_nil_nil"
+      }
+    ],
+    "assertions": [
+      {
+        "name": "wallet_empty_object: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "basic_episode_information: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "scoped_information_type_1: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "scoped_information_type_2: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "scoped_information_type_3: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "single_scope_may_omit_limit: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "full_scope_may_omit_limit: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "discount_list_original_vector: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "discount_price_original_vector: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "free_gold_card_eligibility: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "free_gold_card_zero_remaining_scope: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "bounded_maximum_scope: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "maximum_original_vector: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_wallet: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_wallet: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_basic_info: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_basic_info: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_named_single_basic: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_named_single_basic: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_scoped_single: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_scoped_single: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_scoped_batch: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_scoped_batch: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_discount_list: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_discount_list: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_discount_price: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_discount_price: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_free_gold_card: real Client produces an admitted wire request",
+        "passed": true
+      },
+      {
+        "name": "production_client_wire_free_gold_card: local ordinal never leaks into read body",
+        "passed": true
+      },
+      {
+        "name": "valued_discount_flag: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "valued_discount_flag: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "duplicate_bare_discount_flag: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "duplicate_bare_discount_flag: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "flag_on_basic_info: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "flag_on_basic_info: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "scoped_info_without_flag: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "scoped_info_without_flag: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "flag_on_wallet: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "flag_on_wallet: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "flag_on_existing_read: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "flag_on_existing_read: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "duplicate_base_key: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "duplicate_base_key: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "empty_query_piece: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "empty_query_piece: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "signed_parameter_on_plain_quote_read: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "signed_parameter_on_plain_quote_read: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "query_challenge_on_wallet: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "query_challenge_on_wallet: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_32: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_32: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_33: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_33: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_34: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_34: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_35: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_35: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_36: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_36: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_37: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_37: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_38: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_38: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_39: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_39: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_40: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_40: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_41: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_41: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_42: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_42: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_43: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_43: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_44: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_44: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_45: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_quote_body_45: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_46: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_46: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_47: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_47: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_48: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_48: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_49: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_49: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_50: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_50: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_51: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "invalid_original_vector_51: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "too_many_original_values: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "too_many_original_values: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "unknown_discount_order: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "unknown_discount_order: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "wrong_discount_id_field: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "wrong_discount_id_field: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "wallet_cannot_accept_selection_fields: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "wallet_cannot_accept_selection_fields: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "card_scope_requires_count: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "card_scope_requires_count: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "card_scope_cannot_include_asset_use: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "card_scope_cannot_include_asset_use: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_58: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_58: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_59: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_59: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_60: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_60: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_61: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "malformed_object_61: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "rpc_cannot_write_an_output_file: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "rpc_cannot_write_an_output_file: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "oversized_rpc_body: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "oversized_rpc_body: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "wrong_wallet_method_GET: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "wrong_wallet_method_GET: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "wrong_wallet_method_PUT: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "wrong_wallet_method_PUT: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "wrong_wallet_method_DELETE: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "wrong_wallet_method_DELETE: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_BuyEpisode: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_BuyEpisode: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_SetAutoBuy: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_SetAutoBuy: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_RentEpisode: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_RentEpisode: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_Recharge: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_Recharge: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_AddHistory: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_AddHistory: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_AddFavorite: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_AddFavorite: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_DeleteFavorite: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_DeleteFavorite: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_UnknownRead: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "forbidden_route_UnknownRead: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "buy_fields_cannot_enter_read_route: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "buy_fields_cannot_enter_read_route: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "malformed_transport_request: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "malformed_transport_request: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "wrong_rpc_host: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "wrong_rpc_host: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "existing_nav_read: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "existing_library_read: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "existing_signed_index: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "pinned_public_asset: allowed request reaches the original exactly once and unchanged",
+        "passed": true
+      },
+      {
+        "name": "public_asset_rejects_cookie: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "public_asset_rejects_cookie: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "public_asset_rejects_body: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "public_asset_rejects_body: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "public_asset_rejects_external_output: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "public_asset_rejects_external_output: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "malformed_output_path: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "malformed_output_path: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "active_image_rules_remain_intact: active anonymous image reaches the original",
+        "passed": true
+      },
+      {
+        "name": "completed_image_is_not_permanently_authorized: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "completed_image_is_not_permanently_authorized: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_credentials: anonymous image header restriction remains enforced",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_path_escape_89: active image cannot escape the resource directory",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_path_escape_90: active image cannot escape the resource directory",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_path_escape_91: active image cannot escape the resource directory",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_path_escape_92: active image cannot escape the resource directory",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_path_escape_93: active image cannot escape the resource directory",
+        "passed": true
+      },
+      {
+        "name": "active_image_rejects_path_escape_94: active image cannot escape the resource directory",
+        "passed": true
+      },
+      {
+        "name": "output_parent_segment_is_rejected: forbidden request is denied without transmission",
+        "passed": true
+      },
+      {
+        "name": "output_parent_segment_is_rejected: the original transport is never called",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_validateSession: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_listFavorites: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_listHistory: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_search: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_comicDetail: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_imageIndex: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_imageTokens: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_wallet: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_purchaseInfo: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_discountList: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_discountPrice: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_client_freeGoldCardInfo: read-only client job forwards unchanged",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_quote: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_reconcile_purchase: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_library: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_download_page: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_download_cover: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_source_index: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_verify_source_page: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_admits_kind_diagnostics: approved read kind reaches the original",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_purchase_submit_nil: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_purchase_submit_nil: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_purchase_submit_nil: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_set_favorite_nil: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_set_favorite_nil: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_set_favorite_nil: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_unknown_nil: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_unknown_nil: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_unknown_nil: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_buyEpisode: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_buyEpisode: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_buyEpisode: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_addHistory: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_addHistory: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_addHistory: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_setFavorite: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_setFavorite: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_setFavorite: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_unknown: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_unknown: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_client_unknown: the refusal callback runs once",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_nil_nil: forbidden job is refused before original dispatch",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_nil_nil: deferred denial is nontransmitted",
+        "passed": true
+      },
+      {
+        "name": "runner_rejects_nil_nil: the refusal callback runs once",
+        "passed": true
+      }
+    ],
+    "transport_forwards": 26,
+    "runner_forwards": 20,
+    "real_network_requests": 0,
+    "actual_purchases": false,
+    "real_session_used": false,
+    "strict_fake_originals": true,
+    "counts": {
+      "assertions": 209,
+      "cases": 123
+    }
+  },
+  "runtime_version": "v2026.07.1",
+  "runtime_luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "network_namespace_isolated": true,
+  "strict_fake_originals": true,
+  "network_requests": 0,
+  "real_session_used": false,
+  "actual_purchase_executed": false,
+  "local_wsl_or_interactive_profile_accessed": false,
+  "scope": "Acceptance guard admission/denial only; real Client request construction and strict fake Transport/Runner originals; no service or UI acceptance"
+}

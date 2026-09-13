@@ -1,0 +1,24 @@
+{
+  "android_private_dir": "/data/user/0/org.koreader.launcher/files",
+  "data_dir": "/storage/emulated/0/koreader",
+  "ffi_os": "Linux",
+  "ffi_arch": "x86",
+  "checks": [
+    {
+      "ok": false,
+      "name": "dlopen_wasm_from_plugin",
+      "detail": ".../0/koreader/plugins//bili-native-probe.koplugin/main.lua:58: dlopen failed: library \"/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin/native/libbiliwasm.so\" needed or dlopened by \"/data/app/~~9KLb5hQ686mlm_x8HuOUOw==/org.koreader.launcher-BQ1Y3Pn0ZazcxDnFB41tqQ==/lib/x86/libluajit.so\" is not accessible for the namespace \"classloader-namespace\""
+    },
+    {
+      "ok": false,
+      "name": "dlopen_crypto_from_plugin",
+      "detail": ".../0/koreader/plugins//bili-native-probe.koplugin/main.lua:62: dlopen failed: library \"/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin/native/libbilicrypto.so\" needed or dlopened by \"/data/app/~~9KLb5hQ686mlm_x8HuOUOw==/org.koreader.launcher-BQ1Y3Pn0ZazcxDnFB41tqQ==/lib/x86/libluajit.so\" is not accessible for the namespace \"classloader-namespace\""
+    }
+  ],
+  "ok": false,
+  "plugin_root": "/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin",
+  "research_only": true,
+  "phase": "complete",
+  "apk_native_library_dir": "/data/app/~~9KLb5hQ686mlm_x8HuOUOw==/org.koreader.launcher-BQ1Y3Pn0ZazcxDnFB41tqQ==/lib/x86",
+  "package_dir": "/data/data/org.koreader.launcher/files"
+}

@@ -1,0 +1,32 @@
+{
+  "scope": "Cleanup of the explicitly created remote quote-observation directory after terminal read-only runs and public evidence transfer",
+  "target": "/tmp/bili-quote-live-J7fPZ05L",
+  "files_removed": 445,
+  "directories_removed_including_root": 120,
+  "bytes_removed": 34927376,
+  "launchers": [
+    {
+      "phase": "run1",
+      "returncode": 1,
+      "credential_copy_removed": true
+    },
+    {
+      "phase": "run2",
+      "returncode": 0,
+      "credential_copy_removed": true
+    },
+    {
+      "phase": "ranges",
+      "returncode": 0,
+      "credential_copy_removed": true
+    }
+  ],
+  "wallet_child_terminal_and_reaped": true,
+  "business_http_requests": 13,
+  "quote_http_requests": 7,
+  "wallet_http_requests": 1,
+  "public_asset_http_requests": 1,
+  "actual_buy_endpoint_requests": 0,
+  "original_windows_input_modified_by_agent": false,
+  "target_absent": true
+}

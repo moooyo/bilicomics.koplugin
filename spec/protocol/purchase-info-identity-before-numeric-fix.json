@@ -1,0 +1,80 @@
+{
+  "passed": false,
+  "scope": "Real Client.purchaseInfo identity validation; exact fake quote JSON and memory-only catalog; no actual purchase",
+  "runtime_version": "v2026.07.1",
+  "runtime_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "source_sha256": {
+    "bilicomics/protocol/client.lua": "00cb6a000982937d26482c7db1097156302a4c125af3d91009dd098c088b026d",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/purchase/quote_fetch.lua": "350ef4fc86d8c01b18c877435c893aca9467a93878fb866b2642cf8e0e921ec8",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37"
+  },
+  "spec_sha256": "122477472783715602ec845559b5a23f9366a520e533af48d3381c1080ed6490",
+  "driver_sha256": "a7c7bf64d907292679347d25611c0cf6101297b7e045332954e86a4dcbabfbc0",
+  "source_unchanged": true,
+  "returncode": 1,
+  "result": {
+    "groups": [
+      {
+        "name": "absent episode identity retains the observed fallback behavior",
+        "passed": true
+      },
+      {
+        "name": "present malformed episode identities cannot use the absent-field fallback",
+        "passed": true
+      },
+      {
+        "name": "a valid but different server episode is rejected",
+        "passed": true
+      },
+      {
+        "name": "present malformed comic identities cannot bypass normalization",
+        "passed": true
+      },
+      {
+        "name": "valid numeric and string identities are normalized to strings",
+        "passed": true
+      },
+      {
+        "failure": "...purchase-identity-J7YoGr/purchase_info_identity_spec.lua:42: A valid numeric episode identity must retain all decimal digits",
+        "name": "a valid fifteen-digit JSON episode number matches its string request",
+        "passed": false
+      },
+      {
+        "failure": "...purchase-identity-J7YoGr/purchase_info_identity_spec.lua:42: A valid numeric comic identity must retain all decimal digits",
+        "name": "a valid fifteen-digit JSON comic number is stringified exactly",
+        "passed": false
+      },
+      {
+        "name": "missing response comic ID still requires the matching requested catalog",
+        "passed": true
+      },
+      {
+        "name": "missing response and request comic identity cannot fabricate a catalog",
+        "passed": true
+      },
+      {
+        "name": "the focused run cannot access real transport or BuyEpisode",
+        "passed": true
+      }
+    ],
+    "fake_transport_calls": 36,
+    "rejected_routes": 0,
+    "real_transport_attempts": 0,
+    "buy_episode_attempts": 0,
+    "forbidden_module_attempts": 0,
+    "synthetic_session_only": true,
+    "scope": "Real Client.purchaseInfo and QuoteFetch; fake quote envelopes and in-memory catalog; no real API or purchase",
+    "network_namespace_isolated": true,
+    "passed": false,
+    "assertions": 79
+  },
+  "user_session_accessed": false,
+  "profile_accessed": false
+}

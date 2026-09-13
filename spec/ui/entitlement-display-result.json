@@ -1,0 +1,588 @@
+{
+    "purchase_tests_executed": false,
+    "assertions": [
+        {
+            "name": "expiry_formatter_is_available",
+            "passed": true
+        },
+        {
+            "name": "expiry_messages_have_chinese_translations",
+            "passed": true
+        },
+        {
+            "name": "epoch_one_formats_the_exact_utc_instant",
+            "passed": true
+        },
+        {
+            "name": "epoch_one_does_not_change_access",
+            "passed": true
+        },
+        {
+            "name": "year_2000_formats_the_exact_utc_instant",
+            "passed": true
+        },
+        {
+            "name": "year_2000_does_not_change_access",
+            "passed": true
+        },
+        {
+            "name": "leap_day_formats_the_exact_utc_instant",
+            "passed": true
+        },
+        {
+            "name": "leap_day_does_not_change_access",
+            "passed": true
+        },
+        {
+            "name": "fixed_2024_formats_the_exact_utc_instant",
+            "passed": true
+        },
+        {
+            "name": "fixed_2024_does_not_change_access",
+            "passed": true
+        },
+        {
+            "name": "signed_32_bit_edge_formats_the_exact_utc_instant",
+            "passed": true
+        },
+        {
+            "name": "signed_32_bit_edge_does_not_change_access",
+            "passed": true
+        },
+        {
+            "name": "missing_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "missing_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "zero_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "zero_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "negative_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "negative_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "fractional_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "fractional_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "numeric_string_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "numeric_string_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "unparsed_date_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "unparsed_date_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "empty_string_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "empty_string_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "boolean_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "boolean_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "table_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "table_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "nan_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "nan_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "positive_infinity_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "positive_infinity_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "negative_infinity_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "negative_infinity_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "past_supported_year_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "past_supported_year_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "millisecond_shaped_value_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "millisecond_shaped_value_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "huge_number_is_explicitly_unknown",
+            "passed": true
+        },
+        {
+            "name": "huge_number_keeps_the_existing_access_label",
+            "passed": true
+        },
+        {
+            "name": "free_omits_expiry_1",
+            "passed": true
+        },
+        {
+            "name": "free_omits_expiry_2",
+            "passed": true
+        },
+        {
+            "name": "free_omits_expiry_3",
+            "passed": true
+        },
+        {
+            "name": "owned_omits_expiry_1",
+            "passed": true
+        },
+        {
+            "name": "owned_omits_expiry_2",
+            "passed": true
+        },
+        {
+            "name": "owned_omits_expiry_3",
+            "passed": true
+        },
+        {
+            "name": "formatting_explicitly_requests_a_utc_calendar_table",
+            "passed": true
+        },
+        {
+            "name": "platform_error_cannot_display_a_wrong_instant",
+            "passed": true
+        },
+        {
+            "name": "platform_nil_cannot_display_a_wrong_instant",
+            "passed": true
+        },
+        {
+            "name": "malformed_calendar_cannot_display_a_wrong_instant",
+            "passed": true
+        },
+        {
+            "name": "wrapped_instant_cannot_display_a_wrong_instant",
+            "passed": true
+        },
+        {
+            "name": "temporary_catalog_is_paginated",
+            "passed": true
+        },
+        {
+            "name": "first_page_has_known_and_unknown_expiry",
+            "passed": true
+        },
+        {
+            "name": "chapter_status_axes_keep_their_labels",
+            "passed": true
+        },
+        {
+            "name": "temporary-first-page_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-first-page_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-first-page_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-first-page_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-first-page_expiry_2_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-first-page_expiry_2_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-2_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-page-2_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-2_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-2_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-2_expiry_2_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-2_expiry_2_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-3_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-page-3_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-3_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-3_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-4_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-page-4_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-4_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-4_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-5_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-page-5_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-5_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-5_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-5_expiry_2_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-5_expiry_2_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-6_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-page-6_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-6_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-6_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-6_expiry_2_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-page-6_expiry_2_fits",
+            "passed": true
+        },
+        {
+            "name": "all_temporary_pages_are_reachable",
+            "passed": true
+        },
+        {
+            "name": "current_chapter_uses_the_temporary_row_capacity",
+            "passed": true
+        },
+        {
+            "name": "current_temporary_chapter_keeps_full_expiry",
+            "passed": true
+        },
+        {
+            "name": "temporary-current-chapter_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "temporary-current-chapter_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "temporary-current-chapter_expiry_1_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-current-chapter_expiry_1_fits",
+            "passed": true
+        },
+        {
+            "name": "temporary-current-chapter_expiry_2_uses_full_width",
+            "passed": true
+        },
+        {
+            "name": "temporary-current-chapter_expiry_2_fits",
+            "passed": true
+        },
+        {
+            "name": "current_chapter_is_stable_after_paging",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_1",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_2",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_3",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_4",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_5",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_6",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_7",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_8",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_9",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_10",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_11",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_12",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_13",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_14",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_15",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_16",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_17",
+            "passed": true
+        },
+        {
+            "name": "metadata_access_is_unchanged_18",
+            "passed": true
+        },
+        {
+            "name": "ordinary_catalog_has_no_expiry_line",
+            "passed": true
+        },
+        {
+            "name": "ordinary-first-page_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "ordinary-first-page_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "ordinary_current_chapter_keeps_native_pagination",
+            "passed": true
+        },
+        {
+            "name": "ordinary-current-chapter_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "ordinary-current-chapter_has_no_dialog",
+            "passed": true
+        },
+        {
+            "name": "only_metadata_getters_were_used",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_1",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_2",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_3",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_4",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_5",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_6",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_7",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_8",
+            "passed": true
+        },
+        {
+            "name": "business_module_remains_unloaded_9",
+            "passed": true
+        }
+    ],
+    "screens": [
+        "temporary-first-page.png",
+        "temporary-page-2.png",
+        "temporary-page-3.png",
+        "temporary-page-4.png",
+        "temporary-page-5.png",
+        "temporary-page-6.png",
+        "temporary-current-chapter.png",
+        "ordinary-first-page.png",
+        "ordinary-current-chapter.png"
+    ],
+    "spec": "native-entitlement-display",
+    "passed": true,
+    "metadata_calls": 24,
+    "runtime": "KOReader v2026.07.1",
+    "width": 600,
+    "height": 800,
+    "count": 132,
+    "read_only_metadata": true
+}

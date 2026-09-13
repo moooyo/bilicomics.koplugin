@@ -1,0 +1,193 @@
+{
+  "schema": 1,
+  "host_abi": "bilicrypto-v1",
+  "source_date": "2026-09-12",
+  "dependency": {
+    "name": "Mbed TLS",
+    "version": "3.6.7",
+    "commit": "068ff080b369adfac81509f9b57b2afabaf82dc5",
+    "license": "Apache-2.0",
+    "manifest": "../legacy_v5/dependency.json"
+  },
+  "toolchain": {
+    "name": "Zig",
+    "version": "0.13.0",
+    "archive_sha256": "d45312e61ebcc48032b77bc4cf7fd6915c11fa16e4aad116b66c9468211230ea"
+  },
+  "libraries": {
+    "linux-x86_64": {
+      "path": "../bin/linux-x86_64/libbilicrypto.so",
+      "target": "x86_64-linux-gnu.2.17",
+      "sha256": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+      "bytes": 71528,
+      "needed": [
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "remote-linux-x86_64-nist-node-primitive-golden",
+      "device_verified": false,
+      "minimum_glibc": "2.17"
+    },
+    "linux-armhf": {
+      "path": "../bin/linux-armhf/libbilicrypto.so",
+      "target": "arm-linux-gnueabihf.2.17",
+      "sha256": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f",
+      "bytes": 59880,
+      "needed": [
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "qemu-arm-offline-primitives-glibc2.20-diagnostic-loader-and-glibc2.41",
+      "device_verified": false,
+      "minimum_glibc": "2.17",
+      "cpu": "ARMv6",
+      "float_abi": "hard",
+      "relocation_layout": "adjacent REL and JMPREL with BIND_NOW and GNU_RELRO"
+    },
+    "linux-aarch64": {
+      "path": "../bin/linux-aarch64/libbilicrypto.so",
+      "target": "aarch64-linux-gnu.2.17",
+      "sha256": "21bfe78cd9a114e423a34e5b87008337624ac55e11f8c5f87417f3c50ed330e7",
+      "bytes": 61032,
+      "needed": [
+        "libpthread.so.0",
+        "libc.so.6"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "minimum_glibc": "2.17"
+    },
+    "android-arm64-v8a": {
+      "path": "../bin/android-arm64-v8a/libbilicrypto.so",
+      "target": "aarch64-linux-android21",
+      "sha256": "7bcdeabd8916fbdff8a645a09398eb601c449eae10575e2da60d7979eb94c849",
+      "bytes": 63032,
+      "needed": [
+        "libdl.so",
+        "libc.so"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "minimum_android_api": 21,
+      "elf_page_alignment": 16384
+    },
+    "android-armeabi-v7a": {
+      "path": "../bin/android-armeabi-v7a/libbilicrypto.so",
+      "target": "armv7a-linux-androideabi21",
+      "sha256": "f6f06f4ea99f4ca0c4b4c68d4d6e18120c0d1dd403147768da166f123e5e1f2a",
+      "bytes": 59844,
+      "needed": [
+        "libdl.so",
+        "libc.so"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "minimum_android_api": 21,
+      "elf_page_alignment": 16384
+    },
+    "android-x86": {
+      "path": "../bin/android-x86/libbilicrypto.so",
+      "target": "i686-linux-android21",
+      "sha256": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94",
+      "bytes": 75652,
+      "needed": [
+        "libdl.so",
+        "libc.so"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "remote-android-x86-official-apk-native-golden",
+      "runtime_verification": {
+        "environment": "Android emulator",
+        "android_api": 30,
+        "koreader_version": "v2026.07.1",
+        "scope": "Private loader, AES-256, P-256 exchange and synthetic version-8 image",
+        "repository_evidence": "research/protocol/native-android-production-final-cold-result.json"
+      },
+      "device_verified": false,
+      "minimum_android_api": 21,
+      "elf_page_alignment": 16384
+    },
+    "android-x86_64": {
+      "path": "../bin/android-x86_64/libbilicrypto.so",
+      "target": "x86_64-linux-android21",
+      "sha256": "b6bb8460cfb2877b5492b9926d4a8a05a9ec7692ac2d1ec60118f7bf1d7fd39d",
+      "bytes": 72240,
+      "needed": [
+        "libdl.so",
+        "libc.so"
+      ],
+      "exports": [
+        "bili_aes256_ecb_decrypt",
+        "bili_aes256_ecb_encrypt",
+        "bili_aes_gcm_decrypt",
+        "bili_p256_derive",
+        "bili_p256_new",
+        "bili_p256_public",
+        "bili_pbkdf2_sha512"
+      ],
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "minimum_android_api": 21,
+      "elf_page_alignment": 16384
+    }
+  },
+  "android_toolchain": {
+    "name": "Android NDK",
+    "version": "r27c",
+    "official_archive_sha1": "090e8083a715fdb1a3e402d0763c388abb03fb4e",
+    "archive_sha256": "59c2f6dc96743b5daf5d1626684640b20a6bd2b1d85b13156b90333741bad5cc"
+  }
+}

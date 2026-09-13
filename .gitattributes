@@ -1,0 +1,10 @@
+# Keep source bytes stable across Windows and Linux checkouts.
+* text=auto eol=lf
+# Preserve exact manifest, fixture, and verification-record bytes.
+*.json -text
+*.so binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.wasm binary

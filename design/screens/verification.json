@@ -1,0 +1,252 @@
+{
+  "checks": [
+    {
+      "name": "base_continue_fits_page",
+      "passed": true,
+      "detail": {
+        "view": "continue",
+        "screenWidth": 600,
+        "screenOverflowX": 0,
+        "contentOverflowY": 0,
+        "contentOverflowX": 0
+      }
+    },
+    {
+      "name": "base_following_fits_page",
+      "passed": true,
+      "detail": {
+        "view": "following",
+        "screenWidth": 600,
+        "screenOverflowX": 0,
+        "contentOverflowY": 0,
+        "contentOverflowX": 0
+      }
+    },
+    {
+      "name": "base_detail_fits_page",
+      "passed": true,
+      "detail": {
+        "view": "detail",
+        "screenWidth": 600,
+        "screenOverflowX": 0,
+        "contentOverflowY": 0,
+        "contentOverflowX": 0
+      }
+    },
+    {
+      "name": "base_downloads_fits_page",
+      "passed": true,
+      "detail": {
+        "view": "downloads",
+        "screenWidth": 600,
+        "screenOverflowX": 0,
+        "contentOverflowY": 0,
+        "contentOverflowX": 0
+      }
+    },
+    {
+      "name": "resume_opens_reader",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reader_has_plugin_menu",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "locked_download_checkboxes_disabled",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "download_selection_enables_action",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "download_selection_opens_queue",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "purchase_pending_disables_resubmission",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "purchase_pending_freezes_scope",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "purchase_success_resumes_reader",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "batch_confirmation_preserves_chapter_count",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "insufficient_balance_disables_payment",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no_recharge_entry",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "unknown_has_no_pay_action",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "unknown_survives_dialog_reopen",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "unknown_resolves_to_access",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "paid_load_failure_offers_retry_without_payment",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "downloaded_chapter_opens_offline",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "search_filters_results",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "large_continue_fits_page",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "large_detail_fits_page",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "large_following_fits_page",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "mobile_continue_no_horizontal_overflow",
+      "passed": true,
+      "detail": {
+        "body": 0,
+        "screen": 0
+      }
+    },
+    {
+      "name": "mobile_detail_no_horizontal_overflow",
+      "passed": true,
+      "detail": {
+        "body": 0,
+        "screen": 0
+      }
+    },
+    {
+      "name": "mobile_purchase_no_horizontal_overflow",
+      "passed": true,
+      "detail": {
+        "body": 0,
+        "screen": 0
+      }
+    },
+    {
+      "name": "mobile_downloads_no_horizontal_overflow",
+      "passed": true,
+      "detail": {
+        "body": 0,
+        "screen": 0
+      }
+    },
+    {
+      "name": "mobile_settings_no_horizontal_overflow",
+      "passed": true,
+      "detail": {
+        "body": 0,
+        "screen": 0
+      }
+    },
+    {
+      "name": "no_browser_runtime_errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "measurements": [
+    {
+      "view": "continue",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "following",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "detail",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "search",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "downloads",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "settings",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "reader",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    },
+    {
+      "view": "detail",
+      "screenWidth": 600,
+      "screenOverflowX": 0,
+      "contentOverflowY": 0,
+      "contentOverflowX": 0
+    }
+  ],
+  "errors": []
+}

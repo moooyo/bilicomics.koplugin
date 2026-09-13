@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="240" viewBox="0 0 180 240" fill="none" role="img" aria-label="A diver discovers a submerged lighthouse among jellyfish">
+  <defs>
+    <pattern id="water" width="11" height="11" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".65" fill="#8b8b8b"/></pattern>
+    <clipPath id="frame"><rect width="180" height="240"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <path fill="#252525" d="M0 0h180v240H0z"/>
+    <path d="M0 0h180v44c-23-7-45 3-70 2S58 26 0 40Z" fill="#e8e8e4"/>
+    <path d="M-5 28c26-10 38-7 59 0 20 6 36 10 64 5 26-4 43-7 67 0" stroke="#181818" stroke-width="1.7"/>
+    <path d="M-5 42c25-4 41-4 65 2s42 8 69 1c22-6 39-5 59 0" stroke="#a7a7a4" stroke-width="1.2"/>
+    <path d="m72 41 56 199h52V78L126 43Z" fill="#686868" opacity=".24"/>
+    <path d="m21 41 25 170 15 29h38L51 40Z" fill="#a2a2a2" opacity=".13"/>
+    <path fill="url(#water)" d="M0 45h180v195H0z"/>
+    <path d="M-5 216c26-11 40-12 61-7 20 5 28 5 45-1 23-8 38-5 80 7v26H-5Z" fill="#191919" stroke="#b8b8b2" stroke-width="1.1"/>
+    <path d="m117 199 7-68h25l7 74-17 8Z" fill="#cacac4" stroke="#ecece6" stroke-width="1.2"/>
+    <path d="m129 139-5 57m21-57 5 61" stroke="#72726e" stroke-width="1.3"/>
+    <path d="m122 155 28 5m-30 17 31 5" stroke="#292929" stroke-width="9"/>
+    <path d="M119 129h34v7h-34z" fill="#deded8" stroke="#171717" stroke-width="1.5"/>
+    <path d="M125 112h23v17h-23z" fill="#f7f7f0" stroke="#171717" stroke-width="1.5"/>
+    <path d="M136 112v17m-11-8h23" stroke="#40403d" stroke-width="1"/>
+    <path d="m121 112 15-12 17 12Z" fill="#aaa" stroke="#ededE8" stroke-width="1.2"/>
+    <path d="M133 188a4 4 0 0 1 8 0v15h-8Z" fill="#242424"/>
+    <path d="m146 117 40-22v52l-39-23m-22-6L92 94v51l34-21" fill="#e3e3d9" opacity=".13"/>
+    <g transform="translate(27 69) rotate(-22 36 40)" stroke="#e2e2dc" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m32 45-13 18-15 3-2 8 23-3 17-19m-1-2-2 19-13 10 2 7 19-11 4-24" fill="#141414" stroke-width="2"/>
+      <path d="m4 66-12-4-5 5 15 8m25 4-14 3-1 6 17-2" fill="#e7e7df" stroke-width="1.2"/>
+      <path d="M28 22c6-5 16-4 22 0l5 22-13 13-16-10Z" fill="#121212" stroke-width="2"/>
+      <rect x="20" y="23" width="10" height="27" rx="4" fill="#a7a7a1" stroke-width="1.3" transform="rotate(7 20 23)"/>
+      <path d="m42 25 15 12 13-2 1 6-17 4-17-10" fill="#161616" stroke-width="1.7"/>
+      <path d="M41 7c10 0 17 7 16 15-1 7-8 12-15 11-9-1-15-6-14-14 1-7 6-12 13-12Z" fill="#cacac5" stroke-width="1.5"/>
+      <path d="M37 13c6-2 12 0 14 4l-1 7c-4 3-9 3-14 0Z" fill="#202020" stroke="#303030" stroke-width="1.5"/>
+      <path d="M30 17c-12-5-15 10-10 16m34-8 5 3" stroke-width="1.3"/>
+      <path d="m72 33 7 2-1 9-7-2Z" fill="#f6f6f0" stroke-width="1.1"/>
+    </g>
+    <g stroke="#d9d9d3" stroke-linecap="round">
+      <path d="M126 61c0-11 8-19 17-17 7 1 12 7 11 18-9 4-18 4-28-1Z" fill="#969690" stroke-width="1.2"/>
+      <path d="M132 63c-5 9 5 14 0 24m7-24c-2 8 5 11 0 24m7-24c6 10-4 15 3 22m-9-39c-5 5-6 10-6 15" stroke-width="1"/>
+      <path d="M19 153c0-9 6-14 12-13 7 1 11 7 10 15-7 3-15 2-22-2Z" fill="#74746f" stroke-width="1.1"/>
+      <path d="M23 156c-3 8 4 10 0 19m6-18c-1 7 5 9 2 18m5-18c5 7-2 14 3 19" stroke-width=".9"/>
+    </g>
+    <g stroke="#b9b9b3" stroke-width="1" fill="none"><circle cx="78" cy="77" r="2.5"/><circle cx="85" cy="64" r="1.6"/><circle cx="82" cy="54" r="1"/><circle cx="102" cy="163" r="1.8"/></g>
+    <path d="M12 215c3-16 1-25-4-35m9 34c1-12 5-18 10-23m136 25c-5-16-4-26 2-40m3 42c-2-11 2-20 9-27" stroke="#979791" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="m71 172 7-3 5 3-5 3Zm-9 17 6-2 4 2-4 2Zm92-104 6-2 4 2-4 2Z" fill="#c2c2bc"/>
+  </g>
+</svg>

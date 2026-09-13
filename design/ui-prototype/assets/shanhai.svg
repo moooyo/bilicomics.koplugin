@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="240" viewBox="0 0 180 240" fill="none" role="img" aria-label="A mountain courier follows a ridge beneath a letter-shaped kite">
+  <defs>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(22)"><path d="M0 0V5" stroke="#8b8b8b" stroke-width=".65"/></pattern>
+    <clipPath id="frame"><rect width="180" height="240"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <path fill="#f5f5f2" d="M0 0h180v240H0z"/>
+    <circle cx="116" cy="50" r="27" fill="#e2e2df"/>
+    <path d="M-10 112 28 69 49 93 77 45 120 107 148 62 190 118v78H-10Z" fill="#d3d3cf" stroke="#262626" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="m28 69 3 27 18-3m28-48-8 53 10-10 11 22m58-48-5 37 10-6 16 18" stroke="#595959" stroke-width="1.1" stroke-linejoin="round"/>
+    <path d="m-13 153 53-47 37 38 33-51 41 40 38-29v111H-13Z" fill="#ededeb" stroke="#212121" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="m40 106-7 38 10-7 13 28m54-72-4 43 10-9 24 38m30-45-14 33" stroke="#777" stroke-width="1"/>
+    <path d="M-8 193c27-13 42-16 60-21 21-5 24-11 43-4 23 9 42 10 69 7l25 65H-8Z" fill="#fafaf7" stroke="#161616" stroke-width="2"/>
+    <path d="M-5 229c30-22 45-26 66-37 16-9 24-15 34-24M10 240c27-22 41-32 64-43 10-4 22-14 27-27" stroke="#656565" stroke-width="1.3"/>
+    <path d="M-5 207c18-5 30-8 42-16m78 1 34 9m-23 12 24 8M11 174l7-12m3 12 1-17m104 19 6-11m2 10 4-10m17 14 1-9" stroke="#4a4a4a" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="m12 153 29-27 15 16-18 29-26 6Z" fill="url(#hatch)" opacity=".6"/>
+    <g stroke="#111" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m69 178-5 25 9 2 10-24m-2-1 6 19 14 3 2-6-10-7-2-17" fill="#292929" stroke-width="2"/>
+      <path d="m64 202-3 6c5 3 10 3 14 0l-1-5m25-3-1 6 14 2 1-4-11-5" fill="#111" stroke-width="2"/>
+      <path d="M63 143c3-8 10-13 21-11 10 1 16 9 15 19l-8 29c-9 4-17 2-25-2l-7-22Z" fill="#f4f4f0" stroke-width="2"/>
+      <path d="m83 137 15 7 6 28-15 5-8-27Z" fill="#8c8c86" stroke-width="2"/>
+      <path d="m89 144 8 3 3 18-10 4Z" fill="#e1e1dc" stroke-width="1.3"/>
+      <path d="m84 139 4 32m-16-37-5 22 12 10" stroke-width="1.8"/>
+      <path d="m63 147-7 18 10 8 4-5-6-7 8-15" fill="#f8f8f4" stroke-width="2"/>
+      <path d="m91 145 9 12 7-5 3 5-13 10-9-9" fill="#f8f8f4" stroke-width="2"/>
+      <path d="M74 121c0-9 5-14 12-11 6 2 7 8 4 16l-4 8-10-2-3-6" fill="#f9f9f6" stroke-width="1.6"/>
+      <path d="M71 118c-1-7 2-12 9-13 6-1 11 2 12 8l7 6c-9 4-19 4-29 1Z" fill="#202020" stroke-width="1.6"/>
+      <path d="m88 120 3 3-3 2m-12 5 4 5m-8 37 15 3" stroke-width="1.2"/>
+      <path d="m109 154 10 56" stroke-width="2"/>
+    </g>
+    <path d="M111 155c17-19-13-26 4-49 15-20 35-35 21-59" stroke="#444" stroke-width="1.05"/>
+    <g transform="rotate(16 135 31)" stroke="#242424" stroke-linejoin="round">
+      <path d="m120 19 26 2 8 18-29 5Z" fill="#fff" stroke-width="1.4"/>
+      <path d="m120 19 19 15 7-13m-21 23 11-12 18 7" stroke-width="1"/>
+      <path d="m136 43 1 7-5 5 8 6-3 7" stroke-width="1"/>
+    </g>
+    <path d="M9 32h19m-9 7h15m116 97h16M6 93h8" stroke="#9c9c98" stroke-width="1"/>
+    <path d="m42 33 3-2 3 2m5-5 3-2 3 2" stroke="#555" stroke-width="1" stroke-linecap="round"/>
+  </g>
+</svg>

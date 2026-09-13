@@ -1,0 +1,270 @@
+{
+  "session_validated": true,
+  "library": {
+    "history": {
+      "received": true,
+      "count": 5
+    },
+    "favorites": {
+      "received": true,
+      "count": 2
+    }
+  },
+  "mode": "images",
+  "page_limit": 3,
+  "blocked_requests": 0,
+  "purchase_testing": false,
+  "quote_testing": false,
+  "wallet_testing": false,
+  "finished_stage": "complete",
+  "completed_without_exception": true,
+  "errors": {},
+  "images": {
+    "free": {
+      "catalog_alias": "comic_1",
+      "index_received": true,
+      "page_count": 45,
+      "acquired": true,
+      "width": 2001,
+      "pages": [
+        {
+          "acquired": true,
+          "encrypted": false,
+          "verification": "container",
+          "bytes": 1710744,
+          "width": 2001,
+          "height": 2900,
+          "format": "jpg",
+          "token_received": true,
+          "index": 1,
+          "within_native_pixel_budget": true
+        },
+        {
+          "acquired": true,
+          "encrypted": false,
+          "verification": "container",
+          "bytes": 2123672,
+          "width": 2000,
+          "height": 2850,
+          "format": "jpg",
+          "token_received": true,
+          "index": 2,
+          "within_native_pixel_budget": true
+        },
+        {
+          "acquired": true,
+          "encrypted": false,
+          "verification": "container",
+          "bytes": 4719246,
+          "width": 2000,
+          "height": 2850,
+          "format": "jpg",
+          "token_received": true,
+          "index": 3,
+          "within_native_pixel_budget": true
+        }
+      ],
+      "encrypted": false,
+      "format": "jpg",
+      "bytes": 1710744,
+      "eligible": true,
+      "height": 2900,
+      "verification": "container",
+      "token_received": true,
+      "index": 1,
+      "within_native_pixel_budget": true
+    },
+    "owned": {
+      "catalog_alias": "comic_1",
+      "index_received": true,
+      "page_count": 19,
+      "acquired": true,
+      "width": 2000,
+      "pages": [
+        {
+          "acquired": true,
+          "encrypted": false,
+          "verification": "container",
+          "bytes": 1957862,
+          "width": 2000,
+          "height": 2855,
+          "format": "jpg",
+          "token_received": true,
+          "index": 1,
+          "within_native_pixel_budget": true
+        },
+        {
+          "acquired": true,
+          "encrypted": false,
+          "verification": "container",
+          "bytes": 2263985,
+          "width": 2000,
+          "height": 2855,
+          "format": "jpg",
+          "token_received": true,
+          "index": 2,
+          "within_native_pixel_budget": true
+        },
+        {
+          "acquired": true,
+          "encrypted": false,
+          "verification": "container",
+          "bytes": 2017224,
+          "width": 2000,
+          "height": 2855,
+          "format": "jpg",
+          "token_received": true,
+          "index": 3,
+          "within_native_pixel_budget": true
+        }
+      ],
+      "encrypted": false,
+      "format": "jpg",
+      "bytes": 1957862,
+      "eligible": true,
+      "height": 2855,
+      "verification": "container",
+      "token_received": true,
+      "index": 1,
+      "within_native_pixel_budget": true
+    }
+  },
+  "probe": "authorized-reading-only",
+  "catalogs": [
+    {
+      "received": true,
+      "alias": "comic_1",
+      "episode_count": 170,
+      "access_counts": {
+        "free": 6,
+        "owned": 41,
+        "locked": 123
+      },
+      "access_fields": {
+        "pay_mode": true,
+        "unlock_type": true,
+        "unlock_expire_at": true,
+        "is_locked": true,
+        "is_in_free": true
+      }
+    }
+  ],
+  "requests": [
+    {
+      "path": "/x/web-interface/nav",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/bookshelf.v1.Bookshelf/ListFavorite",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/twirp/bookshelf.v1.Bookshelf/ListHistory",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ComicDetail",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/GetImageIndex",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ImageToken",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ImageToken",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ImageToken",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/GetImageIndex",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ImageToken",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ImageToken",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    },
+    {
+      "path": "/twirp/comic.v1.Comic/ImageToken",
+      "status": 200,
+      "method": "POST"
+    },
+    {
+      "path": "[anonymous CDN resource]",
+      "status": 200,
+      "method": "GET"
+    }
+  ],
+  "provenance": {
+    "host": "test-env",
+    "runtime": "Official KOReader v2026.07.1 Linux x86_64",
+    "source_sha256": {
+      "bilicomics/protocol/client.lua": "48d6fe61a4ace8464cb71780e5be1edb368d4644d2399b8ac8a728e214703ffd",
+      "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+      "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+      "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+      "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+      "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+      "bilicomics/protocol/native_backend.lua": "e0a3103e990f48f13ec1498b63a214de75273fe5a3939346b1fe94896781da02",
+      "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+      "bilicomics/protocol/native/manifest.json": "a854fac43f3f9f9430dc24badec8c1eb611ff8b65c5909722618964cff831008",
+      "bilicomics/protocol/native/portable/manifest.json": "5e70d3e78d45a2994fe5f71572b7cca08b61ea97c6b780f2314aa8f7fa388a83"
+    },
+    "remote_session_input_removed": true,
+    "actual_purchase_testing": false,
+    "quote_and_wallet_testing": false,
+    "image_container_verification_is_not_native_rendering": true,
+    "real_encrypted_image_observed": false
+  }
+}

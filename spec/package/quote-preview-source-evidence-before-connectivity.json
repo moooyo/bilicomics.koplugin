@@ -1,0 +1,37 @@
+{
+  "archive_file": "bilicomics-quote-preview.zip",
+  "archive_sha256": "37127a655a2da25417cb29a8a6871a0ea8de78a97e328f1a2807bc5d8e8a537e",
+  "archive_bytes": 2439484,
+  "packaged_files": 95,
+  "previous_archive_sha256": "2c4f535091cdc6615b67a17d3fa8523155f526ad54914a7d0f1a19494848afdd",
+  "changed_since_previous_archive": [
+    "bilicomics/protocol/native/README.md",
+    "bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so",
+    "bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so",
+    "bilicomics/protocol/native/manifest.json",
+    "bilicomics/protocol/native/portable/README.md",
+    "bilicomics/protocol/native/portable/manifest.json"
+  ],
+  "unchanged_files": 89,
+  "all_lua_files_unchanged": true,
+  "native_libraries_match_both_runtime_probes": true,
+  "native_runtime_evidence": {
+    "glibc220_diagnostic_loader": "/tmp/bilicomics-kindle-loader-WSAJTBOe/new-native-220/result.json",
+    "glibc241": "/tmp/bilicomics-kindle-loader-WSAJTBOe/new-native-241/result.json"
+  },
+  "native_libraries": {
+    "libbiliwasm.so": {
+      "sha256": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d",
+      "bytes": 1715052
+    },
+    "libbilicrypto.so": {
+      "sha256": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f",
+      "bytes": 59880
+    }
+  },
+  "package_checks": 27,
+  "diagnostic_loader_packaged": false,
+  "device_verified": false,
+  "purchase_tests_executed": false,
+  "scope": "Only ARM binaries, their manifests and native documentation changed; earlier Lua/quote evidence retains its original scope"
+}

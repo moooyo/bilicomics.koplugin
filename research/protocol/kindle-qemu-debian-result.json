@@ -1,0 +1,69 @@
+{
+  "sysroot_origin": "debian",
+  "expected_glibc": "2.41",
+  "command": [
+    "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+    "-cpu",
+    "cortex-a15",
+    "-L",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/debian/usr/arm-linux-gnueabihf",
+    "-E",
+    "LD_LIBRARY_PATH=/var/tmp/bilicomics-kindle-qemu-20260912/debian/usr/arm-linux-gnueabihf/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+    "-E",
+    "LD_DEBUG=libs:versions",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/probe.lua",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/source",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/assets",
+    "/var/tmp/bilicomics-kindle-qemu-20260912/debian-result/result.json",
+    "2.41"
+  ],
+  "exit_code": 0,
+  "seconds": 0.583,
+  "qemu_version": "qemu-arm version 10.0.11 (Debian 1:10.0.11+ds-0+deb13u1)",
+  "kindle_runtime_sha256": "8174df8c653d26d9daeed5d1c7f452420d8b4ec81419599d9c65cb6ec44a14ee",
+  "qemu_sha256": "1de890b2dfec9a24ac3a8a566654a6db1e9c4cbb35d056dff022854b688281f9",
+  "sysroot_glibc_sha256": "2f6370faf28af181c727b3817c475888ed108714e57c0076f71081fe3de13e34",
+  "sysroot_loader_sha256": "ca2b396825098cf0997921b8f8e89529b662b4814e5619c95c689c93e35b7fa9",
+  "libraries": {
+    "libbiliwasm.so": "df3bb13afbc85a79d229ef57f4f9826d68f4d7715a25d4d50b38ac584278c98d",
+    "libbilicrypto.so": "424ac0a6ee2c7d5c4afc28b6b2705751306d015269699ac26ed1c379c248cbd1"
+  },
+  "account_requests": 0,
+  "global_installation": false,
+  "binfmt_registration": false,
+  "rebuilt_target_binaries": false,
+  "kindle_firmware_image": false,
+  "device_verified": false,
+  "probe": {
+    "device_verified": false,
+    "account_requests": 0,
+    "ffi_os": "Linux",
+    "ffi_arch": "arm",
+    "hardfp": true,
+    "glibc": "2.41",
+    "ok": true,
+    "target": "linux-armhf",
+    "checks": [
+      {
+        "name": "production_native_libraries_load",
+        "ok": true
+      },
+      {
+        "name": "official_signing_wasm_golden",
+        "ok": true
+      },
+      {
+        "name": "nist_aes256_ecb_golden",
+        "ok": true
+      },
+      {
+        "name": "portable_p256_generator_and_shared_secret_golden",
+        "ok": true
+      }
+    ],
+    "scope": "Official kindlehf LuaJIT under QEMU ARM; the runner records the distinct sysroot origin",
+    "passed": 4,
+    "production_modules": true
+  }
+}

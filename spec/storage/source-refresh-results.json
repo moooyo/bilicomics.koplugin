@@ -1,0 +1,3643 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "source_unchanged": true,
+  "runtime_version": "v2026.07.1",
+  "source_sha256": {
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "434a9fa589dd4d4c3940cb7d08cbded0cd0cb0f25efe9cc828721181b04f0ac4",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "38ffd2068cb639d2da8be5d6afc9d60010447afc609abfe39b376159882b3b98",
+    "source_refresh_spec.lua": "2f13a3cf488d3d9a5e2901ab9d7dfbdf53f68e7ebb597cbcc8103a05f97fc49e"
+  },
+  "runtime_sha256": {
+    "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "libs/libsqlite3.so.0": "9341f59991c140a56a27c81bc8373db66b9db7820738b48ef7d4a78ff2b66a7f"
+  },
+  "launcher_sha256": "f19c95348b68e02244afce03f26b5d3bb46f01a89b3a667b30917956105e5ba2",
+  "suite": {
+    "passed": true,
+    "assertions": [
+      {
+        "passed": true,
+        "name": "file_identity_contract: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: fileIdentity never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity is available without hashing"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity field dev is numeric"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity compares dev strictly"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity field ino is numeric"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity compares ino strictly"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity field size is numeric"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity compares size strictly"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity field modification is numeric"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity compares modification strictly"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity field change is numeric"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: file identity compares change strictly"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: equal file identities compare equal"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: missing identities never compare equal"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: missing fileIdentity never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: missing reference file returns no success"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: missing reference file returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: missing reference file has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: missing reference file has the expected error code"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: outside fileIdentity never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: reference outside the allowed root returns no success"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: reference outside the allowed root returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: reference outside the allowed root has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "file_identity_contract: reference outside the allowed root has the expected error code"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: ready and historical missing pages are both committed"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: both committed pages require the trusted fixture digest"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: only the ready page has a reference identity"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: all allowed changes survive reopening SQLite"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable: every source generation is durable and monotonic"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: zero ready pages still retain both committed baselines"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: all new pages have explicit never history"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: rejected capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: capture rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: capture rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: capture rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: failed historical pages stay committed"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: invalid validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: index rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: index rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: replacement changes the reference identity"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: adoption rejection has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: a real PageStore commit is interrupted after journaling"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: the interrupted commit remains recorded"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: rejected adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: adoption rejection returns no success"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: adoption rejection returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption: all database records and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: a real PageStore commit is interrupted after journaling"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the interrupted commit remains recorded"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: validateIndex never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the complete replacement index validates"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: validated path order 1 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: validated path order 2 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: validated path order 3 is unchanged"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: adoption returns a complete summary"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the source generation advances once for page 1"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the source generation advances once for page 2"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: the source generation advances once for page 3"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained: only allowed source metadata changes"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: the case storage directory is new"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: the first fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: the second fixture commits through PageStore"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: eviction preserves the historical checksum"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture identifies the existing namespace"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture preserves the immutable descriptor"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture contains complete page snapshots"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture page snapshot 1 is exact"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture page snapshot 2 is exact"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture page snapshot 3 is exact"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: capture has no database or file side effects"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: transaction rollback adopt never hashes files"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: injected transaction failure returns no success"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: injected transaction failure returns a structured error"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: injected transaction failure has the expected error kind"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: the first real SQL write ran before the second failed"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: the transaction depth returns to zero"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: the failed transaction restores every database record and file"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably: rollback remains complete after reopening SQLite"
+      }
+    ],
+    "cases": [
+      {
+        "passed": true,
+        "name": "file_identity_contract"
+      },
+      {
+        "passed": true,
+        "name": "mixed_history_success_is_durable"
+      },
+      {
+        "passed": true,
+        "name": "zero_ready_retains_historical_proof_requirements"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_without_source"
+      },
+      {
+        "passed": true,
+        "name": "known_never_chapter_start_with_source"
+      },
+      {
+        "passed": true,
+        "name": "known_never_without_anchor"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_later_page"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_vertical_offset"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_horizontal_offset"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_source_offset"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_rotation"
+      },
+      {
+        "passed": true,
+        "name": "known_never_rejects_finished"
+      },
+      {
+        "passed": true,
+        "name": "legacy_missing_history_is_unknown"
+      },
+      {
+        "passed": true,
+        "name": "one_unknown_page_rejects_a_partial_history"
+      },
+      {
+        "passed": true,
+        "name": "failed_historical_page_still_requires_sha"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_episode"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_count"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_order"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_width"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_height"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_duplicate_source"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_empty_source"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_missing_index"
+      },
+      {
+        "passed": true,
+        "name": "topology_rejects_non_table_page"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_1"
+      },
+      {
+        "passed": true,
+        "name": "checksum_rejection_page_2"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_is_required"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_proof_must_match"
+      },
+      {
+        "passed": true,
+        "name": "ready_reference_replacement_invalidates_basis"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_content_generation"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_geometry_generation"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_generation"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_source_path"
+      },
+      {
+        "passed": true,
+        "name": "page_cas_rejects_unrelated_page_metadata"
+      },
+      {
+        "passed": true,
+        "name": "anchor_cas_rejects_change"
+      },
+      {
+        "passed": true,
+        "name": "pin_cas_rejects_change"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_cas_rejects_change"
+      },
+      {
+        "passed": true,
+        "name": "active_chapter_cannot_adopt"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_queued"
+      },
+      {
+        "passed": true,
+        "name": "active_download_job_rejects_running"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_state"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_revision"
+      },
+      {
+        "passed": true,
+        "name": "job_cas_rejects_run_generation"
+      },
+      {
+        "passed": true,
+        "name": "job_payload_and_timestamp_are_not_binding"
+      },
+      {
+        "passed": true,
+        "name": "target_pending_journal_blocks_adoption"
+      },
+      {
+        "passed": true,
+        "name": "unrelated_journal_and_job_are_retained"
+      },
+      {
+        "passed": true,
+        "name": "sql_failure_rolls_back_every_page_durably"
+      }
+    ],
+    "counts": {
+      "failed_cases": 0,
+      "assertions": 855,
+      "cases": 47
+    }
+  },
+  "scope": "Real SQLite source-refresh proof storage only; synthetic PNG; isolated network namespace",
+  "purchase_scenarios_executed": false
+}

@@ -1,0 +1,198 @@
+[
+  {
+    "scalar": "1",
+    "success": 1
+  },
+  {
+    "scalar": "2",
+    "success": 1
+  },
+  {
+    "scalar": "3",
+    "success": 1
+  },
+  {
+    "scalar": "4",
+    "success": 1
+  },
+  {
+    "scalar": "5",
+    "success": 1
+  },
+  {
+    "scalar": "6",
+    "success": 1
+  },
+  {
+    "scalar": "7",
+    "success": 1
+  },
+  {
+    "scalar": "8",
+    "success": 1
+  },
+  {
+    "scalar": "9",
+    "success": 1
+  },
+  {
+    "scalar": "10",
+    "success": 1
+  },
+  {
+    "scalar": "11",
+    "success": 1
+  },
+  {
+    "scalar": "12",
+    "success": 1
+  },
+  {
+    "scalar": "13",
+    "success": 1
+  },
+  {
+    "scalar": "14",
+    "success": 1
+  },
+  {
+    "scalar": "15",
+    "success": 1
+  },
+  {
+    "scalar": "16",
+    "success": 1
+  },
+  {
+    "scalar": "17",
+    "success": 1
+  },
+  {
+    "scalar": "18",
+    "success": 1
+  },
+  {
+    "scalar": "19",
+    "success": 1
+  },
+  {
+    "scalar": "n-1",
+    "success": 1
+  },
+  {
+    "scalar": "n-2",
+    "success": 1
+  },
+  {
+    "scalar": "n-3",
+    "success": 1
+  },
+  {
+    "scalar": "n-4",
+    "success": 1
+  },
+  {
+    "scalar": "n-5",
+    "success": 1
+  },
+  {
+    "scalar": "n-6",
+    "success": 1
+  },
+  {
+    "scalar": "n-7",
+    "success": 1
+  },
+  {
+    "scalar": "n-8",
+    "success": 1
+  },
+  {
+    "scalar": "n-9",
+    "success": 1
+  },
+  {
+    "scalar": "n-10",
+    "success": 1
+  },
+  {
+    "scalar": "n-11",
+    "success": 1
+  },
+  {
+    "scalar": "n-12",
+    "success": 1
+  },
+  {
+    "scalar": "n-13",
+    "success": 1
+  },
+  {
+    "scalar": "n-14",
+    "success": 1
+  },
+  {
+    "scalar": "n-15",
+    "success": 1
+  },
+  {
+    "scalar": "n-16",
+    "success": 1
+  },
+  {
+    "scalar": "n-17",
+    "success": 1
+  },
+  {
+    "scalar": "n-18",
+    "success": 1
+  },
+  {
+    "scalar": "n-19",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+-5",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+-4",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+-3",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+-2",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+-1",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+0",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+1",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+2",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+3",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+4",
+    "success": 1
+  },
+  {
+    "scalar": "floor(n/2)+5",
+    "success": 1
+  }
+]

@@ -1,0 +1,1418 @@
+{
+  "version": "v2026.07.1",
+  "scope": "Official Linux ReaderUI with production main hooks and synthetic account services",
+  "runs": [
+    {
+      "case": "auto_strip",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "phase": "open",
+        "success": true,
+        "case": "auto_strip",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "passed": true,
+            "name": "native default population is not mistaken for saved document preferences"
+          },
+          {
+            "passed": true,
+            "name": "requested native zoom is active",
+            "detail": "pagewidth"
+          },
+          {
+            "passed": true,
+            "name": "requested native scroll is active",
+            "detail": true
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "temporary native page flipping does not replace continuous setting"
+          },
+          {
+            "passed": true,
+            "name": "temporary native skim mode does not replace continuous setting"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "auto_strip",
+      "phase": "reopen",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "case": "auto_strip",
+        "assertions": [
+          {
+            "name": "production ReaderReady attaches",
+            "passed": true
+          },
+          {
+            "name": "production DocSettingsLoad captures initial settings",
+            "passed": true
+          },
+          {
+            "name": "requested native zoom is active",
+            "detail": "pagewidth",
+            "passed": true
+          },
+          {
+            "name": "requested native scroll is active",
+            "detail": true,
+            "passed": true
+          },
+          {
+            "name": "requested absolute direction is active",
+            "passed": true
+          },
+          {
+            "name": "descriptor page order remains unchanged",
+            "passed": true
+          },
+          {
+            "name": "normal visible requests still run",
+            "passed": true
+          },
+          {
+            "name": "saved source position survives native process restart",
+            "detail": {
+              "actual": {
+                "mode": "continuous",
+                "zoom_mode": "pagewidth",
+                "schema_version": 1,
+                "page_id": "p2",
+                "index": 2,
+                "x": 0,
+                "y": 0.3145833333333333,
+                "rotation": 0,
+                "zoom_ratio": 1,
+                "geometry_generation": 1,
+                "source": {
+                  "x": 0,
+                  "y": 0.3145833333333333
+                }
+              },
+              "previous": {
+                "mode": "continuous",
+                "zoom_mode": "pagewidth",
+                "schema_version": 1,
+                "page_id": "p2",
+                "index": 2,
+                "x": 0,
+                "y": 0.3145833333333333,
+                "rotation": 0,
+                "zoom_ratio": 1,
+                "geometry_generation": 1,
+                "source": {
+                  "x": 0,
+                  "y": 0.3145833333333333
+                }
+              }
+            },
+            "passed": true
+          },
+          {
+            "name": "native close releases active chapter",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected scroll mode",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected zoom",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected reading order",
+            "passed": true
+          },
+          {
+            "name": "native document stores initialized marker",
+            "passed": true
+          }
+        ],
+        "phase": "reopen"
+      }
+    },
+    {
+      "case": "auto_page",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "case": "auto_page",
+        "phase": "open",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "page",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ],
+        "success": true
+      }
+    },
+    {
+      "case": "forced_page",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "case": "forced_page",
+        "phase": "open",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "page",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "native page traversal starts from the right"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native touch zones follow absolute direction"
+          },
+          {
+            "passed": true,
+            "name": "native swipe advances in the selected direction"
+          },
+          {
+            "passed": true,
+            "name": "opposite native swipe returns to previous page"
+          },
+          {
+            "passed": true,
+            "name": "registered native forward tap advances"
+          },
+          {
+            "passed": true,
+            "name": "registered native backward tap returns"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "forced_strip",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "case": "forced_strip",
+        "phase": "open",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "passed": true,
+            "name": "requested native zoom is active",
+            "detail": "pagewidth"
+          },
+          {
+            "passed": true,
+            "name": "requested native scroll is active",
+            "detail": true
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "saved_native",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "case": "saved_native",
+        "assertions": [
+          {
+            "name": "production ReaderReady attaches",
+            "passed": true
+          },
+          {
+            "name": "production DocSettingsLoad captures initial settings",
+            "passed": true
+          },
+          {
+            "name": "requested native zoom is active",
+            "detail": "page",
+            "passed": true
+          },
+          {
+            "name": "requested native scroll is active",
+            "detail": false,
+            "passed": true
+          },
+          {
+            "name": "requested absolute direction is active",
+            "passed": true
+          },
+          {
+            "name": "descriptor page order remains unchanged",
+            "passed": true
+          },
+          {
+            "name": "normal visible requests still run",
+            "passed": true
+          },
+          {
+            "name": "native close releases active chapter",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected scroll mode",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected zoom",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected reading order",
+            "passed": true
+          },
+          {
+            "name": "native document stores initialized marker",
+            "passed": true
+          }
+        ],
+        "phase": "open"
+      }
+    },
+    {
+      "case": "legacy_anchor",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "case": "legacy_anchor",
+        "phase": "open",
+        "assertions": [
+          {
+            "name": "production ReaderReady attaches",
+            "passed": true
+          },
+          {
+            "name": "production DocSettingsLoad captures initial settings",
+            "passed": true
+          },
+          {
+            "name": "requested native zoom is active",
+            "detail": "pagewidth",
+            "passed": true
+          },
+          {
+            "name": "requested native scroll is active",
+            "detail": true,
+            "passed": true
+          },
+          {
+            "name": "requested absolute direction is active",
+            "passed": true
+          },
+          {
+            "name": "descriptor page order remains unchanged",
+            "passed": true
+          },
+          {
+            "name": "normal visible requests still run",
+            "passed": true
+          },
+          {
+            "name": "native close releases active chapter",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected scroll mode",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected zoom",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected reading order",
+            "passed": true
+          },
+          {
+            "name": "native document stores initialized marker",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "legacy_anchor",
+      "phase": "reopen",
+      "returncode": 0,
+      "result": {
+        "phase": "reopen",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "passed": true,
+            "name": "requested native zoom is active",
+            "detail": "pagewidth"
+          },
+          {
+            "passed": true,
+            "name": "requested native scroll is active",
+            "detail": true
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "saved source position survives native process restart",
+            "detail": {
+              "previous": {
+                "zoom_mode": "pagewidth",
+                "y": 0.2,
+                "schema_version": 1,
+                "page_id": "p2",
+                "mode": "continuous",
+                "index": 2,
+                "x": 0,
+                "source": {
+                  "y": 0.2,
+                  "x": 0
+                },
+                "rotation": 0,
+                "zoom_ratio": 1,
+                "geometry_generation": 1
+              },
+              "actual": {
+                "zoom_mode": "pagewidth",
+                "rotation": 0,
+                "schema_version": 1,
+                "page_id": "p2",
+                "mode": "continuous",
+                "index": 2,
+                "x": 0,
+                "source": {
+                  "y": 0.2,
+                  "x": 0
+                },
+                "y": 0.2,
+                "zoom_ratio": 1,
+                "geometry_generation": 1
+              }
+            }
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ],
+        "case": "legacy_anchor"
+      }
+    },
+    {
+      "case": "anchor_only",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "case": "anchor_only",
+        "phase": "open",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "page",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "stale_free_anchor",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "case": "stale_free_anchor",
+        "phase": "open",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "page",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ],
+        "success": true
+      }
+    },
+    {
+      "case": "changed_native",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "phase": "open",
+        "case": "changed_native",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "passed": true,
+            "name": "requested native zoom is active",
+            "detail": "pagewidth"
+          },
+          {
+            "passed": true,
+            "name": "requested native scroll is active",
+            "detail": true
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "changed_native",
+      "phase": "reopen",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "case": "changed_native",
+        "assertions": [
+          {
+            "name": "production ReaderReady attaches",
+            "passed": true
+          },
+          {
+            "name": "production DocSettingsLoad captures initial settings",
+            "passed": true
+          },
+          {
+            "name": "requested native zoom is active",
+            "detail": "page",
+            "passed": true
+          },
+          {
+            "name": "requested native scroll is active",
+            "detail": false,
+            "passed": true
+          },
+          {
+            "name": "requested absolute direction is active",
+            "passed": true
+          },
+          {
+            "name": "descriptor page order remains unchanged",
+            "passed": true
+          },
+          {
+            "name": "normal visible requests still run",
+            "passed": true
+          },
+          {
+            "name": "saved source position survives native process restart",
+            "detail": {
+              "previous": {
+                "zoom_ratio": 0.32708333333333334,
+                "geometry_generation": 1,
+                "source": {
+                  "x": 0,
+                  "y": 0
+                },
+                "zoom_mode": "page",
+                "index": 1,
+                "schema_version": 1,
+                "page_id": "p1",
+                "rotation": 0,
+                "mode": "page",
+                "x": 0,
+                "y": 0
+              },
+              "actual": {
+                "zoom_ratio": 0.32708333333333334,
+                "rotation": 0,
+                "source": {
+                  "x": 0,
+                  "y": 0
+                },
+                "zoom_mode": "page",
+                "geometry_generation": 1,
+                "schema_version": 1,
+                "page_id": "p1",
+                "mode": "page",
+                "index": 1,
+                "x": 0,
+                "y": 0
+              }
+            },
+            "passed": true
+          },
+          {
+            "name": "native close releases active chapter",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected scroll mode",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected zoom",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected reading order",
+            "passed": true
+          },
+          {
+            "name": "native document stores initialized marker",
+            "passed": true
+          }
+        ],
+        "phase": "reopen"
+      }
+    },
+    {
+      "case": "rtl_mirrored",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "case": "rtl_mirrored",
+        "phase": "open",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "page",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "native page traversal starts from the right"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native touch zones follow absolute direction"
+          },
+          {
+            "passed": true,
+            "name": "native swipe advances in the selected direction"
+          },
+          {
+            "passed": true,
+            "name": "opposite native swipe returns to previous page"
+          },
+          {
+            "passed": true,
+            "name": "registered native forward tap advances"
+          },
+          {
+            "passed": true,
+            "name": "registered native backward tap returns"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "ltr_mirrored",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "assertions": [
+          {
+            "name": "production ReaderReady attaches",
+            "passed": true
+          },
+          {
+            "name": "production DocSettingsLoad captures initial settings",
+            "passed": true
+          },
+          {
+            "name": "requested native zoom is active",
+            "detail": "page",
+            "passed": true
+          },
+          {
+            "name": "requested native scroll is active",
+            "detail": false,
+            "passed": true
+          },
+          {
+            "name": "requested absolute direction is active",
+            "passed": true
+          },
+          {
+            "name": "descriptor page order remains unchanged",
+            "passed": true
+          },
+          {
+            "name": "normal visible requests still run",
+            "passed": true
+          },
+          {
+            "name": "native touch zones follow absolute direction",
+            "passed": true
+          },
+          {
+            "name": "native swipe advances in the selected direction",
+            "passed": true
+          },
+          {
+            "name": "opposite native swipe returns to previous page",
+            "passed": true
+          },
+          {
+            "name": "registered native forward tap advances",
+            "passed": true
+          },
+          {
+            "name": "registered native backward tap returns",
+            "passed": true
+          },
+          {
+            "name": "native close releases active chapter",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected scroll mode",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected zoom",
+            "passed": true
+          },
+          {
+            "name": "native document stores selected reading order",
+            "passed": true
+          },
+          {
+            "name": "native document stores initialized marker",
+            "passed": true
+          }
+        ],
+        "case": "ltr_mirrored",
+        "phase": "open"
+      }
+    },
+    {
+      "case": "rtl_pan",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "phase": "open",
+        "case": "rtl_pan",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "passed": true,
+            "name": "requested native zoom is active",
+            "detail": "page"
+          },
+          {
+            "passed": true,
+            "name": "requested native scroll is active",
+            "detail": false
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "native page traversal starts from the right"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native page-height zoom starts at the right edge",
+            "detail": 1167
+          },
+          {
+            "passed": true,
+            "name": "native next viewport progresses from right to left within the page",
+            "detail": 807
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document persists RTL page traversal"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "rtl_pan",
+      "phase": "reopen",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "pageheight",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "native page traversal starts from the right"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "detail": {
+              "previous": {
+                "schema_version": 1,
+                "page_id": "p1",
+                "index": 1,
+                "x": 0.45690021231422506,
+                "y": 0,
+                "zoom_ratio": 2.94375,
+                "geometry_generation": 1,
+                "rotation": 0,
+                "source": {
+                  "y": 0,
+                  "x": 0.45690021231422506
+                },
+                "zoom_mode": "pageheight",
+                "mode": "page"
+              },
+              "actual": {
+                "schema_version": 1,
+                "page_id": "p1",
+                "index": 1,
+                "x": 0.45690021231422506,
+                "y": 0,
+                "zoom_ratio": 2.94375,
+                "geometry_generation": 1,
+                "rotation": 0,
+                "source": {
+                  "y": 0,
+                  "x": 0.45690021231422506
+                },
+                "zoom_mode": "pageheight",
+                "mode": "page"
+              }
+            },
+            "passed": true,
+            "name": "saved source position survives native process restart"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document persists RTL page traversal"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ],
+        "phase": "reopen",
+        "case": "rtl_pan"
+      }
+    },
+    {
+      "case": "free_pan",
+      "phase": "open",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "case": "free_pan",
+        "phase": "open",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "page",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    },
+    {
+      "case": "free_pan",
+      "phase": "reopen",
+      "returncode": 0,
+      "result": {
+        "case": "free_pan",
+        "phase": "reopen",
+        "success": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "production ReaderReady attaches"
+          },
+          {
+            "passed": true,
+            "name": "production DocSettingsLoad captures initial settings"
+          },
+          {
+            "detail": "free",
+            "passed": true,
+            "name": "requested native zoom is active"
+          },
+          {
+            "detail": false,
+            "passed": true,
+            "name": "requested native scroll is active"
+          },
+          {
+            "passed": true,
+            "name": "requested absolute direction is active"
+          },
+          {
+            "passed": true,
+            "name": "descriptor page order remains unchanged"
+          },
+          {
+            "passed": true,
+            "name": "normal visible requests still run"
+          },
+          {
+            "detail": {
+              "previous": {
+                "zoom_mode": "free",
+                "schema_version": 1,
+                "page_id": "p1",
+                "rotation": 0,
+                "mode": "page",
+                "x": 0.18750009375003512,
+                "y": 0.16406258203128074,
+                "zoom_ratio": 1.777776888889,
+                "geometry_generation": 1,
+                "index": 1,
+                "source": {
+                  "y": 0.16406258203128074,
+                  "x": 0.18750009375003512
+                }
+              },
+              "actual": {
+                "zoom_mode": "free",
+                "schema_version": 1,
+                "page_id": "p1",
+                "rotation": 0,
+                "index": 1,
+                "x": 0.18750009375003512,
+                "y": 0.16406258203128074,
+                "zoom_ratio": 1.777776888889,
+                "geometry_generation": 1,
+                "mode": "page",
+                "source": {
+                  "y": 0.16406258203128074,
+                  "x": 0.18750009375003512
+                }
+              }
+            },
+            "passed": true,
+            "name": "saved source position survives native process restart"
+          },
+          {
+            "passed": true,
+            "name": "native close releases active chapter"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected scroll mode"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected zoom"
+          },
+          {
+            "passed": true,
+            "name": "native document stores selected reading order"
+          },
+          {
+            "passed": true,
+            "name": "native document stores initialized marker"
+          }
+        ]
+      }
+    }
+  ]
+}

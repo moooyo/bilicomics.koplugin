@@ -1,0 +1,43 @@
+{
+  "archive_sha256": "2c4f535091cdc6615b67a17d3fa8523155f526ad54914a7d0f1a19494848afdd",
+  "archive_file": "bilicomics-quote-preview.zip",
+  "archive_bytes": 2438680,
+  "packaged_files": 95,
+  "reference_runtime_archive_sha256": "2f337b48d80e5fdae547124851c45f64902fb6e9433c1ca82896218cdcf3fe7d",
+  "syntax_checked_files": {
+    "bilicomics/controller.lua": "f1de12c507d956c5df8aca023673d9f5516d6785c3c81909ba79a4629872be98",
+    "bilicomics/jobs/worker.lua": "29826580e0bcc2d6e66085be26f62c924f6c93420f9c64cb51a130a0123aa215",
+    "bilicomics/protocol/client.lua": "2c43880a1a54d76405ae37c5fb9e3b7742e959f80b2448a24e60d07698215589",
+    "bilicomics/purchase/quote.lua": "228a594dfb21b7a988ff954fe875b53f8ed00de6fb424aa4b9de2397afa2dea6",
+    "bilicomics/purchase/service.lua": "489e2598d5e10302dd905a0701f9e9395ebf7185eeaee2e3ddb136e175d833f9",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote_fetch.lua": "350ef4fc86d8c01b18c877435c893aca9467a93878fb866b2642cf8e0e921ec8",
+    "bilicomics/ui/screens.lua": "b7adabec67542b62e937ef7d21aa7b049a2c2490efce6a21b1c5c5606a5c67a0",
+    "bilicomics/ui/model.lua": "e42d14b09f07f5d6aec49bbff7b97d7a9bde9bbfc2626abc31c911f6a3f0d5f1",
+    "l10n/bilicomics_zh_CN.lua": "a9d947c10f68aafdd724eba2c0be847a8bb61e22d304162e35138cf894c2bb34"
+  },
+  "syntax_evidence": "/tmp/bilicomics-quote-selection-pz9HDA86/syntax/result.json",
+  "changed_or_added_since_runtime_archive": [
+    "bilicomics/controller.lua",
+    "bilicomics/jobs/worker.lua",
+    "bilicomics/protocol/client.lua",
+    "bilicomics/purchase/README.md",
+    "bilicomics/purchase/candidate.lua",
+    "bilicomics/purchase/quote.lua",
+    "bilicomics/purchase/quote_fetch.lua",
+    "bilicomics/purchase/selection-contract.md",
+    "bilicomics/purchase/selection.lua",
+    "bilicomics/purchase/service.lua",
+    "bilicomics/ui/model.lua",
+    "bilicomics/ui/screens.lua",
+    "l10n/bilicomics_zh_CN.lua"
+  ],
+  "unchanged_files": 82,
+  "package_checks": 26,
+  "this_archive_runtime_verified": false,
+  "payment_ui_behavior_verified": false,
+  "live_quote_contract_verified": false,
+  "purchase_tests_executed": false,
+  "scope": "Changed Lua bytes match syntax-only compilation; the preview is not a runtime or purchasing acceptance result"
+}

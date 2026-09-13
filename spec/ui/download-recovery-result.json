@@ -1,0 +1,816 @@
+{
+    "spec": "native-download-recovery",
+    "runtime": "KOReader v2026.07.1",
+    "width": 600,
+    "count": 159,
+    "height": 800,
+    "passed": true,
+    "injected_controller": true,
+    "network_requests": 0,
+    "assertions": [
+        {
+            "name": "http_400_does_not_automatically_refresh_sources",
+            "passed": true
+        },
+        {
+            "name": "failed-download_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "failed-download_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "failed-download_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery_has_explicit_refresh_action",
+            "passed": true
+        },
+        {
+            "name": "recovery-options_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "recovery-options_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "recovery-options_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 240
+            },
+            "passed": true
+        },
+        {
+            "name": "recovery-options_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "recovery-options_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "recovery-options_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "opening_confirmation_does_not_dispatch_refresh",
+            "passed": true
+        },
+        {
+            "name": "confirmation_contains_the_full_explanation",
+            "passed": true
+        },
+        {
+            "name": "refresh-confirmation_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "refresh-confirmation_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "refresh-confirmation_dialog_fits",
+            "detail": {
+                "width": 464,
+                "height": 221
+            },
+            "passed": true
+        },
+        {
+            "name": "refresh-confirmation_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "refresh-confirmation_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "refresh-confirmation_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "canceling_confirmation_has_no_side_effect",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "confirmation_dispatches_one_exact_job",
+            "passed": true
+        },
+        {
+            "name": "repeated_confirmation_cannot_dispatch_twice",
+            "passed": true
+        },
+        {
+            "name": "index_stage_replaces_resume_with_cancel",
+            "passed": true
+        },
+        {
+            "name": "fetching-sources_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "fetching-sources_job_row_1_has_at_most_four_buttons",
+            "detail": 2,
+            "passed": true
+        },
+        {
+            "name": "fetching-sources_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "verification_stage_displays_historical_counts",
+            "passed": true
+        },
+        {
+            "name": "verifying-history_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "verifying-history_job_row_1_has_at_most_four_buttons",
+            "detail": 2,
+            "passed": true
+        },
+        {
+            "name": "verifying-history_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "cancel_verification_calls_only_the_cancel_operation",
+            "passed": true
+        },
+        {
+            "name": "late_completion_after_cancel_does_not_reopen_dialog",
+            "passed": true
+        },
+        {
+            "name": "verification-canceled_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "verification-canceled_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "verification-canceled_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "paused_job_has_recovery_options",
+            "passed": true
+        },
+        {
+            "name": "paused-download_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "paused-download_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "paused-download_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "successful_verification_uses_controller_result",
+            "passed": true
+        },
+        {
+            "name": "verification-complete_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "verification-complete_job_row_1_has_at_most_four_buttons",
+            "detail": 3,
+            "passed": true
+        },
+        {
+            "name": "verification-complete_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "ordinary_pause_and_cancel_keep_existing_actions",
+            "passed": true
+        },
+        {
+            "name": "canceled_job_has_recovery_options",
+            "passed": true
+        },
+        {
+            "name": "canceled-download_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "canceled-download_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "canceled-download_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "canceled_job_confirmation_cancel_preserves_state",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "removal_explains_canceling_verification",
+            "passed": true
+        },
+        {
+            "name": "remove-during-verification_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "remove-during-verification_job_row_1_has_at_most_four_buttons",
+            "detail": 2,
+            "passed": true
+        },
+        {
+            "name": "remove-during-verification_dialog_fits",
+            "detail": {
+                "width": 464,
+                "height": 128
+            },
+            "passed": true
+        },
+        {
+            "name": "remove-during-verification_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "remove-during-verification_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "remove-during-verification_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "canceling_remove_keeps_verification",
+            "passed": true
+        },
+        {
+            "name": "removal_dispatch_has_no_active_verification",
+            "passed": true
+        },
+        {
+            "name": "confirmed_remove_cancels_then_dispatches_removal",
+            "passed": true
+        },
+        {
+            "name": "late_verification_cannot_restore_removed_job",
+            "passed": true
+        },
+        {
+            "name": "removed-download_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "removed-download_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "http_400_resume_does_not_turn_into_source_refresh",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "account_change_invalidates_old_confirmation",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "old_account_feedback_cannot_replace_current_state",
+            "passed": true
+        },
+        {
+            "name": "stale-account-feedback_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "stale-account-feedback_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "stale-account-feedback_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "closed_screen_ignores_delayed_verification_feedback",
+            "passed": true
+        },
+        {
+            "name": "failed_job_without_error_still_uses_recovery_options",
+            "passed": true
+        },
+        {
+            "name": "failure_details_opens_download_recovery",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_explains_cost_preservation_and_scope",
+            "passed": true
+        },
+        {
+            "name": "refresh_confirmation_is_localized",
+            "passed": true
+        },
+        {
+            "name": "content_changed_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "content_changed_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "content_changed_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-content_changed_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-content_changed_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-content_changed_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 271
+            },
+            "passed": true
+        },
+        {
+            "name": "error-content_changed_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-content_changed_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-content_changed_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "unknown_history_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "unknown_history_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "unknown_history_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-unknown_history_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-unknown_history_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-unknown_history_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 271
+            },
+            "passed": true
+        },
+        {
+            "name": "error-unknown_history_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-unknown_history_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-unknown_history_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "unverified_position_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "unverified_position_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "unverified_position_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-unverified_position_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-unverified_position_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-unverified_position_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 302
+            },
+            "passed": true
+        },
+        {
+            "name": "error-unverified_position_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-unverified_position_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-unverified_position_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "reference_changed_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "reference_changed_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "reference_changed_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-reference_changed_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-reference_changed_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-reference_changed_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 271
+            },
+            "passed": true
+        },
+        {
+            "name": "error-reference_changed_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-reference_changed_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-reference_changed_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "stale_source_refresh_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "stale_source_refresh_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "stale_source_refresh_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-stale_source_refresh_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-stale_source_refresh_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-stale_source_refresh_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 271
+            },
+            "passed": true
+        },
+        {
+            "name": "error-stale_source_refresh_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-stale_source_refresh_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-stale_source_refresh_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "source_refresh_interrupted_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "source_refresh_interrupted_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "source_refresh_interrupted_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-source_refresh_interrupted_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-source_refresh_interrupted_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-source_refresh_interrupted_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 271
+            },
+            "passed": true
+        },
+        {
+            "name": "error-source_refresh_interrupted_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-source_refresh_interrupted_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-source_refresh_interrupted_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "chapter_active_has_a_specific_fixed_message",
+            "passed": true
+        },
+        {
+            "name": "chapter_active_is_safe_chinese",
+            "passed": true
+        },
+        {
+            "name": "chapter_active_recovery_exposes_the_typed_error",
+            "passed": true
+        },
+        {
+            "name": "error-chapter_active_content_fits",
+            "detail": {
+                "width": 568,
+                "height": 784
+            },
+            "passed": true
+        },
+        {
+            "name": "error-chapter_active_job_row_1_has_at_most_four_buttons",
+            "detail": 4,
+            "passed": true
+        },
+        {
+            "name": "error-chapter_active_dialog_fits",
+            "detail": {
+                "width": 540,
+                "height": 271
+            },
+            "passed": true
+        },
+        {
+            "name": "error-chapter_active_dialog_is_topmost",
+            "passed": true
+        },
+        {
+            "name": "error-chapter_active_dialog_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "error-chapter_active_screen_text_is_safe",
+            "passed": true
+        },
+        {
+            "name": "all_controller_operations_are_allowlisted",
+            "passed": true
+        },
+        {
+            "name": "all_fake_callbacks_are_accounted_for",
+            "passed": true
+        }
+    ],
+    "screens": [
+        "failed-download.png",
+        "recovery-options.png",
+        "refresh-confirmation.png",
+        "fetching-sources.png",
+        "verifying-history.png",
+        "verification-canceled.png",
+        "paused-download.png",
+        "verification-complete.png",
+        "canceled-download.png",
+        "remove-during-verification.png",
+        "removed-download.png",
+        "stale-account-feedback.png",
+        "error-content_changed.png",
+        "error-unknown_history.png",
+        "error-unverified_position.png",
+        "error-reference_changed.png",
+        "error-stale_source_refresh.png",
+        "error-source_refresh_interrupted.png",
+        "error-chapter_active.png"
+    ],
+    "controller_operations": {
+        "resumeJob": 1,
+        "pauseJob": 1,
+        "cancelJob": 1,
+        "removeDownload": 1,
+        "refreshDownloadSources": 5,
+        "cancelSourceRefresh": 2,
+        "getDownloads": 38,
+        "getComic": 32,
+        "getEpisode": 32,
+        "getStorageSummary": 33,
+        "getAccount": 101
+    }
+}

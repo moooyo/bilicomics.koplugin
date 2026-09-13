@@ -1,0 +1,1556 @@
+{
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "version": "v2026.07.1",
+  "scope": "Synthetic local provider tests, no Bilibili network, no physical device",
+  "runs": [
+    {
+      "mode": "render",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "mode": "render",
+        "assertions": [
+          {
+            "name": "exif_forward_1",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_1",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_1",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_1",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_2",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_2",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_2",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_2",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_3",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_3",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_3",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_3",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_4",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_4",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_4",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_4",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_5",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_5",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_5",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_5",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_6",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_6",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_6",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_6",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_7",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_7",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_7",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_7",
+            "passed": true
+          },
+          {
+            "name": "exif_forward_8",
+            "passed": true
+          },
+          {
+            "name": "exif_inverse_8",
+            "passed": true
+          },
+          {
+            "name": "exif_dimensions_8",
+            "passed": true
+          },
+          {
+            "name": "already_oriented_8",
+            "passed": true
+          },
+          {
+            "name": "dpi_normalization_uses_native_units",
+            "passed": true
+          },
+          {
+            "name": "dpi_crop_stays_in_display_pixels",
+            "passed": true
+          },
+          {
+            "name": "dpi_sample_keeps_crop_origin",
+            "passed": true
+          },
+          {
+            "name": "anisotropic_plan_uses_largest_scale",
+            "passed": true
+          },
+          {
+            "name": "anisotropic_pixel_centers",
+            "passed": true
+          },
+          {
+            "name": "anisotropic_crop_end",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_1_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_2_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_3_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_4_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_5_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_6_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_7_8",
+            "passed": true
+          },
+          {
+            "name": "anchor_round_trip_8",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_1",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_2",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_3",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_4",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_5",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_6",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_7",
+            "passed": true
+          },
+          {
+            "name": "orientation_crop_8_8",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_0",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_dimensions_0",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_90",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_dimensions_90",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_180",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_dimensions_180",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_270",
+            "passed": true
+          },
+          {
+            "name": "reader_rotation_dimensions_270",
+            "passed": true
+          },
+          {
+            "name": "double_boundaries_do_not_add_rows",
+            "passed": true
+          },
+          {
+            "name": "fractional_crop_is_not_direct",
+            "passed": true
+          },
+          {
+            "name": "fractional_crop_retains_sample_offset",
+            "passed": true
+          },
+          {
+            "name": "native_orientation_is_explicit",
+            "passed": true
+          },
+          {
+            "name": "anisotropic_allocation_is_bounded",
+            "passed": true
+          },
+          {
+            "name": "direct_draw_needs_no_extra_allocation",
+            "passed": true
+          },
+          {
+            "name": "source_dimensions_are_paired",
+            "passed": true
+          },
+          {
+            "name": "anchors_clamp_to_source_bounds",
+            "passed": true
+          },
+          {
+            "name": "stored_geometry_has_priority",
+            "passed": true
+          },
+          {
+            "name": "stored_native_orientation_overrides_backend_default",
+            "passed": true
+          },
+          {
+            "name": "unauthorized descriptor is rejected before page reads",
+            "passed": true
+          },
+          {
+            "name": "missing authorization service fails closed",
+            "passed": true
+          },
+          {
+            "name": "provider page count",
+            "passed": true
+          },
+          {
+            "name": "missing geometry is local",
+            "passed": true
+          },
+          {
+            "name": "native crop",
+            "passed": true
+          },
+          {
+            "name": "native owners closed after rendering",
+            "passed": true
+          },
+          {
+            "name": "permission expiry blocks even an existing rendered tile",
+            "passed": true
+          },
+          {
+            "name": "missing ordinary draw",
+            "passed": true
+          },
+          {
+            "name": "missing inverted draw",
+            "passed": true
+          },
+          {
+            "name": "missing full-page unavailable",
+            "passed": true
+          },
+          {
+            "name": "scaled missing region shape",
+            "passed": true
+          },
+          {
+            "name": "missing selection is unavailable",
+            "passed": true
+          },
+          {
+            "name": "missing image completion",
+            "passed": true
+          },
+          {
+            "name": "persistent generation participates in hash",
+            "passed": true
+          },
+          {
+            "name": "format DPI crop jpeg-300",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "format DPI crop png-300",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "format DPI crop png-anisotropic",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "format DPI crop jpeg-anisotropic",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "format DPI crop webp",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 1 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 1 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 1 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 1 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 2 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 2 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 2 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 2 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 3 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 3 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 3 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 3 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 4 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 4 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 4 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 4 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 5 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 5 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 5 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 5 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 6 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 6 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 6 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 6 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 7 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 7 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 7 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 7 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "native EXIF 8 pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "native EXIF 8 pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "native EXIF 8 pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "native EXIF 8 pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-1 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-1 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-1 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-1 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-2 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-2 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-2 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-2 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-3 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-3 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-3 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-3 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-4 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-4 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-4 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-4 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-5 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-5 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-5 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-5 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-6 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-6 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-6 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-6 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-7 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-7 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-7 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-7 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "png-exif-8 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "png-exif-8 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "png-exif-8 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "png-exif-8 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-1 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-1 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-1 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-1 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-2 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-2 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-2 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-2 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-3 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-3 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-3 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-3 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-4 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-4 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-4 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-4 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-5 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-5 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-5 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-5 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-6 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-6 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-6 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-6 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-7 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-7 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-7 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-7 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "webp-exif-8 oriented pixel 40",
+            "passed": true,
+            "detail": 40
+          },
+          {
+            "name": "webp-exif-8 oriented pixel 100",
+            "passed": true,
+            "detail": 100
+          },
+          {
+            "name": "webp-exif-8 oriented pixel 160",
+            "passed": true,
+            "detail": 160
+          },
+          {
+            "name": "webp-exif-8 oriented pixel 220",
+            "passed": true,
+            "detail": 220
+          },
+          {
+            "name": "ready inverted crop",
+            "passed": true
+          },
+          {
+            "name": "ready scaled fragment",
+            "passed": true
+          },
+          {
+            "name": "oversized lossless blocked before native decode",
+            "passed": true
+          },
+          {
+            "name": "oversized input gets explicit unavailable state",
+            "passed": true
+          },
+          {
+            "name": "corrupt image guarded",
+            "passed": true
+          },
+          {
+            "name": "corrupt image handles released",
+            "passed": true
+          },
+          {
+            "name": "ready cover is independently owned",
+            "passed": true
+          },
+          {
+            "name": "registry shared reference",
+            "passed": true
+          },
+          {
+            "name": "standalone close preserves registered document",
+            "passed": true
+          },
+          {
+            "name": "registry final reference released",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "mode": "ui",
+      "returncode": 0,
+      "result": {
+        "mode": "ui",
+        "success": true,
+        "assertions": [
+          {
+            "name": "failed attachment leaves no partial integration",
+            "passed": true
+          },
+          {
+            "name": "native ReaderUI attachment",
+            "passed": true
+          },
+          {
+            "name": "native viewport advances in source image",
+            "passed": true
+          },
+          {
+            "name": "chapter ending is one shot",
+            "passed": true
+          },
+          {
+            "name": "reader active protection released",
+            "passed": true
+          },
+          {
+            "name": "reader closed",
+            "passed": true
+          },
+          {
+            "name": "native document released",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "mode": "ui-reopen",
+      "returncode": 0,
+      "result": {
+        "mode": "ui-reopen",
+        "success": true,
+        "assertions": [
+          {
+            "name": "failed attachment leaves no partial integration",
+            "passed": true
+          },
+          {
+            "name": "native ReaderUI attachment",
+            "passed": true
+          },
+          {
+            "name": "normalized position survives process restart",
+            "passed": true,
+            "detail": {
+              "expected": {
+                "source": {
+                  "x": 0,
+                  "y": 0.3145833333333333
+                },
+                "geometry_generation": 1,
+                "page_id": "page-1",
+                "rotation": 0,
+                "schema_version": 1,
+                "x": 0,
+                "y": 0.3145833333333333,
+                "mode": "continuous",
+                "index": 1,
+                "zoom_ratio": 1,
+                "zoom_mode": "pagewidth"
+              },
+              "actual": {
+                "source": {
+                  "x": 0,
+                  "y": 0.3145833333333333
+                },
+                "geometry_generation": 1,
+                "mode": "page",
+                "rotation": 0,
+                "schema_version": 1,
+                "x": 0,
+                "y": 0.3145833333333333,
+                "index": 1,
+                "page_id": "page-1",
+                "zoom_ratio": 1,
+                "zoom_mode": "pagewidth"
+              }
+            }
+          },
+          {
+            "name": "reader active protection released",
+            "passed": true
+          },
+          {
+            "name": "reader closed",
+            "passed": true
+          },
+          {
+            "name": "native document released",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "mode": "page",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "mode": "page",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "failed attachment leaves no partial integration"
+          },
+          {
+            "passed": true,
+            "name": "native ReaderUI attachment"
+          },
+          {
+            "passed": true,
+            "name": "native viewport advances in source image"
+          },
+          {
+            "passed": true,
+            "name": "chapter ending is one shot"
+          },
+          {
+            "passed": true,
+            "name": "reader active protection released"
+          },
+          {
+            "passed": true,
+            "name": "reader closed"
+          },
+          {
+            "passed": true,
+            "name": "native document released"
+          }
+        ]
+      }
+    },
+    {
+      "mode": "page-reopen",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "mode": "page-reopen",
+        "assertions": [
+          {
+            "name": "failed attachment leaves no partial integration",
+            "passed": true
+          },
+          {
+            "name": "native ReaderUI attachment",
+            "passed": true
+          },
+          {
+            "detail": {
+              "expected": {
+                "zoom_ratio": 1,
+                "geometry_generation": 1,
+                "y": 0.19625,
+                "page_id": "page-1",
+                "source": {
+                  "y": 0.19625,
+                  "x": 0
+                },
+                "index": 1,
+                "zoom_mode": "pagewidth",
+                "rotation": 0,
+                "mode": "page",
+                "schema_version": 1,
+                "x": 0
+              },
+              "actual": {
+                "zoom_ratio": 1,
+                "x": 0,
+                "y": 0.19625,
+                "page_id": "page-1",
+                "source": {
+                  "y": 0.19625,
+                  "x": 0
+                },
+                "geometry_generation": 1,
+                "zoom_mode": "pagewidth",
+                "rotation": 0,
+                "index": 1,
+                "mode": "page",
+                "schema_version": 1
+              }
+            },
+            "name": "normalized position survives process restart",
+            "passed": true
+          },
+          {
+            "name": "reader active protection released",
+            "passed": true
+          },
+          {
+            "name": "reader closed",
+            "passed": true
+          },
+          {
+            "name": "native document released",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "mode": "pan",
+      "returncode": 0,
+      "result": {
+        "mode": "pan",
+        "assertions": [
+          {
+            "name": "failed attachment leaves no partial integration",
+            "passed": true
+          },
+          {
+            "name": "native ReaderUI attachment",
+            "passed": true
+          },
+          {
+            "name": "zoom-only change persists anchor",
+            "passed": true
+          },
+          {
+            "name": "adjacent geometry update preserves panned viewport",
+            "passed": true
+          },
+          {
+            "name": "native viewport advances in source image",
+            "passed": true
+          },
+          {
+            "name": "chapter ending is one shot",
+            "passed": true
+          },
+          {
+            "name": "reader active protection released",
+            "passed": true
+          },
+          {
+            "name": "reader closed",
+            "passed": true
+          },
+          {
+            "name": "native document released",
+            "passed": true
+          }
+        ],
+        "success": true
+      }
+    },
+    {
+      "mode": "pan-reopen",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "mode": "pan-reopen",
+        "assertions": [
+          {
+            "name": "failed attachment leaves no partial integration",
+            "passed": true
+          },
+          {
+            "name": "native ReaderUI attachment",
+            "passed": true
+          },
+          {
+            "detail": {
+              "expected": {
+                "y": 0.12656256328127372,
+                "geometry_generation": 1,
+                "zoom_mode": "free",
+                "page_id": "page-1",
+                "index": 1,
+                "rotation": 0,
+                "schema_version": 1,
+                "zoom_ratio": 1.777776888889,
+                "mode": "page",
+                "x": 0.15000007500002813,
+                "source": {
+                  "y": 0.12656256328127372,
+                  "x": 0.15000007500002813
+                }
+              },
+              "actual": {
+                "y": 0.12656256328127372,
+                "schema_version": 1,
+                "zoom_mode": "free",
+                "rotation": 0,
+                "index": 1,
+                "geometry_generation": 1,
+                "mode": "page",
+                "source": {
+                  "y": 0.12656256328127372,
+                  "x": 0.15000007500002813
+                },
+                "zoom_ratio": 1.777776888889,
+                "page_id": "page-1",
+                "x": 0.15000007500002813
+              }
+            },
+            "name": "normalized position survives process restart",
+            "passed": true
+          },
+          {
+            "name": "reader active protection released",
+            "passed": true
+          },
+          {
+            "name": "reader closed",
+            "passed": true
+          },
+          {
+            "name": "native document released",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "mode": "ui-online",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "assertions": [
+          {
+            "name": "failed attachment leaves no partial integration",
+            "passed": true
+          },
+          {
+            "name": "native ReaderUI attachment",
+            "passed": true
+          },
+          {
+            "name": "arrival preserves continuous viewport",
+            "passed": true
+          },
+          {
+            "name": "geometry correction preserves normalized viewport",
+            "passed": true
+          },
+          {
+            "name": "reader active protection released",
+            "passed": true
+          },
+          {
+            "name": "reader closed",
+            "passed": true
+          },
+          {
+            "name": "native document released",
+            "passed": true
+          }
+        ],
+        "mode": "ui-online"
+      }
+    },
+    {
+      "mode": "thumbnail",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "mode": "thumbnail",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "failed attachment leaves no partial integration"
+          },
+          {
+            "passed": true,
+            "name": "native ReaderUI attachment"
+          },
+          {
+            "passed": true,
+            "name": "native thumbnail integration exists"
+          },
+          {
+            "passed": true,
+            "name": "missing thumbnail callback unavailable"
+          },
+          {
+            "passed": true,
+            "name": "native thumbnail child launched"
+          },
+          {
+            "passed": true,
+            "name": "stale child never enters cache"
+          },
+          {
+            "passed": true,
+            "name": "stale callback never exposes pixels"
+          },
+          {
+            "passed": true,
+            "name": "ready child uses local snapshot"
+          },
+          {
+            "passed": true,
+            "name": "corrupt child never exposes a placeholder thumbnail"
+          },
+          {
+            "passed": true,
+            "name": "corrupt child never enters thumbnail cache"
+          },
+          {
+            "passed": true,
+            "name": "reader active protection released"
+          },
+          {
+            "passed": true,
+            "name": "reader closed"
+          },
+          {
+            "passed": true,
+            "name": "native document released"
+          }
+        ]
+      }
+    }
+  ]
+}

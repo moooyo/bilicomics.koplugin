@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "packages": {
+    "reading": {
+      "files": [
+        {
+          "path": "bilicomics/controller.lua",
+          "sha256": "b4941fe48eda9685c0e4984dcc0539374ed9d3ce0dcee0c26a89fc5c19508025",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/jobs/download_service.lua",
+          "sha256": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/jobs/runner.lua",
+          "sha256": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/ui/model.lua",
+          "sha256": "14f48d18669ad872fe29e5fd3b445c6854905cccacf489291e6605f5dcd304a1",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/ui/screens.lua",
+          "sha256": "3dba24d8ce82a94d8181817861f5565af54f30d87e81c6cbe3ea5697fcbf7353",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "l10n/bilicomics_zh_CN.lua",
+          "sha256": "dc91fd01115830c708fca76b234581f0868e26aaf66c93168031c5ce87198c35",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        }
+      ],
+      "passed": true
+    },
+    "preview": {
+      "files": [
+        {
+          "path": "bilicomics/controller.lua",
+          "sha256": "5ae6d7c13751cc67a2684131d84a2bbdb0930dbc879a4f693931512947a84b72",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/jobs/download_service.lua",
+          "sha256": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/jobs/runner.lua",
+          "sha256": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/ui/model.lua",
+          "sha256": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "bilicomics/ui/screens.lua",
+          "sha256": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        },
+        {
+          "path": "l10n/bilicomics_zh_CN.lua",
+          "sha256": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f",
+          "returncode": 0,
+          "source_unchanged": true,
+          "bytecode_written": true,
+          "mode": "LuaJIT -b compile only",
+          "network_namespace_isolated": true,
+          "lua_initialization_disabled": true,
+          "lua_search_paths_pinned_to_runtime": true,
+          "compiler_output": ""
+        }
+      ],
+      "passed": true
+    }
+  },
+  "modules_executed": false,
+  "purchase_tests_executed": false,
+  "remote_host": "test-env",
+  "staging_receipt_sha256": "c367270a15ecd41d24752618ac5874e2a928a4e39b8ff5c6ca6dec15d96cd87d",
+  "runtime_version": "v2026.07.1",
+  "luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "scope": "Remote syntax compilation of staged changed files only; no application behavior, payment, or visible UI execution"
+}

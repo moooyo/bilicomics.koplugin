@@ -1,0 +1,55 @@
+{
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "returncode": 0,
+  "result": {
+    "cases": [
+      "cookie imports reject header injection and isolate supported names",
+      "stable account identity is server-validated before persistence",
+      "plain wrappers retain real endpoint and empty-object request shape",
+      "protected catalog never silently falls back to unsigned legacy requests",
+      "signed body and protected plain response preserve fractional chapter order",
+      "access normalization does not mistake unlock flags or unparsed expiry for ownership",
+      "encrypted success and plain errors use separate response branches",
+      "purchase rejects automatic settings and accepts explicit coupon payload without currency amount",
+      "purchase unknown results and transport loss cannot become definitive rejection or retry",
+      "image headers are inspected independently of URL extension",
+      "ordinary snapshots redact acquisition credentials",
+      "TLS names support exact and single-label wildcard matches only"
+    ],
+    "passed": 12
+  },
+  "session_mode": "0o600",
+  "native_crypto": {
+    "returncode": 0,
+    "result": {
+      "passed": 7,
+      "cases": [
+        "native signing bridge reproduces the official WASM golden vector",
+        "production response bridge decodes the official synthetic ciphertext",
+        "P-256 exchange uses independent ephemeral material and validates serialized keys",
+        "token exchange keeps private material inside the current client",
+        "missing browser environment follows the official explicit error-report branch",
+        "catalog and index requests sign the same m2 error report they transmit",
+        "pinned asset acquisition rejects modified code before installation"
+      ]
+    }
+  },
+  "acquisition": {
+    "returncode": 0,
+    "result": {
+      "passed": 10,
+      "cases": [
+        "encrypted acquisition version 3 fixture 1",
+        "encrypted acquisition version 3 fixture 2",
+        "encrypted acquisition version 5 fixture 3",
+        "encrypted acquisition version 5 fixture 4",
+        "encrypted acquisition version 6 fixture 5",
+        "encrypted acquisition version 6 fixture 6",
+        "encrypted acquisition version 7 fixture 7",
+        "encrypted acquisition version 7 fixture 8",
+        "encrypted acquisition version 8 fixture 9",
+        "failed conversion removes its temporary file"
+      ]
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "plugin_root": "/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin",
+  "research_only": true,
+  "phase": "complete",
+  "staging": "android_private_files",
+  "package_dir": "/data/data/org.koreader.launcher/files",
+  "android_private_dir": "/data/user/0/org.koreader.launcher/files",
+  "apk_native_library_dir": "/data/app/~~9KLb5hQ686mlm_x8HuOUOw==/org.koreader.launcher-BQ1Y3Pn0ZazcxDnFB41tqQ==/lib/x86",
+  "ffi_os": "Linux",
+  "staging_directory_uid": 10167,
+  "staged_libraries": [
+    {
+      "identical_bytes": true,
+      "path": "/data/user/0/org.koreader.launcher/files/bili-native-probe/libbiliwasm.so",
+      "uid": 10167,
+      "permissions": "rw-------",
+      "name": "libbiliwasm.so",
+      "bytes": 348004
+    },
+    {
+      "identical_bytes": true,
+      "path": "/data/user/0/org.koreader.launcher/files/bili-native-probe/libbilicrypto.so",
+      "uid": 10167,
+      "permissions": "rw-------",
+      "name": "libbilicrypto.so",
+      "bytes": 75652
+    }
+  ],
+  "ok": true,
+  "data_dir": "/storage/emulated/0/koreader",
+  "lfs_filehandle_attributes_error": "bad argument #1 to '?' (string expected, got userdata)",
+  "ffi_arch": "x86",
+  "fd_loads": [
+    {
+      "permissions": "rw-------",
+      "mode": "file",
+      "size": 348004,
+      "descriptor_path": "/proc/self/fd/66",
+      "ino": 131786,
+      "dev": 64773,
+      "uid": 10167,
+      "loaded_after_fd_closed": true,
+      "path": "/data/user/0/org.koreader.launcher/files/bili-native-probe/libbiliwasm.so"
+    },
+    {
+      "permissions": "rw-------",
+      "mode": "file",
+      "size": 75652,
+      "descriptor_path": "/proc/self/fd/66",
+      "ino": 132093,
+      "dev": 64773,
+      "uid": 10167,
+      "loaded_after_fd_closed": true,
+      "path": "/data/user/0/org.koreader.launcher/files/bili-native-probe/libbilicrypto.so"
+    }
+  ],
+  "process_uid": "10167",
+  "checks": [
+    {
+      "detail": "Copied and byte-verified both libraries before atomic rename",
+      "name": "stage_libraries_in_private_files",
+      "ok": true
+    },
+    {
+      "detail": true,
+      "name": "dlopen_wasm_from_held_fd",
+      "ok": true
+    },
+    {
+      "detail": true,
+      "name": "dlopen_crypto_from_held_fd",
+      "ok": true
+    },
+    {
+      "detail": "Official deterministic signature matched",
+      "name": "official_wasm_sign_golden",
+      "ok": true
+    },
+    {
+      "detail": "Official argument error matched",
+      "name": "official_wasm_argument_error",
+      "ok": true
+    },
+    {
+      "detail": "FIPS AES-256 encrypt/decrypt matched",
+      "name": "aes256_ecb_fips_golden",
+      "ok": true
+    },
+    {
+      "detail": "P-256 generator public key and ECDH matched",
+      "name": "p256_public_and_ecdh_golden",
+      "ok": true
+    }
+  ],
+  "native_staging_dir": "/data/user/0/org.koreader.launcher/files/bili-native-probe",
+  "staging_directory_permissions": "rwx------",
+  "selinux_context": "u:r:untrusted_app:s0:c167,c256,c512,c768\u0000",
+  "lfs_filehandle_attributes_supported": false
+}

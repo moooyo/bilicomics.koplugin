@@ -1,0 +1,930 @@
+{
+  "passed": true,
+  "source_unchanged": true,
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "ae9e63930089c69a13cdda563f9eaccc12c5346c9608b946cdfcf9238be4a2b3",
+    "bilicomics/controller.lua": "5ae6d7c13751cc67a2684131d84a2bbdb0930dbc879a4f693931512947a84b72",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+    "bilicomics/jobs/runner.lua": "e04ff2c6bf116487e011a899010db0360acaa2284167ccea45236e1bea4e2991",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "29826580e0bcc2d6e66085be26f62c924f6c93420f9c64cb51a130a0123aa215",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "2c43880a1a54d76405ae37c5fb9e3b7742e959f80b2448a24e60d07698215589",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "228a594dfb21b7a988ff954fe875b53f8ed00de6fb424aa4b9de2397afa2dea6",
+    "bilicomics/purchase/quote_fetch.lua": "350ef4fc86d8c01b18c877435c893aca9467a93878fb866b2642cf8e0e921ec8",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/service.lua": "489e2598d5e10302dd905a0701f9e9395ebf7185eeaee2e3ddb136e175d833f9",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+    "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b"
+  },
+  "test_source_sha256": {
+    "spec/jobs/download_connectivity_runner_spec.lua": "a33d6d682a2bd91849af396faa53070799cf1927d6f620a8adf12841855703c0",
+    "spec/jobs/download_connectivity_spec.lua": "d490f9de1d73900cbdd5d2c0ea53c166b9bf83ff22579bda48c4dc3de486edbd"
+  },
+  "suites": [
+    {
+      "suite": "service",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "real_sqlite": true,
+      "real_controller": true,
+      "real_runner_fork": false,
+      "controlled_async_runner": true,
+      "synthetic_worker": false,
+      "result": {
+        "assertions": [
+          {
+            "name": "offline_enqueue_without_descriptor: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "offline_enqueue_without_descriptor: no index preparation or worker is dispatched",
+            "passed": true
+          },
+          {
+            "name": "offline_enqueue_without_descriptor: no placeholder revision is invented",
+            "passed": true
+          },
+          {
+            "name": "partial_resume_offline_preserves_cached_page: resume returns the connectivity failure",
+            "passed": true
+          },
+          {
+            "name": "partial_resume_offline_preserves_cached_page: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "partial_resume_offline_preserves_cached_page: network pause advances the job generation",
+            "passed": true
+          },
+          {
+            "name": "partial_resume_offline_preserves_cached_page: the ready file stays usable with zero acquisition",
+            "passed": true
+          },
+          {
+            "name": "ready_page_precedes_session_and_network_checks: cache callback remains asynchronous",
+            "passed": true
+          },
+          {
+            "name": "ready_page_precedes_session_and_network_checks: cached page is returned",
+            "passed": true
+          },
+          {
+            "name": "ready_page_precedes_session_and_network_checks: ready cache bypasses all network work",
+            "passed": true
+          },
+          {
+            "name": "complete_cache_can_pin_and_complete_without_session: local resume is accepted",
+            "passed": true
+          },
+          {
+            "name": "complete_cache_can_pin_and_complete_without_session: the complete local chapter is pinned and complete",
+            "passed": true
+          },
+          {
+            "name": "complete_cache_can_pin_and_complete_without_session: complete local work never prepares or dispatches",
+            "passed": true
+          },
+          {
+            "name": "throwing_connection_predicate_fails_closed: predicate failure becomes a paused network error",
+            "passed": true
+          },
+          {
+            "name": "throwing_connection_predicate_fails_closed: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "throwing_connection_predicate_fails_closed: missing page rejects failed predicate",
+            "passed": true
+          },
+          {
+            "name": "throwing_connection_predicate_fails_closed: predicate exception starts no worker and returns once",
+            "passed": true
+          },
+          {
+            "name": "disconnect_after_async_preparation: one index preparation is pending",
+            "passed": true
+          },
+          {
+            "name": "disconnect_after_async_preparation: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "disconnect_after_async_preparation: no image worker starts after preparation returns offline",
+            "passed": true
+          },
+          {
+            "name": "preparation_network_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "preparation_network_pauses: failed preparation dispatches no image",
+            "passed": true
+          },
+          {
+            "name": "preparation_timeout_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "preparation_timeout_pauses: failed preparation dispatches no image",
+            "passed": true
+          },
+          {
+            "name": "disconnect_between_page_commits: only the first page is in flight",
+            "passed": true
+          },
+          {
+            "name": "disconnect_between_page_commits: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "disconnect_between_page_commits: arriving valid bytes commit but no next page starts",
+            "passed": true
+          },
+          {
+            "name": "image_network_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "image_network_pauses: terminal acquisition failure does not advance",
+            "passed": true
+          },
+          {
+            "name": "image_timeout_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "image_timeout_pauses: terminal acquisition failure does not advance",
+            "passed": true
+          },
+          {
+            "name": "cancellation_rejects_late_preparation: the late callback cannot undo cancellation",
+            "passed": true
+          },
+          {
+            "name": "service_close_rejects_late_preparation: closed lifetime does not publish running state or images",
+            "passed": true
+          },
+          {
+            "name": "explicit_resume_after_reconnect_reuses_job: connectivity alone does not add polling or automatic work",
+            "passed": true
+          },
+          {
+            "name": "explicit_resume_after_reconnect_reuses_job: the explicit retry can resume",
+            "passed": true
+          },
+          {
+            "name": "explicit_resume_after_reconnect_reuses_job: the original durable job completes",
+            "passed": true
+          },
+          {
+            "name": "page_before_start_guard_rechecks_connection: page task carries a parent-side guard",
+            "passed": true
+          },
+          {
+            "name": "page_before_start_guard_rechecks_connection: the queued task becomes unavailable",
+            "passed": true
+          },
+          {
+            "name": "page_before_start_guard_rechecks_connection: job remains durable and paused with an explicit reason",
+            "passed": true
+          },
+          {
+            "name": "page_before_start_guard_rechecks_connection: guard rejection never advances to another image",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: production account service receives the connection callback",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: suspended app rejects acquisition",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: offline app rejects acquisition",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: device connectivity exception fails closed",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: obsolete account generation rejects acquisition",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: old account closure stays invalid after replacement",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: production index preparation carries its own start guard",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: queued index work is blocked after disconnection",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: old index start guard rejects the new account",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards: late old-account metadata cannot enter the new store",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "scope": "Real DownloadService/Controller/SQLite/PageStore; controlled asynchronous image results, synthetic accounts, no network or monetary operations",
+        "counts": {
+          "assertions": 50,
+          "cases": 16
+        },
+        "tests": [
+          {
+            "name": "offline_enqueue_without_descriptor",
+            "passed": true
+          },
+          {
+            "name": "partial_resume_offline_preserves_cached_page",
+            "passed": true
+          },
+          {
+            "name": "ready_page_precedes_session_and_network_checks",
+            "passed": true
+          },
+          {
+            "name": "complete_cache_can_pin_and_complete_without_session",
+            "passed": true
+          },
+          {
+            "name": "throwing_connection_predicate_fails_closed",
+            "passed": true
+          },
+          {
+            "name": "disconnect_after_async_preparation",
+            "passed": true
+          },
+          {
+            "name": "preparation_network_pauses",
+            "passed": true
+          },
+          {
+            "name": "preparation_timeout_pauses",
+            "passed": true
+          },
+          {
+            "name": "disconnect_between_page_commits",
+            "passed": true
+          },
+          {
+            "name": "image_network_pauses",
+            "passed": true
+          },
+          {
+            "name": "image_timeout_pauses",
+            "passed": true
+          },
+          {
+            "name": "cancellation_rejects_late_preparation",
+            "passed": true
+          },
+          {
+            "name": "service_close_rejects_late_preparation",
+            "passed": true
+          },
+          {
+            "name": "explicit_resume_after_reconnect_reuses_job",
+            "passed": true
+          },
+          {
+            "name": "page_before_start_guard_rechecks_connection",
+            "passed": true
+          },
+          {
+            "name": "controller_injects_account_lifecycle_and_index_guards",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "suite": "runner",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "real_sqlite": false,
+      "real_controller": false,
+      "real_runner_fork": true,
+      "controlled_async_runner": false,
+      "synthetic_worker": true,
+      "result": {
+        "production_worker_not_loaded": true,
+        "passed": true,
+        "tests": [
+          {
+            "guards": {
+              "queued": {
+                "parent_only": true,
+                "calls": 1
+              }
+            },
+            "name": "queued_read_goes_offline_before_capacity_is_free",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 1,
+              "forks": 1,
+              "standby_allowed": 1,
+              "worker_executions": 1
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "retry": {
+                "parent_only": true,
+                "calls": 2
+              }
+            },
+            "name": "retry_backoff_rechecks_connectivity_before_fork",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 1,
+              "forks": 1,
+              "standby_allowed": 1,
+              "worker_executions": 1
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "low": {
+                "parent_only": true,
+                "calls": 2
+              }
+            },
+            "name": "preempted_replay_rechecks_connectivity",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 2,
+              "forks": 2,
+              "standby_allowed": 2,
+              "worker_executions": 2
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "throwing": {
+                "parent_only": true,
+                "calls": 1
+              }
+            },
+            "name": "guard_exception_completes_once_without_fork",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 0,
+              "forks": 0,
+              "standby_allowed": 0,
+              "worker_executions": 0
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "denied": {
+                "parent_only": true,
+                "calls": 1
+              }
+            },
+            "name": "retryable_guard_denial_is_not_an_automatic_retry",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 0,
+              "forks": 0,
+              "standby_allowed": 0,
+              "worker_executions": 0
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {},
+            "name": "unguarded_read_keeps_existing_behavior",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 1,
+              "forks": 1,
+              "standby_allowed": 1,
+              "worker_executions": 1
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "canceled": {
+                "parent_only": true,
+                "calls": 0
+              }
+            },
+            "name": "canceling_queued_read_never_restarts_its_guard",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 1,
+              "forks": 1,
+              "standby_allowed": 1,
+              "worker_executions": 1
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "refused": {
+                "parent_only": true,
+                "calls": 1
+              }
+            },
+            "name": "guard_callback_suspend_stops_the_current_pump",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 1,
+              "forks": 1,
+              "standby_allowed": 1,
+              "worker_executions": 1
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          },
+          {
+            "guards": {
+              "refused": {
+                "parent_only": true,
+                "calls": 1
+              }
+            },
+            "name": "guard_callback_close_ends_the_current_pump",
+            "passed": true,
+            "counts": {
+              "standby_prevented": 0,
+              "forks": 0,
+              "standby_allowed": 0,
+              "worker_executions": 0
+            },
+            "cleanup": {
+              "all_children_terminal": true,
+              "forced_cleanup": 0,
+              "runners_closed": true,
+              "children_reaped_by_runner": true
+            }
+          }
+        ],
+        "assertions": [
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: the second read is queued without running its guard",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: the already-started read still completes",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: the refused read receives exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: the callback preserves the guard error",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: offline queue release performs no second fork",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: guard queued executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "queued_read_goes_offline_before_capacity_is_free: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: the first attempt failed before any final callback",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: the refused read receives exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: the callback preserves the guard error",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: the backoff executes the guard again but never another child",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: guard retry executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "retry_backoff_rechecks_connectivity_before_fork: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: the low-priority task is genuinely preempted",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: the preempted task waits for replay without a callback",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: the urgent task completes through its original child",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: the refused read receives exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: the callback preserves the guard error",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: preemption replay performs no third fork",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: guard low executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "preempted_replay_rechecks_connectivity: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: a throwing guard produces one nontransmitted failure",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: the throwing guard never retries or forks",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "guard_exception_completes_once_without_fork: guard throwing executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: the refused read receives exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: the callback preserves the guard error",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: even a retryable guard error ends without a fork",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "retryable_guard_denial_is_not_an_automatic_retry: guard denied executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "unguarded_read_keeps_existing_behavior: a read without a guard still executes normally",
+            "passed": true
+          },
+          {
+            "name": "unguarded_read_keeps_existing_behavior: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "unguarded_read_keeps_existing_behavior: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "unguarded_read_keeps_existing_behavior: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "unguarded_read_keeps_existing_behavior: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "unguarded_read_keeps_existing_behavior: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: the queued read has not reached its guard",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: cancel removes the queued task once",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: the canceled queued read receives one cancellation",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: reconnection does not run its guard or child",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: guard canceled executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "canceling_queued_read_never_restarts_its_guard: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: both tasks start queued while suspended",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: the refused read receives exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: the callback preserves the guard error",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: callback suspension preserves the second task without a fork",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: only the second explicit resume starts the remaining task",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: guard refused executes only in the parent",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_suspend_stops_the_current_pump: worker audit proves a real child",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: the refused read receives exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: the callback preserves the guard error",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: callback close cancels the remaining queued task once",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: closed-pump reentry never forks or restarts the guard",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: every real Runner closes with no queued or active task",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: every child was reaped by the real Runner",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: standby holds balance once per actual fork",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: no Runner timer survives close",
+            "passed": true
+          },
+          {
+            "name": "guard_callback_close_ends_the_current_pump: guard refused executes only in the parent",
+            "passed": true
+          }
+        ],
+        "counts": {
+          "standby_prevented": 7,
+          "standby_allowed": 7,
+          "failed_tests": 0,
+          "real_forks": 7,
+          "tests": 9,
+          "assertions": 85
+        }
+      }
+    }
+  ],
+  "runtime_version": "v2026.07.1",
+  "runtime_sha256": {
+    "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "libs/libsqlite3.so.0": "9341f59991c140a56a27c81bc8373db66b9db7820738b48ef7d4a78ff2b66a7f"
+  },
+  "launcher_sha256": "d7a8c395ded0e3059d98db71a2cd05893666b2418c910d5f98314eb97b5fe403",
+  "network_namespace_isolated": true,
+  "network_requests": 0,
+  "real_session_used": false,
+  "purchase_tests_executed": false,
+  "quote_tests_executed": false,
+  "wallet_tests_executed": false,
+  "scope": "Focused connectivity gates and lifecycle; real SQLite/Controller with controlled runner, separate real fork Runner with synthetic worker; not live-service acceptance"
+}

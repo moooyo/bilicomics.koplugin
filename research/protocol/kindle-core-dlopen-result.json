@@ -1,0 +1,52 @@
+{
+  "scope": "No plugin code: libc version and core pthread dlopen only",
+  "cases": [
+    {
+      "name": "ffi_only",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "-E",
+        "LD_DEBUG=libs:versions",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/minimal/minimal.lua",
+        "none"
+      ],
+      "returncode": 0,
+      "stdout": "libc=2.20\ncomplete\n",
+      "stderr_tail": "r version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libdl.so.2 [0]\n   1456418:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libgcc_s.so.1 [0]\n   1456418:\tchecking for version `GLIBC_2.4' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0]\n   1456418:\tchecking for version `GLIBC_PRIVATE' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0]\n   1456418:\t\n   1456418:\tcalling init: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling init: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libgcc_s.so.1\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling init: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libdl.so.2\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling init: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libm.so.6\n   1456418:\t\n   1456418:\t\n   1456418:\tinitialize program: /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit\n   1456418:\t\n   1456418:\t\n   1456418:\ttransferring control: /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling fini: /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit [0]\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libm.so.6 [0]\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libdl.so.2 [0]\n   1456418:\t\n   1456418:\t\n   1456418:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libgcc_s.so.1 [0]\n   1456418:\t\n"
+    },
+    {
+      "name": "pthread_only",
+      "command": [
+        "unshare",
+        "-n",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/qemu/usr/bin/qemu-arm",
+        "-cpu",
+        "cortex-a15",
+        "-L",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot",
+        "-E",
+        "LD_LIBRARY_PATH=/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib:/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/libs",
+        "-E",
+        "LD_DEBUG=libs:versions",
+        "/var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/minimal/minimal.lua",
+        "/tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0"
+      ],
+      "returncode": 0,
+      "stdout": "libc=2.20\nbefore_dlopen\nafter_dlopen=true\ncomplete\n",
+      "stderr_tail": "dle-loader-WSAJTBOe/control/sysroot/lib/libdl.so.2\n   1456420:\t\n   1456420:\t\n   1456420:\tcalling init: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libm.so.6\n   1456420:\t\n   1456420:\t\n   1456420:\tinitialize program: /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit\n   1456420:\t\n   1456420:\t\n   1456420:\ttransferring control: /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit\n   1456420:\t\n   1456420:\tchecking for version `GLIBC_2.4' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456420:\tchecking for version `GLIBC_PRIVATE' in file /lib/ld-linux-armhf.so.3 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456420:\tchecking for version `GLIBC_PRIVATE' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456420:\tchecking for version `GLIBC_2.4' in file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libc.so.6 [0] required by file /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456420:\t\n   1456420:\tcalling init: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0\n   1456420:\t\n   1456420:\t\n   1456420:\tcalling fini: /var/tmp/bilicomics-kindle-qemu-20260912/runtime/koreader/luajit [0]\n   1456420:\t\n   1456420:\t\n   1456420:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libm.so.6 [0]\n   1456420:\t\n   1456420:\t\n   1456420:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libdl.so.2 [0]\n   1456420:\t\n   1456420:\t\n   1456420:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libgcc_s.so.1 [0]\n   1456420:\t\n   1456420:\t\n   1456420:\tcalling fini: /tmp/bilicomics-kindle-loader-WSAJTBOe/control/sysroot/lib/libpthread.so.0 [0]\n   1456420:\t\n"
+    }
+  ],
+  "diagnostic_modified_loader": true,
+  "purchase_tests_executed": false,
+  "plugin_loaded": false
+}

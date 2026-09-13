@@ -1,0 +1,23 @@
+{
+  "scope": "Debian ARM sysroot, not a Kindle firmware or Kindle glibc baseline",
+  "packages": [
+    {
+      "package": "libc6-armhf-cross=2.41-11cross1",
+      "filename": "pool/main/c/cross-toolchain-base/libc6-armhf-cross_2.41-11cross1_all.deb",
+      "bytes": 921804,
+      "sha256": "fa9bcf96a12d15a2e47396c31b3203e107a04baf25e324ecf008931c09320074"
+    },
+    {
+      "package": "libgcc-s1-armhf-cross=14.2.0-19cross1",
+      "filename": "pool/main/g/gcc-14-cross/libgcc-s1-armhf-cross_14.2.0-19cross1_all.deb",
+      "bytes": 36924,
+      "sha256": "7cbb781db348bffeac4dbd94896ea933b6fad50aeb7744c660fee72b05f9f4b8"
+    },
+    {
+      "package": "libstdc++6-armhf-cross=14.2.0-19cross1",
+      "filename": "pool/main/g/gcc-14-cross/libstdc++6-armhf-cross_14.2.0-19cross1_all.deb",
+      "bytes": 559012,
+      "sha256": "adb763a300749cb6df94ec702a95977b820dbee17e1e7595b89bf7edf191de46"
+    }
+  ]
+}

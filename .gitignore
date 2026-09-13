@@ -1,0 +1,7 @@
+.secrets/
+build/
+dist/
+__pycache__/
+*.pyc
+*.log
+*.cookies

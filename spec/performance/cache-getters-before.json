@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "runtime": "official-unmodified-KOReader-v2026.07.1",
+  "source_plugin": "/tmp/bilicomics-cache-performance-9SVXPRjY/plugin",
+  "cache_bytes": 25178104,
+  "page_count": 8,
+  "episode_count": 4,
+  "comic_count": 2,
+  "image_format": "png",
+  "image_width": 2048,
+  "image_height": 512,
+  "repetitions": 3,
+  "network_requests": 0,
+  "notes": [
+    "Only getter and deferred notification time is measured; startup and seeding are excluded.",
+    "Notifications invoke production getters through a screen proxy; native rendering is not measured.",
+    "First resets the PageStore verification memo; no attempt is made to evict the OS page cache.",
+    "Every fixture is a valid PNG with incompressible RGB pixel data, not padding or a truncated image."
+  ],
+  "measurements": [
+    {
+      "samples": [
+        {
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.0007131099700927734,
+          "iteration": 1,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0006489753723144531,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0004999637603759766,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0005278587341308594,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "controller_getEpisodes_all_comics"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.0001399517059326172,
+          "iteration": 1,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00015401840209960938,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00023412704467773438,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 6.222724914550781e-05,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "controller_getLibrary_history_and_favorites"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo",
+          "seconds": 9.703636169433594e-05,
+          "iteration": 1,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 8.702278137207031e-05,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 8.296966552734375e-05,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 4.887580871582031e-05,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "controller_getStorageSummary"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.00020694732666015625,
+          "iteration": 1,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00015997886657714844,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0002758502960205078,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00024700164794921875,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "downloads_route_getters_all_rows"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.0004980564117431641,
+          "iteration": 1,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0005540847778320312,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0006699562072753906,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0006420612335205078,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "notify_coalesced_library_getters"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.0001671314239501953,
+          "iteration": 1,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.000209808349609375,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00023603439331054688,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00019502639770507812,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "notify_coalesced_downloads_getters"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 25178104,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.08856081962585449,
+          "iteration": 1,
+          "digest_calls": 8
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.0002608299255371094,
+          "iteration": 2,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00015401840209960938,
+          "iteration": 3,
+          "digest_calls": 0
+        },
+        {
+          "digest_bytes": 0,
+          "phase": "repeat",
+          "seconds": 0.00012803077697753906,
+          "iteration": 4,
+          "digest_calls": 0
+        }
+      ],
+      "name": "page_store_getPage_all_pages"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 50356208,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.1709740161895752,
+          "iteration": 1,
+          "digest_calls": 16
+        },
+        {
+          "digest_bytes": 25178104,
+          "phase": "repeat",
+          "seconds": 0.0902860164642334,
+          "iteration": 2,
+          "digest_calls": 8
+        },
+        {
+          "digest_bytes": 25178104,
+          "phase": "repeat",
+          "seconds": 0.09439206123352051,
+          "iteration": 3,
+          "digest_calls": 8
+        },
+        {
+          "digest_bytes": 25178104,
+          "phase": "repeat",
+          "seconds": 0.0942530632019043,
+          "iteration": 4,
+          "digest_calls": 8
+        }
+      ],
+      "name": "page_store_isComplete_all_episodes"
+    },
+    {
+      "samples": [
+        {
+          "digest_bytes": 50356208,
+          "phase": "first_empty_verification_memo",
+          "seconds": 0.17857003211975098,
+          "iteration": 1,
+          "digest_calls": 16
+        },
+        {
+          "digest_bytes": 25178104,
+          "phase": "repeat",
+          "seconds": 0.08586692810058594,
+          "iteration": 2,
+          "digest_calls": 8
+        },
+        {
+          "digest_bytes": 25178104,
+          "phase": "repeat",
+          "seconds": 0.08679604530334473,
+          "iteration": 3,
+          "digest_calls": 8
+        },
+        {
+          "digest_bytes": 25178104,
+          "phase": "repeat",
+          "seconds": 0.08540487289428711,
+          "iteration": 4,
+          "digest_calls": 8
+        }
+      ],
+      "name": "page_store_getSummary"
+    }
+  ],
+  "runtime_git_rev": "v2026.07.1",
+  "source_sha256": {
+    "bilicomics/catalog/init.lua": "14e53c341b3f86c809799154226e552534a5c77dfd00e2702455b7bf86ee59c6",
+    "bilicomics/controller.lua": "3897b8b9cbaff1ef16bdc4e3085fa3ce0e6ba1a8f06ee29e5eaded77184a0d96",
+    "bilicomics/storage/page_store.lua": "9b197e0263800d254245bb91cf5fffbee4aeb39fbf50b55a54d282e2d8f2b3bf",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/ui/screens.lua": "17d4e41b1b6f3d50ed8c209b81739f401edba366461514281e57595a01be8573"
+  }
+}

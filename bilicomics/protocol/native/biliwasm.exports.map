@@ -1,0 +1,4 @@
+{
+    global: biliwasm_run; biliwasm_free;
+    local: *;
+};

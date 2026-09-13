@@ -1,0 +1,120 @@
+{
+  "capabilities": {
+    "backend": "wasm3-gojs-local",
+    "request_signing": true,
+    "image_key_exchange": true,
+    "encrypted_images": true,
+    "response_decoding": true,
+    "index_challenge": false,
+    "index_error_reporting": true,
+    "encrypted_image_versions": [
+      3,
+      5,
+      6,
+      7,
+      8
+    ],
+    "max_encrypted_image_bytes": 16777216,
+    "platform": "Linux-x86",
+    "binary_target": "android-x86"
+  },
+  "ok": true,
+  "plugin_root": "/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin",
+  "source_sha256": {
+    "platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "native_backend.lua": "e0a3103e990f48f13ec1498b63a214de75273fe5a3939346b1fe94896781da02",
+    "portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da"
+  },
+  "private_libraries": [
+    {
+      "path": "/data/user/0/org.koreader.launcher/files/bilicomics-native/android-x86/e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4/libbiliwasm.so",
+      "name": "libbiliwasm.so",
+      "permissions": "rw-------",
+      "bytes": 348004,
+      "uid": 10167,
+      "sha256": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4"
+    },
+    {
+      "path": "/data/user/0/org.koreader.launcher/files/bilicomics-native/android-x86/fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94/libbilicrypto.so",
+      "name": "libbilicrypto.so",
+      "permissions": "rw-------",
+      "bytes": 75652,
+      "uid": 10167,
+      "sha256": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94"
+    }
+  ],
+  "research_only": true,
+  "production_modules": true,
+  "phase": "complete",
+  "descriptors": {
+    "repeated_load_calls": 40,
+    "before": {
+      "total": 77,
+      "libraries": {
+        "libbiliwasm.so": [
+          78
+        ],
+        "libbilicrypto.so": [
+          79
+        ]
+      }
+    },
+    "after": {
+      "total": 77,
+      "libraries": {
+        "libbiliwasm.so": [
+          78
+        ],
+        "libbilicrypto.so": [
+          79
+        ]
+      }
+    }
+  },
+  "cache_mode": "reuse",
+  "ffi_arch": "x86",
+  "checks": [
+    {
+      "ok": true,
+      "name": "production_capabilities",
+      "detail": "Both production native backends are available"
+    },
+    {
+      "ok": true,
+      "name": "production_sign_golden",
+      "detail": "Production Backend signing matches the official oracle"
+    },
+    {
+      "ok": true,
+      "name": "production_aes256_golden",
+      "detail": "Production PortableCrypto passes the AES-256 vector"
+    },
+    {
+      "ok": true,
+      "name": "production_ecdh_round_trip",
+      "detail": "Production key generation and ECDH agree; no key material is logged"
+    },
+    {
+      "ok": true,
+      "name": "production_backend_v8_image_golden",
+      "detail": "Production v8 transform matches all 49363 PNG bytes using an offline synthetic response"
+    },
+    {
+      "ok": true,
+      "name": "production_private_library_records",
+      "detail": "Production loader returns digest-specific app-private paths"
+    },
+    {
+      "ok": true,
+      "name": "production_retained_library_descriptors",
+      "detail": "Exactly two distinct retained library descriptors; 40 repeated loads leave FD counts unchanged"
+    }
+  ],
+  "loaded_crypto_source": "@/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin/bilicomics/protocol/portable_crypto.lua",
+  "loaded_backend_source": "@/storage/emulated/0/koreader/plugins//bili-native-probe.koplugin/bilicomics/protocol/native_backend.lua",
+  "android_private_dir": "/data/user/0/org.koreader.launcher/files"
+}

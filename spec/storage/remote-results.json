@@ -1,0 +1,629 @@
+{
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "suites": [
+    {
+      "mode": "core",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "passed": true,
+            "name": "SQLite schema migration is durable"
+          },
+          {
+            "passed": true,
+            "name": "Non-WAL device configuration uses TRUNCATE"
+          },
+          {
+            "passed": true,
+            "name": "Identifiers normalize and SQL punctuation is safely bound"
+          },
+          {
+            "passed": true,
+            "name": "Fractional special episode ordering is preserved"
+          },
+          {
+            "passed": true,
+            "name": "Temporary access expiry survives storage"
+          },
+          {
+            "passed": true,
+            "name": "False settings do not fall back to defaults"
+          },
+          {
+            "passed": true,
+            "name": "Absent setting returns its default"
+          },
+          {
+            "passed": true,
+            "name": "Failed transaction rolls back all records"
+          },
+          {
+            "passed": true,
+            "name": "Rollback removes its writes"
+          },
+          {
+            "passed": true,
+            "name": "Nested failure is isolated by a savepoint"
+          },
+          {
+            "passed": true,
+            "name": "Outer transaction survives a caught nested failure"
+          },
+          {
+            "passed": true,
+            "name": "Transaction preserves multiple and nil return values"
+          },
+          {
+            "passed": true,
+            "name": "Durable jobs can be filtered by state"
+          },
+          {
+            "passed": true,
+            "name": "Purchase uncertainty and additional evidence fields persist"
+          },
+          {
+            "passed": true,
+            "name": "Credentials cannot enter the ordinary database"
+          },
+          {
+            "passed": true,
+            "name": "Precise local anchor and continue library are linked"
+          },
+          {
+            "passed": true,
+            "name": "A database cannot be opened under another account identity"
+          },
+          {
+            "passed": true,
+            "name": "Descriptor drops mutable and private input fields"
+          },
+          {
+            "passed": true,
+            "name": "Same descriptor is never rewritten"
+          },
+          {
+            "passed": true,
+            "name": "A revision cannot mutate its descriptor geometry"
+          },
+          {
+            "passed": true,
+            "name": "Descriptors reject a foreign account"
+          },
+          {
+            "passed": true,
+            "name": "Descriptors reject traversal identities"
+          },
+          {
+            "passed": true,
+            "name": "Symlink fixture is created only inside the isolated output"
+          },
+          {
+            "passed": true,
+            "name": "New descriptor writes reject symlinked parent directories"
+          },
+          {
+            "passed": true,
+            "name": "Rejected descriptor writes do not escape their namespace"
+          },
+          {
+            "passed": true,
+            "name": "New chapters are incomplete with explicit missing pages"
+          },
+          {
+            "passed": true,
+            "name": "Verified file is atomically committed before ready state"
+          },
+          {
+            "passed": true,
+            "name": "Initial content generation is persistent"
+          },
+          {
+            "passed": true,
+            "name": "One available image does not imply a complete chapter"
+          },
+          {
+            "passed": true,
+            "name": "Acquisition checksum mismatch cannot commit"
+          },
+          {
+            "passed": true,
+            "name": "A matching digest does not make a truncated image usable"
+          },
+          {
+            "passed": true,
+            "name": "Workers cannot commit paths outside their account temporary directory"
+          },
+          {
+            "passed": true,
+            "name": "Stale account callbacks cannot commit"
+          },
+          {
+            "passed": true,
+            "name": "All usable images make the existing descriptor complete"
+          },
+          {
+            "passed": true,
+            "name": "Same-second image replacement increments its generation"
+          },
+          {
+            "passed": true,
+            "name": "Replaced content path is released after commit"
+          },
+          {
+            "passed": true,
+            "name": "Image commits do not rewrite the descriptor"
+          },
+          {
+            "passed": true,
+            "name": "A corrupted descriptor cannot retain a complete badge"
+          },
+          {
+            "passed": true,
+            "name": "Derived geometry corrections increment a separate generation"
+          },
+          {
+            "passed": true,
+            "name": "Geometry corrections preserve native descriptor identity"
+          },
+          {
+            "passed": true,
+            "name": "Oriented logical geometry retains source and native mapping fields"
+          },
+          {
+            "passed": true,
+            "name": "Source mapping metadata must match actual file dimensions"
+          },
+          {
+            "passed": true,
+            "name": "Real image header has correct dimensions and orientation: page.jpg"
+          },
+          {
+            "passed": true,
+            "name": "Verified image format can be stored and reopened: page.jpg"
+          },
+          {
+            "passed": true,
+            "name": "Real image header has correct dimensions and orientation: page-lossy.webp"
+          },
+          {
+            "passed": true,
+            "name": "Verified image format can be stored and reopened: page-lossy.webp"
+          },
+          {
+            "passed": true,
+            "name": "Real image header has correct dimensions and orientation: page-lossless.webp"
+          },
+          {
+            "passed": true,
+            "name": "Verified image format can be stored and reopened: page-lossless.webp"
+          },
+          {
+            "passed": true,
+            "name": "Real image header has correct dimensions and orientation: page-extended.webp"
+          },
+          {
+            "passed": true,
+            "name": "Verified image format can be stored and reopened: page-extended.webp"
+          },
+          {
+            "passed": true,
+            "name": "Real image header has correct dimensions and orientation: page-exif.png"
+          },
+          {
+            "passed": true,
+            "name": "Verified image format can be stored and reopened: page-exif.png"
+          },
+          {
+            "passed": true,
+            "name": "Real image header has correct dimensions and orientation: page-exif.webp"
+          },
+          {
+            "passed": true,
+            "name": "Verified image format can be stored and reopened: page-exif.webp"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 1"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 2"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 3"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 4"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 5"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 6"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 7"
+          },
+          {
+            "passed": true,
+            "name": "JPEG EXIF is independently read for orientation 8"
+          },
+          {
+            "passed": true,
+            "name": "Worker metadata cannot hide an actual JPEG EXIF transform"
+          },
+          {
+            "passed": true,
+            "name": "Removing an incomplete download invalidates its pending worker generation"
+          },
+          {
+            "passed": true,
+            "name": "Injected interrupted commit leaves a durable journal"
+          },
+          {
+            "passed": true,
+            "name": "Pending removal test reaches the journal boundary"
+          },
+          {
+            "passed": true,
+            "name": "Removing a download cancels its interrupted commit"
+          },
+          {
+            "passed": true,
+            "name": "Content revisions have independent page state"
+          },
+          {
+            "passed": true,
+            "name": "Automatic eviction preserves pinned and active chapters"
+          },
+          {
+            "passed": true,
+            "name": "Explicit removal cannot invalidate an active reader"
+          },
+          {
+            "passed": true,
+            "name": "Released readers become evictable"
+          },
+          {
+            "passed": true,
+            "name": "Storage summary distinguishes manual retention and automatic data"
+          },
+          {
+            "passed": true,
+            "name": "Content generations survive closing the SQLite connection"
+          },
+          {
+            "passed": true,
+            "name": "Offline completeness survives restart without remote services"
+          },
+          {
+            "passed": true,
+            "name": "Purchases and pins survive process state replacement"
+          },
+          {
+            "passed": true,
+            "name": "Completeness detects equal-size corruption with unchanged timestamps"
+          },
+          {
+            "passed": true,
+            "name": "Corruption invalidates a previously complete pinned chapter"
+          },
+          {
+            "passed": true,
+            "name": "Startup removes only unreferenced committed and abandoned temporary files"
+          },
+          {
+            "passed": true,
+            "name": "Corruption invalidation advances the persistent content generation"
+          },
+          {
+            "passed": true,
+            "name": "Removing downloads keeps native identity and precise progress"
+          },
+          {
+            "passed": true,
+            "name": "Supported device configuration uses WAL"
+          },
+          {
+            "passed": true,
+            "name": "Newer database schemas cannot be silently downgraded"
+          },
+          {
+            "passed": true,
+            "name": "Real SQLite capacity exhaustion rejects the oversized transaction"
+          },
+          {
+            "passed": true,
+            "name": "SQLite FULL preserves previously committed state after reopening"
+          }
+        ],
+        "mode": "core"
+      }
+    },
+    {
+      "mode": "integration-safety",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "name": "Actual SQLite read-only failure rejects reader activation",
+            "passed": true
+          },
+          {
+            "name": "Failed initial activation cannot leak an active reference",
+            "passed": true
+          },
+          {
+            "name": "Failed activation rolls back its access timestamp",
+            "passed": true
+          },
+          {
+            "name": "Successful activation publishes one reference after writing",
+            "passed": true
+          },
+          {
+            "name": "Failure preserves an existing reference and committed timestamp",
+            "passed": true
+          },
+          {
+            "name": "Reader release succeeds while SQLite is read only",
+            "passed": true
+          },
+          {
+            "name": "Activation cannot publish a reference from an uncommitted outer transaction",
+            "passed": true
+          },
+          {
+            "name": "Rejected nested activation does not alter reference counts",
+            "passed": true
+          },
+          {
+            "name": "Recovery test reaches a durable pending commit",
+            "passed": true
+          },
+          {
+            "name": "Journal-only recovery commits a verified pending page",
+            "passed": true
+          },
+          {
+            "name": "Recovery returns committed page records for reader notifications",
+            "passed": true
+          },
+          {
+            "name": "Recovery does not unlink a live unrelated worker temporary file",
+            "passed": true
+          },
+          {
+            "name": "Unrelated worker finishes and is reaped after recovery",
+            "passed": true
+          },
+          {
+            "name": "Concurrent worker data remains reachable at its assigned path",
+            "passed": true
+          },
+          {
+            "name": "Journal-only recovery does not sweep orphan files",
+            "passed": true
+          },
+          {
+            "name": "Journal-only recovery does not rewrite descriptors or unrelated page state",
+            "passed": true
+          },
+          {
+            "name": "Repeated journal-only recovery is idempotent",
+            "passed": true
+          },
+          {
+            "name": "Journal recovery cannot delete files before an outer transaction commits",
+            "passed": true
+          },
+          {
+            "name": "A replacement can be interrupted after final rename",
+            "passed": true
+          },
+          {
+            "name": "Invalidating a missing old file preserves the verified replacement journal",
+            "passed": true
+          },
+          {
+            "name": "A retained replacement recovers with a newer render generation",
+            "passed": true
+          }
+        ],
+        "mode": "integration-safety"
+      }
+    },
+    {
+      "mode": "crash-after_journal",
+      "returncode": 73,
+      "expected_returncode": 73,
+      "result": null
+    },
+    {
+      "mode": "recover-after_journal",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "mode": "recover-after_journal",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "Interrupted file commit is not prematurely marked ready"
+          },
+          {
+            "passed": true,
+            "name": "Journal records the actual crash window"
+          },
+          {
+            "passed": true,
+            "name": "Restart verifies and completes interrupted atomic commits"
+          },
+          {
+            "passed": true,
+            "name": "Recovery is exactly once and preserves page generation"
+          },
+          {
+            "passed": true,
+            "name": "Recovery reports only work that was unfinished"
+          },
+          {
+            "passed": true,
+            "name": "Repeated recovery is harmless"
+          }
+        ]
+      }
+    },
+    {
+      "mode": "crash-after_rename",
+      "returncode": 73,
+      "expected_returncode": 73,
+      "result": null
+    },
+    {
+      "mode": "recover-after_rename",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "name": "Interrupted file commit is not prematurely marked ready",
+            "passed": true
+          },
+          {
+            "name": "Journal records the actual crash window",
+            "passed": true
+          },
+          {
+            "name": "Restart verifies and completes interrupted atomic commits",
+            "passed": true
+          },
+          {
+            "name": "Recovery is exactly once and preserves page generation",
+            "passed": true
+          },
+          {
+            "name": "Recovery reports only work that was unfinished",
+            "passed": true
+          },
+          {
+            "name": "Repeated recovery is harmless",
+            "passed": true
+          }
+        ],
+        "mode": "recover-after_rename"
+      }
+    },
+    {
+      "mode": "crash-after_database",
+      "returncode": 73,
+      "expected_returncode": 73,
+      "result": null
+    },
+    {
+      "mode": "recover-after_database",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "mode": "recover-after_database",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "Restart verifies and completes interrupted atomic commits"
+          },
+          {
+            "passed": true,
+            "name": "Recovery is exactly once and preserves page generation"
+          },
+          {
+            "passed": true,
+            "name": "Recovery reports only work that was unfinished"
+          },
+          {
+            "passed": true,
+            "name": "Repeated recovery is harmless"
+          }
+        ]
+      }
+    },
+    {
+      "mode": "crash-invalid-commit",
+      "returncode": 73,
+      "expected_returncode": 73,
+      "result": null
+    },
+    {
+      "mode": "recover-invalid-commit",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "name": "Recovery does not adopt a corrupted interrupted file",
+            "passed": true
+          },
+          {
+            "name": "Invalid interrupted commits leave retryable missing pages",
+            "passed": true
+          },
+          {
+            "name": "Invalid interrupted temporary content is discarded",
+            "passed": true
+          }
+        ],
+        "mode": "recover-invalid-commit"
+      }
+    },
+    {
+      "mode": "crash-retry-commit",
+      "returncode": 73,
+      "expected_returncode": 73,
+      "result": null
+    },
+    {
+      "mode": "recover-retry-commit",
+      "returncode": 0,
+      "expected_returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "name": "Transient rename failure retains the recovery journal and verified temporary file",
+            "passed": true
+          },
+          {
+            "name": "Directory sync failure retains the only verified renamed image",
+            "passed": true
+          },
+          {
+            "name": "Transient database failure retains the renamed file and journal",
+            "passed": true
+          },
+          {
+            "name": "A later successful recovery adopts the retained file exactly once",
+            "passed": true
+          }
+        ],
+        "mode": "recover-retry-commit"
+      }
+    }
+  ],
+  "passed": true,
+  "execution_host": "test-env",
+  "source_sha256": {
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "25dc87ced8ddb526493d9b37d5aa8e54943d18e074757e2ab5e0cee2c8323881",
+    "bilicomics/storage/store.lua": "38ffd2068cb639d2da8be5d6afc9d60010447afc609abfe39b376159882b3b98",
+    "spec/storage/storage_spec.lua": "f83a7d21a3ab3a2d9f9a6f0d53520b6641b99d811dbc9c8a046c607bc1b76379"
+  },
+  "assertion_count": 128
+}

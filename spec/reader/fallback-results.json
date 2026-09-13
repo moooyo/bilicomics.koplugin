@@ -1,0 +1,43 @@
+{
+  "entrypoint": "official reader.lua in two separate processes",
+  "runtime_version": "v2026.07.1",
+  "scope": "Actual main ReaderReady/FlushSettings hooks and local account, native disabled-patch marker; no substituted fallback hooks",
+  "runs": [
+    {
+      "phase": "read",
+      "returncode": 0,
+      "result": {
+        "success": true,
+        "observations": {
+          "position_advanced": true,
+          "actual_flush_hook_cleared_target": true,
+          "document_and_anchor_preserved": true,
+          "normal_close_does_not_restore_unsafe_lastfile": true,
+          "start_with_last_stays_unchanged": true
+        },
+        "phase": "read"
+      }
+    },
+    {
+      "phase": "recover",
+      "returncode": 0,
+      "result": {
+        "observations": {
+          "start_with_last_stays_unchanged": true,
+          "document_and_anchor_preserved": true,
+          "cold_start_is_filemanager": true,
+          "startup_preference_preserved": true,
+          "unsafe_lastfile_absent": true,
+          "patches_disabled": true,
+          "native_history_preserved": true,
+          "offline_reopen_restores_position": true,
+          "anchor_survives_cold_start": true,
+          "actual_readerready_hook_cleared_target": true,
+          "normal_close_does_not_restore_unsafe_lastfile": true
+        },
+        "phase": "recover",
+        "success": true
+      }
+    }
+  ]
+}

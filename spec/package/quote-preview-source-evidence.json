@@ -1,0 +1,18 @@
+{
+  "archive_file": "bilicomics-quote-preview.zip",
+  "archive_sha256": "8891f287f3cc87904589bee378afdfb0b0bc1cdb5257dc6cece79968d18e6530",
+  "archive_bytes": 2446099,
+  "packaged_files": 96,
+  "previous_archive_sha256": "38a01da12c74271a631af57e9ac45c9e90b48472e390bd4aae5ded42e37f8383",
+  "bound": true,
+  "source_binding": "integrated-quote-source-binding.json",
+  "syntax_evidence": "integrated-quote-syntax.json",
+  "package_checks": 27,
+  "preview_alias_same_bytes": true,
+  "real_purchase_executed": false,
+  "server_confirmed_episode_ids": false,
+  "whole_archive_live_acceptance": false,
+  "device_verified": false,
+  "local_visible_window_verified": false,
+  "scope": "Integrated artifact provenance with separately scoped synthetic, read-only live, reading and inherited ARM evidence; no full payment or device acceptance claim"
+}

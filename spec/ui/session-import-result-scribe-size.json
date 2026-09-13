@@ -1,0 +1,181 @@
+{
+    "count": 42,
+    "validation_requests": 9,
+    "assertions": [
+        {
+            "passed": true,
+            "name": "supported_format_session.txt"
+        },
+        {
+            "passed": true,
+            "name": "supported_format_session-bom.TXT"
+        },
+        {
+            "passed": true,
+            "name": "supported_format_session.json"
+        },
+        {
+            "passed": true,
+            "name": "supported_format_session.cookies"
+        },
+        {
+            "passed": true,
+            "name": "exactly_128_kib_can_be_read"
+        },
+        {
+            "passed": true,
+            "name": "rejects_too-large.txt"
+        },
+        {
+            "passed": true,
+            "name": "rejects_directory.txt"
+        },
+        {
+            "passed": true,
+            "name": "rejects_unsupported.log"
+        },
+        {
+            "passed": true,
+            "name": "rejects_linked.txt"
+        },
+        {
+            "passed": true,
+            "name": "rejects_pipe.txt"
+        },
+        {
+            "passed": true,
+            "name": "rejects_missing.txt"
+        },
+        {
+            "passed": true,
+            "name": "rejects_empty.txt"
+        },
+        {
+            "passed": true,
+            "name": "rejects_binary.txt"
+        },
+        {
+            "passed": true,
+            "name": "path_with_nul_is_rejected"
+        },
+        {
+            "passed": true,
+            "name": "paste_input_remains_masked"
+        },
+        {
+            "passed": true,
+            "name": "file_entry_opens_native_file_chooser"
+        },
+        {
+            "passed": true,
+            "name": "file_types_ignore_book_status_filters"
+        },
+        {
+            "passed": true,
+            "name": "session-file-picker_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_obsolete_picker_never_start_validation"
+        },
+        {
+            "passed": true,
+            "name": "selecting_directory_only_navigates"
+        },
+        {
+            "passed": true,
+            "name": "direct_native_close_retires_picker"
+        },
+        {
+            "passed": true,
+            "name": "closing_before_deferred_read_cancels_import"
+        },
+        {
+            "passed": true,
+            "name": "file_selection_dispatches_validation_1"
+        },
+        {
+            "passed": true,
+            "name": "session-file-validating_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "file_import_saves_verified_account_1"
+        },
+        {
+            "passed": true,
+            "name": "file_selection_dispatches_validation_2"
+        },
+        {
+            "passed": true,
+            "name": "file_import_saves_verified_account_2"
+        },
+        {
+            "passed": true,
+            "name": "file_selection_dispatches_validation_3"
+        },
+        {
+            "passed": true,
+            "name": "file_import_saves_verified_account_3"
+        },
+        {
+            "passed": true,
+            "name": "file_selection_dispatches_validation_4"
+        },
+        {
+            "passed": true,
+            "name": "file_import_saves_verified_account_4"
+        },
+        {
+            "passed": true,
+            "name": "session-file-imported_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "success_feedback_stays_above_controller_refresh"
+        },
+        {
+            "passed": true,
+            "name": "success_feedback_contains_no_secret_or_input_path"
+        },
+        {
+            "passed": true,
+            "name": "oversize_selection_never_reaches_controller"
+        },
+        {
+            "passed": true,
+            "name": "session-file-error_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "validation_error_does_not_echo_cookie_or_path"
+        },
+        {
+            "passed": true,
+            "name": "failure_feedback_stays_above_controller_refresh"
+        },
+        {
+            "passed": true,
+            "name": "closed_status_does_not_reopen_success_feedback"
+        },
+        {
+            "passed": true,
+            "name": "account_change_cancels_a_deferred_selected_file"
+        },
+        {
+            "passed": true,
+            "name": "old_validation_callback_cannot_replace_new_account"
+        },
+        {
+            "passed": true,
+            "name": "only_session_validation_was_dispatched"
+        }
+    ],
+    "screens": [
+        "session-file-picker.png",
+        "session-file-validating.png",
+        "session-file-imported.png",
+        "session-file-error.png"
+    ],
+    "scope": "Synthetic files; native widgets; real Controller/Session/SQLite; controlled validation only"
+}

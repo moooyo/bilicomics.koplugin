@@ -1,0 +1,39 @@
+{
+  "url": "https://github.com/koreader/koreader/releases/download/v2026.07.1/koreader-android-x86-v2026.07.1.apk",
+  "path": "/var/tmp/bili-android-emulator-plan-20260912/koreader-android-x86-v2026.07.1.apk",
+  "bytes": 30674543,
+  "sha256": "3cd979cc6474308ce37c408a8753fce27898249599e6ec6875d34ecd9b3d4144",
+  "expected_digest_source": "GitHub release asset digest",
+  "libraries": [
+    {
+      "path": "lib/x86/libioctl.so",
+      "size": 3020,
+      "elf_class": 1,
+      "machine": 3
+    },
+    {
+      "path": "lib/x86/libkoreader-monolibtic.so",
+      "size": 20165876,
+      "elf_class": 1,
+      "machine": 3
+    },
+    {
+      "path": "lib/x86/libluajit-launcher.so",
+      "size": 14712,
+      "elf_class": 1,
+      "machine": 3
+    },
+    {
+      "path": "lib/x86/libluajit.so",
+      "size": 638948,
+      "elf_class": 1,
+      "machine": 3
+    },
+    {
+      "path": "lib/x86/libsdcv.so",
+      "size": 885684,
+      "elf_class": 1,
+      "machine": 3
+    }
+  ]
+}

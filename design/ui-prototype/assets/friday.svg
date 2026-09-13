@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="240" viewBox="0 0 180 240" fill="none" role="img" aria-label="A cat watches a quiet city from a rooftop">
+  <defs><clipPath id="frame"><rect width="180" height="240"/></clipPath><pattern id="brick" width="24" height="14" patternUnits="userSpaceOnUse"><path d="M0 0h24M0 14h24M12 0v7M0 7h24M0 7v7M24 7v7" stroke="#92928c" stroke-width=".55"/></pattern></defs>
+  <g clip-path="url(#frame)">
+    <path fill="#f7f7f3" d="M0 0h180v240H0z"/>
+    <circle cx="124" cy="50" r="25" fill="#d8d8d2"/>
+    <path d="M-5 101h20V77h25v16h20V61h29v46h15V85h25v13h15V74h26v30h15v74H-5Z" fill="#d7d7d1"/>
+    <path d="M-6 120h32V91h31v48h16V86h34v52h18v-30h37V85h26v112H-6Z" fill="#eaeae4" stroke="#666660" stroke-width="1.2"/>
+    <path d="M32 101h7m7 0h6m-20 11h7m7 0h6m-20 11h7m7 0h6m28-27h8m8 0h8m-24 11h8m8 0h8m-24 11h8m8 0h8m-24 11h8m8 0h8m32-9h8m8 0h8m-24 11h8m8 0h8m12-45h7m-7 11h7m-7 11h7" stroke="#94948e" stroke-width="3.5"/>
+    <path d="M93 85V49m-12 8 26-7m-24 17 22-6" stroke="#41413e" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M-8 32c44 8 114 8 196-8M10 33l-5 13 14 5 6-15m10 1-4 17 18 2 2-18m66-4 4 13 15-3-3-12m15-2 6 12 15-4-5-11" stroke="#474744" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M6 37 2 44m25-5-3 7m96-12 2 7m17-9 2 6" stroke="#f7f7f3" stroke-width="2"/>
+    <path d="m0 166 134-32 51 17v89H0Z" fill="#e0e0da" stroke="#252523" stroke-width="1.7"/>
+    <path d="M0 166 134 134l51 17v15l-51-17L0 182Z" fill="#f6f6f0" stroke="#252523" stroke-width="1.7"/>
+    <path d="M0 183 134 150l51 17v74H0Z" fill="url(#brick)"/>
+    <path d="m134 150 1 91M0 209l134-32 50 17M0 235l134-31 48 17" stroke="#85857e" stroke-width=".85"/>
+    <path d="m134 150 1 90" stroke="#282826" stroke-width="1.3"/>
+    <path d="m11 164 62-14m-48 31 46-11m82-14 20 7" stroke="#9d9d96" stroke-width="1"/>
+    <g stroke="#161615" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M108 158c-4-12-8-16-18-18-6-10-7-17-5-26 1-10 6-19 18-19 13 0 20 10 20 27 0 11-4 20-8 30l8 6c-7 4-11 3-15 0Z" fill="#242422" stroke-width="2"/>
+      <path d="m84 107-2-28 17 12 9-1 13-15 4 31c-6 10-12 14-23 14-8 0-14-3-18-13Z" fill="#242422" stroke-width="2"/>
+      <path d="m86 87 8 7-7 4m28-5 5-8 1 13" stroke="#c9c9bf" stroke-width="1.4"/>
+      <path d="M91 104c3-2 5-2 8-1m10-1c3-2 6-2 9-1" stroke="#f8f8ec" stroke-width="1.6"/>
+      <path d="m104 108-2 3 3 1m-4 3 5 1 5-3" stroke="#e7e7df" stroke-width="1.1"/>
+      <path d="m84 110-13-2m14 6-15 3m51-10 14-5m-13 10 14 1" stroke-width="1.2"/>
+      <path d="M88 140c-11-4-29-1-34 8-4 7 1 14 13 12l16-5" fill="none" stroke-width="7"/>
+      <path d="M113 126c-1 13-2 20 0 28m-18-7 4 8-8 3m21-3 10 2" stroke="#8b8b82" stroke-width="1.3"/>
+    </g>
+    <g transform="translate(24 145)" stroke="#292926" stroke-width="1.4" stroke-linejoin="round">
+      <path d="m0 0 23-6-3 18-16 4Z" fill="#8e8e86"/>
+      <path d="m-1-2 25-6 1 5L0 3Z" fill="#d4d4ca"/>
+      <path d="M11-5c1-17-5-29-15-34m16 22c9-10 15-17 14-27M10-28C3-24-2-25-4-35c8-2 13 0 14 7Zm5 3c6-9 12-11 18-7-3 9-8 12-18 7Z" fill="#64645d"/>
+    </g>
+    <path d="M8 61h22m-16 6h11m133-12h16" stroke="#b0b0a8" stroke-width="1"/>
+  </g>
+</svg>

@@ -1,0 +1,1792 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "timed_out": false,
+  "source_unchanged": true,
+  "runtime_version": "v2026.07.1",
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "ae9e63930089c69a13cdda563f9eaccc12c5346c9608b946cdfcf9238be4a2b3",
+    "bilicomics/controller.lua": "b0666af44dd3832ebb4447cd350682f2ff79130e5741882105055b41b42b9b20",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "264f0fccb41ecda611d4c11d91275df148c9f292b128a5d873c119e9aca70d21",
+    "bilicomics/jobs/runner.lua": "f13c95c384fed95a6e672a1343bb915e90a0695f57a27ff17ac3fb89833cce27",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "30cd38440c7f39cecff279626144d228d14bbe8eb3c561a1d86b955c2a72bbb5",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "a2eb11e2cec8aa1dd4ab6d4072ddc975dbc51747c0793b4a41edbddc752e2bfb",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/quote.lua": "a370e7644505bbcdab9747f786e4d66c92c777f060f3051d0f1fae92cadfb3c7",
+    "bilicomics/purchase/service.lua": "56254d02b5b468dee2a6a76066695b916e060e527ef285dbe315ae0583f425ba",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "113db2aabcceb483b9a731253c9753da4b2890e3d0083c58b4e50e47a6ba7256",
+    "bilicomics/ui/screens.lua": "3b195e023c3b38cce4c5d0289423e14b36009785c1fec5613f86a4853408344c",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b",
+    "version_replacement_spec.lua": "e332447212c59b4c6df432fb096890f818a09c8d1c98a4bde3ad4310b7d80fed"
+  },
+  "suite": {
+    "passed": true,
+    "counts": {
+      "cases": 32,
+      "assertions": 395
+    },
+    "cases": [
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot"
+      }
+    ],
+    "assertions": [
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: unrelated or removed job is untouched removed-sibling"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: retained old job is retired atomically sibling-1"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: retained old job is retired atomically sibling-2"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: retained old job is retired atomically sibling-3"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "independent_topology_and_all_siblings: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: the old version starts unpinned"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "unpinned_old_version_is_retained_and_unknown_legacy_is_allowed: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: new page has independent missing content and never history 3"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: repeat index never reuses a local snapshot"
+      },
+      {
+        "passed": true,
+        "name": "identical_service_index_still_creates_unique_local_versions: both published snapshot histories remain independent"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "fresh_catalog_title_and_permission_can_change: the new job uses fresh catalog metadata"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "fresh_permission_loss_blocks_publication: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_comic: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_pages: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_sparse_pages: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_named_page_key: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_ordinal: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_fractional_geometry: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_unbounded_geometry: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_duplicate_paths: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_signed_paths: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_empty_paths: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "invalid_index_wrong_episode: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_job_generation: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_pin: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_anchor: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_current_revision: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_sibling_job: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "stale_old_page: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_running_sibling: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_pending_commit_of_other_version: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_reader_of_other_version: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_other_replacement: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "busy_source_refresh_of_other_version: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "basis_cannot_be_mutated_or_replayed: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: unrelated or removed job is untouched version-download-4"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "orphan_namespace_and_foreign_anchor_collisions_are_skipped: occupied local identities are never overwritten"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: a prepared descriptor may remain without a published row"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: reopen and reconcile never adopt the orphan descriptor"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: unrelated or removed job is untouched removed-sibling"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: retained old job is retired atomically sibling-1"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: retained old job is retired atomically sibling-2"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: retained old job is retired atomically sibling-3"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "second_page_sql_failure_rolls_back: retry chooses another fresh namespace with never history"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: the old version starts unpinned"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: a prepared descriptor may remain without a published row"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: reopen and reconcile never adopt the orphan descriptor"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: unrelated or removed job is untouched removed-sibling"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: retained old job is retired atomically sibling-1"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: retained old job is retired atomically sibling-2"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: retained old job is retired atomically sibling-3"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "final_episode_sql_failure_rolls_back_all_jobs_and_pins: retry chooses another fresh namespace with never history"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: publication rejects with a structured error"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: rejection has the expected kind"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: the transaction is no longer active"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: a prepared descriptor may remain without a published row"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: reopen and reconcile never adopt the orphan descriptor"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: capture succeeds"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: all existing database state and files remain unchanged"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: capture/publication does not hash images"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: publication returns the committed independent snapshot"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: local revision and descriptor path are new"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: old descriptor, pages and ready/native files remain untouched"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: old stored and native anchors remain while the new snapshot has none"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: the retained old version and the new version are both pinned"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: new page has independent missing content and never history 1"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: new page has independent missing content and never history 2"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: retained old job is retired atomically old-download"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: unrelated or removed job is untouched removed-sibling"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: retained old job is retired atomically sibling-1"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: retained old job is retired atomically sibling-2"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: retained old job is retired atomically sibling-3"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: the new local version is authoritative with fresh progress"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: comic-level old progress is preserved for Catalog to isolate"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: Catalog selects the published descriptor"
+      },
+      {
+        "passed": true,
+        "name": "descriptor_fsync_failure_preserves_old_snapshot: retry chooses another fresh namespace with never history"
+      }
+    ]
+  },
+  "runtime_sha256": {
+    "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "libs/libsqlite3.so.0": "9341f59991c140a56a27c81bc8373db66b9db7820738b48ef7d4a78ff2b66a7f"
+  },
+  "launcher_sha256": "ea1bdfc0f283e5596102982787e6a1b0a3b34cfb460cbc31b30cceeaf120b35a",
+  "network_namespace_isolated": true,
+  "purchase_scenarios_executed": false,
+  "scope": "Real SQLite/PageStore/Catalog and native DocSettings, synthetic PNG, explicit independent version publication only"
+}

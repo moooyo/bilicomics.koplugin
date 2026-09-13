@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "source_sha256": {
+    "research/protocol/quote-readonly.lua": "e4e32c9e1a1472b307b8f28ace9cbe04e6fed0a70b0d45874d32632d60f98bcf",
+    "research/protocol/run_quote_observation.py": "a2a1feb761c6f1641b0bfdabce09238e9deac198ac8642e8a95a71f90dfb2fc2",
+    "research/protocol/quote-observation-plan.md": "c6ae0118f3b0e46a8db84323855bfe6e9ae261f2290bf8cbf6c2a6e04e69292d"
+  },
+  "source_unchanged": true,
+  "lua_bytecode_returncode": 0,
+  "python_ast_parsed": true,
+  "runtime_version": "v2026.07.1",
+  "network_namespace_isolated": true,
+  "lua_initialization_disabled": true,
+  "observer_executed": false,
+  "driver_executed": false,
+  "session_file_accessed": false,
+  "quote_requests_executed": false,
+  "purchase_tests_executed": false,
+  "execution_authorized": false,
+  "scope": "Remote syntax only; no observer, driver, guard, client or payment function executed"
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Remote preparation only; no target program has been executed",
+  "toolchain": {
+    "url": "https://github.com/koreader/koxtoolchain/releases/download/2026.08/kindlehf.tar.zst",
+    "bytes": 100848195,
+    "sha256": "8cc7dfbd71abd78f9e947d6b2e20670288a4402edc7b07176bca791f7eaf87d0"
+  },
+  "qemu_package": {
+    "package": "qemu-user=1:10.0.11+ds-0+deb13u1",
+    "filename": "pool/main/q/qemu/qemu-user_10.0.11+ds-0+deb13u1_amd64.deb",
+    "bytes": 71080424,
+    "sha256": "6b6fea55551fbcc1eb30e146ad5abdfbb49f8fa8c5998016242126de4d7f80df"
+  },
+  "global_installation": false,
+  "binfmt_registration": false,
+  "kindle_firmware_image": false
+}

@@ -1,0 +1,12 @@
+{
+  "scope": "Owned remote probe captures only",
+  "removed": {
+    "catalogs": 12,
+    "indexes": 4,
+    "images": 8,
+    "logs": 8
+  },
+  "remote_session_input_absent": true,
+  "all_selected_captures_absent": true,
+  "local_user_input_untouched": true
+}

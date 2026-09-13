@@ -1,0 +1,45 @@
+{
+  "spec": "native-entitlement-display",
+  "passed": true,
+  "source_sha256": {
+    "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+    "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+    "l10n/bilicomics_zh_CN.lua": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f"
+  },
+  "source_unchanged": true,
+  "purchase_tests_executed": false,
+  "required_sizes": [
+    "600x800",
+    "480x640"
+  ],
+  "requested_sizes": [
+    "600x800",
+    "480x640"
+  ],
+  "runs": [
+    {
+      "width": 600,
+      "height": 800,
+      "returncode": 0,
+      "result_passed": true,
+      "passed": true,
+      "result_file": "600x800/entitlement-display-result.json",
+      "log_file": "600x800/entitlement-display.log"
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "returncode": 0,
+      "result_passed": true,
+      "passed": true,
+      "result_file": "480x640/entitlement-display-result.json",
+      "log_file": "480x640/entitlement-display.log"
+    }
+  ],
+  "interrupted": false,
+  "source_sha256_after": {
+    "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+    "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+    "l10n/bilicomics_zh_CN.lua": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f"
+  }
+}

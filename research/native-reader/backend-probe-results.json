@@ -1,0 +1,1503 @@
+{
+  "runtime_git_rev": "v2026.07.1",
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "platform": "linux",
+  "dependency": {
+    "version": "12.0.0",
+    "wheel": "pillow-12.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+    "sha256": "f4f1231b7dec408e8670264ce63e9c71409d9583dd21d32c163e25213ee2a344"
+  },
+  "fixtures": {
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small.jpg": {
+      "width": 360,
+      "height": 1200,
+      "format": "jpg",
+      "bytes": 23142
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small.png": {
+      "width": 360,
+      "height": 1200,
+      "format": "png",
+      "bytes": 3761
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small.webp": {
+      "width": 360,
+      "height": 1200,
+      "format": "webp",
+      "bytes": 192
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small-300dpi.jpg": {
+      "width": 360,
+      "height": 1200,
+      "format": "jpg",
+      "dpi": 300,
+      "bytes": 23142
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small-300dpi.png": {
+      "width": 360,
+      "height": 1200,
+      "format": "png",
+      "dpi": 300,
+      "bytes": 3761
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/long.jpg": {
+      "width": 1200,
+      "height": 16000,
+      "format": "jpg",
+      "bytes": 550371
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/long.png": {
+      "width": 1200,
+      "height": 16000,
+      "format": "png",
+      "bytes": 89440
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/long.webp": {
+      "width": 1200,
+      "height": 16000,
+      "format": "webp",
+      "bytes": 3090
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/image-directory": {
+      "width": 360,
+      "height": 1200,
+      "format": "mixed",
+      "pages": 3
+    },
+    "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/mixed.cbz": {
+      "width": 360,
+      "height": 1200,
+      "format": "mixed",
+      "pages": 3
+    }
+  },
+  "results": [
+    {
+      "ok": true,
+      "after_close": {
+        "rss_kib": 8884,
+        "peak_rss_kib": 8920
+      },
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small.jpg",
+      "pages": 1,
+      "mode": "draw",
+      "after_open": {
+        "rss_kib": 8152,
+        "peak_rss_kib": 8152
+      },
+      "before": {
+        "rss_kib": 5532,
+        "peak_rss_kib": 5532
+      },
+      "page_results": [
+        {
+          "index": 1,
+          "cpu_seconds": 0.000848,
+          "after_draw": {
+            "rss_kib": 9156,
+            "peak_rss_kib": 9156
+          },
+          "samples": [
+            {
+              "y": 30,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 30,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 90,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 90,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "before_draw": {
+            "rss_kib": 8488,
+            "peak_rss_kib": 8488
+          },
+          "native_width": 360,
+          "native_height": 1200,
+          "crop_matches_fixture": true
+        }
+      ],
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.010718605000874959,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "jpg",
+        "bytes": 23142
+      }
+    },
+    {
+      "mode": "draw",
+      "ok": true,
+      "before": {
+        "rss_kib": 5200,
+        "peak_rss_kib": 5200
+      },
+      "page_results": [
+        {
+          "render_height": 120,
+          "native_width": 360,
+          "index": 1,
+          "samples": [
+            {
+              "x": 45,
+              "y": 30,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 135,
+              "y": 30,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 45,
+              "y": 90,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 135,
+              "y": 90,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "native_height": 1200,
+          "before_draw": {
+            "rss_kib": 7852,
+            "peak_rss_kib": 7852
+          },
+          "after_draw": {
+            "rss_kib": 9524,
+            "peak_rss_kib": 10584
+          },
+          "zoom": 0.5,
+          "cpu_seconds": 0.003181,
+          "offset_y": 300,
+          "render_width": 180,
+          "crop_matches_fixture": true
+        }
+      ],
+      "after_close": {
+        "rss_kib": 8260,
+        "peak_rss_kib": 10584
+      },
+      "after_open": {
+        "rss_kib": 7852,
+        "peak_rss_kib": 7852
+      },
+      "pages": 1,
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small.png",
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.009429151003132574,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "png",
+        "bytes": 3761
+      }
+    },
+    {
+      "ok": true,
+      "after_close": {
+        "rss_kib": 8408,
+        "peak_rss_kib": 10616
+      },
+      "page_results": [
+        {
+          "index": 1,
+          "render_height": 120,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "rss_kib": 7856,
+            "peak_rss_kib": 7856
+          },
+          "cpu_seconds": 0.001369,
+          "after_draw": {
+            "rss_kib": 9676,
+            "peak_rss_kib": 10616
+          },
+          "samples": [
+            {
+              "x": 45,
+              "y": 30,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 135,
+              "y": 30,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 45,
+              "y": 90,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 135,
+              "y": 90,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "render_width": 180,
+          "offset_y": 300,
+          "crop_matches_fixture": true
+        }
+      ],
+      "after_open": {
+        "rss_kib": 7728,
+        "peak_rss_kib": 7728
+      },
+      "mode": "draw",
+      "pages": 1,
+      "before": {
+        "rss_kib": 5252,
+        "peak_rss_kib": 5252
+      },
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small.webp",
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.007614939997438341,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "webp",
+        "bytes": 192
+      }
+    },
+    {
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small-300dpi.jpg",
+      "before": {
+        "peak_rss_kib": 5216,
+        "rss_kib": 5216
+      },
+      "page_results": [
+        {
+          "native_width": 86.400001525879,
+          "native_height": 288,
+          "before_draw": {
+            "peak_rss_kib": 8148,
+            "rss_kib": 8148
+          },
+          "cpu_seconds": 0.001276,
+          "after_draw": {
+            "peak_rss_kib": 8856,
+            "rss_kib": 8856
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 2.0833332965403,
+          "index": 1,
+          "offset_y": 299,
+          "render_width": 180,
+          "render_height": 120,
+          "crop_matches_fixture": true
+        }
+      ],
+      "ok": true,
+      "after_open": {
+        "peak_rss_kib": 7836,
+        "rss_kib": 7836
+      },
+      "after_close": {
+        "peak_rss_kib": 8588,
+        "rss_kib": 8584
+      },
+      "mode": "draw",
+      "pages": 1,
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.009620135999284685,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "jpg",
+        "dpi": 300,
+        "bytes": 23142
+      }
+    },
+    {
+      "ok": true,
+      "after_close": {
+        "rss_kib": 8408,
+        "peak_rss_kib": 10608
+      },
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/small-300dpi.png",
+      "pages": 1,
+      "mode": "draw",
+      "after_open": {
+        "rss_kib": 8096,
+        "peak_rss_kib": 8096
+      },
+      "before": {
+        "rss_kib": 5344,
+        "peak_rss_kib": 5344
+      },
+      "page_results": [
+        {
+          "zoom": 2.0833332965403,
+          "offset_y": 299,
+          "render_width": 180,
+          "render_height": 120,
+          "native_width": 86.400001525879,
+          "native_height": 288,
+          "index": 1,
+          "cpu_seconds": 0.003041,
+          "after_draw": {
+            "rss_kib": 9676,
+            "peak_rss_kib": 10608
+          },
+          "samples": [
+            {
+              "y": 30,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 30,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 90,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 90,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "before_draw": {
+            "rss_kib": 8096,
+            "peak_rss_kib": 8096
+          },
+          "crop_matches_fixture": true
+        }
+      ],
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.009242104992154054,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "png",
+        "dpi": 300,
+        "bytes": 3761
+      }
+    },
+    {
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/long.jpg",
+      "mode": "draw",
+      "ok": true,
+      "before": {
+        "peak_rss_kib": 5348,
+        "rss_kib": 5348
+      },
+      "page_results": [
+        {
+          "render_width": 600,
+          "render_height": 120,
+          "native_width": 1200,
+          "native_height": 16000,
+          "before_draw": {
+            "peak_rss_kib": 8984,
+            "rss_kib": 8984
+          },
+          "cpu_seconds": 0.022937,
+          "after_draw": {
+            "peak_rss_kib": 10356,
+            "rss_kib": 10356
+          },
+          "samples": [
+            {
+              "x": 150,
+              "y": 30,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 450,
+              "y": 30,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 150,
+              "y": 90,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "x": 450,
+              "y": 90,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "index": 1,
+          "offset_y": 4000,
+          "crop_matches_fixture": true
+        }
+      ],
+      "pages": 1,
+      "after_open": {
+        "peak_rss_kib": 8728,
+        "rss_kib": 8728
+      },
+      "after_close": {
+        "peak_rss_kib": 10352,
+        "rss_kib": 8628
+      },
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.02988284699677024,
+      "fixture": {
+        "width": 1200,
+        "height": 16000,
+        "format": "jpg",
+        "bytes": 550371
+      }
+    },
+    {
+      "ok": true,
+      "before": {
+        "rss_kib": 5204,
+        "peak_rss_kib": 5204
+      },
+      "mode": "draw",
+      "after_open": {
+        "rss_kib": 8032,
+        "peak_rss_kib": 8032
+      },
+      "page_results": [
+        {
+          "native_width": 1200,
+          "native_height": 16000,
+          "before_draw": {
+            "rss_kib": 8032,
+            "peak_rss_kib": 8032
+          },
+          "cpu_seconds": 0.119094,
+          "after_draw": {
+            "rss_kib": 8540,
+            "peak_rss_kib": 120864
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 150,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 450,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 150,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 450,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "index": 1,
+          "offset_y": 4000,
+          "render_width": 600,
+          "render_height": 120,
+          "crop_matches_fixture": true
+        }
+      ],
+      "after_close": {
+        "rss_kib": 8168,
+        "peak_rss_kib": 120864
+      },
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/long.png",
+      "pages": 1,
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.12557883000408765,
+      "fixture": {
+        "width": 1200,
+        "height": 16000,
+        "format": "png",
+        "bytes": 89440
+      }
+    },
+    {
+      "ok": true,
+      "pages": 1,
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/long.webp",
+      "before": {
+        "peak_rss_kib": 5576,
+        "rss_kib": 5576
+      },
+      "page_results": [
+        {
+          "zoom": 0.5,
+          "after_draw": {
+            "peak_rss_kib": 121208,
+            "rss_kib": 8860
+          },
+          "offset_y": 4000,
+          "render_width": 600,
+          "render_height": 120,
+          "samples": [
+            {
+              "y": 30,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 150,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 30,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 450,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 90,
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 150,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "y": 90,
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 450,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "native_width": 1200,
+          "native_height": 16000,
+          "before_draw": {
+            "peak_rss_kib": 8144,
+            "rss_kib": 8144
+          },
+          "cpu_seconds": 0.030986,
+          "index": 1,
+          "crop_matches_fixture": true
+        }
+      ],
+      "after_open": {
+        "peak_rss_kib": 8020,
+        "rss_kib": 8020
+      },
+      "after_close": {
+        "peak_rss_kib": 121208,
+        "rss_kib": 8576
+      },
+      "mode": "draw",
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.037650241996743716,
+      "fixture": {
+        "width": 1200,
+        "height": 16000,
+        "format": "webp",
+        "bytes": 3090
+      }
+    },
+    {
+      "ok": true,
+      "after_close": {
+        "peak_rss_kib": 11044,
+        "rss_kib": 8496
+      },
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/image-directory",
+      "pages": 3,
+      "after_open": {
+        "peak_rss_kib": 7660,
+        "rss_kib": 7660
+      },
+      "before": {
+        "peak_rss_kib": 5608,
+        "rss_kib": 5608
+      },
+      "page_results": [
+        {
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "peak_rss_kib": 7984,
+            "rss_kib": 7984
+          },
+          "cpu_seconds": 0.001015,
+          "after_draw": {
+            "peak_rss_kib": 8692,
+            "rss_kib": 8692
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "index": 1,
+          "zoom": 0.5,
+          "crop_matches_fixture": true
+        },
+        {
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "peak_rss_kib": 8672,
+            "rss_kib": 8344
+          },
+          "cpu_seconds": 0.003002,
+          "after_draw": {
+            "peak_rss_kib": 10804,
+            "rss_kib": 9696
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "index": 2,
+          "zoom": 0.5,
+          "crop_matches_fixture": true
+        },
+        {
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "peak_rss_kib": 10804,
+            "rss_kib": 8472
+          },
+          "cpu_seconds": 0.00119,
+          "after_draw": {
+            "peak_rss_kib": 11072,
+            "rss_kib": 11072
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "index": 3,
+          "zoom": 0.5,
+          "crop_matches_fixture": true
+        }
+      ],
+      "mode": "draw",
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.012579624002682976,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "mixed",
+        "pages": 3
+      }
+    },
+    {
+      "ok": true,
+      "after_close": {
+        "peak_rss_kib": 11004,
+        "rss_kib": 8732
+      },
+      "mode": "draw",
+      "pages": 3,
+      "after_open": {
+        "peak_rss_kib": 7596,
+        "rss_kib": 7596
+      },
+      "path": "/tmp/bilicomics-native-_duimwe7/backend-probe/fixtures/mixed.cbz",
+      "page_results": [
+        {
+          "cpu_seconds": 0.000942,
+          "after_draw": {
+            "peak_rss_kib": 8652,
+            "rss_kib": 8652
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "index": 1,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "peak_rss_kib": 7912,
+            "rss_kib": 7912
+          },
+          "crop_matches_fixture": true
+        },
+        {
+          "cpu_seconds": 0.003092,
+          "after_draw": {
+            "peak_rss_kib": 10864,
+            "rss_kib": 9692
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "index": 2,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "peak_rss_kib": 8652,
+            "rss_kib": 8316
+          },
+          "crop_matches_fixture": true
+        },
+        {
+          "cpu_seconds": 0.001101,
+          "after_draw": {
+            "peak_rss_kib": 11136,
+            "rss_kib": 11136
+          },
+          "samples": [
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 30,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 30,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                32,
+                32,
+                224
+              ],
+              "x": 45,
+              "y": 90,
+              "expected_rgb": [
+                32,
+                32,
+                224
+              ],
+              "max_error": 0
+            },
+            {
+              "rgb": [
+                223,
+                223,
+                31
+              ],
+              "x": 135,
+              "y": 90,
+              "expected_rgb": [
+                223,
+                223,
+                31
+              ],
+              "max_error": 0
+            }
+          ],
+          "zoom": 0.5,
+          "offset_y": 300,
+          "render_width": 180,
+          "render_height": 120,
+          "index": 3,
+          "native_width": 360,
+          "native_height": 1200,
+          "before_draw": {
+            "peak_rss_kib": 10864,
+            "rss_kib": 8544
+          },
+          "crop_matches_fixture": true
+        }
+      ],
+      "before": {
+        "peak_rss_kib": 5488,
+        "rss_kib": 5488
+      },
+      "stderr": "",
+      "returncode": 0,
+      "wall_seconds": 0.013854138000169769,
+      "fixture": {
+        "width": 360,
+        "height": 1200,
+        "format": "mixed",
+        "pages": 3
+      }
+    }
+  ],
+  "scope": "Synthetic solid-band fixtures; native image backend only; no ReaderUI or device performance guarantee."
+}

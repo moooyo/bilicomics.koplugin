@@ -1,0 +1,570 @@
+{
+  "host": "test-env",
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "scope": "Real POSIX subprocesses, pipes, SQLite and synthetic image files; injected download runner and protocol client; no account or real purchase",
+  "source_sha256": {
+    "bilicomics/jobs/runner.lua": "a3fd3dd288885205801a4dbcf44c2be9c309835ead78951bc478e57dd8609cb6",
+    "bilicomics/jobs/download_service.lua": "2954477a07dc260b9eb3aedc430fdc5b9d1ab2e3d3cbf79eb3ca072a5f3e8fda",
+    "bilicomics/jobs/worker.lua": "37703f012a48302cb0586a38337c456b110d2398798d1ed50e4d7c63ea7f47f5",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/storage/store.lua": "38ffd2068cb639d2da8be5d6afc9d60010447afc609abfe39b376159882b3b98",
+    "bilicomics/storage/page_store.lua": "25dc87ced8ddb526493d9b37d5aa8e54943d18e074757e2ab5e0cee2c8323881",
+    "bilicomics/protocol/client.lua": "48d6fe61a4ace8464cb71780e5be1edb368d4644d2399b8ac8a728e214703ffd",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+  },
+  "test_source_sha256": {
+    "spec/jobs/cancel_race.lua": "18c70589bf9eba82cc9ceea86d1c3ec98fb131fe8ce753a3bece1b97095648f0",
+    "spec/jobs/cover_policy_spec.lua": "0ca4cf1bcbb79e10984aaa61aa1ac76940168b9882c0cea470a92f2df95bd63a",
+    "spec/jobs/download_service_spec.lua": "00bc136750c99ae830b4f9801fa794d1cbee2706fc31b0a0b81e1b8466101650",
+    "spec/jobs/parent_exit_fixture.lua": "780ae6a03177aa2d20509ad3822898d352112f9530b8d14b2cb537e71de63219",
+    "spec/jobs/parent_exit_spec.py": "f687b15fb24cf101a6f2eaab1949a5da9a0db42c2424391f95789a13b8466dc1",
+    "spec/jobs/run_remote.py": "fa68390184be8184d84741f05dd9d2e8e1f139e7a9af26ed4c1c93e255e9a94d",
+    "spec/jobs/runner_spec.lua": "17e2b8f86997eec16f8a4421e307428a126bcec1d4c101dbd105881dfa03c2b7",
+    "spec/jobs/storage_budget_spec.lua": "4625dfa58fe4068bb28b431b9f6325bba462584ff7e4dcd89c21a70da8b2deb1",
+    "spec/jobs/worker_extensions_spec.lua": "85d85ac73fe4c06a844d8df1624942227851e8cbe0b45edbb181c36436487310",
+    "spec/jobs/worker_spec.lua": "f4b523a21f573a8dd4fa4b6801fe0404793c2460afab45da7ebf5a7fe598b0bc"
+  },
+  "image_fixtures": [
+    {
+      "name": "cover-6mp.png",
+      "width": 3000,
+      "height": 2000,
+      "pixels": 6000000,
+      "encoded_bytes": 5908,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    },
+    {
+      "name": "cover-4mp.png",
+      "width": 2000,
+      "height": 2000,
+      "pixels": 4000000,
+      "encoded_bytes": 3958,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    }
+  ],
+  "suites": [
+    {
+      "suite": "worker",
+      "returncode": 0,
+      "result": {
+        "passed": 81,
+        "environment": "test-env",
+        "assertions": [
+          {
+            "name": "A non-table request is rejected before constructing a client",
+            "passed": true
+          },
+          {
+            "name": "Unknown operations return invalid_request without a protocol call",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject buyEpisode",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject addHistory",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject setFavorite",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject downloadImage",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject imageTokens",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject new",
+            "passed": true
+          },
+          {
+            "name": "Read workers reject missing",
+            "passed": true
+          },
+          {
+            "name": "listFavorites preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "listFavorites returns its read result",
+            "passed": true
+          },
+          {
+            "name": "listFavorites constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "listHistory preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "listHistory returns its read result",
+            "passed": true
+          },
+          {
+            "name": "listHistory constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "search preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "search returns its read result",
+            "passed": true
+          },
+          {
+            "name": "search constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "comicDetail preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "comicDetail returns its read result",
+            "passed": true
+          },
+          {
+            "name": "comicDetail constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "imageIndex preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "imageIndex returns its read result",
+            "passed": true
+          },
+          {
+            "name": "imageIndex constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "wallet preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "wallet returns its read result",
+            "passed": true
+          },
+          {
+            "name": "wallet constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "purchaseInfo preserves the request arguments",
+            "passed": true
+          },
+          {
+            "name": "purchaseInfo returns its read result",
+            "passed": true
+          },
+          {
+            "name": "purchaseInfo constructs an isolated client with supplied configuration",
+            "passed": true
+          },
+          {
+            "name": "Validated sessions return both identity and the updated serialized session",
+            "passed": true
+          },
+          {
+            "name": "Validation failure does not serialize a missing session",
+            "passed": true
+          },
+          {
+            "name": "Read failures retain structured protocol evidence",
+            "passed": true
+          },
+          {
+            "name": "Favorites request page 1 has a bounded page size",
+            "passed": true
+          },
+          {
+            "name": "Favorites request page 2 has a bounded page size",
+            "passed": true
+          },
+          {
+            "name": "Favorites stop after a partial page",
+            "passed": true
+          },
+          {
+            "name": "Library duplicates and absent identifiers are removed in first-seen order",
+            "passed": true
+          },
+          {
+            "name": "History page numbering is sequential",
+            "passed": true
+          },
+          {
+            "name": "History page numbering is sequential",
+            "passed": true
+          },
+          {
+            "name": "A repeated full library page terminates without duplicates",
+            "passed": true
+          },
+          {
+            "name": "An empty library succeeds after one request",
+            "passed": true
+          },
+          {
+            "name": "A later page failure never publishes a partial library",
+            "passed": true
+          },
+          {
+            "name": "Unbounded library responses stop at 200 pages with an explicit error",
+            "passed": true
+          },
+          {
+            "name": "Invalid library selection favorite cannot silently read history",
+            "passed": true
+          },
+          {
+            "name": "Invalid library selection unexpected cannot silently read history",
+            "passed": true
+          },
+          {
+            "name": "Invalid library selection false cannot silently read history",
+            "passed": true
+          },
+          {
+            "name": "Missing library selection is rejected",
+            "passed": true
+          },
+          {
+            "name": "Quote scope is forwarded without reinterpreting its price",
+            "passed": true
+          },
+          {
+            "name": "Quote retrieves the requested comic detail",
+            "passed": true
+          },
+          {
+            "name": "Quote joins both source responses without a purchase call",
+            "passed": true
+          },
+          {
+            "name": "Quote failure skips comic detail and retains its error",
+            "passed": true
+          },
+          {
+            "name": "Comic detail failure does not publish an incomplete quote",
+            "passed": true
+          },
+          {
+            "name": "Malformed purchase intent 1 cannot transmit",
+            "passed": true
+          },
+          {
+            "name": "Malformed purchase intent 2 cannot transmit",
+            "passed": true
+          },
+          {
+            "name": "Malformed purchase intent 3 cannot transmit",
+            "passed": true
+          },
+          {
+            "name": "Malformed purchase intent 4 cannot transmit",
+            "passed": true
+          },
+          {
+            "name": "Malformed purchase intent 5 cannot transmit",
+            "passed": true
+          },
+          {
+            "name": "Confirmed purchase payload is forwarded exactly once",
+            "passed": true
+          },
+          {
+            "name": "A valid intent returns the purchase response",
+            "passed": true
+          },
+          {
+            "name": "An uncertain purchase response is propagated without retry",
+            "passed": true
+          },
+          {
+            "name": "Wallet failure preserves independently observed episode rights",
+            "passed": true
+          },
+          {
+            "name": "Rights lookup failure skips wallet and preserves purchase uncertainty",
+            "passed": true
+          },
+          {
+            "name": "Page acquisition asks for only the source image path",
+            "passed": true
+          },
+          {
+            "name": "Page download uses its token, temporary path, index and byte limit",
+            "passed": true
+          },
+          {
+            "name": "Successful page acquisition keeps the file for atomic storage commit",
+            "passed": true
+          },
+          {
+            "name": "Worker derives geometry from the actual PNG header",
+            "passed": true
+          },
+          {
+            "name": "Page acquisition orders token retrieval before downloading",
+            "passed": true
+          },
+          {
+            "name": "Cover acquisition constructs a plain URL token",
+            "passed": true
+          },
+          {
+            "name": "Image acquisition defaults to a bounded 32 MiB transfer",
+            "passed": true
+          },
+          {
+            "name": "Covers bypass the chapter token operation and retain parsed geometry",
+            "passed": true
+          },
+          {
+            "name": "EXIF rotation swaps display axes without losing source dimensions",
+            "passed": true
+          },
+          {
+            "name": "Token failure stops before file download",
+            "passed": true
+          },
+          {
+            "name": "An empty token response produces a protocol error without downloading",
+            "passed": true
+          },
+          {
+            "name": "The worker rejects and removes unsupported image data",
+            "passed": true
+          },
+          {
+            "name": "The worker rejects and removes truncated image data",
+            "passed": true
+          },
+          {
+            "name": "Image acquisition failure preserves its structured error without retry",
+            "passed": true
+          },
+          {
+            "name": "A failed acquisition cannot leave an uncommitted temporary image",
+            "passed": true
+          },
+          {
+            "name": "The mismatched-result scenario receives the assigned output path",
+            "passed": true
+          },
+          {
+            "name": "An image result for another path returns worker_protocol without geometry",
+            "passed": true
+          },
+          {
+            "name": "A mismatched image result removes only its assigned partial output",
+            "passed": true
+          },
+          {
+            "name": "A mismatched foreign image is never opened for header inspection",
+            "passed": true
+          }
+        ],
+        "network": "injected protocol client; no live account or purchase",
+        "failed": 0
+      }
+    },
+    {
+      "suite": "extensions",
+      "returncode": 0,
+      "result": {
+        "scope": "Production Worker and Client with injected transports; local capability and runtime metadata inspection; no live network or account access",
+        "tests": [
+          {
+            "name": "Favorite worker forwards true and returns only its confirmed state",
+            "passed": true
+          },
+          {
+            "name": "Favorite worker forwards false and returns only its confirmed state",
+            "passed": true
+          },
+          {
+            "name": "Favorite worker accepts the client's explicit boolean success",
+            "passed": true
+          },
+          {
+            "name": "A nil favorite result without an error cannot become a confirmation",
+            "passed": true
+          },
+          {
+            "name": "A false favorite result preserves the client failure",
+            "passed": true
+          },
+          {
+            "name": "An uncertain favorite timeout is propagated without retry or confirmation",
+            "passed": true
+          },
+          {
+            "name": "Read-only client operations reject the favorite mutation method",
+            "passed": true
+          },
+          {
+            "name": "Production client uses the AddFavorite wire contract",
+            "passed": true
+          },
+          {
+            "name": "Production client uses the DeleteFavorite wire contract",
+            "passed": true
+          },
+          {
+            "name": "Production client business rejection never becomes a favorite confirmation",
+            "passed": true
+          },
+          {
+            "name": "Production client validates identifiers and boolean favorite state before transport",
+            "passed": true
+          },
+          {
+            "name": "Diagnostic capability inspection has an anonymous offline transport and a strict public shape",
+            "passed": true
+          },
+          {
+            "name": "Capability exceptions report only boolean failure without exception text",
+            "passed": true
+          },
+          {
+            "name": "Malformed capability results are unavailable without exposing their contents",
+            "passed": true
+          },
+          {
+            "name": "A real diagnostic Client stays anonymous and its actual request path remains offline",
+            "passed": true
+          },
+          {
+            "name": "Diagnostic versions come from the actual KOReader runtime and complete plugin source",
+            "passed": true
+          }
+        ],
+        "evidence": {
+          "versions": {
+            "koreader": "v2026.07.1",
+            "plugin": "0.1.0-dev",
+            "target": "linux-x86_64"
+          },
+          "real_diagnostic_client": {
+            "session_absent": true,
+            "request_error": "diagnostics_offline"
+          }
+        },
+        "passed": true
+      }
+    },
+    {
+      "suite": "budget",
+      "returncode": 0,
+      "result": {
+        "evidence": {
+          "filesystem_capacity_bytes": 6263463936,
+          "filesystem_fragment_bytes": 4096,
+          "raw_available_bytes": 3167817728,
+          "budget_available_bytes": 3167817728,
+          "ffi_os": "Linux",
+          "ffi_arch": "x64"
+        },
+        "scope": "Real statvfs on an isolated existing directory; impossible numeric reserves; no image downloads or account access",
+        "passed": true,
+        "tests": [
+          {
+            "name": "Available storage uses real filesystem bytes",
+            "passed": true
+          },
+          {
+            "name": "A failed statvfs call never reuses a previous successful capacity",
+            "passed": true
+          },
+          {
+            "name": "A regular file cannot be used as a parent directory for storage inspection",
+            "passed": true
+          },
+          {
+            "name": "Zero requested reserve allows an existing readable filesystem",
+            "passed": true
+          },
+          {
+            "name": "A reserve larger than filesystem capacity fails without allocating data",
+            "passed": true
+          },
+          {
+            "name": "Expected image output is included in the storage reserve",
+            "passed": true
+          },
+          {
+            "name": "Storage query errors propagate through the budget check",
+            "passed": true
+          },
+          {
+            "name": "download_page is rejected before any protocol work when the reserve exceeds available bytes",
+            "passed": true
+          },
+          {
+            "name": "download_cover is rejected before any protocol work when the reserve exceeds available bytes",
+            "passed": true
+          },
+          {
+            "name": "Worker rejects an unavailable output directory before protocol work",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "suite": "cover",
+      "returncode": 0,
+      "result": {
+        "tests": [
+          {
+            "passed": true,
+            "name": "Large grayscale fixtures are complete PNG containers with the intended geometry"
+          },
+          {
+            "passed": true,
+            "name": "Worker rejects an oversized cover even when its client ignores the budget and lies about geometry"
+          },
+          {
+            "passed": true,
+            "name": "Worker accepts a cover exactly at the four-million-pixel boundary"
+          },
+          {
+            "passed": true,
+            "name": "Worker does not apply the cover budget to a six-million-pixel chapter page"
+          },
+          {
+            "passed": true,
+            "name": "Production client rejects and removes a six-million-pixel image under the cover budget"
+          },
+          {
+            "passed": true,
+            "name": "Production client retains a complete cover exactly at the pixel budget"
+          },
+          {
+            "passed": true,
+            "name": "Production client accepts the same six-million-pixel image without a cover budget"
+          }
+        ],
+        "passed": true,
+        "scope": "Real compressed PNG containers and headers; production Worker and Client with injected transfers; no image decoding or live network"
+      }
+    }
+  ],
+  "passed": true
+}

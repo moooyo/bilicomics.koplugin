@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "returncode": 0,
+  "scope": "Actual plugin, cached synthetic free chapter, official reader.lua",
+  "runtime_version": "v2026.07.1",
+  "report": {
+    "entrypoint": "official reader.lua",
+    "reader_provider": "bilicomics_document",
+    "plugins_loaded_at_late_patch": false,
+    "reader_integration_attached": true,
+    "visible_pixel": 40,
+    "first_show": {
+      "runtime_initialized": false,
+      "plugins_loaded": false,
+      "provider_available": true,
+      "file": "/tmp/bilicomics-session-regression-YVJoZn6l/production-startup/data/bilicomics/accounts/anonymous/documents/comic/episode/r1/chapter.bcomic"
+    },
+    "filemanager_opened": false,
+    "reader_opened": true,
+    "actual_plugin_present": true,
+    "provider_at_late_patch": true
+  }
+}

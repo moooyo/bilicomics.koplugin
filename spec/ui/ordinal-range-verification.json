@@ -1,0 +1,53 @@
+{
+  "spec": "native-ordinal-range",
+  "environment": "ssh test-env, unshare -n",
+  "synthetic_only": true,
+  "actual_purchase_executed": false,
+  "source_sha256": {
+    "bilicomics/ui/model.lua": "18c15b5fb8492dad669153c0780e5fdbd25e1486182fee5cd7aa8b1e100d2eef",
+    "bilicomics/ui/screens.lua": "8f9a1238d124503ce4b9824d7475e628c89671982f60eb4a3bbf5cec325a22dc",
+    "l10n/bilicomics_zh_CN.lua": "8b13bb98692b14c1af6bce5d2ab2be5137b68d5ebb8abcc90ea696e92c0932a2"
+  },
+  "test_sha256": {
+    "ordinal_range_spec.lua": "f5f81bf9c00b515d07f8012680371a8fd42b48f4c2d26e196294ecdbd8be142f",
+    "run_ordinal_range.py": "ecfca843207617ea37a47579f07c5cac768b9c59b8da50c1fd281736face32b1"
+  },
+  "source_unchanged": true,
+  "runs": [
+    {
+      "width": 600,
+      "height": 800,
+      "returncode": 0,
+      "passed": true,
+      "count": 106,
+      "dimensions_match": true,
+      "result_file": "600x800/ordinal-range-result.json",
+      "log_file": "600x800/ordinal-range.log",
+      "synthetic_only": true,
+      "actual_purchase_executed": false,
+      "network_namespace_isolated": true,
+      "no_network_routes": true
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "returncode": 0,
+      "passed": true,
+      "count": 106,
+      "dimensions_match": true,
+      "result_file": "480x640/ordinal-range-result.json",
+      "log_file": "480x640/ordinal-range.log",
+      "synthetic_only": true,
+      "actual_purchase_executed": false,
+      "network_namespace_isolated": true,
+      "no_network_routes": true
+    }
+  ],
+  "interrupted": false,
+  "passed": true,
+  "source_sha256_after": {
+    "bilicomics/ui/model.lua": "18c15b5fb8492dad669153c0780e5fdbd25e1486182fee5cd7aa8b1e100d2eef",
+    "bilicomics/ui/screens.lua": "8f9a1238d124503ce4b9824d7475e628c89671982f60eb4a3bbf5cec325a22dc",
+    "l10n/bilicomics_zh_CN.lua": "8b13bb98692b14c1af6bce5d2ab2be5137b68d5ebb8abcc90ea696e92c0932a2"
+  }
+}

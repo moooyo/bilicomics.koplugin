@@ -1,0 +1,40 @@
+{
+  "spec": "native-quote-selection",
+  "environment": "ssh test-env, unshare -n",
+  "synthetic_only": true,
+  "actual_purchase_executed": false,
+  "source_sha256": {
+    "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+    "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+    "l10n/bilicomics_zh_CN.lua": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f"
+  },
+  "source_unchanged": true,
+  "runs": [
+    {
+      "width": 600,
+      "height": 800,
+      "returncode": 0,
+      "passed": true,
+      "count": 141,
+      "result_file": "600x800/quote-selection-result.json"
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "returncode": 0,
+      "passed": true,
+      "count": 141,
+      "result_file": "480x640/quote-selection-result.json"
+    }
+  ],
+  "passed": true,
+  "test_sha256": {
+    "quote_selection_spec.lua": "c25295be1bb93b45628361ae65b5ba33d8629aaa55ba4217b0ab8d394ecd74c0",
+    "run_quote_selection.py": "7059ae23d9edceb101e6e8f83b36782174623357a10a6a00228cc984478d561f"
+  },
+  "source_sha256_after": {
+    "bilicomics/ui/model.lua": "114015c56418dda781b78aa9f30f1444d824ea7d9e2e11432d2f8df8ea163ce1",
+    "bilicomics/ui/screens.lua": "e0931fd82798b27e67026089e69e07842c573b2273e2c0702bcb5222dd0aa6ad",
+    "l10n/bilicomics_zh_CN.lua": "a61f899377506d9856d8c09abcb6574748bbad02ecda9b29ba001998564c223f"
+  }
+}

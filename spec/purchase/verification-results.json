@@ -1,0 +1,40 @@
+{
+  "date": "2026-09-12",
+  "environment": "ssh test-env",
+  "runtime_version": "v2026.07.1",
+  "runtime_root": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "test_root": "/tmp/bilicomics-purchase-20260912",
+  "checks": [
+    {
+      "script": "spec/purchase/state_machine.lua",
+      "passed_cases": 33,
+      "exit_code": 0,
+      "scope": "Synthetic quotes and clients; durable ordering, explicit confirmation, changed price, exact scope, coupons, concurrency, uncertainty, memory-preserved results after disk failure, partial entitlement recovery, account isolation."
+    },
+    {
+      "script": "spec/purchase/protocol_boundary.lua",
+      "passed_cases": 12,
+      "exit_code": 0,
+      "scope": "Production Client and Purchase Service with an injected transport; coin, coupon, zero amount, verified batch payloads, five known rejection codes, unknown business code, malformed response, HTTP failure."
+    },
+    {
+      "script": "spec/purchase/restart.lua",
+      "phases": ["prepare", "recover", "confirm", "inspect"],
+      "separate_processes": 4,
+      "passed_cases": 5,
+      "exit_codes": [0, 0, 0, 0],
+      "data_root": "/tmp/bilicomics-purchase-20260912/durable-v2",
+      "scope": "Production SQLite store; reject nested transaction payload release, committed intent before exit, unknown recovery without replay, exact permanent access reconciliation, persisted final result after reopening."
+    }
+  ],
+  "local_verification_performed": false,
+  "live_network_requests": 0,
+  "live_purchase_requests": 0,
+  "coupon_consumption": 0,
+  "limitations": [
+    "Production account authentication and live quotes were not verified.",
+    "The server's exact batch chapter set and final discounted price contract remain a capability gate.",
+    "A zero coin quote follows the statically observed payload omission and still requires authenticated verification.",
+    "No actual charge or entitlement delivery was tested."
+  ]
+}

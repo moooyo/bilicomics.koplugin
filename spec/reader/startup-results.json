@@ -1,0 +1,60 @@
+[
+  {
+    "mode": "plugin-init",
+    "returncode": 0,
+    "passed": true,
+    "report": {
+      "reader_opened": false,
+      "first_show": {
+        "provider_available": false,
+        "file": "/tmp/bilicomics-reader-YclZOvo8/startup/plugin-init/chapter.bcomic",
+        "plugins_loaded": false
+      },
+      "filemanager_opened": true,
+      "entrypoint": "official reader.lua",
+      "bootstrap_called": true,
+      "plugins_loaded_at_late_patch": false,
+      "provider_at_late_patch": false,
+      "plugin_initialized": true
+    }
+  },
+  {
+    "mode": "plugin-top-level",
+    "returncode": 0,
+    "passed": true,
+    "report": {
+      "first_show": {
+        "provider_available": false,
+        "plugins_loaded": false,
+        "file": "/tmp/bilicomics-reader-YclZOvo8/startup/plugin-top-level/chapter.bcomic"
+      },
+      "reader_opened": false,
+      "entrypoint": "official reader.lua",
+      "bootstrap_called": true,
+      "plugins_loaded_at_late_patch": false,
+      "provider_at_late_patch": false,
+      "filemanager_opened": true,
+      "plugin_initialized": true
+    }
+  },
+  {
+    "mode": "late-hook",
+    "returncode": 0,
+    "passed": true,
+    "report": {
+      "plugins_loaded_at_late_patch": false,
+      "provider_at_late_patch": false,
+      "first_show": {
+        "file": "/tmp/bilicomics-reader-YclZOvo8/startup/late-hook/chapter.bcomic",
+        "provider_available": true,
+        "plugins_loaded": false
+      },
+      "bootstrap_called": true,
+      "plugin_initialized": true,
+      "reader_opened": true,
+      "reader_provider": "bilicomics_document",
+      "filemanager_opened": false,
+      "entrypoint": "official reader.lua"
+    }
+  }
+]

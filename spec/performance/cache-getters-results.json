@@ -1,0 +1,327 @@
+{
+  "image_height": 512,
+  "repetitions": 3,
+  "network_requests": 0,
+  "notes": [
+    "Only getter and deferred notification time is measured; startup and seeding are excluded.",
+    "Notifications invoke production getters through a screen proxy; native rendering is not measured.",
+    "First resets the PageStore verification memo; no attempt is made to evict the OS page cache.",
+    "Every fixture is a valid PNG with incompressible RGB pixel data, not padding or a truncated image."
+  ],
+  "measurements": [
+    {
+      "samples": [
+        {
+          "seconds": 0.0006451606750488281,
+          "iteration": 1,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0009949207305908203,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.0006468296051025391,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.0008540153503417969,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "controller_getEpisodes_all_comics"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.0005819797515869141,
+          "iteration": 1,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0001380443572998047,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.0001220703125,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.00010991096496582031,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "controller_getLibrary_history_and_favorites"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 8.988380432128906e-05,
+          "iteration": 1,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.00010800361633300781,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 4.506111145019531e-05,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 8.106231689453125e-05,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "controller_getStorageSummary"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.0002181529998779297,
+          "iteration": 1,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0001800060272216797,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.0002739429473876953,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.00018596649169921875,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "downloads_route_getters_all_rows"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.0005259513854980469,
+          "iteration": 1,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0006279945373535156,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.000827789306640625,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.0006151199340820312,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "notify_coalesced_library_getters"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.00017404556274414062,
+          "iteration": 1,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0002570152282714844,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.00032591819763183594,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.0001900196075439453,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "notify_coalesced_downloads_getters"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.08899497985839844,
+          "iteration": 1,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0002760887145996094,
+          "iteration": 2,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.00014901161193847656,
+          "iteration": 3,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.00012302398681640625,
+          "iteration": 4,
+          "digest_calls": 0,
+          "digest_bytes": 0,
+          "phase": "repeat"
+        }
+      ],
+      "name": "page_store_getPage_all_pages"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.08634018898010254,
+          "iteration": 1,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.0869290828704834,
+          "iteration": 2,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.08727288246154785,
+          "iteration": 3,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.08671092987060547,
+          "iteration": 4,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "repeat"
+        }
+      ],
+      "name": "page_store_isComplete_all_episodes"
+    },
+    {
+      "samples": [
+        {
+          "seconds": 0.08756399154663086,
+          "iteration": 1,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "first_empty_verification_memo"
+        },
+        {
+          "seconds": 0.08762884140014648,
+          "iteration": 2,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.08840107917785645,
+          "iteration": 3,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "repeat"
+        },
+        {
+          "seconds": 0.08670997619628906,
+          "iteration": 4,
+          "digest_calls": 8,
+          "digest_bytes": 25178104,
+          "phase": "repeat"
+        }
+      ],
+      "name": "page_store_getSummary"
+    }
+  ],
+  "runtime": "official-unmodified-KOReader-v2026.07.1",
+  "schema_version": 1,
+  "source_plugin": "/tmp/bilicomics-cache-performance-9SVXPRjY/plugin",
+  "cache_bytes": 25178104,
+  "page_count": 8,
+  "episode_count": 4,
+  "comic_count": 2,
+  "image_format": "png",
+  "image_width": 2048,
+  "runtime_git_rev": "v2026.07.1",
+  "source_sha256": {
+    "bilicomics/catalog/init.lua": "14e53c341b3f86c809799154226e552534a5c77dfd00e2702455b7bf86ee59c6",
+    "bilicomics/controller.lua": "3897b8b9cbaff1ef16bdc4e3085fa3ce0e6ba1a8f06ee29e5eaded77184a0d96",
+    "bilicomics/storage/page_store.lua": "25dc87ced8ddb526493d9b37d5aa8e54943d18e074757e2ab5e0cee2c8323881",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/ui/screens.lua": "17d4e41b1b6f3d50ed8c209b81739f401edba366461514281e57595a01be8573"
+  }
+}

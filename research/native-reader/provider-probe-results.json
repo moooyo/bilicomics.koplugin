@@ -1,0 +1,147 @@
+{
+  "research_date": "2026-09-12",
+  "runtime_git_rev": "v2026.07.1",
+  "release_asset": "koreader-linux-x86_64-v2026.07.1.tar.xz",
+  "asset_sha256": "299aadb28147a25e9432ced1214ea444a4184393b5ae97cf42402c8a61b1a1b0",
+  "environment": "test-env Linux x86_64 with Xvfb; 600x800 SDL screen",
+  "scope": "Synthetic PNG fixtures; native core ReaderUI; bundled plugins disabled; file arrival simulated without HTTP",
+  "total_assertions": 21,
+  "all_passed": true,
+  "results": [
+    {
+      "backend_opens": 2,
+      "missing_draws": 1,
+      "hints": 0,
+      "mode": "render",
+      "success": true,
+      "assertions": [
+        {
+          "passed": true,
+          "name": "stable_page_count"
+        },
+        {
+          "passed": true,
+          "name": "missing_geometry_is_local"
+        },
+        {
+          "data": 100,
+          "passed": true,
+          "name": "native_mid_image_crop"
+        },
+        {
+          "passed": true,
+          "name": "missing_page_does_not_open_backend"
+        },
+        {
+          "passed": true,
+          "name": "same_document_missing_page_becomes_ready"
+        },
+        {
+          "passed": true,
+          "name": "same_second_generation_changes_cache_key"
+        },
+        {
+          "passed": true,
+          "name": "registry_reference_released"
+        }
+      ]
+    },
+    {
+      "backend_opens": 1,
+      "missing_draws": 0,
+      "mode": "ui",
+      "success": true,
+      "hints": 2,
+      "assertions": [
+        {
+          "passed": true,
+          "name": "native_readerui_opened"
+        },
+        {
+          "passed": true,
+          "name": "native_paging_and_zooming"
+        },
+        {
+          "data": {
+            "page": 1,
+            "position": 0.3145833333333333
+          },
+          "passed": true,
+          "name": "native_viewport_advances_inside_long_image"
+        },
+        {
+          "passed": true,
+          "name": "instance_scoped_end_of_book_interception"
+        },
+        {
+          "passed": true,
+          "name": "native_reader_closed_cleanly"
+        }
+      ]
+    },
+    {
+      "missing_draws": 0,
+      "mode": "ui-reopen",
+      "hints": 2,
+      "success": true,
+      "assertions": [
+        {
+          "passed": true,
+          "name": "native_readerui_opened"
+        },
+        {
+          "passed": true,
+          "name": "native_paging_and_zooming"
+        },
+        {
+          "data": {
+            "expected": 0.3145833333333333,
+            "actual": 0.31458333333333
+          },
+          "passed": true,
+          "name": "native_scroll_position_survives_restart"
+        },
+        {
+          "passed": true,
+          "name": "native_reader_closed_cleanly"
+        }
+      ],
+      "backend_opens": 0
+    },
+    {
+      "success": true,
+      "assertions": [
+        {
+          "name": "native_readerui_opened",
+          "passed": true
+        },
+        {
+          "name": "native_paging_and_zooming",
+          "passed": true
+        },
+        {
+          "name": "native_ui_can_display_and_pan_missing_page",
+          "passed": true
+        },
+        {
+          "name": "native_ui_completion_preserves_viewport",
+          "passed": true,
+          "data": {
+            "before": 0.471875,
+            "after": 0.471875
+          }
+        },
+        {
+          "name": "native_ui_completion_replaces_loading_pixels",
+          "passed": true,
+          "data": 180
+        }
+      ],
+      "backend_opens": 1,
+      "missing_draws": 1,
+      "mode": "ui-online",
+      "event_loop_callback_while_missing": true,
+      "hints": 1
+    }
+  ]
+}

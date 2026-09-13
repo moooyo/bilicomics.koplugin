@@ -1,0 +1,136 @@
+{
+  "compiler_version": "Android (12470979, +pgo, +bolt, +lto, +mlgo, based on r522817c) clang version 18.0.3 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /var/tmp/bili-android-ndk-20260912/android-ndk-r27c/toolchains/llvm/prebuilt/linux-x86_64/bin\n",
+  "source_sha256": {
+    "biliwasm.c": "a614ee2572e283fbf56c7ffd61ad3eae1bad9c30716b5b334f84ae2ce01368f2",
+    "biliwasm.h": "c6668541ef3c021100d138bc38931b3c64ba05c222fb61e880f4260dbd10042e",
+    "biliwasm.exports.map": "53a04aacff1a72d81ed1849167857f7516fc2fff2f3238c9e7402652db31eead",
+    "build.sh": "aba7d3fc5f3a9d131f3ff32f5e03fb8de512fd5b4adad8385c11204b5fae1522",
+    "build-android.sh": "62bf8be13873135419c781a07c73166fdcb667d3641c50f3d070d183d00ca3d2"
+  },
+  "libraries": [
+    {
+      "platform": "android-arm64-v8a",
+      "path": "/var/tmp/bili-android-ndk-20260912/host-build/android-arm64-v8a/libbiliwasm.so",
+      "compiler": "aarch64-linux-android21-clang",
+      "minimum_android_api": 21,
+      "ndk_revision": "27.2.12479018",
+      "sha256": "ca890ba1e7e0065579fa5aea3bb19a9f9971830711ad0611aba742b9ffb87f4d",
+      "bytes": 310808,
+      "soname": "libbiliwasm.so",
+      "exports": [
+        "biliwasm_free",
+        "biliwasm_run"
+      ],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "load_segment_alignment": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "native_tls_segment": false,
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "elf_header": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              DYN (Shared object file)\n  Machine:                           AArch64\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          64 (bytes into file)\n  Start of section headers:          309080 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           56 (bytes)\n  Number of program headers:         10\n  Size of section headers:           64 (bytes)\n  Number of section headers:         27\n  Section header string table index: 25\n",
+      "elf_attributes": "",
+      "elf_notes": "Displaying notes found in: .note.android.ident\n  Owner                Data size \tDescription\n  Android              0x00000084\tNT_ANDROID_TYPE_IDENT\n   description data: 15 00 00 00 72 32 37 63 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 31 32 34 37 39 30 31 38 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n"
+    },
+    {
+      "platform": "android-armeabi-v7a",
+      "path": "/var/tmp/bili-android-ndk-20260912/host-build/android-armeabi-v7a/libbiliwasm.so",
+      "compiler": "armv7a-linux-androideabi21-clang",
+      "minimum_android_api": 21,
+      "ndk_revision": "27.2.12479018",
+      "sha256": "45961992fc646cbf9679f8959ab28b049f0b06504c1aac77eec1a88d471e60b4",
+      "bytes": 313396,
+      "soname": "libbiliwasm.so",
+      "exports": [
+        "biliwasm_free",
+        "biliwasm_run"
+      ],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "load_segment_alignment": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "native_tls_segment": false,
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "elf_header": "ELF Header:\n  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF32\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              DYN (Shared object file)\n  Machine:                           ARM\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          52 (bytes into file)\n  Start of section headers:          312316 (bytes into file)\n  Flags:                             0x5000200\n  Size of this header:               52 (bytes)\n  Size of program headers:           32 (bytes)\n  Number of program headers:         10\n  Size of section headers:           40 (bytes)\n  Number of section headers:         27\n  Section header string table index: 25\n",
+      "elf_attributes": "BuildAttributes {\n  FormatVersion: 0x41\n  Section 1 {\n    SectionLength: 59\n    Vendor: aeabi\n    Tag: Tag_File (0x1)\n    Size: 49\n    FileAttributes {\n      Attribute {\n        Tag: 67\n        TagName: conformance\n        Value: 2.09\n      }\n      Attribute {\n        Tag: 6\n        Value: 10\n        TagName: CPU_arch\n        Description: ARM v7\n      }\n      Attribute {\n        Tag: 7\n        Value: 65\n        TagName: CPU_arch_profile\n        Description: Application\n      }\n      Attribute {\n        Tag: 8\n        Value: 1\n        TagName: ARM_ISA_use\n        Description: Permitted\n      }\n      Attribute {\n        Tag: 9\n        Value: 2\n        TagName: THUMB_ISA_use\n        Description: Thumb-2\n      }\n      Attribute {\n        Tag: 10\n        Value: 3\n        TagName: FP_arch\n        Description: VFPv3\n      }\n      Attribute {\n        Tag: 12\n        Value: 1\n        TagName: Advanced_SIMD_arch\n        Description: NEONv1\n      }\n      Attribute {\n        Tag: 14\n        Value: 0\n        TagName: ABI_PCS_R9_use\n        Description: v6\n      }\n      Attribute {\n        Tag: 15\n        Value: 1\n        TagName: ABI_PCS_RW_data\n        Description: PC-relative\n      }\n      Attribute {\n        Tag: 16\n        Value: 1\n        TagName: ABI_PCS_RO_data\n        Description: PC-relative\n      }\n      Attribute {\n        Tag: 17\n        Value: 2\n        TagName: ABI_PCS_GOT_use\n        Description: GOT-Indirect\n      }\n      Attribute {\n        Tag: 18\n        Value: 4\n        TagName: ABI_PCS_wchar_t\n        Description: 4-byte\n      }\n      Attribute {\n        Tag: 20\n        Value: 1\n        TagName: ABI_FP_denormal\n        Description: IEEE-754\n      }\n      Attribute {\n        Tag: 21\n        Value: 0\n        TagName: ABI_FP_exceptions\n        Description: Not Permitted\n      }\n      Attribute {\n        Tag: 23\n        Value: 3\n        TagName: ABI_FP_number_model\n        Description: IEEE-754\n      }\n      Attribute {\n        Tag: 24\n        Value: 1\n        TagName: ABI_align_needed\n        Description: 8-byte alignment\n      }\n      Attribute {\n        Tag: 25\n        Value: 1\n        TagName: ABI_align_preserved\n        Description: 8-byte data alignment\n      }\n      Attribute {\n        Tag: 26\n        Value: 2\n        TagName: ABI_enum_size\n        Description: Int32\n      }\n      Attribute {\n        Tag: 34\n        Value: 1\n        TagName: CPU_unaligned_access\n        Description: v6-style\n      }\n      Attribute {\n        Tag: 38\n        Value: 1\n        TagName: ABI_FP_16bit_format\n        Description: IEEE-754\n      }\n    }\n  }\n}\n",
+      "elf_notes": "Displaying notes found in: .note.android.ident\n  Owner                Data size \tDescription\n  Android              0x00000084\tNT_ANDROID_TYPE_IDENT\n   description data: 15 00 00 00 72 32 37 63 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 31 32 34 37 39 30 31 38 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n"
+    },
+    {
+      "platform": "android-x86_64",
+      "path": "/var/tmp/bili-android-ndk-20260912/host-build/android-x86_64/libbiliwasm.so",
+      "compiler": "x86_64-linux-android21-clang",
+      "minimum_android_api": 21,
+      "ndk_revision": "27.2.12479018",
+      "sha256": "5a0a4ab94c9faa3e33b21a002d3ea74e3d529329f37840a6464c363c34df31e2",
+      "bytes": 308288,
+      "soname": "libbiliwasm.so",
+      "exports": [
+        "biliwasm_free",
+        "biliwasm_run"
+      ],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "load_segment_alignment": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "native_tls_segment": false,
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "elf_header": "ELF Header:\n  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF64\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              DYN (Shared object file)\n  Machine:                           Advanced Micro Devices X86-64\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          64 (bytes into file)\n  Start of section headers:          306560 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               64 (bytes)\n  Size of program headers:           56 (bytes)\n  Number of program headers:         10\n  Size of section headers:           64 (bytes)\n  Number of section headers:         27\n  Section header string table index: 25\n",
+      "elf_attributes": "",
+      "elf_notes": "Displaying notes found in: .note.android.ident\n  Owner                Data size \tDescription\n  Android              0x00000084\tNT_ANDROID_TYPE_IDENT\n   description data: 15 00 00 00 72 32 37 63 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 31 32 34 37 39 30 31 38 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n"
+    },
+    {
+      "platform": "android-x86",
+      "path": "/var/tmp/bili-android-ndk-20260912/host-build/android-x86/libbiliwasm.so",
+      "compiler": "i686-linux-android21-clang",
+      "minimum_android_api": 21,
+      "ndk_revision": "27.2.12479018",
+      "sha256": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4",
+      "bytes": 348004,
+      "soname": "libbiliwasm.so",
+      "exports": [
+        "biliwasm_free",
+        "biliwasm_run"
+      ],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
+      "load_segment_alignment": [
+        16384,
+        16384,
+        16384,
+        16384
+      ],
+      "native_tls_segment": false,
+      "verification": "cross-compiled-elf-inspected-only",
+      "device_verified": false,
+      "elf_header": "ELF Header:\n  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00\n  Class:                             ELF32\n  Data:                              2's complement, little endian\n  Version:                           1 (current)\n  OS/ABI:                            UNIX - System V\n  ABI Version:                       0\n  Type:                              DYN (Shared object file)\n  Machine:                           Intel 80386\n  Version:                           0x1\n  Entry point address:               0x0\n  Start of program headers:          52 (bytes into file)\n  Start of section headers:          346924 (bytes into file)\n  Flags:                             0x0\n  Size of this header:               52 (bytes)\n  Size of program headers:           32 (bytes)\n  Number of program headers:         10\n  Size of section headers:           40 (bytes)\n  Number of section headers:         27\n  Section header string table index: 25\n",
+      "elf_attributes": "",
+      "elf_notes": "Displaying notes found in: .note.android.ident\n  Owner                Data size \tDescription\n  Android              0x00000084\tNT_ANDROID_TYPE_IDENT\n   description data: 15 00 00 00 72 32 37 63 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 31 32 34 37 39 30 31 38 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00\n"
+    }
+  ]
+}

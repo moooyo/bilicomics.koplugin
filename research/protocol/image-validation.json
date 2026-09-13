@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-12",
+  "environment": "ssh test-env",
+  "runtime": "Official KOReader v2026.07.1 Linux x86-64 LuaJIT",
+  "suite": "research/protocol/image-spec.lua",
+  "passed_assertions": 47,
+  "official_wasm_vectors": 9,
+  "official_legacy_js_vectors": 10,
+  "supported_versions": [3, 5, 6, 7, 8],
+  "portable_library_sha256": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+  "official_image_wasm_sha256": "f96b11772a59ba8321755fe94e145b175f40354638405442fb2d40a8a8e2dfc8",
+  "local_verification_performed": false,
+  "live_download_verified": false,
+  "user_session_material_used": false,
+  "private_values_logged": false
+}

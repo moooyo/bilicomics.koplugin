@@ -1,0 +1,37 @@
+{
+    "assertions": [
+        {
+            "passed": true,
+            "name": "offline_resume_keeps_network_runner_suspended"
+        },
+        {
+            "passed": true,
+            "name": "diagnostics_executes_in_a_real_child_process"
+        },
+        {
+            "passed": true,
+            "name": "real_diagnostics_worker_returns_local_snapshot"
+        },
+        {
+            "passed": true,
+            "name": "diagnostics_never_claims_server_verification"
+        },
+        {
+            "passed": true,
+            "name": "real_local_versions_and_capabilities_are_reported"
+        },
+        {
+            "passed": true,
+            "name": "local_diagnostics_does_not_resume_or_execute_network_queue"
+        },
+        {
+            "passed": true,
+            "name": "local_worker_runner_is_closed_with_controller"
+        }
+    ],
+    "real_fork_worker": true,
+    "scope": "Local capabilities only; no Bilibili network or account request",
+    "passed": true,
+    "phase": "event-loop-returned",
+    "count": 7
+}

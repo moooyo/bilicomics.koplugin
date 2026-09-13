@@ -1,0 +1,2076 @@
+{
+  "passed": false,
+  "source_unchanged": true,
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "ae9e63930089c69a13cdda563f9eaccc12c5346c9608b946cdfcf9238be4a2b3",
+    "bilicomics/controller.lua": "b0666af44dd3832ebb4447cd350682f2ff79130e5741882105055b41b42b9b20",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "264f0fccb41ecda611d4c11d91275df148c9f292b128a5d873c119e9aca70d21",
+    "bilicomics/jobs/runner.lua": "f13c95c384fed95a6e672a1343bb915e90a0695f57a27ff17ac3fb89833cce27",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "30cd38440c7f39cecff279626144d228d14bbe8eb3c561a1d86b955c2a72bbb5",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "a2eb11e2cec8aa1dd4ab6d4072ddc975dbc51747c0793b4a41edbddc752e2bfb",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/quote.lua": "a370e7644505bbcdab9747f786e4d66c92c777f060f3051d0f1fae92cadfb3c7",
+    "bilicomics/purchase/service.lua": "56254d02b5b468dee2a6a76066695b916e060e527ef285dbe315ae0583f425ba",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "113db2aabcceb483b9a731253c9753da4b2890e3d0083c58b4e50e47a6ba7256",
+    "bilicomics/ui/screens.lua": "3b195e023c3b38cce4c5d0289423e14b36009785c1fec5613f86a4853408344c",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b",
+    "version_replacement_workflow.lua": "c98a37ca6317c7d9d203b057512dd054411cef8e20ca442f2f8d59efc4152fd5"
+  },
+  "runs": [
+    {
+      "case": "success",
+      "passed": false,
+      "returncode": 1,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 69,
+        "worker_starts": 5,
+        "error": "...ow-waqSS3Li/run1/source/version_replacement_workflow.lua:52: native reader renders the cached first page R1",
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "close_succeeded": true,
+        "case": "success",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "replacement completes exactly one callback"
+          },
+          {
+            "passed": true,
+            "name": "a fresh independent snapshot is published"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "publication releases its temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "both retained duplicate jobs are retired toward the new job"
+          },
+          {
+            "passed": true,
+            "name": "the new job links its selected predecessor and owns its own pin"
+          },
+          {
+            "passed": true,
+            "name": "catalog identity and local progress reset to the new snapshot"
+          },
+          {
+            "passed": true,
+            "name": "no old anchor or native page positions are copied to the new version"
+          },
+          {
+            "passed": true,
+            "name": "retired jobs cannot resume acquisition"
+          },
+          {
+            "passed": true,
+            "name": "publication resumes without an error"
+          },
+          {
+            "passed": true,
+            "name": "all new pages are acquired even where old cached bytes exist"
+          },
+          {
+            "passed": true,
+            "name": "only fresh source index and every new image are dispatched"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "Controller reconstruction preserves both exact descriptors"
+          },
+          {
+            "passed": true,
+            "name": "native exact-version open succeeds R1"
+          },
+          {
+            "passed": true,
+            "name": "ReaderUI uses the exact persisted descriptor R1"
+          },
+          {
+            "passed": true,
+            "name": "native reader renders the cached first page R1"
+          },
+          {
+            "passed": true,
+            "name": "retired missing page reports cache-only status"
+          },
+          {
+            "passed": true,
+            "name": "reading the retained version changes only its own anchor"
+          },
+          {
+            "passed": true,
+            "name": "native exact-version open succeeds R1"
+          },
+          {
+            "passed": true,
+            "name": "ReaderUI uses the exact persisted descriptor R1"
+          },
+          {
+            "passed": false,
+            "name": "native reader renders the cached first page R1"
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204938-1-e329bf1137",
+            "pid": 1448382,
+            "kind": "client"
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204938-3-eee14d919d",
+            "pid": 1448383,
+            "kind": "source_index"
+          },
+          {
+            "attempt": 1,
+            "task_id": "page-1789204938-4-025effecb4",
+            "pid": 1448384,
+            "kind": "download_page",
+            "index": 1
+          },
+          {
+            "attempt": 1,
+            "task_id": "page-1789204938-5-7b96911408",
+            "pid": 1448385,
+            "kind": "download_page",
+            "index": 2
+          },
+          {
+            "attempt": 1,
+            "task_id": "page-1789204938-6-90eda6bc23",
+            "pid": 1448386,
+            "kind": "download_page",
+            "index": 3
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          },
+          {
+            "kind": "source_index"
+          },
+          {
+            "source_path": "/synthetic/source-1",
+            "kind": "download_page",
+            "index": 1
+          },
+          {
+            "source_path": "/synthetic/source-2",
+            "kind": "download_page",
+            "index": 2
+          },
+          {
+            "source_path": "/synthetic/source-3",
+            "kind": "download_page",
+            "index": 3
+          }
+        ],
+        "passed": false,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only"
+      }
+    },
+    {
+      "case": "same_identity",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "passed": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "ui_ticks": 30,
+        "worker_starts": 5,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "replacement completes exactly one callback"
+          },
+          {
+            "passed": true,
+            "name": "a fresh independent snapshot is published"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "publication releases its temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "both retained duplicate jobs are retired toward the new job"
+          },
+          {
+            "passed": true,
+            "name": "the new job links its selected predecessor and owns its own pin"
+          },
+          {
+            "passed": true,
+            "name": "catalog identity and local progress reset to the new snapshot"
+          },
+          {
+            "passed": true,
+            "name": "no old anchor or native page positions are copied to the new version"
+          },
+          {
+            "passed": true,
+            "name": "retired jobs cannot resume acquisition"
+          },
+          {
+            "passed": true,
+            "name": "Client normalizes exactly the old opaque revision while local publication stays independent"
+          },
+          {
+            "passed": true,
+            "name": "publication resumes without an error"
+          },
+          {
+            "passed": true,
+            "name": "all new pages are acquired even where old cached bytes exist"
+          },
+          {
+            "passed": true,
+            "name": "only fresh source index and every new image are dispatched"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789204939-1-cfbcbebdd6",
+            "pid": 1448431,
+            "kind": "client",
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789204939-3-6b59610b41",
+            "pid": 1448432,
+            "kind": "source_index",
+            "attempt": 1
+          },
+          {
+            "task_id": "page-1789204939-4-fb32964ce2",
+            "index": 1,
+            "pid": 1448433,
+            "kind": "download_page",
+            "attempt": 1
+          },
+          {
+            "task_id": "page-1789204939-5-3f8c088c57",
+            "index": 2,
+            "pid": 1448434,
+            "kind": "download_page",
+            "attempt": 1
+          },
+          {
+            "task_id": "page-1789204939-6-d5567e92fc",
+            "index": 3,
+            "pid": 1448435,
+            "kind": "download_page",
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          },
+          {
+            "source_path": "/synthetic/source-1",
+            "kind": "download_page",
+            "index": 1
+          },
+          {
+            "source_path": "/synthetic/source-2",
+            "kind": "download_page",
+            "index": 2
+          },
+          {
+            "source_path": "/synthetic/source-3",
+            "kind": "download_page",
+            "index": 3
+          }
+        ],
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "case": "same_identity"
+      }
+    },
+    {
+      "case": "topology",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "assertions": [
+          {
+            "name": "the scenario runs in a distinct network namespace",
+            "passed": true
+          },
+          {
+            "name": "session validation uses a real read-only child",
+            "passed": true
+          },
+          {
+            "name": "fixture has unknown legacy missing history and retained native progress",
+            "passed": true
+          },
+          {
+            "name": "replacement completes exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "a fresh independent snapshot is published",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          },
+          {
+            "name": "publication releases its temporary eviction lease",
+            "passed": true
+          },
+          {
+            "name": "both retained duplicate jobs are retired toward the new job",
+            "passed": true
+          },
+          {
+            "name": "the new job links its selected predecessor and owns its own pin",
+            "passed": true
+          },
+          {
+            "name": "catalog identity and local progress reset to the new snapshot",
+            "passed": true
+          },
+          {
+            "name": "no old anchor or native page positions are copied to the new version",
+            "passed": true
+          },
+          {
+            "name": "retired jobs cannot resume acquisition",
+            "passed": true
+          },
+          {
+            "name": "the new independent descriptor accepts changed page count",
+            "passed": true
+          },
+          {
+            "name": "publication resumes without an error",
+            "passed": true
+          },
+          {
+            "name": "all new pages are acquired even where old cached bytes exist",
+            "passed": true
+          },
+          {
+            "name": "only fresh source index and every new image are dispatched",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1448480,
+            "attempt": 1,
+            "task_id": "worker-1789204940-1-de7f89cb07",
+            "kind": "client"
+          },
+          {
+            "pid": 1448481,
+            "attempt": 1,
+            "task_id": "worker-1789204940-3-257fe165a1",
+            "kind": "source_index"
+          },
+          {
+            "pid": 1448482,
+            "attempt": 1,
+            "task_id": "page-1789204940-4-89f957f26c",
+            "kind": "download_page",
+            "index": 1
+          },
+          {
+            "pid": 1448483,
+            "attempt": 1,
+            "task_id": "page-1789204940-5-326e083a01",
+            "kind": "download_page",
+            "index": 2
+          },
+          {
+            "pid": 1448484,
+            "attempt": 1,
+            "task_id": "page-1789204940-6-1ba213e321",
+            "kind": "download_page",
+            "index": 3
+          },
+          {
+            "pid": 1448485,
+            "attempt": 1,
+            "task_id": "page-1789204940-7-35763596e0",
+            "kind": "download_page",
+            "index": 4
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          },
+          {
+            "kind": "download_page",
+            "index": 1,
+            "source_path": "/synthetic/source-1"
+          },
+          {
+            "kind": "download_page",
+            "index": 2,
+            "source_path": "/synthetic/source-2"
+          },
+          {
+            "kind": "download_page",
+            "index": 3,
+            "source_path": "/synthetic/source-3"
+          },
+          {
+            "kind": "download_page",
+            "index": 4,
+            "source_path": "/synthetic/source-4"
+          }
+        ],
+        "passed": true,
+        "case": "topology",
+        "ui_ticks": 36,
+        "worker_starts": 6,
+        "normalized_revision": "660b9cf57e899f6ec054b877a4a8ee8a2e5a4bfe68f5f55d174c1eded52d79bf",
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "close_succeeded": true
+      }
+    },
+    {
+      "case": "cancel",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "index preparation has a durable visible marker and responsive UI"
+          },
+          {
+            "passed": true,
+            "name": "explicit cancellation terminates the active replacement"
+          },
+          {
+            "passed": true,
+            "name": "second cancellation has no effect"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "the cancellation callback respects lifetime and runs once"
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204941-1-a653d74b9d",
+            "kind": "client",
+            "pid": 1448530
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204941-3-77f345a309",
+            "kind": "source_index",
+            "pid": 1448531
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "case": "cancel"
+      }
+    },
+    {
+      "case": "suspend",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "starts": [
+          {
+            "pid": 1448578,
+            "attempt": 1,
+            "task_id": "worker-1789204941-1-185c612301",
+            "kind": "client"
+          },
+          {
+            "pid": 1448579,
+            "attempt": 1,
+            "task_id": "worker-1789204941-3-545253193a",
+            "kind": "source_index"
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "case": "suspend",
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 23,
+        "worker_starts": 2,
+        "all_children_reaped": true,
+        "close_succeeded": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "index preparation has a durable visible marker and responsive UI"
+          },
+          {
+            "passed": true,
+            "name": "resume does not replay canceled index preparation"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "the cancellation callback respects lifetime and runs once"
+          }
+        ]
+      }
+    },
+    {
+      "case": "account_close",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204942-1-d77160e703",
+            "kind": "client",
+            "pid": 1448624
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204942-3-83bb2960ea",
+            "kind": "source_index",
+            "pid": 1448625
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "case": "account_close",
+        "ui_ticks": 9,
+        "worker_starts": 2,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "index preparation has a durable visible marker and responsive UI"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "the cancellation callback respects lifetime and runs once"
+          }
+        ],
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only"
+      }
+    },
+    {
+      "case": "account_switch",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "case": "account_switch",
+        "ui_ticks": 16,
+        "worker_starts": 3,
+        "all_children_reaped": true,
+        "passed": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "close_succeeded": true,
+        "assertions": [
+          {
+            "name": "the scenario runs in a distinct network namespace",
+            "passed": true
+          },
+          {
+            "name": "session validation uses a real read-only child",
+            "passed": true
+          },
+          {
+            "name": "fixture has unknown legacy missing history and retained native progress",
+            "passed": true
+          },
+          {
+            "name": "index preparation has a durable visible marker and responsive UI",
+            "passed": true
+          },
+          {
+            "name": "public synthetic account switch succeeds without publishing into the new store",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          },
+          {
+            "name": "no new local descriptor or download job is published",
+            "passed": true
+          },
+          {
+            "name": "the catalog still selects the retained revision",
+            "passed": true
+          },
+          {
+            "name": "the old job remains paused without replacement marker",
+            "passed": true
+          },
+          {
+            "name": "no pending commit remains",
+            "passed": true
+          },
+          {
+            "name": "terminal preparation releases the operation and temporary eviction lease",
+            "passed": true
+          },
+          {
+            "name": "the cancellation callback respects lifetime and runs once",
+            "passed": true
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204942-1-5e2d43585a",
+            "kind": "client",
+            "pid": 1448670
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204942-3-568c3b140f",
+            "kind": "source_index",
+            "pid": 1448671
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204942-4-4001c1a3df",
+            "kind": "client",
+            "pid": 1448672
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          },
+          {
+            "method": "validateSession",
+            "kind": "client"
+          }
+        ],
+        "all_worker_pids_terminal": true
+      }
+    },
+    {
+      "case": "stale_index",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "starts": [
+          {
+            "pid": 1448717,
+            "attempt": 1,
+            "task_id": "worker-1789204943-1-ab68d050bd",
+            "kind": "client"
+          },
+          {
+            "pid": 1448720,
+            "attempt": 1,
+            "task_id": "worker-1789204943-3-ce87dbd15b",
+            "kind": "source_index"
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "case": "stale_index",
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "index preparation has a durable visible marker and responsive UI"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "the cancellation callback respects lifetime and runs once"
+          }
+        ]
+      }
+    },
+    {
+      "case": "stale_basis",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "assertions": [
+          {
+            "name": "the scenario runs in a distinct network namespace",
+            "passed": true
+          },
+          {
+            "name": "session validation uses a real read-only child",
+            "passed": true
+          },
+          {
+            "name": "fixture has unknown legacy missing history and retained native progress",
+            "passed": true
+          },
+          {
+            "name": "index preparation has a durable visible marker and responsive UI",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          },
+          {
+            "name": "no new local descriptor or download job is published",
+            "passed": true
+          },
+          {
+            "name": "the catalog still selects the retained revision",
+            "passed": true
+          },
+          {
+            "name": "the old job remains paused without replacement marker",
+            "passed": true
+          },
+          {
+            "name": "no pending commit remains",
+            "passed": true
+          },
+          {
+            "name": "terminal preparation releases the operation and temporary eviction lease",
+            "passed": true
+          },
+          {
+            "name": "the cancellation callback respects lifetime and runs once",
+            "passed": true
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1448775,
+            "attempt": 1,
+            "task_id": "worker-1789204943-1-ae90262e66",
+            "kind": "client"
+          },
+          {
+            "pid": 1448782,
+            "attempt": 1,
+            "task_id": "worker-1789204943-3-f656634a5c",
+            "kind": "source_index"
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "case": "stale_basis",
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "close_succeeded": true
+      }
+    },
+    {
+      "case": "mutual_exclusion",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 11,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "index preparation has a durable visible marker and responsive UI"
+          },
+          {
+            "passed": true,
+            "name": "source refresh cannot run during replacement"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "the cancellation callback respects lifetime and runs once"
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204944-1-ffba4a48bb",
+            "pid": 1448841,
+            "kind": "client"
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204944-3-262b9e838f",
+            "pid": 1448854,
+            "kind": "source_index"
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "worker_starts": 2,
+        "case": "mutual_exclusion"
+      }
+    },
+    {
+      "case": "interrupted",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "starts": [
+          {
+            "attempt": 1,
+            "kind": "client",
+            "task_id": "worker-1789204944-1-83754d6c47",
+            "pid": 1448911
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          }
+        ],
+        "passed": true,
+        "case": "interrupted",
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 6,
+        "worker_starts": 1,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "recovery explicitly clears an interrupted marker without replay"
+          }
+        ]
+      }
+    },
+    {
+      "case": "fresh_access",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "replacement completes exactly one callback"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "fresh access, index or database failure is reported precisely"
+          },
+          {
+            "passed": true,
+            "name": "failed preparation submits no image worker"
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789204945-1-aa350664e8",
+            "pid": 1448972,
+            "kind": "client",
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789204945-3-20603a3c94",
+            "pid": 1448973,
+            "kind": "source_index",
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "case": "fresh_access",
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only"
+      }
+    },
+    {
+      "case": "fresh_index",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "starts": [
+          {
+            "kind": "client",
+            "pid": 1449018,
+            "attempt": 1,
+            "task_id": "worker-1789204945-1-338d332ade"
+          },
+          {
+            "kind": "source_index",
+            "pid": 1449019,
+            "attempt": 1,
+            "task_id": "worker-1789204945-3-6adb7a01d6"
+          }
+        ],
+        "case": "fresh_index",
+        "passed": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "assertions": [
+          {
+            "name": "the scenario runs in a distinct network namespace",
+            "passed": true
+          },
+          {
+            "name": "session validation uses a real read-only child",
+            "passed": true
+          },
+          {
+            "name": "fixture has unknown legacy missing history and retained native progress",
+            "passed": true
+          },
+          {
+            "name": "replacement completes exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          },
+          {
+            "name": "no new local descriptor or download job is published",
+            "passed": true
+          },
+          {
+            "name": "the catalog still selects the retained revision",
+            "passed": true
+          },
+          {
+            "name": "the old job remains paused without replacement marker",
+            "passed": true
+          },
+          {
+            "name": "no pending commit remains",
+            "passed": true
+          },
+          {
+            "name": "terminal preparation releases the operation and temporary eviction lease",
+            "passed": true
+          },
+          {
+            "name": "fresh access, index or database failure is reported precisely",
+            "passed": true
+          },
+          {
+            "name": "failed preparation submits no image worker",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "database_failure",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 11,
+        "case": "database_failure",
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "replacement completes exactly one callback"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "fresh access, index or database failure is reported precisely"
+          },
+          {
+            "passed": true,
+            "name": "the failure came from the real SQLite new-job write"
+          },
+          {
+            "passed": true,
+            "name": "failed preparation submits no image worker"
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1449082,
+            "task_id": "worker-1789204946-1-9b95b44f23",
+            "kind": "client",
+            "attempt": 1
+          },
+          {
+            "pid": 1449083,
+            "task_id": "worker-1789204946-3-950f13e516",
+            "kind": "source_index",
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "worker_starts": 2
+      }
+    },
+    {
+      "case": "resume_throw",
+      "passed": false,
+      "returncode": 1,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "replacement completes exactly one callback"
+          },
+          {
+            "passed": true,
+            "name": "a fresh independent snapshot is published"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "publication releases its temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "both retained duplicate jobs are retired toward the new job"
+          },
+          {
+            "passed": true,
+            "name": "the new job links its selected predecessor and owns its own pin"
+          },
+          {
+            "passed": true,
+            "name": "catalog identity and local progress reset to the new snapshot"
+          },
+          {
+            "passed": true,
+            "name": "no old anchor or native page positions are copied to the new version"
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1449133,
+            "attempt": 1,
+            "task_id": "worker-1789204946-1-ef7766e9f8",
+            "kind": "client"
+          },
+          {
+            "pid": 1449134,
+            "attempt": 1,
+            "task_id": "worker-1789204946-3-fa006a6cc4",
+            "kind": "source_index"
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": false,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "error": "...ow-waqSS3Li/run1/source/version_replacement_workflow.lua:399: Synthetic post-publication resume failure",
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "case": "resume_throw",
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "close_succeeded": true
+      }
+    },
+    {
+      "case": "binding",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "ui_ticks": 19,
+        "worker_starts": 3,
+        "assertions": [
+          {
+            "name": "the scenario runs in a distinct network namespace",
+            "passed": true
+          },
+          {
+            "name": "session validation uses a real read-only child",
+            "passed": true
+          },
+          {
+            "name": "fixture has unknown legacy missing history and retained native progress",
+            "passed": true
+          },
+          {
+            "name": "an ordinary bound job resumes",
+            "passed": true
+          },
+          {
+            "name": "bound resume uses its own descriptor without catalog preparation",
+            "passed": true
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789204947-1-18681e5544",
+            "kind": "client",
+            "pid": 1449188,
+            "attempt": 1
+          },
+          {
+            "task_id": "page-1789204947-2-7f44584533",
+            "kind": "download_page",
+            "index": 2,
+            "pid": 1449189,
+            "attempt": 1
+          },
+          {
+            "task_id": "page-1789204947-3-7f11dab8d0",
+            "kind": "download_page",
+            "index": 3,
+            "pid": 1449190,
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "download_page",
+            "index": 2,
+            "source_path": "/synthetic/old-2"
+          },
+          {
+            "kind": "download_page",
+            "index": 3,
+            "source_path": "/synthetic/old-3"
+          }
+        ],
+        "passed": true,
+        "case": "binding",
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true
+      }
+    },
+    {
+      "case": "unbound",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "ui_ticks": 30,
+        "worker_starts": 5,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "first unbound enqueue succeeds"
+          },
+          {
+            "passed": true,
+            "name": "the first unbound job uses real preparation and binds its fetched index"
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204948-1-6db89fcb25",
+            "kind": "client",
+            "pid": 1449243
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204948-3-610c14d6fd",
+            "kind": "client",
+            "pid": 1449248
+          },
+          {
+            "attempt": 1,
+            "task_id": "page-1789204948-4-8acb0424ce",
+            "kind": "download_page",
+            "index": 1,
+            "pid": 1449249
+          },
+          {
+            "attempt": 1,
+            "task_id": "page-1789204948-5-739d8ec998",
+            "kind": "download_page",
+            "index": 2,
+            "pid": 1449254
+          },
+          {
+            "attempt": 1,
+            "task_id": "page-1789204948-6-83b6f02dbc",
+            "kind": "download_page",
+            "index": 3,
+            "pid": 1449255
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          },
+          {
+            "kind": "client",
+            "method": "imageIndex"
+          },
+          {
+            "kind": "download_page",
+            "index": 1,
+            "source_path": "/synthetic/source-1"
+          },
+          {
+            "kind": "download_page",
+            "index": 2,
+            "source_path": "/synthetic/source-2"
+          },
+          {
+            "kind": "download_page",
+            "index": 3,
+            "source_path": "/synthetic/source-3"
+          }
+        ],
+        "passed": true,
+        "case": "unbound"
+      }
+    },
+    {
+      "case": "unpinned_cancel",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the scenario runs in a distinct network namespace"
+          },
+          {
+            "passed": true,
+            "name": "session validation uses a real read-only child"
+          },
+          {
+            "passed": true,
+            "name": "fixture has unknown legacy missing history and retained native progress"
+          },
+          {
+            "passed": true,
+            "name": "index preparation has a durable visible marker and responsive UI"
+          },
+          {
+            "passed": true,
+            "name": "un-pinned retained images have a temporary lease while the fresh index waits"
+          },
+          {
+            "passed": true,
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive"
+          },
+          {
+            "passed": true,
+            "name": "no new local descriptor or download job is published"
+          },
+          {
+            "passed": true,
+            "name": "the catalog still selects the retained revision"
+          },
+          {
+            "passed": true,
+            "name": "the old job remains paused without replacement marker"
+          },
+          {
+            "passed": true,
+            "name": "no pending commit remains"
+          },
+          {
+            "passed": true,
+            "name": "terminal preparation releases the operation and temporary eviction lease"
+          },
+          {
+            "passed": true,
+            "name": "the cancellation callback respects lifetime and runs once"
+          },
+          {
+            "passed": true,
+            "name": "cancellation restores automatic eviction without adding a pin"
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204948-1-43f0e173a8",
+            "pid": 1449340,
+            "kind": "client"
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789204949-3-961e4483b7",
+            "pid": 1449357,
+            "kind": "source_index"
+          }
+        ],
+        "submitted": [
+          {
+            "method": "validateSession",
+            "kind": "client"
+          },
+          {
+            "kind": "source_index"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "ui_ticks": 11,
+        "worker_starts": 2,
+        "close_succeeded": true,
+        "case": "unpinned_cancel"
+      }
+    },
+    {
+      "case": "unpinned_success",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "tracked_processes_terminal": true,
+      "result": {
+        "case": "unpinned_success",
+        "ui_ticks": 28,
+        "worker_starts": 5,
+        "normalized_revision": "242d7185494e49d65ccf452ae09f1e3443fadf69f2e0350bfb1c5a1f92cadd02",
+        "all_children_reaped": true,
+        "all_worker_pids_terminal": true,
+        "scope": "Production Controller, coordinator, SQLite, PageStore, replacement publication, default Worker, Client, fork/IPC and native ReaderUI; synthetic free transport only",
+        "starts": [
+          {
+            "kind": "client",
+            "attempt": 1,
+            "pid": 1449414,
+            "task_id": "worker-1789204949-1-038d6d6426"
+          },
+          {
+            "kind": "source_index",
+            "attempt": 1,
+            "pid": 1449415,
+            "task_id": "worker-1789204949-3-6d900176ca"
+          },
+          {
+            "kind": "download_page",
+            "attempt": 1,
+            "pid": 1449428,
+            "index": 1,
+            "task_id": "page-1789204949-4-3d46d757e4"
+          },
+          {
+            "kind": "download_page",
+            "attempt": 1,
+            "pid": 1449437,
+            "index": 2,
+            "task_id": "page-1789204949-5-1d8708554c"
+          },
+          {
+            "kind": "download_page",
+            "attempt": 1,
+            "pid": 1449450,
+            "index": 3,
+            "task_id": "page-1789204949-6-5d12615551"
+          }
+        ],
+        "assertions": [
+          {
+            "name": "the scenario runs in a distinct network namespace",
+            "passed": true
+          },
+          {
+            "name": "session validation uses a real read-only child",
+            "passed": true
+          },
+          {
+            "name": "fixture has unknown legacy missing history and retained native progress",
+            "passed": true
+          },
+          {
+            "name": "index preparation has a durable visible marker and responsive UI",
+            "passed": true
+          },
+          {
+            "name": "un-pinned retained images have a temporary lease while the fresh index waits",
+            "passed": true
+          },
+          {
+            "name": "replacement completes exactly one callback",
+            "passed": true
+          },
+          {
+            "name": "a fresh independent snapshot is published",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          },
+          {
+            "name": "publication releases its temporary eviction lease",
+            "passed": true
+          },
+          {
+            "name": "both retained duplicate jobs are retired toward the new job",
+            "passed": true
+          },
+          {
+            "name": "the new job links its selected predecessor and owns its own pin",
+            "passed": true
+          },
+          {
+            "name": "catalog identity and local progress reset to the new snapshot",
+            "passed": true
+          },
+          {
+            "name": "no old anchor or native page positions are copied to the new version",
+            "passed": true
+          },
+          {
+            "name": "retired jobs cannot resume acquisition",
+            "passed": true
+          },
+          {
+            "name": "publication resumes without an error",
+            "passed": true
+          },
+          {
+            "name": "successful publication pins old and new snapshots against automatic eviction",
+            "passed": true
+          },
+          {
+            "name": "all new pages are acquired even where old cached bytes exist",
+            "passed": true
+          },
+          {
+            "name": "only fresh source index and every new image are dispatched",
+            "passed": true
+          },
+          {
+            "name": "old page records, ready bytes and identity, descriptor, native positions, anchor and pin survive",
+            "passed": true
+          }
+        ],
+        "close_succeeded": true,
+        "submitted": [
+          {
+            "kind": "client",
+            "method": "validateSession"
+          },
+          {
+            "kind": "source_index"
+          },
+          {
+            "kind": "download_page",
+            "index": 1,
+            "source_path": "/synthetic/source-1"
+          },
+          {
+            "kind": "download_page",
+            "index": 2,
+            "source_path": "/synthetic/source-2"
+          },
+          {
+            "kind": "download_page",
+            "index": 3,
+            "source_path": "/synthetic/source-3"
+          }
+        ],
+        "passed": true
+      }
+    }
+  ],
+  "requested_cases": [
+    "success",
+    "same_identity",
+    "topology",
+    "cancel",
+    "suspend",
+    "account_close",
+    "account_switch",
+    "stale_index",
+    "stale_basis",
+    "mutual_exclusion",
+    "interrupted",
+    "fresh_access",
+    "fresh_index",
+    "database_failure",
+    "resume_throw",
+    "binding",
+    "unbound",
+    "unpinned_cancel",
+    "unpinned_success"
+  ],
+  "complete_matrix": true,
+  "runtime_version": "v2026.07.1",
+  "runtime_sha256": {
+    "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "libs/libsqlite3.so.0": "9341f59991c140a56a27c81bc8373db66b9db7820738b48ef7d4a78ff2b66a7f"
+  },
+  "launcher_sha256": "d5c939cf81e2da54753b7c38e367f92b86dd1328f3511f55066a7d5960c0d3f0",
+  "asset_sha256": {
+    "efae82c96a7eef44bee5.wasm": "39bc0676953752c461197df592e1f5894f1a7492a29400c946e560fc109a8e2e"
+  },
+  "source_package_sha256": "0f250c17b94ef955b2b1479896ece2917016f7d39eb3de4edd90b5251e34c591",
+  "network_namespace_isolated": true,
+  "purchase_scenarios_executed": false,
+  "scope": "Real Controller, coordinator, SQLite, PageStore, version replacement, Worker/Client and native ReaderUI, fork/IPC and UIManager; synthetic transport responses"
+}

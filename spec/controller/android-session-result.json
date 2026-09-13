@@ -1,0 +1,178 @@
+{
+  "process_pid": 7339,
+  "ffi_arch": "x86",
+  "result": {
+    "count": 28,
+    "native_android": true,
+    "scope": "Synthetic sessions only; real Controller, SQLite, PageStore and credential filesystem operations",
+    "private_uid": 10167,
+    "assertions": [
+      {
+        "name": "android_session_path_is_under_context_files_dir",
+        "passed": true
+      },
+      {
+        "name": "first_read_does_not_adopt_legacy_shared_session",
+        "passed": true
+      },
+      {
+        "name": "first_read_does_not_create_or_remove_credential_files",
+        "passed": true
+      },
+      {
+        "name": "cached_account_database_stays_in_data_storage",
+        "passed": true
+      },
+      {
+        "name": "cached_owned_content_remains_readable_without_import",
+        "passed": true
+      },
+      {
+        "name": "readonly_startup_does_not_send_network_requests",
+        "passed": true
+      },
+      {
+        "name": "import_waits_for_explicit_worker_validation_verified",
+        "passed": true
+      },
+      {
+        "name": "validated_import_enables_private_session",
+        "passed": true
+      },
+      {
+        "name": "legacy_cleanup_occurs_only_for_selected_account",
+        "passed": true
+      },
+      {
+        "name": "saved_private_file_is_owned_regular_0600_single_link",
+        "passed": true
+      },
+      {
+        "name": "private_directory_0700_uid_1",
+        "passed": true
+      },
+      {
+        "name": "private_directory_0700_uid_2",
+        "passed": true
+      },
+      {
+        "name": "private_directory_0700_uid_3",
+        "passed": true
+      },
+      {
+        "name": "private_session_can_be_loaded_after_verification",
+        "passed": true
+      },
+      {
+        "name": "private_filesystem_enforces_permission_changes",
+        "passed": true
+      },
+      {
+        "name": "unsafe_private_mode_is_rejected_without_legacy_fallback",
+        "passed": true
+      },
+      {
+        "name": "session_file_symlink_is_not_loaded",
+        "passed": true
+      },
+      {
+        "name": "session_file_symlink_is_not_followed_on_save",
+        "passed": true
+      },
+      {
+        "name": "account_directory_symlink_is_rejected",
+        "passed": true
+      },
+      {
+        "name": "unverified_and_path_like_account_keys_are_rejected",
+        "passed": true
+      },
+      {
+        "name": "shared_fuse_directory_is_not_accepted_as_private_app_storage",
+        "passed": true
+      },
+      {
+        "name": "production_android_detection_uses_context_files_dir",
+        "passed": true
+      },
+      {
+        "name": "import_waits_for_explicit_worker_validation_save-failure",
+        "passed": true
+      },
+      {
+        "name": "failed_private_save_preserves_legacy_and_selected_account",
+        "passed": true
+      },
+      {
+        "name": "import_waits_for_explicit_worker_validation_account-rollback",
+        "passed": true
+      },
+      {
+        "name": "account_open_rollback_retains_legacy_after_private_save",
+        "passed": true
+      },
+      {
+        "name": "controller_reopen_loads_verified_private_session_without_network",
+        "passed": true
+      },
+      {
+        "name": "controller_reopen_keeps_database_and_cached_images_outside_credentials_root",
+        "passed": true
+      }
+    ],
+    "private_permissions": "rw-------",
+    "private_session_path": "/data/user/0/org.koreader.launcher/files/bilicomics/accounts/bili_98765017891842277339/session.dat",
+    "process_uid": 10167
+  },
+  "synthetic_data_root": "/storage/emulated/0/koreader/bili-session-storage-probe-1789184227-7339",
+  "phase": "complete",
+  "passed": true,
+  "synthetic_only": true,
+  "android_private_root": "/data/user/0/org.koreader.launcher/files",
+  "data_storage": "/storage/emulated/0/koreader",
+  "process_uid": 10167,
+  "process_restart": {
+    "phase": "complete",
+    "synthetic_only": true,
+    "passed": true,
+    "data_storage": "/storage/emulated/0/koreader",
+    "process_uid": 10167,
+    "process_pid": 7388,
+    "ffi_arch": "x86",
+    "result": {
+      "count": 5,
+      "process_restart": true,
+      "assertions": [
+        {
+          "name": "fresh_app_process_loads_private_session",
+          "passed": true
+        },
+        {
+          "name": "fresh_app_process_does_not_adopt_shared_legacy_cookie",
+          "passed": true
+        },
+        {
+          "name": "fresh_app_process_uses_android_private_path",
+          "passed": true
+        },
+        {
+          "name": "fresh_app_process_keeps_cached_content_in_data_storage",
+          "passed": true
+        },
+        {
+          "name": "fresh_app_process_sends_no_session_validation",
+          "passed": true
+        }
+      ]
+    },
+    "android_private_root": "/data/user/0/org.koreader.launcher/files"
+  },
+  "production_sha256": {
+    "bilicomics/controller.lua": "3897b8b9cbaff1ef16bdc4e3085fa3ce0e6ba1a8f06ee29e5eaded77184a0d96",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395"
+  },
+  "test_sha256": {
+    "spec/controller/session_storage_cases.lua": "fa70c8a46bfe8cb3b59711e1400bfe3a6f558404f65e4632a95d34a5f930115c",
+    "spec/controller/android_session_plugin.lua": "372034cc0ff5e084ba0d5240a9567c5e0cd8f37e734ce4160e269a3285b867fd"
+  }
+}

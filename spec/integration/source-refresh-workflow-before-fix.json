@@ -1,0 +1,1121 @@
+{
+  "passed": false,
+  "source_unchanged": true,
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "14e53c341b3f86c809799154226e552534a5c77dfd00e2702455b7bf86ee59c6",
+    "bilicomics/controller.lua": "750e9ce7f08695ebb87d39ab048951c6146e74ba58081a4ca0ef52bd32c5bb05",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "c77af6aa73dc570ea885a78df2e1a50151743d1603b3f64dcd3e4068bd93c476",
+    "bilicomics/jobs/runner.lua": "a3fd3dd288885205801a4dbcf44c2be9c309835ead78951bc478e57dd8609cb6",
+    "bilicomics/jobs/source_refresh.lua": "3c8f79b974810b93318b9cd9973c992f1322babea1fc23f91723e22dd17907ae",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/worker.lua": "30cd38440c7f39cecff279626144d228d14bbe8eb3c561a1d86b955c2a72bbb5",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "a2eb11e2cec8aa1dd4ab6d4072ddc975dbc51747c0793b4a41edbddc752e2bfb",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/quote.lua": "a370e7644505bbcdab9747f786e4d66c92c777f060f3051d0f1fae92cadfb3c7",
+    "bilicomics/purchase/service.lua": "56254d02b5b468dee2a6a76066695b916e060e527ef285dbe315ae0583f425ba",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "434a9fa589dd4d4c3940cb7d08cbded0cd0cb0f25efe9cc828721181b04f0ac4",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "38ffd2068cb639d2da8be5d6afc9d60010447afc609abfe39b376159882b3b98",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "36d9a82cb5c8dbf4685d8e49f7ecc2aac7cf94ba859d921f2c34b2a7d0f8985d",
+    "bilicomics/ui/screens.lua": "2c71deec254115f24a0b9f3456d497f752ca18dd20e2135693485549df689f89",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b",
+    "source_refresh_workflow.lua": "d153c6741d87c64c50cdb3c133d73c2265a986b078802da975342b2f2dfe9159"
+  },
+  "runs": [
+    {
+      "case": "success",
+      "returncode": 0,
+      "result": {
+        "all_children_reaped": true,
+        "case": "success",
+        "worker_starts": 6,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "the refresh callback runs exactly once"
+          },
+          {
+            "passed": true,
+            "name": "refresh publishes after exactly the two historical proofs"
+          },
+          {
+            "passed": true,
+            "name": "all three pages are complete and pinned"
+          },
+          {
+            "passed": true,
+            "name": "the descriptor bytes, path and sole version are preserved"
+          },
+          {
+            "passed": true,
+            "name": "anchor and the ready reference file are preserved"
+          },
+          {
+            "passed": true,
+            "name": "current_revision remains the immutable R1"
+          },
+          {
+            "passed": true,
+            "name": "only A and historical B are verified"
+          },
+          {
+            "passed": true,
+            "name": "only missing B and C download using fresh paths"
+          },
+          {
+            "passed": true,
+            "name": "source epoch advances once while immutable page ID stays stable 1"
+          },
+          {
+            "passed": true,
+            "name": "source epoch advances once while immutable page ID stays stable 2"
+          },
+          {
+            "passed": true,
+            "name": "source epoch advances once while immutable page ID stays stable 3"
+          },
+          {
+            "passed": true,
+            "name": "all proof candidates and marker are removed"
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1412580,
+            "kind": "client",
+            "attempt": 1,
+            "task_id": "worker-1789202702-1-20349feec7"
+          },
+          {
+            "pid": 1412581,
+            "kind": "source_index",
+            "attempt": 1,
+            "task_id": "worker-1789202702-3-8f89b998c0"
+          },
+          {
+            "index": 1,
+            "pid": 1412583,
+            "kind": "verify_source_page",
+            "attempt": 1,
+            "task_id": "worker-1789202702-5-81b6bc2612"
+          },
+          {
+            "index": 2,
+            "pid": 1412584,
+            "kind": "verify_source_page",
+            "attempt": 1,
+            "task_id": "worker-1789202703-7-bc78fd2b19"
+          },
+          {
+            "index": 2,
+            "pid": 1412586,
+            "kind": "download_page",
+            "attempt": 1,
+            "task_id": "page-1789202703-8-d790889140"
+          },
+          {
+            "index": 3,
+            "pid": 1412587,
+            "kind": "download_page",
+            "attempt": 1,
+            "task_id": "page-1789202703-9-ceda38febb"
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "reference": false
+          },
+          {
+            "kind": "source_index",
+            "reference": false
+          },
+          {
+            "kind": "verify_source_page",
+            "source_path": "/synthetic/new-1",
+            "index": 1,
+            "reference": true
+          },
+          {
+            "kind": "verify_source_page",
+            "source_path": "/synthetic/new-2",
+            "index": 2,
+            "reference": false
+          },
+          {
+            "kind": "download_page",
+            "source_path": "/synthetic/new-2",
+            "index": 2,
+            "reference": false
+          },
+          {
+            "kind": "download_page",
+            "source_path": "/synthetic/new-3",
+            "index": 3,
+            "reference": false
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "ui_ticks": 36,
+        "close_succeeded": true
+      }
+    },
+    {
+      "case": "changed_bytes",
+      "returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "the refresh callback runs exactly once"
+          },
+          {
+            "passed": true,
+            "name": "the rejected refresh reports its precise error"
+          },
+          {
+            "passed": true,
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged"
+          },
+          {
+            "passed": true,
+            "name": "the authoritative revision remains R1"
+          },
+          {
+            "passed": true,
+            "name": "no candidate remains"
+          },
+          {
+            "passed": true,
+            "name": "no commit journal remains"
+          },
+          {
+            "passed": true,
+            "name": "no source refresh payload remains"
+          },
+          {
+            "passed": true,
+            "name": "the partial download remains paused"
+          },
+          {
+            "passed": true,
+            "name": "only the necessary proof workers ran"
+          }
+        ],
+        "starts": [
+          {
+            "attempt": 1,
+            "task_id": "worker-1789202703-1-b3cea64d20",
+            "kind": "client",
+            "pid": 1412634
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789202703-3-9f83e8a6c2",
+            "kind": "source_index",
+            "pid": 1412636
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789202703-5-65704a4040",
+            "index": 1,
+            "kind": "verify_source_page",
+            "pid": 1412637
+          },
+          {
+            "attempt": 1,
+            "task_id": "worker-1789202703-7-1010a1c01d",
+            "index": 2,
+            "kind": "verify_source_page",
+            "pid": 1412642
+          }
+        ],
+        "submitted": [
+          {
+            "reference": false,
+            "kind": "client"
+          },
+          {
+            "reference": false,
+            "kind": "source_index"
+          },
+          {
+            "source_path": "/synthetic/new-1",
+            "index": 1,
+            "reference": true,
+            "kind": "verify_source_page"
+          },
+          {
+            "source_path": "/synthetic/new-2",
+            "index": 2,
+            "reference": false,
+            "kind": "verify_source_page"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "ui_ticks": 23,
+        "case": "changed_bytes",
+        "worker_starts": 4
+      }
+    },
+    {
+      "case": "topology",
+      "returncode": 0,
+      "result": {
+        "worker_starts": 2,
+        "assertions": [
+          {
+            "name": "the real session import completes through a nav worker",
+            "passed": true
+          },
+          {
+            "name": "A is ready while B is evicted with a retained digest",
+            "passed": true
+          },
+          {
+            "name": "C has positive never-downloaded history",
+            "passed": true
+          },
+          {
+            "name": "the refresh callback runs exactly once",
+            "passed": true
+          },
+          {
+            "name": "the rejected refresh reports its precise error",
+            "passed": true
+          },
+          {
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged",
+            "passed": true
+          },
+          {
+            "name": "the authoritative revision remains R1",
+            "passed": true
+          },
+          {
+            "name": "no candidate remains",
+            "passed": true
+          },
+          {
+            "name": "no commit journal remains",
+            "passed": true
+          },
+          {
+            "name": "no source refresh payload remains",
+            "passed": true
+          },
+          {
+            "name": "the partial download remains paused",
+            "passed": true
+          },
+          {
+            "name": "only the necessary proof workers ran",
+            "passed": true
+          }
+        ],
+        "close_succeeded": true,
+        "case": "topology",
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "starts": [
+          {
+            "kind": "client",
+            "attempt": 1,
+            "task_id": "worker-1789202704-1-10655cdc87",
+            "pid": 1412688
+          },
+          {
+            "kind": "source_index",
+            "attempt": 1,
+            "task_id": "worker-1789202704-3-06b913ee21",
+            "pid": 1412690
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "reference": false
+          },
+          {
+            "kind": "source_index",
+            "reference": false
+          }
+        ],
+        "passed": true,
+        "all_children_reaped": true,
+        "ui_ticks": 11
+      }
+    },
+    {
+      "case": "legacy_unknown",
+      "returncode": 0,
+      "result": {
+        "all_children_reaped": true,
+        "ui_ticks": 7,
+        "worker_starts": 1,
+        "assertions": [
+          {
+            "name": "the real session import completes through a nav worker",
+            "passed": true
+          },
+          {
+            "name": "A is ready while B is evicted with a retained digest",
+            "passed": true
+          },
+          {
+            "name": "C has positive never-downloaded history",
+            "passed": true
+          },
+          {
+            "name": "the refresh callback runs exactly once",
+            "passed": true
+          },
+          {
+            "name": "the rejected refresh reports its precise error",
+            "passed": true
+          },
+          {
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged",
+            "passed": true
+          },
+          {
+            "name": "the authoritative revision remains R1",
+            "passed": true
+          },
+          {
+            "name": "no candidate remains",
+            "passed": true
+          },
+          {
+            "name": "no commit journal remains",
+            "passed": true
+          },
+          {
+            "name": "no source refresh payload remains",
+            "passed": true
+          },
+          {
+            "name": "the partial download remains paused",
+            "passed": true
+          },
+          {
+            "name": "only the necessary proof workers ran",
+            "passed": true
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1412738,
+            "kind": "client",
+            "attempt": 1,
+            "task_id": "worker-1789202704-1-8063e05c1c"
+          }
+        ],
+        "submitted": [
+          {
+            "reference": false,
+            "kind": "client"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "case": "legacy_unknown",
+        "close_succeeded": true
+      }
+    },
+    {
+      "case": "native_positions",
+      "returncode": 0,
+      "result": {
+        "case": "native_positions",
+        "ui_ticks": 7,
+        "assertions": [
+          {
+            "name": "the real session import completes through a nav worker",
+            "passed": true
+          },
+          {
+            "name": "A is ready while B is evicted with a retained digest",
+            "passed": true
+          },
+          {
+            "name": "C has positive never-downloaded history",
+            "passed": true
+          },
+          {
+            "name": "the refresh callback runs exactly once",
+            "passed": true
+          },
+          {
+            "name": "the rejected refresh reports its precise error",
+            "passed": true
+          },
+          {
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged",
+            "passed": true
+          },
+          {
+            "name": "the authoritative revision remains R1",
+            "passed": true
+          },
+          {
+            "name": "no candidate remains",
+            "passed": true
+          },
+          {
+            "name": "no commit journal remains",
+            "passed": true
+          },
+          {
+            "name": "no source refresh payload remains",
+            "passed": true
+          },
+          {
+            "name": "the partial download remains paused",
+            "passed": true
+          },
+          {
+            "name": "only the necessary proof workers ran",
+            "passed": true
+          }
+        ],
+        "starts": [
+          {
+            "pid": 1412787,
+            "kind": "client",
+            "attempt": 1,
+            "task_id": "worker-1789202705-1-b90a1ed311"
+          }
+        ],
+        "submitted": [
+          {
+            "reference": false,
+            "kind": "client"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "worker_starts": 1,
+        "close_succeeded": true,
+        "all_children_reaped": true
+      }
+    },
+    {
+      "case": "cancel",
+      "returncode": 0,
+      "result": {
+        "ui_ticks": 17,
+        "worker_starts": 3,
+        "case": "cancel",
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "close_succeeded": true,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "proof leaves a real candidate while the UI keeps ticking"
+          },
+          {
+            "passed": true,
+            "name": "explicit cancellation finds the active operation"
+          },
+          {
+            "passed": true,
+            "name": "repeated cancellation is inert"
+          },
+          {
+            "passed": true,
+            "name": "cancellation does not leave tasks queued for replay"
+          },
+          {
+            "passed": true,
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged"
+          },
+          {
+            "passed": true,
+            "name": "the authoritative revision remains R1"
+          },
+          {
+            "passed": true,
+            "name": "no candidate remains"
+          },
+          {
+            "passed": true,
+            "name": "no commit journal remains"
+          },
+          {
+            "passed": true,
+            "name": "no source refresh payload remains"
+          },
+          {
+            "passed": true,
+            "name": "the partial download remains paused"
+          },
+          {
+            "passed": true,
+            "name": "cancellation never publishes source mappings"
+          },
+          {
+            "passed": true,
+            "name": "the public completion respects account lifetime"
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789202705-1-a571ae125e",
+            "pid": 1412834,
+            "kind": "client",
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789202705-3-9daf42bf7f",
+            "pid": 1412836,
+            "kind": "source_index",
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789202705-5-8e9234a64c",
+            "index": 1,
+            "pid": 1412837,
+            "kind": "verify_source_page",
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "reference": false,
+            "kind": "client"
+          },
+          {
+            "reference": false,
+            "kind": "source_index"
+          },
+          {
+            "reference": true,
+            "kind": "verify_source_page",
+            "index": 1,
+            "source_path": "/synthetic/new-1"
+          }
+        ],
+        "passed": true,
+        "all_children_reaped": true
+      }
+    },
+    {
+      "case": "suspend",
+      "returncode": 1,
+      "result": {
+        "ui_ticks": 17,
+        "worker_starts": 3,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "proof leaves a real candidate while the UI keeps ticking"
+          },
+          {
+            "passed": false,
+            "name": "cancellation does not leave tasks queued for replay"
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789202706-1-c8451854fa",
+            "kind": "client",
+            "pid": 1412884,
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789202706-3-593df1a24c",
+            "kind": "source_index",
+            "pid": 1412885,
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789202706-5-a3a458281c",
+            "index": 1,
+            "kind": "verify_source_page",
+            "pid": 1412887,
+            "attempt": 1
+          }
+        ],
+        "error": "...orkflow-cxg00B47/run2/source/source_refresh_workflow.lua:33: cancellation does not leave tasks queued for replay",
+        "passed": false,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "case": "suspend",
+        "submitted": [
+          {
+            "kind": "client",
+            "reference": false
+          },
+          {
+            "kind": "source_index",
+            "reference": false
+          },
+          {
+            "index": 1,
+            "kind": "verify_source_page",
+            "source_path": "/synthetic/new-1",
+            "reference": true
+          }
+        ],
+        "close_succeeded": true,
+        "all_children_reaped": true
+      }
+    },
+    {
+      "case": "account_close",
+      "returncode": 0,
+      "result": {
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "ui_ticks": 12,
+        "worker_starts": 3,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "proof leaves a real candidate while the UI keeps ticking"
+          },
+          {
+            "passed": true,
+            "name": "cancellation does not leave tasks queued for replay"
+          },
+          {
+            "passed": true,
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged"
+          },
+          {
+            "passed": true,
+            "name": "the authoritative revision remains R1"
+          },
+          {
+            "passed": true,
+            "name": "no candidate remains"
+          },
+          {
+            "passed": true,
+            "name": "no commit journal remains"
+          },
+          {
+            "passed": true,
+            "name": "no source refresh payload remains"
+          },
+          {
+            "passed": true,
+            "name": "the partial download remains paused"
+          },
+          {
+            "passed": true,
+            "name": "cancellation never publishes source mappings"
+          },
+          {
+            "passed": true,
+            "name": "the public completion respects account lifetime"
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789202706-1-3f7bfc33b6",
+            "pid": 1412935,
+            "kind": "client",
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789202706-3-09610114d7",
+            "pid": 1412937,
+            "kind": "source_index",
+            "attempt": 1
+          },
+          {
+            "task_id": "worker-1789202706-5-4154f4462c",
+            "index": 1,
+            "pid": 1412938,
+            "kind": "verify_source_page",
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "reference": false,
+            "kind": "client"
+          },
+          {
+            "reference": false,
+            "kind": "source_index"
+          },
+          {
+            "reference": true,
+            "kind": "verify_source_page",
+            "index": 1,
+            "source_path": "/synthetic/new-1"
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "case": "account_close"
+      }
+    },
+    {
+      "case": "interrupted",
+      "returncode": 0,
+      "result": {
+        "all_children_reaped": true,
+        "ui_ticks": 6,
+        "worker_starts": 1,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "recovery records an interrupted refresh explicitly"
+          },
+          {
+            "passed": true,
+            "name": "old content, page mappings, descriptor, anchor and pin remain unchanged"
+          },
+          {
+            "passed": true,
+            "name": "the authoritative revision remains R1"
+          },
+          {
+            "passed": true,
+            "name": "no candidate remains"
+          },
+          {
+            "passed": true,
+            "name": "no commit journal remains"
+          },
+          {
+            "passed": true,
+            "name": "no source refresh payload remains"
+          },
+          {
+            "passed": true,
+            "name": "the partial download remains paused"
+          },
+          {
+            "passed": true,
+            "name": "recovery starts no source or image worker"
+          }
+        ],
+        "starts": [
+          {
+            "task_id": "worker-1789202707-1-04ae93ff79",
+            "kind": "client",
+            "pid": 1412985,
+            "attempt": 1
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "reference": false
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "case": "interrupted",
+        "close_succeeded": true
+      }
+    },
+    {
+      "case": "preempt",
+      "returncode": 0,
+      "result": {
+        "starts": [
+          {
+            "kind": "client",
+            "attempt": 1,
+            "task_id": "worker-1789202707-1-41b515bf5b",
+            "pid": 1413033
+          },
+          {
+            "kind": "source_index",
+            "attempt": 1,
+            "task_id": "worker-1789202707-3-d9be8892f8",
+            "pid": 1413035
+          },
+          {
+            "kind": "verify_source_page",
+            "attempt": 1,
+            "task_id": "worker-1789202707-5-80def514c2",
+            "pid": 1413037,
+            "index": 1
+          },
+          {
+            "kind": "client",
+            "attempt": 1,
+            "task_id": "worker-1789202707-6-16abdf1515",
+            "pid": 1413038
+          },
+          {
+            "kind": "verify_source_page",
+            "attempt": 2,
+            "task_id": "worker-1789202707-5-80def514c2",
+            "pid": 1413040,
+            "index": 1
+          },
+          {
+            "kind": "verify_source_page",
+            "attempt": 1,
+            "task_id": "worker-1789202707-8-e9b795a5d6",
+            "pid": 1413041,
+            "index": 2
+          },
+          {
+            "kind": "download_page",
+            "attempt": 1,
+            "task_id": "page-1789202708-9-3939342974",
+            "pid": 1413043,
+            "index": 2
+          },
+          {
+            "kind": "download_page",
+            "attempt": 1,
+            "task_id": "page-1789202708-10-a02c0f9586",
+            "pid": 1413044,
+            "index": 3
+          }
+        ],
+        "submitted": [
+          {
+            "kind": "client",
+            "reference": false
+          },
+          {
+            "kind": "source_index",
+            "reference": false
+          },
+          {
+            "kind": "verify_source_page",
+            "source_path": "/synthetic/new-1",
+            "index": 1,
+            "reference": true
+          },
+          {
+            "kind": "client",
+            "reference": false
+          },
+          {
+            "kind": "verify_source_page",
+            "source_path": "/synthetic/new-2",
+            "index": 2,
+            "reference": false
+          },
+          {
+            "kind": "download_page",
+            "source_path": "/synthetic/new-2",
+            "index": 2,
+            "reference": false
+          },
+          {
+            "kind": "download_page",
+            "source_path": "/synthetic/new-3",
+            "index": 3,
+            "reference": false
+          }
+        ],
+        "passed": true,
+        "scope": "Production Controller, DownloadService, coordinator, SQLite, PageStore, SourceRefresh, default Worker, Client and real fork/IPC; synthetic transport only",
+        "close_succeeded": true,
+        "all_children_reaped": true,
+        "case": "preempt",
+        "worker_starts": 8,
+        "ui_ticks": 46,
+        "assertions": [
+          {
+            "passed": true,
+            "name": "the real session import completes through a nav worker"
+          },
+          {
+            "passed": true,
+            "name": "A is ready while B is evicted with a retained digest"
+          },
+          {
+            "passed": true,
+            "name": "C has positive never-downloaded history"
+          },
+          {
+            "passed": true,
+            "name": "proof leaves a real candidate while the UI keeps ticking"
+          },
+          {
+            "passed": true,
+            "name": "the urgent safe worker finishes before proof publication"
+          },
+          {
+            "passed": true,
+            "name": "the refresh callback runs exactly once"
+          },
+          {
+            "passed": true,
+            "name": "refresh publishes after exactly the two historical proofs"
+          },
+          {
+            "passed": true,
+            "name": "all three pages are complete and pinned"
+          },
+          {
+            "passed": true,
+            "name": "the descriptor bytes, path and sole version are preserved"
+          },
+          {
+            "passed": true,
+            "name": "anchor and the ready reference file are preserved"
+          },
+          {
+            "passed": true,
+            "name": "current_revision remains the immutable R1"
+          },
+          {
+            "passed": true,
+            "name": "only A and historical B are verified"
+          },
+          {
+            "passed": true,
+            "name": "only missing B and C download using fresh paths"
+          },
+          {
+            "passed": true,
+            "name": "source epoch advances once while immutable page ID stays stable 1"
+          },
+          {
+            "passed": true,
+            "name": "source epoch advances once while immutable page ID stays stable 2"
+          },
+          {
+            "passed": true,
+            "name": "source epoch advances once while immutable page ID stays stable 3"
+          },
+          {
+            "passed": true,
+            "name": "all proof candidates and marker are removed"
+          },
+          {
+            "passed": true,
+            "name": "the same proof task replays its partial in a different real child"
+          }
+        ]
+      }
+    }
+  ],
+  "runtime_version": "v2026.07.1",
+  "runtime_sha256": {
+    "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "libs/libsqlite3.so.0": "9341f59991c140a56a27c81bc8373db66b9db7820738b48ef7d4a78ff2b66a7f"
+  },
+  "launcher_sha256": "0a24ad4d7ab9f060da15da30656529d3f614a5085805b583ce331450178f1baf",
+  "asset_sha256": {
+    "efae82c96a7eef44bee5.wasm": "39bc0676953752c461197df592e1f5894f1a7492a29400c946e560fc109a8e2e"
+  },
+  "network_namespace_isolated": true,
+  "purchase_scenarios_executed": false,
+  "scope": "Real Controller, coordinator, SQLite, PageStore, SourceRefresh, Worker/Client, fork/IPC and UIManager; synthetic transport responses"
+}

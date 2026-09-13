@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BiliComics</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { margin: 0; background: #e7eae9; }
+    .overview { padding: 35px 34px 30px; width: 1296px; }
+    .overview-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 27px; }
+    .overview-heading strong { font-size: 21px; font-weight: 600; }
+    .overview-heading span { color: #606b63; font-size: 12px; }
+    .overview-grid { display: grid; grid-template-columns: 600px 600px; gap: 28px; }
+    figure { margin: 0; }
+    figcaption { font-size: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; }
+    figcaption span { font-size: 11px; color: #737f75; }
+    iframe { width: 600px; height: 800px; border: 1px solid #383f39; border-radius: 4px; background: white; display: block; }
+    .overview-foot { color: #737f75; font-size: 11px; text-align: center; margin-top: 22px; }
+  </style>
+</head>
+<body>
+  <main class="overview" id="overview"></main>
+  <script type="module">
+    const copy = await fetch("locales/zh-CN.json").then(response => response.json());
+    const second = new URLSearchParams(location.search).get("second") || "detail";
+    const views = [["continue", copy.continueTitle], [second, copy[second]]];
+    document.getElementById("overview").innerHTML = `<header class="overview-heading"><strong>${copy.labEyebrow}</strong><span>${copy.deviceLabel} / 600 × 800</span></header><div class="overview-grid">${views.map(([view, label]) => `<figure><figcaption>${label}<span>${view === "continue" ? copy.noteContinueTitle : copy.noteDetailTitle}</span></figcaption><iframe src="./?view=${view}&embed=1" title="${label}"></iframe></figure>`).join("")}</div><footer class="overview-foot">${copy.labFoot}</footer>`;
+    window.__overviewReady = true;
+  </script>
+</body>
+</html>

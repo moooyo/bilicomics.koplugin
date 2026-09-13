@@ -1,0 +1,163 @@
+{
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "14e53c341b3f86c809799154226e552534a5c77dfd00e2702455b7bf86ee59c6",
+    "bilicomics/controller.lua": "98c0d2f6935f2c2c5c740906459f058bfbe25b0a78072f1c3dd6b9d1882167c5",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "2954477a07dc260b9eb3aedc430fdc5b9d1ab2e3d3cbf79eb3ca072a5f3e8fda",
+    "bilicomics/jobs/runner.lua": "a3fd3dd288885205801a4dbcf44c2be9c309835ead78951bc478e57dd8609cb6",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/worker.lua": "37703f012a48302cb0586a38337c456b110d2398798d1ed50e4d7c63ea7f47f5",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/client.lua": "48d6fe61a4ace8464cb71780e5be1edb368d4644d2399b8ac8a728e214703ffd",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "6585f2e9ab52ae12dec5ad1c4048280108029f6d1017dd11a2e01c00c7d49a9e",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "e0a3103e990f48f13ec1498b63a214de75273fe5a3939346b1fe94896781da02",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "f9263fef7202aa32411d4367f6aaa5d803e62e9d04d00578c67c76b31f17ab6e",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "ef34141699c5042eb29bbf9ef8c0e64544cc9d138e0dceb57b266169c7a3b927",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/quote.lua": "a370e7644505bbcdab9747f786e4d66c92c777f060f3051d0f1fae92cadfb3c7",
+    "bilicomics/purchase/service.lua": "56254d02b5b468dee2a6a76066695b916e060e527ef285dbe315ae0583f425ba",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "a24365812837e0241cc72573455850b5581b3f45b95617b7ce8e374196c66c07",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "25dc87ced8ddb526493d9b37d5aa8e54943d18e074757e2ab5e0cee2c8323881",
+    "bilicomics/storage/store.lua": "38ffd2068cb639d2da8be5d6afc9d60010447afc609abfe39b376159882b3b98",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "38e83a2aeee9272530c97d683ebe4316602efcfd841593931ea2115c33876db3",
+    "bilicomics/ui/screens.lua": "1c8981290a3ba4932d1b30c8d60dd39b1674291eee4c490ffce1621202bdf219",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "f808229ce748d1459999842f165c6f6817d5fe1855ab1425551802549c4d9f0b"
+  },
+  "runtime_sha256": {
+    "luajit": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "frontend/apps/reader/readerui.lua": "54290763c2593dd853c15ff2f6bfa15f5f73cce721dd2447f84ca8ea842138b7",
+    "frontend/document/document.lua": "fbc8a11e4a5321c4b86742f9d699839a56ebe125edf6030f85f8ef57789c4129",
+    "ffi/mupdf.lua": "1d6627890135a97ecb22e725400c91645c4d21b43eca4eb8088d1e0cf6c1896d"
+  },
+  "test_sha256": {
+    "real_image_local.lua": "71a3e284e83cbc3acbca939f126a8820be309092f1e8399c3bf7b630bf411ac6",
+    "run_real_image_local.py": "2e8aef4cc5fecdd9ab0cb2cebd93cbb09812364426b16b8a47a7cea1fec68a56"
+  },
+  "samples": [
+    {
+      "open": {
+        "height": 2900,
+        "checks": {
+          "native_scroll_moves_within_source": true,
+          "no_network_routes": true,
+          "unchanged_decode_and_buffer_limits": true,
+          "within_existing_decode_budget": true,
+          "scrolled_anchor_saved_on_close": true,
+          "actual_native_image_draw": true,
+          "native_document_released": true,
+          "committed_local_page_ready": true,
+          "all_reader_hints_stay_local": true,
+          "native_reader_closed": true,
+          "matching_native_opened_event": true,
+          "scrolled_view_has_no_placeholder": true,
+          "no_network_or_worker_attempts": true,
+          "isolated_network_namespace": true
+        },
+        "format": "jpg",
+        "passed": true,
+        "width": 2001,
+        "process_completed": true
+      },
+      "reopen": {
+        "height": 2900,
+        "format": "jpg",
+        "checks": {
+          "committed_local_page_ready": true,
+          "all_reader_hints_stay_local": true,
+          "isolated_network_namespace": true,
+          "durable_anchor_available": true,
+          "native_reader_closed": true,
+          "no_network_or_worker_attempts": true,
+          "no_network_routes": true,
+          "matching_native_opened_event": true,
+          "unchanged_decode_and_buffer_limits": true,
+          "native_document_released": true,
+          "continuous_mode_restored": true,
+          "source_anchor_restored": true,
+          "actual_native_image_draw": true
+        },
+        "passed": true,
+        "width": 2001,
+        "process_completed": true
+      }
+    },
+    {
+      "open": {
+        "checks": {
+          "isolated_network_namespace": true,
+          "unchanged_decode_and_buffer_limits": true,
+          "scrolled_view_has_no_placeholder": true,
+          "within_existing_decode_budget": true,
+          "no_network_or_worker_attempts": true,
+          "scrolled_anchor_saved_on_close": true,
+          "committed_local_page_ready": true,
+          "all_reader_hints_stay_local": true,
+          "native_document_released": true,
+          "native_reader_closed": true,
+          "native_scroll_moves_within_source": true,
+          "actual_native_image_draw": true,
+          "matching_native_opened_event": true,
+          "no_network_routes": true
+        },
+        "passed": true,
+        "format": "jpg",
+        "width": 2000,
+        "height": 2855,
+        "process_completed": true
+      },
+      "reopen": {
+        "checks": {
+          "unchanged_decode_and_buffer_limits": true,
+          "isolated_network_namespace": true,
+          "native_reader_closed": true,
+          "source_anchor_restored": true,
+          "continuous_mode_restored": true,
+          "matching_native_opened_event": true,
+          "no_network_routes": true,
+          "native_document_released": true,
+          "durable_anchor_available": true,
+          "no_network_or_worker_attempts": true,
+          "actual_native_image_draw": true,
+          "committed_local_page_ready": true,
+          "all_reader_hints_stay_local": true
+        },
+        "format": "jpg",
+        "passed": true,
+        "width": 2000,
+        "height": 2855,
+        "process_completed": true
+      }
+    }
+  ],
+  "passed": true,
+  "source_unchanged": true,
+  "runtime_unchanged": true
+}

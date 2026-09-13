@@ -1,0 +1,94 @@
+[
+  {
+    "name": "x86_64-baseline",
+    "exports": [
+      "biliwasm_free",
+      "biliwasm_run"
+    ],
+    "glibc_versions": [
+      "2.2.5",
+      "2.3",
+      "2.7",
+      "2.14",
+      "2.17"
+    ],
+    "needed": [
+      "libm.so.6",
+      "libpthread.so.0",
+      "libc.so.6",
+      "ld-linux-x86-64.so.2"
+    ],
+    "abi": [
+      "Class:                             ELF64",
+      "Machine:                           Advanced Micro Devices X86-64",
+      "Flags:                             0x0",
+      "0x000000006ffffffb (FLAGS_1)            Flags: NOW",
+      "0x0040:   Name: GLIBC_2.2.5  Flags: none  Version: 7",
+      "0x0050:   Name: GLIBC_2.2.5  Flags: none  Version: 5",
+      "0x0060:   Name: GLIBC_2.2.5  Flags: none  Version: 3",
+      "0x0070:   Name: GLIBC_2.3  Flags: none  Version: 9",
+      "0x0080:   Name: GLIBC_2.7  Flags: none  Version: 8",
+      "0x0090:   Name: GLIBC_2.14  Flags: none  Version: 6",
+      "0x00a0:   Name: GLIBC_2.17  Flags: none  Version: 4",
+      "0x00b0:   Name: GLIBC_2.3  Flags: none  Version: 2"
+    ],
+    "build_log_bytes": 0
+  },
+  {
+    "name": "armhf",
+    "exports": [
+      "biliwasm_free",
+      "biliwasm_run"
+    ],
+    "glibc_versions": [
+      "2.4",
+      "2.7",
+      "2.17"
+    ],
+    "needed": [
+      "libm.so.6",
+      "libpthread.so.0",
+      "libc.so.6",
+      "ld-linux-armhf.so.3"
+    ],
+    "abi": [
+      "Class:                             ELF32",
+      "Machine:                           ARM",
+      "Flags:                             0x5000400, Version5 EABI, hard-float ABI",
+      "0x6ffffffb (FLAGS_1)                    Flags: NOW",
+      "0x0040:   Name: GLIBC_2.4  Flags: none  Version: 7",
+      "0x0050:   Name: GLIBC_2.4  Flags: none  Version: 5",
+      "0x0060:   Name: GLIBC_2.4  Flags: none  Version: 3",
+      "0x0070:   Name: GLIBC_2.7  Flags: none  Version: 6",
+      "0x0080:   Name: GLIBC_2.17  Flags: none  Version: 4",
+      "0x0090:   Name: GLIBC_2.4  Flags: none  Version: 2",
+      "Tag_CPU_arch: v6"
+    ],
+    "build_log_bytes": 0
+  },
+  {
+    "name": "aarch64",
+    "exports": [
+      "biliwasm_free",
+      "biliwasm_run"
+    ],
+    "glibc_versions": [
+      "2.17"
+    ],
+    "needed": [
+      "libm.so.6",
+      "libpthread.so.0",
+      "libc.so.6"
+    ],
+    "abi": [
+      "Class:                             ELF64",
+      "Machine:                           AArch64",
+      "Flags:                             0x0",
+      "0x000000006ffffffb (FLAGS_1)            Flags: NOW",
+      "0x0030:   Name: GLIBC_2.17  Flags: none  Version: 4",
+      "0x0040:   Name: GLIBC_2.17  Flags: none  Version: 3",
+      "0x0050:   Name: GLIBC_2.17  Flags: none  Version: 2"
+    ],
+    "build_log_bytes": 0
+  }
+]

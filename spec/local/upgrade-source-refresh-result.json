@@ -1,0 +1,35 @@
+{
+  "environment": "User-authorized local WSL; SDL dummy video and disposable profile",
+  "work": "/home/moooyo/.local/share/bilicomics-acceptance/upgrade-check-qj026stf",
+  "existing_interactive_profile_touched": false,
+  "display_server_started": false,
+  "network_listener_started": false,
+  "purchase_tests_executed": false,
+  "session_imported": false,
+  "phases": [
+    {
+      "name": "baseline",
+      "native_ui_ready": true,
+      "selected_build_loaded": true,
+      "source_refresh_available": false,
+      "bootstrap_matches_build": true,
+      "archive_files": 87,
+      "archive_sha256": "65b38f158e3170dbd028703e62ace39707da21ba08e0c8e7ea773a7ac82f04ae",
+      "pid": 21444
+    },
+    {
+      "name": "updated",
+      "native_ui_ready": true,
+      "selected_build_loaded": true,
+      "source_refresh_available": true,
+      "bootstrap_matches_build": true,
+      "archive_files": 89,
+      "archive_sha256": "641041ce5df61e82f93374f6560e1be79d2f960862d94afd2d5b6e562b055b0e",
+      "pid": 21450
+    }
+  ],
+  "passed": true,
+  "profile_data_preserved": true,
+  "both_owned_applications_stopped": true,
+  "final_test_profile_stopped": true
+}

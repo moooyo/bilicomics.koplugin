@@ -1,0 +1,7 @@
+{
+    global:
+        bili_pbkdf2_sha512;
+        bili_aes_gcm_decrypt;
+    local:
+        *;
+};

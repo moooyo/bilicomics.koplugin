@@ -1,0 +1,155 @@
+{
+  "passed": true,
+  "scope": "Synthetic Range, fake Fetch, and pure Quote; no real Client, Service, transport, or session modules",
+  "runtime_version": "v2026.07.1",
+  "runtime_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "source_sha256": {
+    "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37"
+  },
+  "spec_sha256": "852433be05d84f3a22b09c7f207127269763ce902864447d0007bcf4a71baefe",
+  "driver_sha256": "587cf0e28466c5405f16be68aa9b4d1195d39c9e804623474990503c2b4bf07d",
+  "source_unchanged": true,
+  "returncode": 0,
+  "network_namespace_isolated": true,
+  "forbidden_module_attempts": 0,
+  "buy_episode_calls": 0,
+  "user_session_accessed": false,
+  "actual_http_permitted": false,
+  "actual_purchases_permitted": false,
+  "result": {
+    "rejection_cases": [
+      "uppercase false lock flag",
+      "numeric lock flag",
+      "missing lock flag",
+      "uppercase free flag",
+      "missing free flag",
+      "temporary free flag",
+      "temporary unlock type",
+      "unavailable pay mode",
+      "string pay mode",
+      "missing unlock type",
+      "contradictory locked ownership",
+      "ambiguous unlocked paid access",
+      "nonzero expiry",
+      "dated expiry",
+      "partial zero date",
+      "nonnumeric raw price",
+      "negative raw price",
+      "infinite raw price",
+      "duplicate identity",
+      "duplicate ordinal",
+      "infinite ordinal",
+      "missing ordinal",
+      "out of order original catalog",
+      "catalog array hole",
+      "catalog object key",
+      "missing original catalog",
+      "raw comic identity mismatch",
+      "normalized comic identity mismatch",
+      "anchor is permanently owned",
+      "anchor ordinal changed",
+      "selected offer unusable",
+      "truthy numeric usability",
+      "positive amount differs from limit",
+      "selected price mismatch",
+      "equal prices disagree with catalog",
+      "missing selected original price",
+      "missing whole aggregate",
+      "incorrect whole amount",
+      "incorrect whole price aggregate",
+      "incorrect tail count",
+      "incorrect tail price",
+      "anchor original amount mismatch",
+      "anchor displayed amount mismatch",
+      "range selected amount changed",
+      "range whole aggregate changed",
+      "range anchor identity mismatch",
+      "range comic identity mismatch",
+      "offer array hole",
+      "offer array object key",
+      "selected original position mismatch",
+      "unsupported extra asset"
+    ],
+    "fake_calls": 8,
+    "buy_episode_calls": 0,
+    "forbidden_module_attempts": 0,
+    "scope": "Synthetic Range, fake quote collector, and pure Quote construction only",
+    "real_transaction_verified": false,
+    "actual_entitlement_verified": false,
+    "network_namespace_isolated": true,
+    "passed": true,
+    "assertions": 240,
+    "groups": [
+      {
+        "passed": true,
+        "name": "positive ranges include the fractional anchor and skip interleaved owned chapters"
+      },
+      {
+        "passed": true,
+        "name": "explicit zero offers resolve the inclusive remaining tail and retain zero on the wire"
+      },
+      {
+        "passed": true,
+        "name": "the fake collector retains original offer positions and builds a matching range proof"
+      },
+      {
+        "passed": true,
+        "name": "strict catalog evidence rejects unknown, temporary, malformed, and unavailable states"
+      },
+      {
+        "passed": true,
+        "name": "only explicitly supported absent-expiry representations are accepted"
+      },
+      {
+        "passed": true,
+        "name": "offer and quote aggregates cannot manufacture a payable range"
+      },
+      {
+        "passed": true,
+        "name": "unusable shortened positive offers never convert into a zero selection"
+      },
+      {
+        "passed": true,
+        "name": "legacy exact-scope booleans cannot replace a recomputable proof"
+      },
+      {
+        "passed": true,
+        "name": "Quote independently checks every supplied proof against the current evidence"
+      },
+      {
+        "passed": true,
+        "name": "equal price and count do not hide a changed intended identity from the fingerprint"
+      },
+      {
+        "passed": true,
+        "name": "changes in required whole-catalog evidence invalidate the prior basis"
+      },
+      {
+        "passed": true,
+        "name": "raw discount fields must agree and participate in refreshed semantic fingerprints"
+      },
+      {
+        "passed": true,
+        "name": "identical remaining members do not merge positive, zero, or other comic contracts"
+      },
+      {
+        "passed": true,
+        "name": "single coin and reading-coupon construction retain their separate contracts"
+      },
+      {
+        "passed": true,
+        "name": "no real account, transport, or purchase operation was accessed"
+      }
+    ]
+  },
+  "limits": [
+    "Synthetic contract checks only",
+    "No real charging or entitlement-delivery verification",
+    "No guarantee of atomic server scope between quote and submit"
+  ]
+}
