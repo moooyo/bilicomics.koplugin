@@ -3,6 +3,7 @@ require("ffi/posix_h")
 local ffiutil = require("ffi/util")
 local json = require("rapidjson")
 local Util = require("bilicomics/util")
+local Budget = require("bilicomics/jobs/storage_budget")
 if ffi.os == "Linux" then
     if not pcall(function() return ffi.C.prctl end) then ffi.cdef[[int prctl(int option, ...);]] end
     if not pcall(function() return ffi.C.getppid end) then ffi.cdef[[int getppid(void);]] end
@@ -13,6 +14,9 @@ local read_methods = { listFavorites = true, listHistory = true, search = true, 
     imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true }
 local read_kinds = { library = true, quote = true, reconcile_purchase = true, download_page = true, download_cover = true }
 local mutations = { purchase_submit = true, set_favorite = true, auth = true }
+local function imageConcurrency(value)
+    return type(value) == "number" and value % 1 == 0 and value >= 1 and value <= 4 and value or nil
+end
 local function retryableRead(task, err)
     local request = task.request
     if not err or err.retryable ~= true then return false end
@@ -53,14 +57,27 @@ local function writeFrame(fd, packet, limit)
 end
 function Runner.new(options)
     options = options or {}
+    local concurrency = options.image_concurrency ~= nil and assert(imageConcurrency(options.image_concurrency), "Image concurrency must be an integer from 1 to 4") or nil
+    local resource_limits = {}
+    for key, value in pairs(options.resource_limits or { image = 1 }) do resource_limits[key] = value end
+    if concurrency then resource_limits.image = concurrency end
     local self = setmetatable({ ui = options.ui or require("ui/uimanager"), clock = options.clock or require("socket").gettime,
         worker = options.worker or function(request) return require("bilicomics/jobs/worker").execute(request) end,
         limit = options.max_payload or 4 * 1024 * 1024, interval = options.interval or 0.05,
-        max_workers = options.max_workers or 2, resource_limits = options.resource_limits or { image = 1 },
+        max_workers = options.max_workers or (concurrency and concurrency + 1 or 2), resource_limits = resource_limits,
         retry_delay = math.max(0.01, options.retry_delay or 1),
-        tasks = {}, queue = {}, sequence = 0, stopped = false, suspended = false }, Runner)
+        tasks = {}, queue = {}, reservations = {}, sequence = 0, stopped = false, suspended = false }, Runner)
     self.tick = function() self:_tick() end
     return self
+end
+function Runner:getImageConcurrency() return self.resource_limits.image or 1 end
+function Runner:setImageConcurrency(value)
+    local concurrency = imageConcurrency(value)
+    if not concurrency then return nil, Util.error("invalid_request", "Image concurrency must be an integer from 1 to 4.") end
+    self.resource_limits.image, self.max_workers = concurrency, concurrency + 1
+    -- Existing work drains naturally when the limit shrinks; priority preemption remains independent.
+    self:_pump(); self:_schedule()
+    return concurrency
 end
 function Runner:_schedule()
     if self.stopped or (not next(self.tasks) and #self.queue == 0) then return end
@@ -93,6 +110,31 @@ end
 function Runner:_release(task)
     if task.held then task.held = nil; self.ui:allowStandby() end
 end
+function Runner:_reserveImage(task)
+    local request = task.request
+    if task.resource ~= "image" or request.temporary_path == nil then return true end
+    local path = type(request.temporary_path) == "string" and request.temporary_path:match("^(.+)/[^/]+$")
+    local bytes = request.max_bytes or Budget.default_image_limit
+    local minimum = request.minimum_free_bytes or Budget.default_minimum
+    if not path or type(bytes) ~= "number" or bytes ~= bytes or bytes < 1 or bytes > Budget.default_image_limit
+        or bytes % 1 ~= 0 or type(minimum) ~= "number" or minimum ~= minimum or minimum < 0 or minimum >= math.huge then
+        return nil, Util.error("invalid_request", "The image storage budget is invalid.")
+    end
+    local scope, err = Budget.scope(path)
+    if not scope then return nil, err end
+    local allowed, failure = Budget.admit(path, minimum, bytes, self.reservations[scope] or 0)
+    if allowed ~= true then return allowed, failure, scope end
+    self.reservations[scope] = (self.reservations[scope] or 0) + bytes
+    task.reservation = { scope = scope, bytes = bytes }
+    return true
+end
+function Runner:_releaseImage(task)
+    local reservation = task.reservation
+    if not reservation then return end
+    local remaining = math.max(0, (self.reservations[reservation.scope] or 0) - reservation.bytes)
+    self.reservations[reservation.scope] = remaining > 0 and remaining or nil
+    task.reservation = nil
+end
 function Runner:_start(task)
     if task.before_start then
         local ok, allowed, err = pcall(task.before_start)
@@ -102,6 +144,9 @@ function Runner:_start(task)
             return
         end
     end
+    local admitted, budget_error, budget_scope = self:_reserveImage(task)
+    if admitted == false then return false, budget_scope end
+    if not admitted then Util.callback(task.callback, nil, budget_error); return end
     task.attempt = (task.attempt or 0) + 1
     local id, attempt, request, worker, limit = task.id, task.attempt, task.request, self.worker, self.limit
     local parent_pid = tonumber(ffi.C.getpid())
@@ -122,6 +167,7 @@ function Runner:_start(task)
             session_update = ok and session_update or nil }, limit)
     end, true)
     if not pid then
+        self:_releaseImage(task)
         Util.callback(task.callback, nil, Util.error("worker", "A background process could not be started."))
         return
     end
@@ -129,6 +175,7 @@ function Runner:_start(task)
     task.started_at, task.cancel_kind = self.clock(), nil
     self.tasks[id] = task
     self:_hold(task)
+    return true
 end
 function Runner:_pump()
     if self.stopped or self.suspended then return end
@@ -136,31 +183,47 @@ function Runner:_pump()
         if a.priority == b.priority then return a.sequence < b.sequence end
         return a.priority < b.priority
     end)
+    local budget_blocked = {}
     while not self.stopped and not self.suspended and #self.queue > 0 do
         local total, resources = self:_counts()
         local candidate
         for index, task in ipairs(self.queue) do
             local available = not task.resource or not self.resource_limits[task.resource]
                 or (resources[task.resource] or 0) < self.resource_limits[task.resource]
-            if total < self.max_workers and available and (task.not_before or 0) <= self.clock() then candidate = index; break end
+            if not budget_blocked[task] and total < self.max_workers and available
+                and (task.not_before or 0) <= self.clock() then candidate = index; break end
         end
         if not candidate then break end
-        self:_start(table.remove(self.queue, candidate))
+        local task = table.remove(self.queue, candidate)
+        local started, scope = self:_start(task)
+        if started == false then
+            table.insert(self.queue, candidate, task)
+            budget_blocked[task] = scope
+        end
     end
     if self.stopped or self.suspended then return end
-    -- A visible page may interrupt a long, cancelable prefetch occupying its resource slot.
+    -- Preempt only work that occupies the slot or filesystem reservation needed by the urgent task.
     local urgent
     for _, task in ipairs(self.queue) do
-        if (task.not_before or 0) <= self.clock() then urgent = task; break end
+        if task.priority <= 0 and (task.not_before or 0) <= self.clock() then urgent = task; break end
     end
     if urgent then
-        local victim
+        local _, resources = self:_counts()
+        local resource_full = urgent.resource and self.resource_limits[urgent.resource]
+            and (resources[urgent.resource] or 0) >= self.resource_limits[urgent.resource]
+        local victim, releasing_slot
         for _, task in pairs(self.tasks) do
-            if task.cancelable and not task.cancel_kind and task.priority > urgent.priority
-                and (not urgent.resource or task.resource == urgent.resource)
+            local blocks_urgent = (not resource_full or task.resource == urgent.resource)
+            if budget_blocked[urgent] then
+                blocks_urgent = task.reservation ~= nil and task.reservation.scope == budget_blocked[urgent]
+            end
+            -- A previously interrupted worker still owns its slot until reap; do not kill a second worker for it.
+            if blocks_urgent and (task.cancel_kind or task.read_error) then releasing_slot = true end
+            if task.cancelable and not task.cancel_kind and not task.packet and not task.read_error
+                and task.priority > urgent.priority and blocks_urgent
                 and (not victim or task.priority > victim.priority) then victim = task end
         end
-        if victim then victim.cancel_kind = "preempt"; killTask(victim) end
+        if victim and not releasing_slot then victim.cancel_kind = "preempt"; killTask(victim) end
     end
 end
 function Runner:submit(request, options, callback)
@@ -219,6 +282,8 @@ end
 function Runner:_finish(task, packet, err)
     closeFD(task)
     self.tasks[task.id] = nil
+    -- The subprocess has been reaped; its partial file is now the only remaining disk consumption.
+    self:_releaseImage(task)
     self:_release(task)
     if task.cancel_kind == "preempt" and not self.stopped then
         task.buffer, task.pid, task.packet, task.read_error = nil, nil, nil, nil

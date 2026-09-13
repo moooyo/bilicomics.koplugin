@@ -255,7 +255,7 @@ run("controller_injects_account_lifecycle_and_index_guards", function()
     local generation = app.generation; app.generation = generation + 1
     check("obsolete account generation rejects acquisition", not initial:_networkAllowed()); app.generation = generation
     app:_closeAccount()
-    local session = assert(Session.parse("SESSDATA=synthetic-only; DedeUserID=42"))
+    local session = assert(Session.parse("SESSDATA=synthetic-only; DedeUserID=42; buvid3=synthetic-connectivity-device"))
     assert(session:withIdentity{ id = "42", name = "Synthetic account" })
     app:_openAccount("bili_42", session, true)
     check("old account closure stays invalid after replacement", not initial:_networkAllowed() and app.account.downloads:_networkAllowed())

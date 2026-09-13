@@ -1,0 +1,2553 @@
+{
+    "traces": [
+        {
+            "maximum_image_workers": 1,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-1",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292380.174348,
+                    "ended_at": 1789292380.167271,
+                    "parent_pid": 413163,
+                    "time": 1789292380.00874,
+                    "resource": "image",
+                    "pid": 413191
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292380.2665,
+                    "ended_at": 1789292380.260615,
+                    "parent_pid": 413163,
+                    "time": 1789292380.195152,
+                    "resource": "image",
+                    "pid": 413192
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292380.361304,
+                    "ended_at": 1789292380.355201,
+                    "parent_pid": 413163,
+                    "time": 1789292380.288501,
+                    "resource": "image",
+                    "pid": 413193
+                }
+            ],
+            "maximum_unreaped_image_workers": 1,
+            "forks": 3,
+            "case": "legacy_settings_without_concurrency_keep_one_page_window"
+        },
+        {
+            "maximum_image_workers": 1,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-2",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292380.608463,
+                    "ended_at": 1789292380.602615,
+                    "parent_pid": 413163,
+                    "time": 1789292380.475022,
+                    "resource": "image",
+                    "pid": 413194
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292380.701042,
+                    "ended_at": 1789292380.695649,
+                    "parent_pid": 413163,
+                    "time": 1789292380.630188,
+                    "resource": "image",
+                    "pid": 413195
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292380.792349,
+                    "ended_at": 1789292380.78698,
+                    "parent_pid": 413163,
+                    "time": 1789292380.721968,
+                    "resource": "image",
+                    "pid": 413196
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292380.881479,
+                    "ended_at": 1789292380.877823,
+                    "parent_pid": 413163,
+                    "time": 1789292380.813117,
+                    "resource": "image",
+                    "pid": 413197
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292380.974252,
+                    "ended_at": 1789292380.96989,
+                    "parent_pid": 413163,
+                    "time": 1789292380.904864,
+                    "resource": "image",
+                    "pid": 413198
+                },
+                {
+                    "index": 6,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-6",
+                    "reaped_at": 1789292381.066266,
+                    "ended_at": 1789292381.061215,
+                    "parent_pid": 413163,
+                    "time": 1789292380.995902,
+                    "resource": "image",
+                    "pid": 413199
+                },
+                {
+                    "index": 7,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-7",
+                    "reaped_at": 1789292381.16074,
+                    "ended_at": 1789292381.15444,
+                    "parent_pid": 413163,
+                    "time": 1789292381.088895,
+                    "resource": "image",
+                    "pid": 413200
+                }
+            ],
+            "maximum_unreaped_image_workers": 1,
+            "forks": 7,
+            "case": "single_chapter_real_parallel_download_1"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-3",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292381.52842,
+                    "ended_at": 1789292381.507098,
+                    "parent_pid": 413163,
+                    "time": 1789292381.31129,
+                    "resource": "image",
+                    "pid": 413201
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292381.512821,
+                    "ended_at": 1789292381.505944,
+                    "parent_pid": 413163,
+                    "time": 1789292381.368898,
+                    "resource": "image",
+                    "pid": 413202
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292381.658992,
+                    "ended_at": 1789292381.61267,
+                    "parent_pid": 413163,
+                    "time": 1789292381.548263,
+                    "resource": "image",
+                    "pid": 413204
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292381.734606,
+                    "ended_at": 1789292381.665279,
+                    "parent_pid": 413163,
+                    "time": 1789292381.598136,
+                    "resource": "image",
+                    "pid": 413205
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292381.757441,
+                    "ended_at": 1789292381.74845,
+                    "parent_pid": 413163,
+                    "time": 1789292381.68153,
+                    "resource": "image",
+                    "pid": 413206
+                },
+                {
+                    "index": 6,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-6",
+                    "reaped_at": 1789292381.909941,
+                    "ended_at": 1789292381.8425,
+                    "parent_pid": 413163,
+                    "time": 1789292381.776788,
+                    "resource": "image",
+                    "pid": 413207
+                },
+                {
+                    "index": 7,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-7",
+                    "reaped_at": 1789292381.925694,
+                    "ended_at": 1789292381.905872,
+                    "parent_pid": 413163,
+                    "time": 1789292381.838594,
+                    "resource": "image",
+                    "pid": 413208
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "forks": 7,
+            "case": "single_chapter_real_parallel_download_2"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-4",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292382.440735,
+                    "ended_at": 1789292382.402086,
+                    "parent_pid": 413163,
+                    "time": 1789292382.07593,
+                    "resource": "image",
+                    "pid": 413209
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292382.424885,
+                    "ended_at": 1789292382.402048,
+                    "parent_pid": 413163,
+                    "time": 1789292382.116765,
+                    "resource": "image",
+                    "pid": 413210
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292382.408563,
+                    "ended_at": 1789292382.402053,
+                    "parent_pid": 413163,
+                    "time": 1789292382.193929,
+                    "resource": "image",
+                    "pid": 413211
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292382.456076,
+                    "ended_at": 1789292382.403615,
+                    "parent_pid": 413163,
+                    "time": 1789292382.265868,
+                    "resource": "image",
+                    "pid": 413212
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292382.657443,
+                    "ended_at": 1789292382.543864,
+                    "parent_pid": 413163,
+                    "time": 1789292382.47926,
+                    "resource": "image",
+                    "pid": 413213
+                },
+                {
+                    "index": 6,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-6",
+                    "reaped_at": 1789292382.639677,
+                    "ended_at": 1789292382.605423,
+                    "parent_pid": 413163,
+                    "time": 1789292382.534297,
+                    "resource": "image",
+                    "pid": 413214
+                },
+                {
+                    "index": 7,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-7",
+                    "reaped_at": 1789292382.681328,
+                    "ended_at": 1789292382.643097,
+                    "parent_pid": 413163,
+                    "time": 1789292382.576855,
+                    "resource": "image",
+                    "pid": 413215
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "forks": 7,
+            "case": "single_chapter_real_parallel_download_4"
+        },
+        {
+            "maximum_image_workers": 3,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-5",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292383.08725,
+                    "ended_at": 1789292383.06196,
+                    "parent_pid": 413163,
+                    "time": 1789292382.818835,
+                    "resource": "image",
+                    "pid": 413216
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292383.10085,
+                    "ended_at": 1789292383.063031,
+                    "parent_pid": 413163,
+                    "time": 1789292382.863628,
+                    "resource": "image",
+                    "pid": 413217
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292383.071519,
+                    "ended_at": 1789292383.063033,
+                    "parent_pid": 413163,
+                    "time": 1789292382.941639,
+                    "resource": "image",
+                    "pid": 413218
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292383.26299,
+                    "ended_at": 1789292383.187134,
+                    "parent_pid": 413163,
+                    "time": 1789292383.121869,
+                    "resource": "image",
+                    "pid": 413219
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292383.249317,
+                    "ended_at": 1789292383.226119,
+                    "parent_pid": 413163,
+                    "time": 1789292383.16088,
+                    "resource": "image",
+                    "pid": 413220
+                }
+            ],
+            "maximum_unreaped_image_workers": 3,
+            "forks": 5,
+            "case": "live_increase_refills_the_current_chapter"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-6",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292383.691235,
+                    "ended_at": 1789292383.68561,
+                    "parent_pid": 413163,
+                    "time": 1789292383.373493,
+                    "resource": "image",
+                    "pid": 413222
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292383.869048,
+                    "ended_at": 1789292383.827047,
+                    "parent_pid": 413163,
+                    "time": 1789292383.408237,
+                    "resource": "image",
+                    "pid": 413223
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292383.58636,
+                    "ended_at": 1789292383.581787,
+                    "parent_pid": 413163,
+                    "time": 1789292383.461818,
+                    "resource": "image",
+                    "pid": 413224
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292383.837025,
+                    "ended_at": 1789292383.828499,
+                    "parent_pid": 413163,
+                    "time": 1789292383.524538,
+                    "resource": "image",
+                    "pid": 413225
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292383.852849,
+                    "ended_at": 1789292383.833319,
+                    "parent_pid": 413163,
+                    "time": 1789292383.609397,
+                    "resource": "image",
+                    "pid": 413226
+                },
+                {
+                    "index": 6,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-6",
+                    "reaped_at": 1789292383.96811,
+                    "ended_at": 1789292383.834372,
+                    "parent_pid": 413163,
+                    "time": 1789292383.71366,
+                    "resource": "image",
+                    "pid": 413227
+                },
+                {
+                    "index": 7,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-7",
+                    "reaped_at": 1789292383.995571,
+                    "ended_at": 1789292383.912149,
+                    "parent_pid": 413163,
+                    "time": 1789292383.891044,
+                    "resource": "image",
+                    "pid": 413228
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "forks": 7,
+            "case": "out_of_order_settlement_refills_distinct_pages"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-7",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292384.436339,
+                    "ended_at": 1789292384.429874,
+                    "parent_pid": 413163,
+                    "time": 1789292384.185856,
+                    "resource": "image",
+                    "pid": 413229
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292384.502172,
+                    "ended_at": 1789292384.496609,
+                    "parent_pid": 413163,
+                    "time": 1789292384.242366,
+                    "resource": "image",
+                    "pid": 413230
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292384.565278,
+                    "ended_at": 1789292384.561121,
+                    "parent_pid": 413163,
+                    "time": 1789292384.297764,
+                    "resource": "image",
+                    "pid": 413231
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292384.63055,
+                    "ended_at": 1789292384.624754,
+                    "parent_pid": 413163,
+                    "time": 1789292384.351047,
+                    "resource": "image",
+                    "pid": 413232
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292384.741795,
+                    "ended_at": 1789292384.735679,
+                    "parent_pid": 413163,
+                    "time": 1789292384.650922,
+                    "resource": "image",
+                    "pid": 413233
+                },
+                {
+                    "index": 6,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-6",
+                    "reaped_at": 1789292384.84635,
+                    "ended_at": 1789292384.838378,
+                    "parent_pid": 413163,
+                    "time": 1789292384.764863,
+                    "resource": "image",
+                    "pid": 413234
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "forks": 6,
+            "case": "live_chapter_downshift_stops_new_page_starts"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-8",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292385.282266,
+                    "ended_at": 1789292385.278243,
+                    "parent_pid": 413163,
+                    "time": 1789292384.931427,
+                    "resource": "image",
+                    "pid": 413235
+                },
+                {
+                    "reaped_at": 1789292385.196361,
+                    "label": "synthetic-concurrency-a-page-2",
+                    "pid": 413236,
+                    "time": 1789292385.004756,
+                    "parent_pid": 413163,
+                    "index": 2,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "reaped_at": 1789292385.192456,
+                    "label": "synthetic-concurrency-a-page-3",
+                    "pid": 413237,
+                    "time": 1789292385.056962,
+                    "parent_pid": 413163,
+                    "index": 3,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "reaped_at": 1789292385.190105,
+                    "label": "synthetic-concurrency-a-page-4",
+                    "pid": 413238,
+                    "time": 1789292385.108118,
+                    "parent_pid": 413163,
+                    "index": 4,
+                    "kind": "download_page",
+                    "resource": "image"
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "forks": 4,
+            "case": "visible_owner_promotes_one_page_and_pause_preserves_reader"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-9",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292385.771815,
+                    "ended_at": 1789292385.766799,
+                    "parent_pid": 413163,
+                    "time": 1789292385.387841,
+                    "resource": "image",
+                    "pid": 413239
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292385.6653,
+                    "ended_at": 1789292385.660714,
+                    "parent_pid": 413163,
+                    "time": 1789292385.489846,
+                    "resource": "image",
+                    "pid": 413240
+                },
+                {
+                    "reaped_at": 1789292385.681831,
+                    "label": "synthetic-concurrency-a-page-3",
+                    "pid": 413241,
+                    "time": 1789292385.528406,
+                    "parent_pid": 413163,
+                    "index": 3,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "reaped_at": 1789292385.679365,
+                    "label": "synthetic-concurrency-a-page-4",
+                    "pid": 413242,
+                    "time": 1789292385.600957,
+                    "parent_pid": 413163,
+                    "index": 4,
+                    "kind": "download_page",
+                    "resource": "image"
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "forks": 4,
+            "case": "one_page_failure_retires_other_job_owners"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-10",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292386.012803,
+                    "ended_at": 1789292386.009061,
+                    "parent_pid": 413163,
+                    "time": 1789292385.890917,
+                    "resource": "image",
+                    "pid": 413243
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292386.051097,
+                    "ended_at": 1789292386.045747,
+                    "parent_pid": 413163,
+                    "time": 1789292385.946529,
+                    "resource": "image",
+                    "pid": 413244
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "forks": 2,
+            "case": "failure_counts_ready_pages_before_deferred_refill"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-11",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292386.744051,
+                    "ended_at": 1789292386.688996,
+                    "parent_pid": 413163,
+                    "time": 1789292386.185484,
+                    "resource": "image",
+                    "pid": 413245
+                },
+                {
+                    "reaped_at": 1789292386.45595,
+                    "label": "synthetic-concurrency-a-page-2",
+                    "pid": 413246,
+                    "time": 1789292386.247053,
+                    "parent_pid": 413163,
+                    "index": 2,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "reaped_at": 1789292386.453633,
+                    "label": "synthetic-concurrency-a-page-3",
+                    "pid": 413247,
+                    "time": 1789292386.293198,
+                    "parent_pid": 413163,
+                    "index": 3,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "reaped_at": 1789292386.449756,
+                    "label": "synthetic-concurrency-a-page-4",
+                    "pid": 413248,
+                    "time": 1789292386.365138,
+                    "parent_pid": 413163,
+                    "index": 4,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292386.71317,
+                    "ended_at": 1789292386.688988,
+                    "parent_pid": 413163,
+                    "time": 1789292386.459904,
+                    "resource": "image",
+                    "pid": 413249
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292386.696664,
+                    "ended_at": 1789292386.689982,
+                    "parent_pid": 413163,
+                    "time": 1789292386.504785,
+                    "resource": "image",
+                    "pid": 413250
+                },
+                {
+                    "index": 4,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-4",
+                    "reaped_at": 1789292386.727862,
+                    "ended_at": 1789292386.689971,
+                    "parent_pid": 413163,
+                    "time": 1789292386.555926,
+                    "resource": "image",
+                    "pid": 413251
+                },
+                {
+                    "index": 5,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-5",
+                    "reaped_at": 1789292386.870008,
+                    "ended_at": 1789292386.832822,
+                    "parent_pid": 413163,
+                    "time": 1789292386.766726,
+                    "resource": "image",
+                    "pid": 413252
+                },
+                {
+                    "index": 6,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-6",
+                    "reaped_at": 1789292386.892857,
+                    "ended_at": 1789292386.872748,
+                    "parent_pid": 413163,
+                    "time": 1789292386.807735,
+                    "resource": "image",
+                    "pid": 413253
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "forks": 9,
+            "case": "immediate_resume_ignores_old_parallel_cancellation_callbacks"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-12",
+            "records": [
+                {
+                    "reaped_at": 1789292387.081186,
+                    "label": "synthetic-concurrency-a-page-1",
+                    "pid": 413254,
+                    "time": 1789292386.990806,
+                    "parent_pid": 413163,
+                    "index": 1,
+                    "kind": "download_page",
+                    "resource": "image"
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292387.241613,
+                    "ended_at": 1789292387.235446,
+                    "parent_pid": 413163,
+                    "time": 1789292387.036177,
+                    "resource": "image",
+                    "pid": 413255
+                },
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1-replacement",
+                    "reaped_at": 1789292387.155171,
+                    "ended_at": 1789292387.150637,
+                    "parent_pid": 413163,
+                    "time": 1789292387.084621,
+                    "resource": "image",
+                    "pid": 413256
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "forks": 3,
+            "case": "source_generation_change_retires_only_the_stale_page"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-service/case-13",
+            "records": [
+                {
+                    "index": 1,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-1",
+                    "reaped_at": 1789292387.579458,
+                    "ended_at": 1789292387.573114,
+                    "parent_pid": 413163,
+                    "time": 1789292387.381274,
+                    "resource": "image",
+                    "pid": 413257
+                },
+                {
+                    "index": 2,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-2",
+                    "reaped_at": 1789292387.596194,
+                    "ended_at": 1789292387.573048,
+                    "parent_pid": 413163,
+                    "time": 1789292387.464273,
+                    "resource": "image",
+                    "pid": 413258
+                },
+                {
+                    "index": 3,
+                    "kind": "download_page",
+                    "label": "synthetic-concurrency-a-page-3",
+                    "reaped_at": 1789292387.686938,
+                    "ended_at": 1789292387.68201,
+                    "parent_pid": 413163,
+                    "time": 1789292387.616756,
+                    "resource": "image",
+                    "pid": 413259
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "forks": 3,
+            "case": "session_wrapper_and_real_default_settings_keep_account_isolation"
+        }
+    ],
+    "counts": {
+        "actual_forks": 67,
+        "tests": 13,
+        "assertions": 410
+    },
+    "scope": "Real Runner forks, pipes, SQLite and PageStore with synthetic images and accounts; no network or monetary operations",
+    "suite": "service",
+    "passed": true,
+    "tests": [
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation"
+        }
+    ],
+    "assertions": [
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: missing concurrency settings retain one in-flight page"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: legacy settings remain actually serial"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "legacy_settings_without_concurrency_keep_one_page_window: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: one explicit chapter fills its image window"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: actual page workers overlap at the selected concurrency"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: completion counts each committed page once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 4 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 4 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 5 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 5 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 6 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 6 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 7 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: page 7 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 4 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 4 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 5 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 5 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 6 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 6 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 7 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: commit 7 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_1: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: one explicit chapter fills its image window"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: actual page workers overlap at the selected concurrency"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: completion counts each committed page once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 4 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 4 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 5 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 5 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 6 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 6 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 7 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: page 7 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 4 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 4 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 5 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 5 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 6 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 6 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 7 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: commit 7 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_2: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: one explicit chapter fills its image window"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: actual page workers overlap at the selected concurrency"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: completion counts each committed page once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 4 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 4 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 5 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 5 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 6 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 6 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 7 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: page 7 starts once"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 4 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 4 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 6 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 6 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 5 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 5 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 7 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: commit 7 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "single_chapter_real_parallel_download_4: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: Runner accepts the live increase"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: refill happens before any prior page finishes"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: the existing chapter reaches three actual workers"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 4 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 4 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 5 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: page 5 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 5 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 5 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 4 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: commit 4 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_increase_refills_the_current_chapter: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: out-of-order completion counts only ready pages"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: repeated refresh does not duplicate a page or exceed the window"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 4 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 4 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 5 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 5 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 6 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 6 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 7 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: page 7 starts once"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 4 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 4 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 5 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 5 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 6 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 6 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 7 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: commit 7 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "out_of_order_settlement_refills_distinct_pages: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: the reduced chapter does not refill before draining"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: the reduced chapter does not refill before draining"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: the reduced chapter does not refill before draining"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: the sixth page still waits"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 4 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 4 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 5 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 5 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 6 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: page 6 starts once"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 4 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 4 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 5 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 5 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 6 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: commit 6 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "live_chapter_downshift_stops_new_page_starts: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: visible ownership promotes the same acquisition"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: another reader and the job retain the same worker"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: pause is accepted"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: pause removes job owners and preserves the remaining reader"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: the paused job owns no remaining acquisition"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: shared callbacks settle once with the same committed image"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: pause does not resume or complete the chapter"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: unowned page 2 is canceled before writing"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: unowned page 3 is canceled before writing"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: unowned page 4 is canceled before writing"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_owner_promotes_one_page_and_pause_preserves_reader: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: failure retires every job owner"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: the shared reader still commits successfully"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: failure preserves the terminal job and starts no later pages"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: exclusive sibling work is canceled"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: exclusive sibling work is canceled"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "one_page_failure_retires_other_job_owners: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: the successful page is committed before deferred progress runs"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: failure persists the count of real ready pages"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: delayed refill cannot restart the stopped job"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: the successful page and descriptor remain verified"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "failure_counts_ready_pages_before_deferred_refill: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: immediate resume is accepted"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: old cancellations do not fail or complete the resumed job"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: the surviving shared reader settles once"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: only the six current pages are committed"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumed page generations do not double advance"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumed page generations do not double advance"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumed page generations do not double advance"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumed page generations do not double advance"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumed page generations do not double advance"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumed page generations do not double advance"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: resumption preserves the descriptor"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "immediate_resume_ignores_old_parallel_cancellation_callbacks: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: a new source generation receives a new acquisition"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: the old source settles as canceled and cannot commit"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: the replacement commits once in the parent"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: the neighboring page retains its original worker"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: independent current pages remain valid"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "source_generation_change_retires_only_the_stale_page: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: SessionRunner delegates live capacity access"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: real default settings produce two simultaneous pages"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: the immutable descriptor is unchanged"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: every page is atomically committed and complete"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: page 1 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: page 1 starts once"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: page 2 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: page 2 starts once"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: page 3 has verified content and one generation"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: page 3 starts once"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: parent commits are serialized"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: commit 1 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: commit 1 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: commit 2 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: commit 2 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: commit 3 is performed by the parent"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: commit 3 retains the atomic journal sequence"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: another synthetic account retains an untouched descriptor"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: cross-account page state is isolated"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: cross-account page state is isolated"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: cross-account page state is isolated"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "session_wrapper_and_real_default_settings_keep_account_isolation: image slots remain owned until children are reaped"
+        }
+    ]
+}

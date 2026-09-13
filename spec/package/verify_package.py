@@ -90,10 +90,15 @@ def main() -> None:
                 required.add("bilicomics/bookstore.lua")
             if "bilicomics/bookstore_categories" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
                 required.add("bilicomics/bookstore_categories.lua")
+            if "bilicomics/bookshelf_state" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
+                required.add("bilicomics/bookshelf_state.lua")
             if "bilicomics/protocol/recommendations" in archive.read(prefix + "bilicomics/protocol/client.lua").decode("utf-8"):
                 required.add("bilicomics/protocol/recommendations.lua")
             if "bilicomics/protocol/categories" in archive.read(prefix + "bilicomics/protocol/client.lua").decode("utf-8"):
                 required.add("bilicomics/protocol/categories.lua")
+            auth = prefix + "bilicomics/protocol/auth.lua"
+            if auth in names and "bilicomics/protocol/site_context" in archive.read(auth).decode("utf-8"):
+                required.add("bilicomics/protocol/site_context.lua")
             collector = prefix + "bilicomics/purchase/quote_fetch.lua"
             if collector in names and "bilicomics/purchase/range" in archive.read(collector).decode("utf-8"):
                 required.add("bilicomics/purchase/range.lua")

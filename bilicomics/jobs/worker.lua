@@ -304,7 +304,8 @@ function Worker.execute(request)
     assert(type(request) == "table", "Invalid worker request")
     if request.kind == "diagnostics" then return localDiagnostics() end
     if request.kind == "auth" then
-        local methods = { generateQR = true, pollQR = true, cookieInfo = true, refreshSession = true, confirmRefresh = true }
+        local methods = { generateQR = true, pollQR = true, cookieInfo = true, refreshSession = true, confirmRefresh = true,
+            ensureSiteContext = true }
         if not methods[request.method] then return nil, Util.error("invalid_request", "The sign-in operation is not supported.") end
         local auth = require("bilicomics/protocol/auth").new{ session = request.session,
             transport_options = request.transport_options }

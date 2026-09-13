@@ -69,7 +69,7 @@ local network = { isConnected = function() return true end }
 local root = output .. "/auth-data"
 local controller = Controller.new{ root = root, ui_manager = ui, network = network, runner_factory = makeRunner }
 local function imported(mid, suffix)
-    local session = assert(Session.parse("SESSDATA=synthetic-" .. suffix .. "; DedeUserID=" .. mid))
+    local session = assert(Session.parse("SESSDATA=synthetic-" .. suffix .. "; DedeUserID=" .. mid .. "; buvid3=synthetic-authentication-device"))
     assert(session:withIdentity({ id = mid, name = "Synthetic account" }))
     return { session = session:serialize(), summary = session:summary() }
 end

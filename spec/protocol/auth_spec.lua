@@ -26,6 +26,7 @@ local function cookies(mid)
         "SESSDATA=new_session; Domain=.bilibili.com; Path=/; Secure; HttpOnly; Max-Age=15552000",
         "bili_jct=new_csrf; Domain=.bilibili.com; Path=/; Secure",
         "DedeUserID=" .. tostring(mid or 42) .. "; Domain=.bilibili.com; Path=/; Secure",
+        "buvid3=synthetic-existing-device; Domain=.bilibili.com; Path=/; Secure",
     } }
 end
 

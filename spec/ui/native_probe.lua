@@ -103,9 +103,11 @@ local function press(message)
     error("Button not found: " .. message)
 end
 local function dialog_button(message)
+    local expected = _(message)
     for _index, row in ipairs(screens.dialog.buttons) do
         for _index, button in ipairs(row) do
-            if button.text == _(message) then return button end
+            local label = type(button.text) == "string" and button.text:gsub("^%[x%] ", ""):gsub("^%[ %] ", "")
+            if button.text == expected or label == expected then return button end
         end
     end
     error("Dialog button not found: " .. message)
@@ -154,7 +156,8 @@ check("locked_next_chapter_enters_quote_instead_of_read_or_purchase", controller
 finish(nil, { kind = "capability" }); screens:_closeDialog()
 controller.episodes[2].read = false
 controller.episodes[3].access, controller.episodes[3].downloaded = "free", true
-press("All")
+press("More")
+dialog_press("Filter bookshelf")
 dialog_press("Updated")
 check("following_filter_changes", screens.filter == "updated")
 screens:showComic("1")
@@ -420,7 +423,10 @@ check("account_switch_retires_a_displayed_download_continuation", #controller.ca
 controller.account_key = nil
 screens:_closeDialog()
 screens:showLibrary()
-press("Refresh bookshelf")
+press("More")
+dialog_press("Refresh bookshelf")
+check("more_refresh_uses_the_favorites_controller_operation", controller.waiting[1].method == "refreshLibrary"
+    and controller.calls[#controller.calls].args[1] == "favorites")
 screens:close()
 finish(true)
 check("stale_callback_does_not_reopen_closed_ui", screens.widget == nil and screens.route == nil)

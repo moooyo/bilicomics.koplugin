@@ -14,6 +14,8 @@ SOURCES = (
     "bilicomics/purchase/selection.lua", "bilicomics/purchase/candidate.lua",
     "bilicomics/purchase/quote_fetch.lua", "bilicomics/purchase/value.lua", "bilicomics/purchase/range.lua",
     "bilicomics/protocol/client.lua", "bilicomics/protocol/crypto.lua",
+    # Client eagerly imports these helpers; their read endpoints are not exercised by these purchase cases.
+    "bilicomics/protocol/categories.lua", "bilicomics/protocol/recommendations.lua", "bilicomics/cover_source.lua",
     "bilicomics/protocol/errors.lua", "bilicomics/protocol/image.lua",
     "bilicomics/protocol/json.lua", "bilicomics/protocol/normalize.lua",
     "bilicomics/protocol/session.lua", "bilicomics/protocol/transport.lua",

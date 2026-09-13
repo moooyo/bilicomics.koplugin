@@ -43,6 +43,7 @@ function Screens.new(options)
 end
 
 function Screens:_navigate(route, id)
+    if self.route == "favorites" then self:_saveBookshelfView() end
     self:_closeDialog()
     self.purchase_visible = false
     self.epoch = self.epoch + 1
@@ -51,25 +52,38 @@ function Screens:_navigate(route, id)
     self.bookstore_loading, self.bookstore_error, self.bookstore_loading_more, self.bookstore_more_error = false, nil, false, nil
     self.route, self.comic_id, self.page = route, id, 1
     self.status, self.filter, self.selecting, self.selected = nil, "all", false, {}
+    if route == "favorites" then self:_loadBookshelfView() end
     self:_render()
 end
 
 -- Legacy continue/history links now return to the bookshelf without discarding progress.
-function Screens:showLibrary() self:_navigate("favorites") end
+function Screens:showLibrary()
+    self:_navigate("favorites")
+    self:_syncBookshelf(false)
+    self:_maybeBookshelfHelp()
+end
 function Screens:showBookstore()
     self:_navigate("bookstore")
     if self.controller:getBookstore(self.bookstore_query).stale then self:_refreshBookstore() end
 end
 function Screens:showComic(id)
+    if self.route ~= "comic" then self.comic_origin = { route = self.route, page = self.page } end
     self:_navigate("comic", tostring(id))
     if not self.loaded["comic:" .. tostring(id)] then self:_refreshComic() end
 end
 function Screens:showDownloads() self:_navigate("downloads") end
 function Screens:showAccount() self:_navigate("account") end
 function Screens:showSearch() self:_navigate("search") end
-function Screens:refresh() if self.route then self:_render() end end
+function Screens:refresh()
+    if self.bookshelf_reader_return and self.bookshelf_reader_return.account_key ~= accountKey(self.controller) then
+        self.bookshelf_reader_return = nil
+    end
+    if self.route then self:_render() end
+end
 
-function Screens:close()
+function Screens:close(keep_reader_return)
+    if self.route == "favorites" then self:_saveBookshelfView() end
+    if not keep_reader_return then self.bookshelf_reader_return = nil end
     self.epoch = self.epoch + 1
     self.bookstore_sequence = (self.bookstore_sequence or 0) + 1
     self.bookstore_loading = false
@@ -85,9 +99,222 @@ function Screens:_closeDialog(keep_purchase)
     if not keep_purchase then self.purchase_visible = false end
     self.bookstore_synopsis, self.bookstore_synopsis_dirty = nil, nil
     self.bookstore_picker, self.bookstore_picker_state, self.bookstore_picker_dirty = nil, nil, nil
+    self.context_dialog, self.context_dialog_dirty, self.context_dialog_account = nil, nil, nil
     self.session_input = nil
     if self.qr_login then self.qr_login:close(); self.qr_login = nil end
     if self.dialog then UIManager:close(self.dialog); self.dialog = nil end
+end
+
+function Screens:_loadBookshelfView()
+    local view = self.controller.getBookshelfViewState and self.controller:getBookshelfViewState() or { help_seen = true }
+    self.bookshelf_view_account, self.bookshelf_view_loaded = accountKey(self.controller), true
+    self.filter, self.bookshelf_sort, self.page = view.filter or "all", view.sort or "source", view.page or 1
+    self.bookshelf_focused_comic_id = view.focused_comic_id and tostring(view.focused_comic_id) or nil
+    self.bookshelf_order_ids, self.bookshelf_help_seen = copy(view.order_ids or {}), view.help_seen == true
+    self.bookshelf_reorder = false
+end
+
+function Screens:_saveBookshelfView()
+    if self.route ~= "favorites" or not self.bookshelf_view_loaded or self.bookshelf_view_account ~= accountKey(self.controller)
+        or not self.controller.saveBookshelfViewState then return end
+    self.controller:saveBookshelfViewState({ filter = self.filter or "all", sort = self.bookshelf_sort or "source", page = self.page or 1,
+        focused_comic_id = self.bookshelf_focused_comic_id or false, order_ids = copy(self.bookshelf_order_ids or {}), help_seen = self.bookshelf_help_seen == true },
+        self.bookshelf_view_account)
+end
+
+function Screens:onReaderClosed(event)
+    local intent = self.bookshelf_reader_return
+    self.bookshelf_reader_return = nil
+    if not intent or not intent.ready or self.route ~= nil or intent.account_key ~= accountKey(self.controller)
+        or not event or tostring(event.comic_id) ~= intent.comic_id then return false end
+    self:showLibrary()
+    return true
+end
+
+function Screens:_showContextDialog(heading, buttons, on_dismiss)
+    local dirty = self.context_dialog_dirty
+    self:_closeDialog()
+    local owner, epoch, key = self, self.epoch, accountKey(self.controller)
+    local dialog = ButtonDialog:new{ title = heading, buttons = buttons, modal = true, width_factor = 0.94, rows_per_page = 8 }
+    function dialog:onCloseWidget()
+        ButtonDialog.onCloseWidget(self)
+        if owner.context_dialog ~= self then return end
+        local repaint = owner.context_dialog_dirty
+        owner.context_dialog, owner.context_dialog_dirty, owner.context_dialog_account = nil, nil, nil
+        if owner.dialog == self then owner.dialog = nil end
+        if owner.epoch == epoch and accountKey(owner.controller) == key then
+            if on_dismiss then on_dismiss() end
+            if repaint and owner.route then owner:_render() end
+        end
+    end
+    self.dialog, self.context_dialog, self.context_dialog_dirty, self.context_dialog_account = dialog, dialog, dirty, key
+    UIManager:show(dialog)
+    return dialog
+end
+
+function Screens:_bookshelfSyncState()
+    if self.controller.getBookshelfSyncState then return self.controller:getBookshelfSyncState() end
+    local account = self.controller:getAccount() or {}
+    local authenticated = account.session_valid
+    if authenticated == nil and account.account_key == "anonymous" then authenticated = false end
+    return { has_cache = true, syncing = false, can_sync = authenticated ~= false, authenticated = authenticated, offline = false }
+end
+
+function Screens:_syncBookshelf(manual)
+    if self.route ~= "favorites" then return end
+    local sync = self:_bookshelfSyncState()
+    if sync.syncing or manual and not sync.can_sync then return end
+    local epoch, key = self.epoch, accountKey(self.controller)
+    local function done(value, error)
+        if self.route ~= "favorites" or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
+        if manual and value and not error then self.bookshelf_reorder = true end
+        self:_render()
+        self:_maybeBookshelfHelp()
+    end
+    if manual then
+        if self.controller.syncBookshelf then self.controller:syncBookshelf(done)
+        else self.controller:refreshLibrary("favorites", done) end
+    elseif self.controller.ensureBookshelfSync then self.controller:ensureBookshelfSync(done) end
+    if self.route == "favorites" then self:_render() end
+end
+
+function Screens:_maybeBookshelfHelp()
+    if self.route ~= "favorites" or self.bookshelf_help_seen or self.dialog or #(self.cards or {}) == 0 then return end
+    local ticket = { epoch = self.epoch, account = accountKey(self.controller) }
+    self.bookshelf_help_ticket = ticket
+    UIManager:nextTick(function()
+        if self.bookshelf_help_ticket ~= ticket then return end
+        self.bookshelf_help_ticket = nil
+        if self.route == "favorites" and self.epoch == ticket.epoch and accountKey(self.controller) == ticket.account
+            and not self.bookshelf_help_seen and not self.dialog and #(self.cards or {}) > 0 then self:_bookshelfHelp() end
+    end)
+end
+
+function Screens:_bookshelfHelp()
+    local dialog
+    dialog = self:_showContextDialog(_("Bookshelf help") .. "\n\n"
+        .. _("Tap a cover to resume reading. Hold it to open chapters.") .. "\n\n"
+        .. _("With keys, select a comic, then use More to open its chapter catalog.") .. "\n\n"
+        .. _("Use More for sync, filters, sorting and settings."), {
+        { { text = _("Got it"), callback = function() if self.dialog == dialog then dialog:onClose() end end } },
+    }, function()
+        self.bookshelf_help_seen = true
+        if self.route == "favorites" then self:_saveBookshelfView()
+        elseif self.controller.getBookshelfViewState and self.controller.saveBookshelfViewState then
+            local view = self.controller:getBookshelfViewState(); view.help_seen = true
+            self.controller:saveBookshelfViewState(view)
+        end
+    end)
+end
+
+function Screens:_selectedBookshelfComic()
+    local focused = self.widget and self.widget:getFocusItem()
+    if focused and focused.comic then self.bookshelf_focused_comic_id = tostring(focused.comic.id) end
+    for _index, card in ipairs(self.cards or {}) do
+        if tostring(card.comic.id) == self.bookshelf_focused_comic_id then return card.comic end
+    end
+    return self.cards and self.cards[1] and self.cards[1].comic
+end
+
+function Screens:_more()
+    local epoch, key = self.epoch, accountKey(self.controller)
+    local dialog
+    local function current() return self.dialog == dialog and self.epoch == epoch and accountKey(self.controller) == key end
+    local buttons, heading = {}, _("More")
+    if self.route == "favorites" then
+        local sync, comic = self:_bookshelfSyncState(), self:_selectedBookshelfComic()
+        self:_saveBookshelfView()
+        local timestamp = tonumber(sync.last_synced_at)
+        heading = _("Bookshelf") .. "\n" .. (timestamp and timestamp > 0
+            and string.format(_("Last synced: %s"), os.date("%Y-%m-%d %H:%M", timestamp)) or _("Not synced yet"))
+        if sync.syncing then heading = heading .. "\n" .. _("Syncing bookshelf…") end
+        if sync.error then heading = heading .. "\n" .. Model.error(sync.error) end
+        if sync.authenticated == false then heading = heading .. "\n" .. _("Sign in to sync your bookshelf.")
+        elseif sync.offline then heading = heading .. "\n" .. _("Connect, then retry bookshelf sync.")
+        elseif not sync.can_sync then heading = heading .. "\n" .. _("Bookshelf sync is temporarily unavailable.") end
+        if comic then heading = heading .. "\n" .. string.format(_("Selected: %s"), title(comic)) end
+        buttons[#buttons + 1] = { { text = _("Refresh bookshelf"), enabled = sync.can_sync == true and not sync.syncing,
+            callback = function() if current() then self:_closeDialog(); self:_syncBookshelf(true) end end } }
+        buttons[#buttons + 1] = { { text = _("Filter bookshelf"), callback = function() if current() then self:_bookshelfFilter() end end } }
+        buttons[#buttons + 1] = { { text = _("Sort bookshelf"), callback = function() if current() then self:_bookshelfSort() end end } }
+        buttons[#buttons + 1] = { { text = _("Open chapter catalog"), enabled = comic ~= nil, callback = function()
+            if current() and comic then self:showComic(comic.id) end
+        end } }
+    end
+    buttons[#buttons + 1] = { { text = _("Account and settings"), callback = function() if current() then self:showAccount() end end } }
+    buttons[#buttons + 1] = { { text = _("Bookshelf help"), callback = function() if current() then self:_bookshelfHelp() end end } }
+    buttons[#buttons + 1] = { { text = _("Close"), callback = function() if current() then dialog:onClose() end end } }
+    dialog = self:_showContextDialog(heading, buttons)
+end
+
+function Screens:_bookshelfSort()
+    local dialog
+    local choices = { { "source", _("Bookshelf order") }, { "title", _("Title") }, { "recent", _("Recently read") } }
+    local buttons = {}
+    for _index, choice in ipairs(choices) do
+        local value = choice[1]
+        buttons[#buttons + 1] = { { text = (self.bookshelf_sort == value and "[x] " or "[ ] ") .. choice[2], callback = function()
+            if self.dialog ~= dialog then return end
+            self:_closeDialog()
+            self.bookshelf_sort, self.bookshelf_reorder, self.page, self.epoch = value, true, 1, self.epoch + 1
+            self:_render(); self:_saveBookshelfView()
+        end } }
+    end
+    buttons[#buttons + 1] = { { text = _("Cancel"), callback = function() if self.dialog == dialog then dialog:onClose() end end } }
+    dialog = self:_showContextDialog(_("Sort bookshelf"), buttons)
+end
+
+function Screens:_bookshelfItems()
+    local items = copy(Model.array(self.controller.getBookshelfItems and self.controller:getBookshelfItems()
+        or self.controller:getLibrary("favorites")))
+    local records, source_order = {}, {}
+    for index, comic in ipairs(items) do records[tostring(comic.id)], source_order[tostring(comic.id)] = comic, index end
+    if self.bookshelf_reorder or #(self.bookshelf_order_ids or {}) == 0 then
+        local function readTime(comic)
+            local extra = comic.extra or {}
+            if (comic.progress_source or extra.progress_source) ~= "local" then return nil end
+            local value = tonumber(comic.last_read_at or extra.last_read_at)
+            return value and value > 0 and value < math.huge and value or nil
+        end
+        if self.bookshelf_sort == "title" then
+            table.sort(items, function(a, b)
+                local left, right = tostring(title(a)):lower(), tostring(title(b)):lower()
+                if left ~= right then return left < right end
+                return source_order[tostring(a.id)] < source_order[tostring(b.id)]
+            end)
+        elseif self.bookshelf_sort == "recent" then
+            table.sort(items, function(a, b)
+                local left, right = readTime(a), readTime(b)
+                if left ~= right then return left ~= nil and (right == nil or left > right) end
+                return source_order[tostring(a.id)] < source_order[tostring(b.id)]
+            end)
+        end
+        self.bookshelf_order_ids = {}
+        for _index, comic in ipairs(items) do self.bookshelf_order_ids[#self.bookshelf_order_ids + 1] = tostring(comic.id) end
+        self.bookshelf_reorder = false
+    end
+    local ordered, ids, seen = {}, {}, {}
+    for _index, id in ipairs(self.bookshelf_order_ids or {}) do
+        if records[id] and not seen[id] then ordered[#ordered + 1], ids[#ids + 1], seen[id] = records[id], id, true end
+    end
+    for _index, comic in ipairs(items) do
+        local id = tostring(comic.id)
+        if not seen[id] then ordered[#ordered + 1], ids[#ids + 1], seen[id] = comic, id, true end
+    end
+    self.bookshelf_order_ids = ids
+    return ordered
+end
+
+function Screens:_back()
+    if self.route == "comic" and self.comic_origin then
+        local origin = self.comic_origin
+        self.comic_origin = nil
+        if origin.route == "bookstore" then self:showBookstore()
+        elseif origin.route == "search" then self:showSearch()
+        else self:showLibrary(); return end
+        self.page = origin.page or 1; self:_render()
+    elseif self.route == "account" then self:showLibrary()
+    else self:close() end
 end
 
 function Screens:_error(error)
@@ -184,6 +411,16 @@ end
 
 function Screens:_render()
     if not self.route then return end
+    if self.context_dialog and self.context_dialog_account ~= accountKey(self.controller) then self:_closeDialog() end
+    if self.route == "favorites" and (not self.bookshelf_view_loaded or self.bookshelf_view_account ~= accountKey(self.controller)) then
+        if self.context_dialog then self:_closeDialog() end
+        self.epoch = self.epoch + 1
+        self:_loadBookshelfView()
+    end
+    if self.context_dialog and self.dialog == self.context_dialog then
+        self.context_dialog_dirty = true
+        return
+    end
     if self.bookstore_synopsis and self.dialog == self.bookstore_synopsis then
         self.bookstore_synopsis_dirty = true
         return
@@ -202,22 +439,22 @@ function Screens:_render()
         downloads = _("Downloads"), search = _("Search"), account = _("Account and settings") }
     local side_width = W.scale(78)
     local header = W.row{
-        self:_button(_("Close"), side_width, function() self:close() end, { borderless = true, size = 16 }),
+        self:_button(_("Back"), side_width, function() self:_back() end, { borderless = true, size = 16 }),
         W.text(headings[self.route], self.width - 2 * side_width, 25, { bold = true, align = "center", height = W.scale(38) }),
-        self:_button(self.route == "account" and _("Bookshelf") or _("Account"), side_width,
-            function() if self.route == "account" then self:showLibrary() else self:showAccount() end end,
-            { borderless = true, size = 16 }),
+        self:_button(_("More"), side_width, function() self:_more() end, { borderless = true, size = 16 }),
     }
     local builders = { bookstore = self._bookstore, favorites = self._library, comic = self._comic,
         downloads = self._downloads, search = self._search, account = self._account }
     local body = builders[self.route](self)
-    local navigation = self:_buttons{
-        { text = _("Bookshelf"), primary = self.route == "favorites", callback = function() self:showLibrary() end },
-        { text = _("Bookstore"), primary = self.route == "bookstore", callback = function() self:showBookstore() end },
-        { text = _("Search"), primary = self.route == "search", callback = function() self:showSearch() end },
-        { text = _("Downloads"), primary = self.route == "downloads", callback = function() self:showDownloads() end },
-    }
-    local content = W.column{ header, W.space(6), W.rule(self.width, true), W.space(10), body }
+    local navigation, navigation_buttons = W.navigation({
+        { text = _("Bookshelf"), selected = self.route == "favorites", callback = function() self:showLibrary() end },
+        { text = _("Bookstore"), selected = self.route == "bookstore", callback = function() self:showBookstore() end },
+        { text = _("Search"), selected = self.route == "search", callback = function() self:showSearch() end },
+        { text = _("Downloads"), selected = self.route == "downloads", callback = function() self:showDownloads() end },
+    }, self.width)
+    self.navigation_buttons = navigation_buttons
+    self.focus[#self.focus + 1] = navigation_buttons
+    local content = W.column{ header, W.space(6), W.rule(self.width, self.route ~= "favorites"), W.space(10), body }
     local filler = self.height - content:getSize().h - navigation:getSize().h - W.scale(16)
     content[#content + 1] = W.spacePixels(math.max(0, filler))
     content[#content + 1] = navigation
@@ -231,9 +468,14 @@ function Screens:_render()
         if self.focus[position.y] and self.focus[position.y][position.x] then selected = position end
         restore_focus = old and (old.focused or old[1] and old[1].invert)
     end
+    if not selected and self.route == "favorites" and self.bookshelf_focused_comic_id then
+        for y, row in ipairs(self.focus) do for x, item in ipairs(row) do
+            if item.comic and tostring(item.comic.id) == self.bookshelf_focused_comic_id then selected = { x = x, y = y } end
+        end end
+    end
     self.widget = W.Panel:new{ content = content, layout = self.focus, selected = selected,
         view_epoch = self.epoch, view_route = self.route, view_page = self.page,
-        close_callback = function() self:close() end,
+        close_callback = function() self:_back() end,
         next_page = function() self:_changePage(1) end,
         previous_page = function() self:_changePage(-1) end }
     if previous then UIManager:close(previous) end
@@ -263,6 +505,7 @@ function Screens:_comicCard(comic)
 end
 
 function Screens:_readComic(comic)
+    self:_saveBookshelfView()
     self.epoch = self.epoch + 1
     if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
     local key, epoch = accountKey(self.controller), self.epoch
@@ -273,7 +516,6 @@ function Screens:_readComic(comic)
 end
 
 function Screens:_bookshelfFilter()
-    self:_closeDialog()
     local rows, epoch, account = {}, self.epoch, accountKey(self.controller)
     local dialog
     for _, option in ipairs{
@@ -281,20 +523,18 @@ function Screens:_bookshelfFilter()
         { "updated", _("Updated") }, { "completed", _("Completed series") },
     } do
         local key = option[1]
-        rows[#rows + 1] = { { text = option[2], callback = function()
+        rows[#rows + 1] = { { text = (self.filter == key and "[x] " or "[ ] ") .. option[2], callback = function()
             if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= account then return end
             self:_closeDialog()
             self.filter, self.page, self.status, self.epoch = key, 1, nil, self.epoch + 1
             if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
-            self:_render()
+            self:_render(); self:_saveBookshelfView()
         end } }
     end
     rows[#rows + 1] = { { text = _("Cancel"), callback = function()
-        if self.dialog == dialog then self:_closeDialog() end
+        if self.dialog == dialog then dialog:onClose() end
     end } }
-    dialog = ButtonDialog:new{ title = _("Filter bookshelf"), buttons = rows, modal = true }
-    self.dialog = dialog
-    UIManager:show(dialog)
+    dialog = self:_showContextDialog(_("Filter bookshelf"), rows)
 end
 
 function Screens:_bookshelf(items)
@@ -310,14 +550,48 @@ function Screens:_bookshelf(items)
             entries[#entries + 1] = { comic = comic, progress = progress }
         end
     end
-    local rows = { self:_buttons{
-        { text = self.status or _("Refresh bookshelf"), callback = function()
-            self:_invoke("refreshLibrary", { "favorites" }, function(_value, error) if error then self:_error(error) end end)
-        end },
-        { text = labels[self.filter] or labels.all, callback = function() self:_bookshelfFilter() end },
-    }, W.space(8) }
-    return self:_coverGrid(entries, { rows = rows, empty_message = #items == 0
-        and _("Your bookshelf is empty. Search for a comic to follow.") or _("No comics match this filter.") })
+    local rows, fixed = {}, 16
+    local sync = self:_bookshelfSyncState()
+    if not self.controller.ensureBookshelfSync then
+        rows[#rows + 1] = self:_button(_("Refresh bookshelf"), self.width, function() self:_syncBookshelf(true) end,
+            { borderless = true, size = 14, height = 24, align = "left" })
+        fixed = fixed + 32
+    end
+    if self.filter ~= "all" then
+        local clear_width = W.scale(106)
+        rows[#rows + 1] = W.row{
+            W.text(string.format(_("Filter: %s"), labels[self.filter] or labels.all), self.width - clear_width, 14, { muted = true }),
+            self:_button(_("Clear filter"), clear_width, function()
+                self.filter, self.page, self.epoch = "all", 1, self.epoch + 1
+                self:_render(); self:_saveBookshelfView()
+            end, { borderless = true, size = 14, height = 24 }),
+        }
+        fixed = fixed + 32
+    end
+    local message = self.status or (sync.syncing and _("Syncing bookshelf…"))
+        or (sync.error and #items > 0 and _("Could not sync. Saved comics are still available."))
+    if message then
+        rows[#rows + 1] = W.text(message, self.width, 13, { muted = true, height = W.scale(24) })
+        fixed = fixed + 24
+    end
+    local empty
+    if self.filter ~= "all" then empty = _("No comics match this filter.")
+    elseif sync.syncing then empty = _("Loading your bookshelf…")
+    elseif not sync.has_cache then
+        if sync.authenticated == false then empty = _("Sign in to load your bookshelf.")
+        elseif sync.offline then empty = _("Connect, then retry bookshelf sync.")
+        elseif not sync.can_sync then empty = _("Bookshelf sync is temporarily unavailable.")
+        else empty = _("Your bookshelf has not been synced yet.") end
+    else empty = _("Your bookshelf is empty. Find a comic in Bookstore or Search.") end
+    local body = self:_coverGrid(entries, { rows = rows, bookshelf = true, fixed_height = fixed, hint = "", empty_message = empty })
+    if #entries == 0 and self.filter == "all" then
+        local action
+        if sync.authenticated == false then action = self:_button(_("Sign in with QR code"), self.width, function() self:showAccount(); self:_signInWithQR() end)
+        elseif not sync.has_cache and not sync.syncing then action = self:_button(_("Retry sync"), self.width,
+            function() self:_syncBookshelf(true) end, { enabled = sync.can_sync == true }) end
+        if action then body[#body + 1] = W.space(8); body[#body + 1] = action; body:resetLayout() end
+    end
+    return body
 end
 
 function Screens:_coverGrid(entries, options)
@@ -328,9 +602,14 @@ function Screens:_coverGrid(entries, options)
     if options.bookstore then columns = screen_width >= 900 and 4 or screen_width >= 600 and 3 or 2 end
     local width = math.floor((self.width - gap * (columns - 1)) / columns)
     local available = self.body_height - W.scale(options.fixed_height or 96)
-    local cover_height = math.max(W.scale(70), math.min(math.floor((width - W.scale(12)) * 1.34), available - W.scale(130)))
-    local row_height = cover_height + W.scale(128)
+    local caption_height = options.bookshelf and 84 or 128
+    local cover_height = math.max(W.scale(70), math.min(math.floor((width - W.scale(12)) * 1.34), available - W.scale(caption_height + 2)))
+    local row_height = cover_height + W.scale(caption_height)
     local row_count = math.max(1, math.floor((available + gap) / (row_height + gap)))
+    if options.bookshelf and row_count > 1 then
+        cover_height = math.min(cover_height,
+            math.floor((available - gap * (row_count - 1) - W.scale(18)) / row_count) - W.scale(caption_height))
+    end
     if options.bookstore then
         -- Reserve two browsing rows before sizing covers, including rounded widget padding.
         local metadata_height, minimum_cover = W.scale(84), W.scale(80)
@@ -364,12 +643,12 @@ function Screens:_coverGrid(entries, options)
             { muted = true, align = "center" })
         local hint_width = self.width - 2 * arrow_width - counter_width - W.scale(8)
         rows[#rows + 1] = W.row{
-            W.text(hint, hint_width, 12, { muted = true, height = W.scale(20) }),
+            hint ~= "" and W.text(hint, hint_width, 12, { muted = true, height = W.scale(20) }) or W.gap(hint_width),
             W.gap(W.scale(8)), previous, counter, next_page,
         }
         self.focus[#self.focus + 1] = { previous, next_page }
         self.pagination = { previous = previous, next = next_page, counter = counter }
-    else
+    elseif hint ~= "" then
         rows[#rows + 1] = W.text(hint, self.width, 12,
             { muted = true, height = W.scale(20) })
     end
@@ -391,7 +670,7 @@ function Screens:_coverGrid(entries, options)
                 self.controller:getBookstore(self.bookstore_query).identity)
         end
         local card = W.CoverCard:new{ comic = comic, text = title(comic), width = width, cover_height = cover_height,
-            compact = options.bookstore,
+            compact = options.bookstore, bookshelf = options.bookshelf,
             progress = entry.description or entry.progress and entry.progress.label or "",
             update = options.bookstore and (entry.tags or "") or Model.comicUpdate(comic),
             callback = function()
@@ -401,11 +680,19 @@ function Screens:_coverGrid(entries, options)
             hold_callback = function()
                 if not current() then return end
                 if options.bookstore then self:_bookstoreSynopsis(comic) else self:showComic(comic.id) end
+            end,
+            focus_callback = function(focused)
+                if options.bookshelf and current() then self.bookshelf_focused_comic_id = tostring(focused.id) end
             end }
         if #row > 0 then row[#row + 1] = W.gap(gap) end
         row[#row + 1], focus[#focus + 1], self.cards[#self.cards + 1] = card, card, card
     end
     if row then rows[#rows + 1] = W.row(row); self.focus[#self.focus + 1] = focus end
+    if options.bookshelf and #self.cards > 0 then
+        local found = false
+        for _index, card in ipairs(self.cards) do if tostring(card.comic.id) == self.bookshelf_focused_comic_id then found = true end end
+        if not found then self.bookshelf_focused_comic_id = tostring(self.cards[1].comic.id) end
+    end
     if #entries == 0 then
         rows[#rows + 1] = W.text(options.empty_message or _("No recommendations are available."), self.width, 18,
             { height = W.scale(80) })
@@ -417,7 +704,7 @@ function Screens:_coverGrid(entries, options)
 end
 
 function Screens:_library()
-    return self:_bookshelf(copy(Model.array(self.controller:getLibrary("favorites"))))
+    return self:_bookshelf(self:_bookshelfItems())
 end
 
 function Screens:_refreshBookstore() self:_requestBookstore(false) end
@@ -621,8 +908,15 @@ function Screens:_read(comic, episode)
         else self:_error({ kind = "access" }) end
         return
     end
+    local from_bookshelf = self.route == "favorites" or self.route == "comic" and self.comic_origin and self.comic_origin.route == "favorites"
+    self.bookshelf_reader_return = from_bookshelf and { account_key = accountKey(self.controller), comic_id = tostring(comic.id), ready = false } or nil
+    self:_saveBookshelfView()
     self:_invoke("readEpisode", { tostring(comic.id), tostring(episode.id) }, function(_value, error)
-        if error then self:_error(error) else self:close() end
+        if error then self.bookshelf_reader_return = nil; self:_error(error)
+        else
+            if self.bookshelf_reader_return then self.bookshelf_reader_return.ready = true end
+            self:close(true)
+        end
     end)
 end
 
@@ -1224,39 +1518,44 @@ function Screens:_account()
     local signed_in = account.session_valid == true or (account.session_valid ~= false and account.id ~= nil)
     local prefetch = self.controller:getSetting("prefetch_pages", 3)
     local cache_limit = self.controller:getSetting("cache_limit_mb", 512)
+    local concurrency = self.controller:getSetting("download_concurrency", 2)
     local storage = self.controller:getStorageSummary() or {}
     local renewing = account.auth_state == "checking" or account.auth_state == "refreshing"
         or account.auth_state == "pending_confirmation"
     local rows = {
         W.text(signed_in and (account.name or _("Signed in")) or _("Not signed in"), self.width, 27, { display = true, bold = true }),
-        W.space(6), W.text(string.format(_("Coins: %s · Coupons: %s"), tostring(wallet.remain_gold or "—"),
-            tostring(wallet.remain_coupon or "—")), self.width, 19), W.space(6),
+        W.space(4), W.text(string.format(_("Coins: %s · Coupons: %s"), tostring(wallet.remain_gold or "—"),
+            tostring(wallet.remain_coupon or "—")), self.width, 19), W.space(4),
         W.text(account.auth_state == "reauth_required" and _("Sign in again to restore your account.")
             or renewing and _("Checking or renewing your sign-in…")
             or account.auth_state == "error" and _("Renewal is temporarily unavailable. Retry or sign in with QR code.")
             or account.renewable and _("Automatic sign-in renewal is enabled.")
             or signed_in and _("This imported session cannot renew itself. Sign in with QR code.")
             or _("Scan a code to sign in and enable automatic renewal."),
-            self.width, 16, { muted = true, height = W.scale(38) }), W.space(6),
+            self.width, 16, { muted = true, height = W.scale(38) }), W.space(4),
         W.text(wallet.stale and _("Balance may be outdated. Refresh before reviewing a purchase.") or _("Purchases use your existing balance and eligible coupons."),
-            self.width, 16, { muted = true, height = W.scale(38) }), W.space(6),
+            self.width, 16, { muted = true, height = W.scale(38) }), W.space(4),
         self:_buttons{
             { text = _("Sign in with QR code"), primary = true, callback = function() self:_signInWithQR() end },
             { text = signed_in and _("Replace session") or _("Import session"), callback = function() self:_importSession() end },
-        }, W.space(6), self:_buttons{
+        }, W.space(4), self:_buttons{
             { text = _("Import from file"), callback = function() self:_importSessionFile() end },
             { text = _("Refresh balance"), callback = function() self:_invoke("refreshWallet", {}, function(_value, error)
                 if error then self:_error(error) end
             end) end },
         }, W.space(10), W.rule(self.width, true), W.space(8),
-        W.text(_("Reading and cache"), self.width, 21, { bold = true }), W.space(6),
+        W.text(_("Reading and cache"), self.width, 21, { bold = true }), W.space(4),
         self:_buttons{
             { text = _("Reader defaults"), callback = function() self:_readerDefaults() end },
             { text = _("Local diagnostics"), callback = function() self:_diagnostics() end },
-        }, W.space(6),
-        self:_button(string.format(_("Preload next images: %d"), prefetch), self.width, function()
-            self.controller:setSetting("prefetch_pages", ({ [0] = 1, [1] = 3, [3] = 5, [5] = 0 })[prefetch] or 3); self:_render()
-        end, { align = "left" }), W.space(6),
+        }, W.space(4),
+        self:_buttons{
+            { text = string.format(_("Preload next images: %d"), prefetch), callback = function()
+                self.controller:setSetting("prefetch_pages", ({ [0] = 1, [1] = 3, [3] = 5, [5] = 0 })[prefetch] or 3); self:_render()
+            end, align = "left", size = 16 },
+            { text = string.format(_("Concurrent images: %d"), concurrency), callback = function() self:_imageConcurrency() end,
+                align = "left", size = 16 },
+        }, W.space(4),
         self:_button(string.format(_("Automatic cache limit: %d MiB"), cache_limit), self.width, function()
             self.controller:setSetting("cache_limit_mb", ({ [256] = 512, [512] = 1024, [1024] = 2048, [2048] = 256 })[cache_limit] or 512); self:_render()
         end, { align = "left" }), W.space(10),
@@ -1279,6 +1578,24 @@ function Screens:_account()
             function() self:_pendingList(pending) end, { primary = true })
     end
     return W.column(rows)
+end
+
+function Screens:_imageConcurrency()
+    local selected = self.controller:getSetting("download_concurrency", 2)
+    local buttons, row = {}, nil
+    local dialog, key = nil, accountKey(self.controller)
+    for value = 1, 4 do
+        if value % 2 == 1 then row = {}; buttons[#buttons + 1] = row end
+        row[#row + 1] = { text = (selected == value and "[x] " or "[ ] ") .. value, callback = function()
+            if self.dialog ~= dialog or accountKey(self.controller) ~= key then return end
+            local saved, error = self.controller:setSetting("download_concurrency", value)
+            if saved == nil and error then self:_closeDialog(); self:_render(); self:_error(error)
+            else self.context_dialog_dirty = true; self:_imageConcurrency() end
+        end }
+    end
+    buttons[#buttons + 1] = { { text = _("Close"), callback = function() if self.dialog == dialog then dialog:onClose() end end } }
+    dialog = self:_showContextDialog(_("Concurrent image downloads") .. "\n\n"
+        .. _("Applies to online cache and downloads. Images already downloading will finish."), buttons)
 end
 
 function Screens:_readerDefaults()

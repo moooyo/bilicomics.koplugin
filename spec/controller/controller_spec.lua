@@ -91,7 +91,7 @@ check("cache_ui_limit_matches_runtime_limit", controller:getSetting("cache_limit
 
 local secret = "synthetic-session-value"
 local function validated(mid)
-    local session = assert(Session.parse("SESSDATA=" .. secret .. "; DedeUserID=" .. mid))
+    local session = assert(Session.parse("SESSDATA=" .. secret .. "; DedeUserID=" .. mid .. "; buvid3=synthetic-controller-device"))
     assert(session:withIdentity({ id = mid, name = "Synthetic account " .. mid }))
     return { session = session:serialize(), summary = session:summary() }
 end

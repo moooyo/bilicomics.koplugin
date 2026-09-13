@@ -9,6 +9,8 @@ local ffi = require("ffi")
 local lfs = require("libs/libkoreader-lfs")
 local socket = require("socket")
 local Files = require("bilicomics/storage/files")
+local driver_root = assert(debug.getinfo(1, "S").source:match("^@(.+)/[^/]+$"))
+local Scope = assert(loadfile(driver_root .. "/live_acceptance_scope.lua"))()
 local private = work .. "/private"
 Files.mkdir(private)
 local report = { checks = {}, counts = {}, dimensions = {} }
@@ -22,6 +24,17 @@ local image_submission_attempts = 0
 local submission_observation = {}
 local initialized, opened_events = {}, {}
 local session_copy, state
+local checked_info
+local maintenance_counts, library_counts = {}, {}
+local visible_cover_urls = {}
+local image_timing = { starts = 0, peak_processes = 0 }
+require("ffi/posix_h")
+local timespec = ffi.new("struct timespec")
+function image_timing.now()
+    if ffi.C.clock_gettime(ffi.C.CLOCK_MONOTONIC, timespec) ~= 0 then return nil end
+    return tonumber(timespec.tv_sec) + tonumber(timespec.tv_nsec) / 1000000000
+end
+local function packed(...) return { n = select("#", ...), ... } end
 
 local function check(name, condition)
     report.checks[name] = not not condition
@@ -84,6 +97,8 @@ local ok = xpcall(function()
         and #selection.approved_source_paths <= 64)
     local comic_id, episode_id = tostring(selection.comic_id), tostring(selection.episode_id)
     local total = #selection.approved_source_paths
+    local selected_cover = require("bilicomics/cover_source").resolve(selection.approved_cover_url)
+    if phase == "online" and selected_cover then visible_cover_urls[selected_cover.url] = true end
     local approved, approved_paths = {}, {}
     for index, path in ipairs(selection.approved_source_paths) do
         assert(type(path) == "string" and path ~= "" and not approved[path], "Approved source paths must be unique")
@@ -106,7 +121,8 @@ local ok = xpcall(function()
     local guard
     if phase == "online" then
         local factory = assert(loadfile(assert(arg[5])))()
-        guard = assert(factory(selection, { phase = phase, work = work, private_root = private, parent_pid = parent_pid }))
+        guard = assert(factory(selection, { phase = phase, work = work, private_root = private, parent_pid = parent_pid,
+            auth_scope = Scope }))
         assert(type(guard.before) == "function" and type(guard.after) == "function"
             and type(guard.updateIndex) == "function" and type(guard.approveTokens) == "function")
     end
@@ -172,6 +188,28 @@ local ok = xpcall(function()
     end
 
     -- These wrappers observe the real Runner; its worker dependency is never replaced.
+    -- Only completed calls write timing evidence. File I/O is outside the measured call interval,
+    -- but holds the worker slot briefly before its original result returns to Runner.
+    local Worker = require("bilicomics/jobs/worker")
+    local worker_execute = Worker.execute
+    function Worker.execute(request, ...)
+        if type(request) ~= "table" or request.kind ~= "download_page" then return worker_execute(request, ...) end
+        local pid = tonumber(ffi.C.getpid())
+        local gate_known, gate_open = pcall(Files.exists, private .. "/allow-images")
+        local started = image_timing.now()
+        local values = packed(pcall(worker_execute, request, ...))
+        local finished = image_timing.now()
+        pcall(function()
+            assert(started and finished and finished >= started)
+            write(private .. "/image-worker-" .. pid .. "-" .. string.format("%.0f", started * 1000000) .. ".json", {
+                schema = 1, pid = pid, started = started, finished = finished,
+                gate_open_at_start = gate_known and gate_open == true,
+                returned_normally = values[1] == true,
+            })
+        end)
+        if not values[1] then error(values[2], 0) end
+        return unpack(values, 2, values.n)
+    end
     local Runner = require("bilicomics/jobs/runner")
     local runner_new, runner_submit, runner_start = Runner.new, Runner.submit, Runner._start
     Runner.new = function(options)
@@ -180,10 +218,26 @@ local ok = xpcall(function()
     end
     function Runner:submit(request, options, callback)
         local allowed = phase == "online"
+        local scoped_method = Scope.submissionName(request, phase == "online" and "reading" or "offline", checked_info)
         if request.kind == "client" then
             allowed = allowed and (request.method == "validateSession"
                 or request.method == "comicDetail" and tostring((request.arguments or {})[1]) == comic_id
                 or request.method == "imageIndex" and tostring((request.arguments or {})[1]) == episode_id)
+        elseif request.kind == "auth" then
+            local count = (maintenance_counts[scoped_method or "invalid"] or 0) + 1
+            allowed = allowed and scoped_method ~= nil and count <= 2
+            maintenance_counts[scoped_method or "invalid"] = count
+        elseif request.kind == "library" then
+            local count = (library_counts[scoped_method or "invalid"] or 0) + 1
+            allowed = allowed and scoped_method ~= nil and count <= 2
+            library_counts[scoped_method or "invalid"] = count
+        elseif request.kind == "download_cover" then
+            allowed = allowed and app and visible_cover_urls[request.url]
+                and Files.within(request.temporary_path, app.account.root .. "/covers")
+                and request.max_bytes == 4 * 1024 * 1024
+            if allowed then
+                allowed = type(guard.approveCover) == "function" and guard:approveCover(request.url, request.temporary_path) == true
+            end
         elseif request.kind == "download_page" then
             image_submission_attempts = image_submission_attempts + 1
             submission_observation = { source_approved = approved[request.source_path] ~= nil,
@@ -191,7 +245,7 @@ local ok = xpcall(function()
                 index_is_number = type(request.index) == "number" }
             allowed = allowed and approved[request.source_path] == request.index
             if options and options.priority == 20 then prefetched[request.index] = true end
-        elseif request.kind ~= "download_cover" then allowed = false end
+        else allowed = false end
         if not allowed then
             forbidden_attempts = forbidden_attempts + 1
             write(private .. "/submission-observation.json", submission_observation)
@@ -199,7 +253,22 @@ local ok = xpcall(function()
         end
         submitted[#submitted + 1] = { image = request.kind == "download_page", index = request.index }
         local forwarded = callback
-        if request.kind == "client" and request.method == "imageIndex" then
+        if request.kind == "auth" and request.method == "cookieInfo" then
+            forwarded = function(value, err, update)
+                if value then
+                    checked_info = { refresh = value.refresh, timestamp = value.timestamp }
+                    if Scope.rotationDeferred(value) then
+                        report.deferred = true
+                        report.checks.no_deferred_credential_rotation_required = false
+                        report.counts.credential_rotation_deferred = 1
+                        write(private .. "/rotation-deferred.json", { deferred = true })
+                        UIManager:nextTick(shutdown)
+                        return
+                    end
+                end
+                if callback then return callback(value, err, update) end
+            end
+        elseif request.kind == "client" and request.method == "imageIndex" then
             forwarded = function(value, err)
                 if value then
                     local observed = pcall(observeIndex, value)
@@ -215,13 +284,22 @@ local ok = xpcall(function()
         return runner_submit(self, request, options, forwarded)
     end
     function Runner:_start(task)
-        runner_start(self, task)
-        if task.pid then
+        local values = packed(runner_start(self, task))
+        if values[1] == true and task.pid then
             check("all_acquisition_runs_in_real_children", task.pid ~= parent_pid)
             worker_starts = worker_starts + 1
+            if task.request.kind == "download_page" then
+                image_timing.starts = image_timing.starts + 1
+                local active = 0
+                for _, current in pairs(self.tasks) do
+                    if current.pid and current.request.kind == "download_page" then active = active + 1 end
+                end
+                image_timing.peak_processes = math.max(image_timing.peak_processes, active)
+            end
             if closed_at and task.request.kind == "download_page" then starts_after_close = starts_after_close + 1 end
             childRecord(task.pid)
         end
+        return unpack(values, 1, values.n)
     end
 
     G_defaults = require("luadefaults"):open()
@@ -275,6 +353,14 @@ local ok = xpcall(function()
     end
     keeper = require("ui/widget/container/widgetcontainer"):new{}
     UIManager:show(keeper)
+    local Controller = require("bilicomics/controller")
+    local request_cover = Controller.requestCover
+    function Controller:requestCover(comic_id)
+        local comic = self:getComic(comic_id)
+        local cover = comic and require("bilicomics/cover_source").resolve(comic.cover_url)
+        if phase == "online" and self == app and cover then visible_cover_urls[cover.url] = true end
+        return request_cover(self, comic_id)
+    end
     local Plugin = assert(loadfile(source .. "/main.lua"))()
     local registered
     local plugin = Plugin:new{ ui = { menu = { registerToMainMenu = function(_, value) registered = value end } } }
@@ -356,6 +442,21 @@ local ok = xpcall(function()
         check("no_out_of_scope_workers", forbidden_attempts == 0)
         report.counts.worker_submissions, report.counts.worker_starts = #submitted, worker_starts
         report.counts.heartbeat_count = beats
+        report.counts.image_worker_starts = image_timing.starts
+        report.counts.peak_image_processes = image_timing.peak_processes
+        report.counts.configured_download_concurrency = app:getSetting("download_concurrency")
+        report.counts.configured_image_resource_limit = app.account.raw_runner:getImageConcurrency()
+        check("default_download_concurrency_is_two", report.counts.configured_download_concurrency == 2)
+        check("image_resource_limit_is_two", report.counts.configured_image_resource_limit == 2)
+        if image_timing.reader_closed then
+            write(private .. "/image-timing-context.json", { schema = 1, reader_closed = image_timing.reader_closed })
+        end
+        for _, names in ipairs({ { "cookieInfo", "cookie_info" }, { "ensureSiteContext", "site_context" },
+            { "refreshSession", "no_refresh_check" } }) do
+            report.counts["maintenance_" .. names[2]] = maintenance_counts[names[1]] or 0
+        end
+        report.counts.favorites_sync_jobs = library_counts.library_favorites or 0
+        report.counts.history_sync_jobs = library_counts.library_history or 0
         if phase == "online" then
             local count = tonumber(Files.read(work .. "/transport-count", 128))
             check("transport_request_count_is_bounded", count and count > 0 and count <= math.min(300, (total + 4) * 4))
@@ -514,6 +615,7 @@ local ok = xpcall(function()
                 check("real_native_scroll_anchor_saved", anchor and (anchor.y > 0 or anchor.index > 1))
                 ready_at_close = readyCount()
                 reader:onClose()
+                image_timing.reader_closed = image_timing.now()
                 reader = nil
                 closed_at = socket.gettime()
                 check("reader_close_keeps_explicit_download", ReaderUI.instance == nil and not app.closed

@@ -9,20 +9,30 @@ local json = require("rapidjson")
 local ffi = require("ffi")
 local lfs = require("libs/libkoreader-lfs")
 local Files = require("bilicomics/storage/files")
+local driver_root = assert(debug.getinfo(1, "S").source:match("^@(.+)/[^/]+$"))
+local Scope = assert(loadfile(driver_root .. "/live_acceptance_scope.lua"))()
 local private = work .. "/private"
 local parent_pid = tonumber(ffi.C.getpid())
 local result_path = private .. "/" .. phase .. "-driver.json"
 local qr_path = private .. "/qr.png"
-local app, login, UIManager, Device
+local app, login, UIManager, Device, Runtime, screens, plugin, menu
 local runners, stopping, confirmed = {}, false, false
+local checked_info, bookshelf_entered, native_menu_opened
+local visible_cover_urls, approved_covers = {}, {}
 local report = { schema = 1, code = 10, passed = false, running = true,
     checks = { live_network_enabled = phase ~= "rehearse", source_worker_unmodified = true,
         controller_initialized = false, native_dialog_visible = false, qr_ready = false,
         login_confirmed = false, saved_session_verified = false, restart_loaded_session = false,
         cookie_info_verified = false, server_refresh_required = false, refresh_verified = false,
-        confirmation_verified = false, maintenance_verified = false, workers_closed = false },
+        confirmation_verified = false, maintenance_verified = false, workers_closed = false,
+        production_main_initialized = false, native_menu_opened_bookshelf = false,
+        native_menu_opened_account = false, native_account_qr_button_used = false,
+        site_context_saved = false, favorites_sync_completed = false, history_sync_completed = false,
+        automatic_bookshelf_sync_verified = false, credential_rotation_deferred = false },
     counts = { workers_started = 0, workers_completed = 0, heartbeats = 0,
         generateQR = 0, pollQR = 0, cookieInfo = 0, refreshSession = 0, confirmRefresh = 0,
+        ensureSiteContext = 0, library_favorites = 0, library_history = 0, visible_cover = 0,
+        covers_completed = 0, covers_failed = 0, bookshelf_help_acknowledgements = 0,
         rejected_submissions = 0, session_saves = 0 }, network = {} }
 
 local function write(path, value) Files.atomicWrite(path, json.encode(value)) end
@@ -70,7 +80,10 @@ local function shutdown(code, passed)
     pcall(removeQR)
     if login then pcall(login.close, login) end
     if app then
-        local closed = pcall(app.close, app)
+        local closed = pcall(function()
+            if screens then screens:close() end
+            if Runtime then Runtime.close() else app:close() end
+        end)
         report.checks.controller_closed = closed and app.closed == true
     end
     local closed = true
@@ -90,7 +103,6 @@ local ok = xpcall(function()
     -- It never records URLs, headers, request bodies, identities, cookies or QR keys.
     local Transport = require("bilicomics/protocol/transport")
     local transport_request = Transport.request
-    local parse = require("socket.url").parse
     local child_events = {}
     local function event(category, key, value)
         local item = child_events[category] or { requests = 0, responses = 0, transmitted = 0, rejections = 0 }
@@ -98,44 +110,11 @@ local ok = xpcall(function()
         child_events[category] = item
         write(private .. "/" .. phase .. "-transport-" .. tostring(ffi.C.getpid()) .. ".json", child_events)
     end
-    local function formKeys(body, allowed)
-        if type(body) ~= "string" or #body > 32768 then return false end
-        local seen = {}
-        for field in body:gmatch("[^&]+") do
-            local key, value = field:match("^([a-z_]+)=(.+)$")
-            if not key or not allowed[key] or seen[key] or value:find("[%c%s]") then return false end
-            seen[key] = true
-        end
-        for key in pairs(allowed) do if not seen[key] then return false end end
-        return true
-    end
     function Transport:request(request)
-        local parsed = parse(request.url or "") or {}
-        local method, category = request.method or "GET", nil
-        local passport = parsed.host == "passport.bilibili.com"
-        local plain_get = method == "GET" and request.body == nil
-        if plain_get and passport and parsed.path == "/x/passport-login/web/qrcode/generate"
-            and phase == "login" then category = "qr_generate"
-        elseif plain_get and passport and parsed.path == "/x/passport-login/web/qrcode/poll"
-            and phase == "login" then category = "qr_poll"
-        elseif plain_get and parsed.host == "api.bilibili.com" and parsed.path == "/x/web-interface/nav"
-            and (phase == "login" or phase == "restart") then category = "identity_check"
-        elseif plain_get and passport and parsed.path == "/x/passport-login/web/cookie/info"
-            and phase == "restart" then category = "cookie_info"
-        elseif phase == "restart" and report.checks.server_refresh_required then
-            if plain_get and parsed.host == "www.bilibili.com" and type(parsed.path) == "string"
-                and #parsed.path <= 1200 and parsed.path:match("^/correspond/1/%x+$") then category = "refresh_challenge"
-            elseif passport and method == "POST" and parsed.path == "/x/passport-login/web/cookie/refresh"
-                and formKeys(request.body, { csrf = true, refresh_csrf = true, source = true, refresh_token = true }) then
-                category = "refresh"
-            elseif passport and method == "POST" and parsed.path == "/x/passport-login/web/confirm/refresh"
-                and formKeys(request.body, { csrf = true, refresh_token = true }) then category = "confirm"
-            end
-        end
+        local category = Scope.transportCategory(request, phase)
+        if not category and phase ~= "rehearse" and Scope.coverAllowed(request, approved_covers) then category = "visible_cover" end
         local allowed = category ~= nil and tonumber(ffi.C.getpid()) ~= parent_pid
-            and parsed.scheme == "https" and not parsed.user and not parsed.password
-            and (not parsed.port or tostring(parsed.port) == "443") and not parsed.fragment
-            and request.output_path == nil and not Files.exists(private .. "/stop")
+            and not Files.exists(private .. "/stop")
         if not allowed then
             event("rejected", "rejections")
             return nil, { kind = "scope_guard", code = "authentication_scope", transmitted = false,
@@ -162,24 +141,16 @@ local ok = xpcall(function()
         local runner = runner_new(options); runners[runner] = true; return runner
     end
     function Runner:submit(request, options, callback)
-        local method = request.method
-        local allowed = request.kind == "auth" and ((phase == "login" or phase == "rehearse")
-            and (method == "generateQR" or method == "pollQR") or phase == "restart"
-            and (method == "cookieInfo" or method == "refreshSession" or method == "confirmRefresh"))
-        if method == "generateQR" then allowed = allowed and report.counts.generateQR == 0 end
-        if method == "pollQR" then allowed = allowed and report.counts.pollQR < 100 end
-        if method == "cookieInfo" then allowed = allowed and report.counts.cookieInfo == 0 end
-        if method == "refreshSession" then
-            local info = request.arguments and request.arguments[1] and request.arguments[1].info
-            allowed = allowed and report.counts.refreshSession == 0 and report.checks.cookie_info_verified
-                and type(info) == "table" and info.refresh == report.checks.server_refresh_required
+        local method = Scope.submissionName(request, phase, checked_info)
+        if request.kind == "download_cover" and phase ~= "rehearse" and screens and screens.route == "favorites"
+            and visible_cover_urls[request.url] and Files.within(request.temporary_path, app.account.root .. "/covers")
+            and request.max_bytes == 4 * 1024 * 1024 then
+            method = "visible_cover"
+            approved_covers[request.url] = request.temporary_path
         end
-        if method == "confirmRefresh" then
-            allowed = allowed and report.counts.confirmRefresh == 0 and report.checks.server_refresh_required
-                and report.checks.refresh_verified and savedSessionMatches()
-                and request.session and request.session.pending_refresh_token ~= nil
-                and request.session.confirmation_blocked == true
-        end
+        local limits = { generateQR = 1, pollQR = 100, cookieInfo = 2, refreshSession = 2,
+            ensureSiteContext = 2, library_favorites = 2, library_history = 2, visible_cover = 24 }
+        local allowed = method ~= nil and limits[method] ~= nil and report.counts[method] < limits[method]
         if not allowed then
             report.counts.rejected_submissions = report.counts.rejected_submissions + 1
             error("The authentication acceptance scope rejected a worker")
@@ -190,11 +161,22 @@ local ok = xpcall(function()
             report.counts.workers_completed = report.counts.workers_completed + 1
             if method == "cookieInfo" and value then
                 assert(type(value.refresh) == "boolean" and type(value.timestamp) == "number")
+                checked_info = { refresh = value.refresh, timestamp = value.timestamp }
                 report.checks.cookie_info_verified = true
                 report.checks.server_refresh_required = value.refresh
-            elseif method == "refreshSession" and value and report.checks.server_refresh_required then
-                report.checks.refresh_verified = value.pending_refresh_token ~= nil and value.last_refreshed_at ~= nil
-            elseif method == "confirmRefresh" and value == true then report.checks.confirmation_verified = true end
+                if Scope.rotationDeferred(value) then
+                    report.deferred, report.checks.credential_rotation_deferred = true, true
+                    report.checks.saved_session_verified = savedSessionMatches()
+                    publicState()
+                    UIManager:nextTick(function() shutdown(24, false) end)
+                    return
+                end
+            elseif method == "library_favorites" and value and not err then report.checks.favorites_sync_completed = true
+            elseif method == "library_history" and value and not err then report.checks.history_sync_completed = true
+            elseif method == "visible_cover" then
+                local key = value and not err and "covers_completed" or "covers_failed"
+                report.counts[key] = report.counts[key] + 1
+            end
             if err and type(err.code) == "number" then report.service_code = err.code end
             if err and type(err.status) == "number" then report.http_code = err.status end
             if callback then return callback(value, err, update) end
@@ -212,20 +194,135 @@ local ok = xpcall(function()
     local DataStorage = require("datastorage")
     assert(Files.within(DataStorage:getDataDir(), private))
     G_reader_settings = require("luasettings"):open(DataStorage:getDataDir() .. "/settings.reader.lua")
+    local disabled = {}
+    for entry in lfs.dir("plugins") do
+        local name = entry:match("^(.*)%.koplugin$")
+        if name then disabled[name] = true end
+    end
+    G_reader_settings:saveSetting("plugins_disabled", disabled)
     Device = require("device")
     require("document/canvascontext"):init(Device)
     require("gettext").current_lang = "zh_CN"
     UIManager = require("ui/uimanager")
     local keeper = require("ui/widget/container/widgetcontainer"):new{}
     UIManager:show(keeper)
-    app = require("bilicomics/controller").new{ root = DataStorage:getDataDir() .. "/bilicomics",
-        ui_manager = UIManager, network = { isConnected = function() return true end } }
+    local Controller = require("bilicomics/controller")
+    local request_cover = Controller.requestCover
+    function Controller:requestCover(comic_id)
+        local comic = self:getComic(comic_id)
+        local cover = comic and require("bilicomics/cover_source").resolve(comic.cover_url)
+        if self == app and screens and screens.route == "favorites" and cover then visible_cover_urls[cover.url] = true end
+        return request_cover(self, comic_id)
+    end
+    local Plugin = assert(loadfile(source .. "/main.lua"))()
+    local registered
+    plugin = Plugin:new{ ui = { menu = { registerToMainMenu = function(_, value) registered = value end } } }
+    assert(registered == plugin and not plugin.initialization_error)
+    Runtime = require("bilicomics/runtime")
+    app, screens = Runtime.peek()
+    assert(app and screens)
+    report.checks.production_main_initialized = true
     report.checks.controller_initialized = app.account ~= nil and app.account.raw_runner ~= nil
     local storage_save = app.session_storage.save
     function app.session_storage:save(session)
         local saved, err = storage_save(self, session)
         if saved then report.counts.session_saves = report.counts.session_saves + 1 end
         return saved, err
+    end
+    menu = {}
+    plugin:addToMainMenu(menu)
+    assert(menu.bilicomics and type(menu.bilicomics.callback) == "function"
+        and type(menu.bilicomics.hold_callback) == "function")
+    local function openBookshelf()
+        menu.bilicomics.callback()
+        assert(screens.route == "favorites" and screens.widget)
+        report.checks.native_menu_opened_bookshelf = true
+        native_menu_opened = true
+    end
+    local function sessionHasSiteContext()
+        local session = app.account.session
+        if not session or not session.cookies.buvid3 then return false end
+        local saved = app.session_storage:load(app.account.key)
+        local header = saved and saved:cookieHeader("manga.bilibili.com") or ""
+        return saved and saved.cookies.buvid3 == session.cookies.buvid3 and header:find("buvid3=", 1, true) ~= nil
+    end
+    local function finishBookshelf(code)
+        local synchronized = report.checks.favorites_sync_completed and report.checks.history_sync_completed
+        if phase ~= "restart" and not synchronized then return false end
+        if screens.dialog or screens.context_dialog then
+            local dialog = screens.dialog
+            local translate = require("bilicomics/ui/i18n")
+            local heading = translate("Bookshelf help") .. "\n\n"
+            if dialog and dialog == screens.context_dialog and type(dialog.title) == "string"
+                and dialog.title:sub(1, #heading) == heading then
+                local button
+                for _, row in ipairs(dialog.buttons or {}) do
+                    for _, item in ipairs(row) do
+                        if item.text == translate("Got it") and type(item.callback) == "function" then button = item end
+                    end
+                end
+                assert(button and button.enabled ~= false and phase ~= "restart"
+                    and report.counts.bookshelf_help_acknowledgements == 0)
+                report.counts.bookshelf_help_acknowledgements = report.counts.bookshelf_help_acknowledgements + 1
+                button.callback()
+            end
+            return false
+        end
+        -- A queued first-visit dialog or its deferred repaint must run before completion is considered.
+        if screens.bookshelf_help_ticket then return false end
+        for runner in pairs(runners) do if next(runner.tasks) or #runner.queue > 0 then return false end end
+        if app.account.session_manager.active or app.notify_pending then return false end
+        assert(screens.route == "favorites" and screens.widget)
+        local sync = app:getBookshelfSyncState()
+        if sync.syncing or not sync.has_cache or sync.error then return false end
+        local items, cards = app:getBookshelfItems(), screens.cards or {}
+        if #items > 0 and not screens.bookshelf_help_seen then return false end
+        local columns, rows = screens.grid_columns, screens.grid_rows
+        if type(columns) ~= "number" or type(rows) ~= "number" or columns < 1 or rows < 1 then return false end
+        local capacity = columns * rows
+        local offset = ((screens.page or 1) - 1) * capacity
+        local expected = math.min(capacity, math.max(0, #items - offset))
+        if #cards ~= expected or screens.widget.view_page ~= screens.page
+            or screens.widget.view_route ~= "favorites" or screens.widget.view_epoch ~= screens.epoch then return false end
+        local members, seen = {}, {}
+        for _, comic in ipairs(items) do members[tostring(comic.id)] = true end
+        local order = screens.bookshelf_order_ids or {}
+        for index, card in ipairs(cards) do
+            local key = card.comic and tostring(card.comic.id)
+            if not key or not members[key] or seen[key] or order[offset + index] ~= key then return false end
+            seen[key] = true
+        end
+        local view = app:getBookshelfViewState()
+        if #items > 0 and (not view.help_seen or phase == "login"
+            and report.counts.bookshelf_help_acknowledgements ~= 1) then return false end
+        UIManager:forceRePaint()
+        local size = screens.widget.content:getSize()
+        assert(size.w <= Device.screen:getWidth() and size.h <= Device.screen:getHeight())
+        report.checks.bookshelf_help_dismissed = #items == 0 or view.help_seen == true
+        report.checks.bookshelf_cards_match_current_page = true
+        report.checks.bookshelf_native_frame_rendered = true
+        report.checks.bookshelf_unobstructed = screens.dialog == nil and screens.context_dialog == nil
+        report.counts.expected_visible_cards = expected
+        report.checks.automatic_bookshelf_sync_verified = synchronized == true
+        report.checks.site_context_saved = sessionHasSiteContext() == true
+        report.checks.saved_session_verified = savedSessionMatches()
+        report.counts.favorite_items = #app:getLibrary("favorites")
+        report.counts.history_items = #app:getLibrary("history")
+        report.counts.visible_cards = #(screens.cards or {})
+        if phase == "restart" then
+            local previous = assert(json.decode(Files.read(private .. "/login-driver.json", 2 * 1024 * 1024)))
+            report.checks.bookshelf_cache_restored = previous.checks.automatic_bookshelf_sync_verified == true
+                and report.counts.favorite_items == previous.counts.favorite_items
+                and report.counts.history_items == previous.counts.history_items
+            assert(report.checks.bookshelf_cache_restored)
+        end
+        report.checks.visible_cover_workers_settled = report.counts.visible_cover
+            == report.counts.covers_completed + report.counts.covers_failed
+        write(private .. "/session-input-path.json", { session_path = assert(app.session_storage:path(app.account.key)) })
+        shutdown(code, report.checks.saved_session_verified and report.checks.site_context_saved
+            and report.checks.visible_cover_workers_settled and report.checks.bookshelf_unobstructed
+            and report.checks.bookshelf_cards_match_current_page and report.checks.bookshelf_help_dismissed)
+        return true
     end
     local function tick()
         if stopping then return end
@@ -235,10 +332,9 @@ local ok = xpcall(function()
             if phase ~= "restart" then
                 if confirmed then
                     report.checks.login_confirmed = true
-                    report.checks.saved_session_verified = savedSessionMatches()
-                    shutdown(20, report.checks.saved_session_verified); return
-                end
-                if login and (login.status == "waiting" or login.status == "scanned") then
+                    if not bookshelf_entered then removeQR(); bookshelf_entered = true; openBookshelf() end
+                    if finishBookshelf(20) then return end
+                elseif login and (login.status == "waiting" or login.status == "scanned") then
                     if not report.checks.qr_ready then
                         UIManager:forceRePaint()
                         local size = assert(login.dialog).movable:getSize()
@@ -253,7 +349,7 @@ local ok = xpcall(function()
                     local denied = report.network.rejected and report.network.rejected.rejections == 1
                     shutdown(phase == "rehearse" and 23 or 40, phase == "rehearse" and denied); return
                 end
-            end
+            elseif report.checks.maintenance_verified and finishBookshelf(21) then return end
             publicState()
             UIManager:scheduleIn(0.25, tick)
         end)
@@ -270,25 +366,41 @@ local ok = xpcall(function()
                 local complete = session ~= nil and err == nil and report.checks.cookie_info_verified
                     and savedSessionMatches() and not session.refresh_blocked
                     and not session.confirmation_blocked and not session.pending_refresh_token
-                if report.checks.server_refresh_required then
-                    complete = complete and report.checks.refresh_verified and report.checks.confirmation_verified
-                else
-                    complete = complete and report.counts.confirmRefresh == 0
-                end
+                complete = complete and not report.checks.server_refresh_required and report.counts.confirmRefresh == 0
                 report.checks.maintenance_verified = complete == true
                 report.checks.saved_session_verified = savedSessionMatches()
-                shutdown(report.checks.server_refresh_required and 22 or 21, complete)
+                if not complete then shutdown(40, false); return end
+                if not native_menu_opened then openBookshelf() end
             end)
             if not success then fail() end
         end)
     else
         assert(app.account.session == nil and app.account.key == "anonymous")
-        login = require("bilicomics/ui/qr_login").new{ controller = app,
-            is_current = function() return not stopping end,
-            on_dialog = function() report.checks.native_dialog_visible = true end,
-            on_close = function() removeQR() end,
-            on_confirmed = function() confirmed = true end }
-        login:start()
+        openBookshelf()
+        menu.bilicomics.hold_callback()
+        assert(screens.route == "account" and screens.widget)
+        report.checks.native_menu_opened_account = true
+        local label = require("bilicomics/ui/i18n")("Sign in with QR code")
+        local button
+        for _, row in ipairs(screens.focus or {}) do
+            for _, item in ipairs(row) do if item.text == label and type(item.callback) == "function" then button = item end end
+        end
+        assert(button)
+        button.callback()
+        login = assert(screens.qr_login)
+        report.checks.native_account_qr_button_used = true
+        report.checks.native_dialog_visible = login.dialog ~= nil
+        local on_close = login.on_close
+        login.on_close = function(...)
+            removeQR()
+            return on_close(...)
+        end
+        local on_confirmed = login.on_confirmed
+        login.on_confirmed = function(...)
+            local result = on_confirmed(...)
+            confirmed = true
+            return result
+        end
     end
     publicState()
     UIManager:scheduleIn(0.25, tick)
@@ -296,4 +408,4 @@ local ok = xpcall(function()
 end, function() return "authentication_driver_failure" end)
 if not ok then pcall(fail) end
 if not stopping then pcall(function() shutdown(42, false) end) end
-os.exit(report.passed and 0 or 1)
+os.exit((report.passed or report.deferred) and 0 or 1)

@@ -15,7 +15,8 @@ end
 local function session(suffix, renewable)
     local refresh_token
     if renewable ~= false then refresh_token = "refresh-" .. suffix end
-    local value = Session.new({ cookies = { SESSDATA = "synthetic-" .. suffix, bili_jct = "csrf-" .. suffix, DedeUserID = "42" },
+    local value = Session.new({ cookies = { SESSDATA = "synthetic-" .. suffix, bili_jct = "csrf-" .. suffix,
+        DedeUserID = "42", buvid3 = "synthetic-existing-device" },
         refresh_token = refresh_token })
     assert(value:withIdentity({ id = "42", name = "Synthetic account" }, 100))
     return value

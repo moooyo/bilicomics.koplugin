@@ -1,0 +1,215 @@
+{
+  "passed": true,
+  "source_unchanged": true,
+  "source_hashes": {
+    "spec/controller/product_features_spec.lua": "f3806d8ae16da85a3dcbdfe8648cbdecc853188e730bca53d8525908d81f4dff",
+    "spec/integration/online_plugin.lua": "02d6d769d5ba80724b5126930de8ab5ab4ca038a68be98ea52d58cd58b4ceb13",
+    "bilicomics/session_manager.lua": "a6b85152487c3c4cc783848f8c805d3c6928af38a465ed5d1f7aa4b0833517c3",
+    "bilicomics/protocol/site_context.lua": "5a627e4875f1cc2f9e2b0d79ae4aeed316d83bb51f98e53f12a13741999c2406",
+    "bilicomics/controller.lua": "8ed64ff9a760359ac4409a6aab3fcbcfa7403b1ab741ba9a3603928c4025dce1"
+  },
+  "network_namespace_isolated": true,
+  "production_edits": false,
+  "fixture_source": "/tmp/bilicomics-finishing-regression-1/reader-native/data/fixtures/page-1.png",
+  "fixture_sha256": "ba9610e1a575eb43c96b11b29ee7af2f38bef5b007baf383db90c4ffa09ef3e2",
+  "results": [
+    {
+      "suite": "controller-product",
+      "returncode": 0,
+      "log": "has monolibtic? no (libs/libkoreader-monolibtic.so: cannot open shared object file: No such file or directory)\nlib_search_path: libs/?\nlib_basic_format: lib%s.so\nlib_version_format: lib%s.so.%s\nffi.load: rt.so.1 (RTLD_GLOBAL)\nffi.findlib: utf8proc [3]\nffi.load: libs/libutf8proc.so.3\nffi.findlib: blitbuffer\nffi.load: libs/libblitbuffer.so\nffi.findlib: wrap-mupdf\nffi.load: libs/libwrap-mupdf.so\nffi.findlib: SDL3 [0]\nffi.load: libs/libSDL3.so.0\nStarted SDL in /var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader/ using x11 video driver\nffi.findlib: lodepng\nffi.load: libs/liblodepng.so\n09/13/26-17:46:01 INFO  initializing for device Linux \n09/13/26-17:46:01 INFO  framebuffer resolution: {\n  h = 800,\n  w = 600\n} --[[table: 0x7f8a72e591e8]] \nffi.findlib: zstd [1]\nffi.load: libs/libzstd.so.1\nffi.findlib: sqlite3 [0]\nffi.load: libs/libsqlite3.so.0\n{\n    \"count\": 45,\n    \"assertions\": [\n        {\n            \"passed\": true,\n            \"name\": \"explicit_id_accepts_1\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"explicit_id_accepts_mc123\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"explicit_id_accepts_999999999999999\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"explicit_id_accepts__MC000123_\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_1\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_2\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_3\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_4\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_5\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_6\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_7\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_8\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_9\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_10\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_11\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_12\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_id_rejected_13\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"invalid_ids_do_not_dispatch_workers\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"explicit_lookup_uses_real_comic_detail_contract\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"lookup_persists_exact_returned_comic\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"following_read_fetches_unknown_catalog_asynchronously\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"new_comic_read_starts_at_first_ordered_chapter\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"finished_chapter_selects_fractional_next_without_skipping_lock\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"unfinished_current_chapter_is_resumed\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"ordinary_numeric_title_stays_a_title_search\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"follow_uses_explicit_nonpreemptible_worker\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"pending_follow_does_not_optimistically_change_library\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"duplicate_follow_click_cannot_submit_another_request\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"confirmed_follow_updates_favorite_and_clears_pending\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"older_library_response_cannot_undo_confirmed_follow\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"failed_unfollow_preserves_confirmed_favorite_without_retry\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"missing_server_acknowledgment_is_not_success\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"confirmed_unfollow_updates_only_membership\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"reader_defaults_start_as_auto_ltr\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"reader_service_reads_updated_defaults_through_getter\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"unsupported_reader_enum_does_not_replace_saved_preference\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"unrelated_auth_failure_does_not_cancel_authorized_follow\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"inflight_follow_ack_survives_auth_failure_without_revalidating_session\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"diagnostics_has_no_session_and_works_when_session_is_invalid\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"diagnostics_returns_only_safe_typed_fields\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"local_capabilities_never_claim_live_server_verification\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"diagnostic_strings_reject_urls_and_credential_markers\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"diagnostic_reader_defaults_normalize_untrusted_disk_settings\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"offline_resume_allows_local_diagnostics_without_resuming_network_queue\"\n        },\n        {\n            \"passed\": true,\n            \"name\": \"old_account_follow_result_cannot_modify_new_account\"\n        }\n    ]\n}\n\n"
+    },
+    {
+      "suite": "reading-integration",
+      "returncode": 0,
+      "log": "online 0 38\noffline-reopen 0 14\noffline-smoke 0 13\n"
+    }
+  ],
+  "product": {
+    "count": 45,
+    "all_passed": true
+  },
+  "reading": {
+    "passed": true,
+    "runs": [
+      {
+        "name": "online",
+        "returncode": 0,
+        "assertions": 38,
+        "passed": true
+      },
+      {
+        "name": "offline-reopen",
+        "returncode": 0,
+        "assertions": 14,
+        "passed": true
+      },
+      {
+        "name": "offline-smoke",
+        "returncode": 0,
+        "assertions": 13,
+        "passed": true
+      }
+    ]
+  },
+  "purchase_dispatch": {
+    "passed": true,
+    "host": "test-env",
+    "runtime_version": "v2026.07.1",
+    "runtime_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+    "source_sha256": {
+      "bilicomics/bookshelf_state.lua": "9a69462ec2199299ca535a8c5b7dbd297bcdfbadf10d531d84ea66283c215e82",
+      "bilicomics/bookstore.lua": "edca2a2692c58064e972ced94fef1bfe790c8c3d2f9690f264089f41b55d91ce",
+      "bilicomics/bookstore_categories.lua": "4c916bdc9e1f0e864261d430b11166481f418aad3023955f3ed12f5299cd5f3d",
+      "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+      "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+      "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+      "bilicomics/controller.lua": "8ed64ff9a760359ac4409a6aab3fcbcfa7403b1ab741ba9a3603928c4025dce1",
+      "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+      "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+      "bilicomics/jobs/download_service.lua": "c230f607d1a285275a5da1818156a3794b32541f1586c6d7e7db0ddf6351324a",
+      "bilicomics/jobs/runner.lua": "60fc9a198b8f09486639af29751c7e18f731c8801e0d3d37507bbf34e72b1f63",
+      "bilicomics/jobs/session_runner.lua": "78dec27c258a3f897eae9ff108158a933f6da72d1abaadd1fd46e81700a919af",
+      "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+      "bilicomics/jobs/storage_budget.lua": "a50252f77cc279408168c35d61f8e7e9d754bad5af3640dcdbdaa5609c2fbf59",
+      "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+      "bilicomics/jobs/worker.lua": "8530c2e00d8315447cffcee90fda82d80704bba59895115af13b3a585149ba4b",
+      "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+      "bilicomics/protocol/auth.lua": "a2ab806cf7496137306034d47a3cfc5177db8bf6f16d3ab562757d319b749e1f",
+      "bilicomics/protocol/auth_crypto.lua": "d09cca5a7660f94863a7aec42c62369525167ff58ef8a9dd41bfa5b7fc9180bf",
+      "bilicomics/protocol/categories.lua": "213e4033589cb81f0608a5bcbcc79d2f42d9243d9384cddb088fb0ebbff21242",
+      "bilicomics/protocol/client.lua": "c1334e3ec9b6a8b2fd4a607da3bb13309fd8f653c22d6a022153bcb2ddf1fdfa",
+      "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+      "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+      "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+      "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+      "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+      "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+      "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+      "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+      "bilicomics/protocol/normalize.lua": "1358072c2095922872509faab3bd4823bc5c7e28d390234671eb50bbe1464087",
+      "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+      "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+      "bilicomics/protocol/recommendations.lua": "12320090d2e49188797ec95fbdd2d772c932f817c28d47cde062b86a224e4dc2",
+      "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+      "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+      "bilicomics/protocol/site_context.lua": "5a627e4875f1cc2f9e2b0d79ae4aeed316d83bb51f98e53f12a13741999c2406",
+      "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+      "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+      "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+      "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+      "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+      "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+      "bilicomics/purchase/service.lua": "6eac520fbbc9d140b6f9f503a6cfa5623743e0b6b2ce8be9d2b0f46fdcf51296",
+      "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+      "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+      "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+      "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+      "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+      "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+      "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+      "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+      "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+      "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+      "bilicomics/session_manager.lua": "a6b85152487c3c4cc783848f8c805d3c6928af38a465ed5d1f7aa4b0833517c3",
+      "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+      "bilicomics/settings.lua": "5efa4c410864c522e5f472f0a9194a1f5363ee3018beb72f35c5ca4743799d4b",
+      "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+      "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+      "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+      "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+      "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+      "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+      "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+      "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+      "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+      "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+      "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+      "bilicomics/ui/screens.lua": "c11d910e2830821cd4197eef384a40519ada11d179aa5d042c82b1fa5d2b1d01",
+      "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+      "bilicomics/ui/widgets.lua": "b865eac227976851b8b2b7962e6bb0409d8dc19103aaa3b77e6987a03306a680",
+      "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+      "l10n/bilicomics_zh_CN.lua": "f03a995e1c52d0f8c93526e14c04346b6074c3bbe0481aaf2fe44ff3bf50a20c",
+      "spec/controller/purchase_dispatch_spec.lua": "02f64e50d785a70f586f646ab2088e231d95cd4823920940045b777be0c3ab88",
+      "spec/controller/run_purchase_dispatch.py": "5cc1af4118a4bddb474409010d7271abe7327c8d30cf9834b1af0cb2261594c2"
+    },
+    "source_unchanged": true,
+    "returncode": 0,
+    "timed_out": false,
+    "completed_at": "2026-09-13T09:45:47.777668+00:00",
+    "result": {
+      "real_network_requests": 0,
+      "real_purchases": 0,
+      "synthetic_credentials_only": true,
+      "network_namespace_isolated": true,
+      "tests": [
+        {
+          "passed": true,
+          "name": "A queued purchase expiring before dispatch is durably rejected without a retry",
+          "assertions": 8
+        },
+        {
+          "passed": true,
+          "name": "A queued purchase cannot outlive its confirmed quote across suspend and resume",
+          "assertions": 9
+        },
+        {
+          "passed": true,
+          "name": "Session maintenance cannot authorize an expired purchase with its new credentials",
+          "assertions": 9
+        },
+        {
+          "passed": true,
+          "name": "An unexpired confirmation transmits once and reconciles without replay",
+          "assertions": 6
+        },
+        {
+          "passed": true,
+          "name": "A failed rejection write retains non-transmission evidence until storage recovers",
+          "assertions": 8
+        },
+        {
+          "passed": true,
+          "name": "Dispatch uses the durable quote and refuses unavailable or uncommitted journal state",
+          "assertions": 4
+        },
+        {
+          "passed": true,
+          "name": "An unreadable journal still returns a held non-transmitted result to the caller",
+          "assertions": 6
+        },
+        {
+          "passed": true,
+          "name": "Refusing a stale dispatch preserves the earlier outcome_unknown range outcome",
+          "assertions": 8
+        },
+        {
+          "passed": true,
+          "name": "Refusing a stale dispatch preserves the earlier access_confirmed range outcome",
+          "assertions": 8
+        },
+        {
+          "passed": true,
+          "name": "Refusing a duplicate dispatch saves a held unknown outcome without negating it",
+          "assertions": 5
+        },
+        {
+          "passed": true,
+          "name": "The synchronous service also checks expiry after its intent is committed",
+          "assertions": 1
+        }
+      ],
+      "passed": true,
+      "assertions": 72
+    },
+    "error": null,
+    "limits": [
+      "Controlled asynchronous workers with production Controller, SessionRunner and SQLite",
+      "No real account, network request or payment"
+    ]
+  },
+  "fixture_changes": [
+    "spec/controller/product_features_spec.lua: validated session helper includes synthetic-feature-device",
+    "spec/controller/purchase_dispatch_spec.lua: shared validated session includes synthetic-device; renewal clones inherit it",
+    "spec/integration/online_plugin.lua: explicit synthetic import includes synthetic-integration-device"
+  ]
+}

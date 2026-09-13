@@ -35,7 +35,8 @@ local function fixture()
     sequence = sequence + 1
     local root = output .. "/case-" .. sequence
     local env = { now = 1800000000, root = root, results = {} }
-    local session = Session.new{ cookies = { SESSDATA = "synthetic-session", bili_jct = "synthetic-csrf", DedeUserID = "42" },
+    local session = Session.new{ cookies = { SESSDATA = "synthetic-session", bili_jct = "synthetic-csrf", DedeUserID = "42",
+        buvid3 = "synthetic-device" },
         refresh_token = "synthetic-refresh" }
     assert(session:withIdentity({ id = "42", name = "Synthetic account" }, env.now))
     local storage, settings = Storage.new{ data_root = root, android = false }, Settings.open(root)

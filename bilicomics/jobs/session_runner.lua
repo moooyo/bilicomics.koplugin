@@ -144,16 +144,31 @@ function SessionRunner:_dispatch(task)
         end
         task.started_session = self._get_session()
         task.request.session = task.started_session and task.started_session:serialize() or nil
+        task.dispatch_started = true
         return true
     end
     -- Controlled runners may not execute before_start, so populate their request as well.
     task.started_session = self._get_session()
     task.request.session = task.started_session and task.started_session:serialize() or nil
     local completed = false
-    local identifier = self._runner:submit(task.request, options, function(value, err, session_update)
+    local function done(value, err, session_update)
         completed = true
         self:_result(task, value, err, session_update)
-    end)
+    end
+    local identifier
+    if replayable(task.request) then
+        -- A submission exception inside a maintenance callback must still settle a read waiter.
+        -- Mutation dispatch retains its existing receipt and uncertainty handling.
+        local ok
+        ok, identifier = pcall(self._runner.submit, self._runner, task.request, options, done)
+        if not ok then
+            if not completed and not task.done then
+                self:_finish(task, nil, Util.error("worker", "The background read could not be scheduled.",
+                    { transmitted = task.dispatch_started == true, retryable = false }))
+            end
+            return
+        end
+    else identifier = self._runner:submit(task.request, options, done) end
     if not completed and not task.done then task.raw_id = identifier end
 end
 

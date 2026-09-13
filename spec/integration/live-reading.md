@@ -1,6 +1,26 @@
 # Authorized Single-Chapter Live Reading Probe
 
-The authorized live workflow now passes on the official KOReader v2026.07.1
+The [final finishing run](finishing-live-reading-results.json) passed after a
+fresh QR login and session restart: all 45 pages, real two-image overlap, continued
+download after reader closure, and new-process offline reopening with zero
+network/workers. Its [acceptance record](../../docs/finishing-acceptance.md)
+and [binding](../package/finishing-acceptance-binding.json) supersede the historical
+default-package references below while preserving their original receipts.
+
+The current harness also admits bounded site-context recovery, cookie-info and
+verified no-refresh maintenance, automatic favorites/history reads, and exact
+declared cover thumbnails. A server request for credential rotation records a
+deferred result and stops before the SessionManager callback; refresh and
+confirmation transport remain excluded. Offline execution still permits no
+worker or transport request. The [earlier finishing preparation](live-reading-finishing-preparation.json)
+and [later timing preparation](live-reading-timing-preparation.json) are
+syntax/staging evidence for their recorded source snapshots only. The
+[seven observer checks](image-worker-timing-observer-results.json) exercise
+synthetic timing intervals and wrapper semantics; they do not prove real-service
+parallelism. The historical real runs below retain their original source hashes.
+See [the shared scope regression](live-harness-scope-results.json).
+
+The earlier authorized live workflow passed on the official KOReader v2026.07.1
 Linux x86_64 runtime through `ssh test-env`. A complete free chapter retained
 all 45 pages (92,022,101 bytes). Online opening, real prefetch, continued download
 after reader closure and cross-process offline reopening passed 51 online and
@@ -42,10 +62,13 @@ forwarded unchanged. The descriptor must match that current complete index;
 the driver never truncates it. Exactly one chapter download is submitted.
 
 The default Runner worker remains unchanged. Its submission observer permits
-only session validation, the selected comic's detail, the selected chapter's
-index, approved chapter images and the selected comic's cover path through the
-transport guard. Quote, purchase, wallet, following, history-write and unrelated
-chapter tasks are rejected before submission. Library reads are not exercised.
+session validation and bounded no-rotation maintenance, the selected comic's
+detail, the selected chapter's index, approved chapter images and declared
+cover paths through the transport guard. Necessary automatic favorites/history
+reads are admitted without changing production responses. Quote, purchase,
+wallet, following mutations, history-write and unrelated chapter tasks remain
+rejected before submission. The original historical runs did not exercise
+library synchronization.
 The normal empty local purchase-service lifecycle may be initialized by the
 production Controller; no purchase scenario or payment request is run.
 

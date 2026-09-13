@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "synthetic_only": true,
+  "real_network_requests": 0,
+  "raw_process_and_clock_values_remain_private": true,
+  "checks": {
+    "overlap": true,
+    "touching_endpoints": true,
+    "initial_gate_only": true,
+    "over_limit": true,
+    "wrong_configuration": true,
+    "interrupted_call_not_invented": true,
+    "return_arity_nil_positions_error_identity_and_recorder_failure": true
+  },
+  "harness_sha256": {
+    "live_reading.lua": "6e09b91fdad7e9ede54555a541e4bc8182c9f458a11f8019fb69f0b3b94aa1a0",
+    "run_live_reading.py": "be1658111c51d53315fdfe95d0aaf91fcca51757117d4c3562d581924de46aa1"
+  }
+}

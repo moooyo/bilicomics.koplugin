@@ -180,7 +180,7 @@ end
 local function seed()
     app = Controller.new{ root = work .. "/plugin", ui_manager = UIManager, runner_factory = runnerFactory,
         network = { isConnected = function() return true end } }
-    app:importSession("SESSDATA=synthetic-only; DedeUserID=42; bili_jct=synthetic-csrf", function(value, err)
+    app:importSession("SESSDATA=synthetic-only; DedeUserID=42; bili_jct=synthetic-csrf; buvid3=synthetic-source-device", function(value, err)
         response, response_error, completed = value, err, true
     end)
     await(function() return completed end, "synthetic session validation")

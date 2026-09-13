@@ -570,7 +570,7 @@ invalid_auth = authRequest(auth_refresh, refresh_body, nil, true); invalid_auth.
 blocked("auth_rejects_unexpected_header", invalid_auth)
 invalid_auth = authRequest(auth_refresh, refresh_body, nil, true); invalid_auth.method = "GET"
 blocked("auth_rejects_wrong_method", invalid_auth)
-for _, method in ipairs({ "generateQR", "pollQR", "cookieInfo", "refreshSession", "confirmRefresh" }) do
+for _, method in ipairs({ "generateQR", "pollQR", "cookieInfo", "refreshSession", "confirmRefresh", "ensureSiteContext" }) do
     test("runner_admits_auth_" .. method, false, true, function()
         local before = original_runner_calls
         check("approved authentication job reaches the original", runner:submit({ kind = "auth", method = method }, {}, function() end) ~= nil

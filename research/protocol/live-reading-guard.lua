@@ -47,6 +47,9 @@ return function(selection, context)
     local maximum = math.min(300, (#selection.approved_source_paths + 4) * 4)
     local counter_path = context.work .. "/transport-count"
     local guard = { current = nil }
+    local auth_scope = context.auth_scope
+    local selected_cover = require("bilicomics/cover_source").resolve(selection.approved_cover_url)
+    local approved_covers = {}
     local function audit(record)
         local path = context.work .. "/transport-" .. tostring(ffi.C.getpid()) .. ".jsonl"
         local file = assert(io.open(path, "ab"))
@@ -123,12 +126,24 @@ return function(selection, context)
         allowed_cdn_paths[host .. path] = true
         return true
     end
+    function guard:approveCover(url, temporary_path)
+        if type(url) ~= "string" or not within(temporary_path, context.private_root or context.work)
+            or not require("bilicomics/cover_source").resolve(url) then return reject() end
+        approved_covers[url] = temporary_path
+        return true
+    end
     function guard:before(request)
         if context.phase ~= "online" then return reject() end
         local host, path = (request.url or ""):match("^https://([^/?#]+)(/[^?#]*)")
         if not host or request.url:find("#", 1, true) then return reject() end
         local route, category = routes[path], "metadata"
-        if route then
+        local maintenance = auth_scope and auth_scope.transportCategory(request, "reading")
+        if maintenance == "site_context" or maintenance == "cookie_info"
+            or maintenance == "library_favorites" or maintenance == "library_history" then
+            route = { label = maintenance }
+        elseif auth_scope and auth_scope.coverAllowed(request, approved_covers) then
+            category = "cover_image"
+        elseif route then
             if host ~= route.host or request.method ~= route.method then return reject() end
             local query, seen = request.url:match("%?([^#]*)"), {}
             for pair in (query or ""):gmatch("[^&]+") do
@@ -160,7 +175,7 @@ return function(selection, context)
             end
             if asset_urls[request.url] then
                 category = "metadata"
-            elseif request.url == selection.approved_cover_url then
+            elseif request.url == selection.approved_cover_url or selected_cover and request.url == selected_cover.url then
                 category = "cover_image"
             elseif allowed_cdn_paths[host .. path] and not (request.output_path and request.output_path:find("/covers/", 1, true)) then
                 category = "page_image"

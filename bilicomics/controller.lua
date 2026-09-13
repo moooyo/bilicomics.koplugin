@@ -1,4 +1,5 @@
 local Catalog = require("bilicomics/catalog/init")
+local Bookshelf = require("bilicomics/bookshelf_state")
 local Bookstore = require("bilicomics/bookstore")
 local Categories = require("bilicomics/bookstore_categories")
 local Codec = require("bilicomics/storage/codec")
@@ -101,7 +102,8 @@ function Controller:_openAccount(key, session, verified_import)
     account.purchases = PurchaseService.new{ store = account.store, account_key = key }
     account.catalog = Catalog.new{ store = account.store, pages = account.pages }
     self.account = account
-    local raw_runner = self.runner_factory and self.runner_factory({ ui = self.ui_manager }) or Runner.new{ ui = self.ui_manager }
+    local runner_options = { ui = self.ui_manager, image_concurrency = self:getSetting("download_concurrency", 2) }
+    local raw_runner = self.runner_factory and self.runner_factory(runner_options) or Runner.new(runner_options)
     account.raw_runner = raw_runner
     local function current() return not self.closed and self.account == account and self.generation == account.generation end
     account.session_manager = SessionManager.new{
@@ -388,6 +390,132 @@ function Controller:getComic(comic_id) return comic_id and self.account.catalog:
 function Controller:getEpisodes(comic_id) return comic_id and self.account.catalog:getEpisodes(tostring(comic_id)) or {} end
 function Controller:getEpisode(episode_id) return episode_id and self.account.store:getEpisode(tostring(episode_id)) end
 function Controller:getLibrary(kind, query) return self.account.catalog:getLibrary(kind or "history", query) end
+
+function Controller:_bookshelfSyncSnapshot()
+    if self.closed or not self.account then return nil end
+    local ok, value = pcall(self.account.store.getSetting, self.account.store, Bookshelf.sync_key)
+    return ok and Bookshelf.syncCache(value, self.account.key) or nil
+end
+
+function Controller:getBookshelfItems()
+    if self.closed or not self.account then return {} end
+    return Bookshelf.order(self.account.catalog:getLibrary("favorites"), self:_bookshelfSyncSnapshot())
+end
+
+function Controller:getBookshelfSyncState()
+    if self.closed or not self.account then return { has_cache = false, stale = true, syncing = false, can_sync = false } end
+    local account, snapshot, now = self.account, self:_bookshelfSyncSnapshot(), self.clock()
+    local authenticated = account.session ~= nil and account.session_valid == true and not account.authentication_invalidated
+    local offline = not self:_connected()
+    local reading_away = self.active_integration ~= nil and (not self.screens or self.screens.route ~= "favorites")
+    local cached = snapshot ~= nil or #account.store:listComics("favorites") > 0
+    local stale = snapshot == nil or now < snapshot.last_synced_at or now - snapshot.last_synced_at >= Bookshelf.ttl
+        or account.bookshelf_sync_error ~= nil
+    return { has_cache = cached, syncing = account.bookshelf_sync ~= nil, last_synced_at = snapshot and snapshot.last_synced_at,
+        error = account.bookshelf_sync_error, stale = stale, offline = offline, authenticated = authenticated,
+        can_sync = authenticated and not offline and not self.suspended and not reading_away,
+        retry_at = account.bookshelf_sync_retry_at }
+end
+
+function Controller:getBookshelfViewState()
+    local account = self.account
+    if self.closed or not account then return Bookshelf.view(nil, "anonymous") end
+    local ok, value = pcall(account.store.getSetting, account.store, Bookshelf.view_key)
+    return Bookshelf.view(ok and value or nil, account.key)
+end
+
+function Controller:saveBookshelfViewState(changes, expected_account)
+    if self.closed or not self.account or expected_account and expected_account ~= self.account.key then
+        return nil, errorValue("account_mismatch", "The bookshelf view belongs to another account.")
+    end
+    local value, err = Bookshelf.updateView(self:getBookshelfViewState(), changes, self.account.key)
+    if not value then return nil, err end
+    local ok = pcall(self.account.store.putSetting, self.account.store, Bookshelf.view_key, value)
+    if not ok then return nil, errorValue("storage", "The bookshelf view could not be saved.") end
+    return value
+end
+
+function Controller:ensureBookshelfSync(callback)
+    local state = self:getBookshelfSyncState()
+    if state.syncing then return self:syncBookshelf(callback) end
+    if not state.stale or not state.can_sync or state.retry_at and self.clock() < state.retry_at then
+        self:_later(callback, self:getBookshelfItems())
+        return
+    end
+    return self:syncBookshelf(callback)
+end
+
+function Controller:syncBookshelf(callback)
+    if self.closed or not self.account then self:_later(callback, nil, errorValue("closed", "The plugin is closed.")); return end
+    if not self:_authenticated(callback) then return end
+    local account, generation = self.account, self.generation
+    if account.bookshelf_sync then
+        if callback then table.insert(account.bookshelf_sync.waiters, callback) end
+        return account.bookshelf_sync.task_ids[1]
+    end
+    local reading_away = self.active_integration ~= nil and (not self.screens or self.screens.route ~= "favorites")
+    if self.suspended or not self:_connected() or reading_away then
+        self:_later(callback, nil, errorValue("network", "Open the bookshelf while connected to synchronize it.", { transmitted = false }))
+        return
+    end
+    local pending = { waiters = callback and { callback } or {}, task_ids = {}, lists = {}, remaining = 2,
+        favorite_revision = account.favorite_revision }
+    account.bookshelf_sync, account.bookshelf_sync_error = pending, nil
+    local function current()
+        return not self.closed and self.account == account and self.generation == generation and account.bookshelf_sync == pending
+    end
+    local function finish(value, err)
+        if not current() then return end
+        account.bookshelf_sync, account.bookshelf_sync_error = nil, err
+        account.bookshelf_sync_retry_at = err and self.clock() + Bookshelf.retry_delay or nil
+        for _, waiter in ipairs(pending.waiters) do
+            if self.closed or self.account ~= account or self.generation ~= generation then break end
+            Util.callback(waiter, value, err)
+        end
+        self:_notify()
+    end
+    local function received(kind, comics, err)
+        if not current() then return end
+        if not comics then
+            pending.error = pending.error or err or errorValue("protocol", "The bookshelf response is unavailable.")
+        else pending.lists[kind] = comics end
+        pending.remaining = pending.remaining - 1
+        if pending.remaining > 0 then return end
+        if pending.error then finish(nil, pending.error); return end
+        local saved = pcall(function()
+            account.store:transaction(function()
+                local preserve = {}
+                for comic_id, revision in pairs(account.favorite_versions) do
+                    if revision > pending.favorite_revision or account.favorite_operations[comic_id] then
+                        local comic = account.store:getComic(comic_id)
+                        if comic then preserve[comic_id] = comic.favorite == true end
+                    end
+                end
+                account.catalog:ingestLibrary("favorites", pending.lists.favorites)
+                account.catalog:ingestLibrary("history", pending.lists.history)
+                for comic_id, favorite in pairs(preserve) do account.store:upsertComic{ id = comic_id, favorite = favorite } end
+                account.store:putSetting(Bookshelf.sync_key,
+                    Bookshelf.syncSnapshot(pending.lists.favorites, account.key, self.clock()))
+            end)
+        end)
+        if not saved then finish(nil, errorValue("storage", "The bookshelf could not be saved.")); return end
+        finish(self:getBookshelfItems())
+    end
+    for _, kind in ipairs{ "favorites", "history" } do
+        if not current() then break end
+        local completed = false
+        local function done(value, err)
+            if completed then return end
+            completed = true
+            received(kind, value, err)
+        end
+        local ok, task = pcall(self._submit, self, { kind = "library", library = kind }, { priority = 10 }, done)
+        if not ok then done(nil, errorValue("storage", "The bookshelf request could not start."))
+        elseif task then pending.task_ids[#pending.task_ids + 1] = task end
+    end
+    self:_notify()
+    return pending.task_ids[1]
+end
 function Controller:getPendingPurchases()
     if not self.account then return {} end
     local pending = self.account.purchases:listPending() or {}
@@ -1502,7 +1630,10 @@ function Controller:removeDownload(job_id, callback)
 end
 
 function Controller:getSetting(key, default)
-    if key == "reading_mode" then
+    if key == "download_concurrency" then
+        local value = self.settings:get(key, 2)
+        return type(value) == "number" and value % 1 == 0 and value >= 1 and value <= 4 and value or 2
+    elseif key == "reading_mode" then
         local value = self.settings:get(key, "auto")
         return (value == "auto" or value == "page" or value == "strip") and value or "auto"
     elseif key == "reading_direction" then
@@ -1513,6 +1644,17 @@ function Controller:getSetting(key, default)
     return self.settings:get(key, default)
 end
 function Controller:setSetting(key, value)
+    if key == "download_concurrency" then
+        if type(value) ~= "number" or value % 1 ~= 0 or value < 1 or value > 4 then
+            return nil, errorValue("invalid_request", "Choose one through four concurrent downloads.")
+        end
+        local saved = pcall(self.settings.set, self.settings, key, value)
+        if not saved then return nil, errorValue("storage", "The download concurrency could not be saved.") end
+        if self.account and self.account.raw_runner.setImageConcurrency then self.account.raw_runner:setImageConcurrency(value) end
+        if self.account and self.account.downloads.refreshConcurrency then self.account.downloads:refreshConcurrency() end
+        self:_notify()
+        return true
+    end
     if (key == "reading_mode" and value ~= "auto" and value ~= "page" and value ~= "strip")
         or (key == "reading_direction" and value ~= "ltr" and value ~= "rtl") then
         return nil, errorValue("invalid_request", "Select a supported reading default.")
@@ -1815,6 +1957,15 @@ function Controller:_readerEvent(name, event)
             if integration.generation == event.reader_generation then self.integrations[integration] = nil end
         end
         if self.active_integration and self.active_integration.generation == event.reader_generation then self.active_integration = nil end
+        local account, generation = self.account, self.generation
+        self.ui_manager:nextTick(function()
+            if not self.closed and not self.suspended and self.account == account and self.generation == generation
+                and not self.opening and not self.active_integration and next(self.integrations) == nil
+                and self.screens and self.screens.onReaderClosed then
+                self.screens:onReaderClosed{ comic_id = event.comic_id or event.descriptor and event.descriptor.comic_id,
+                    reader_generation = event.reader_generation }
+            end
+        end)
     elseif name == "page_error" then self:_pageError(event.descriptor, event.index or 1, {}, event.error)
     elseif name == "suspend" then self:suspend()
     elseif name == "resume" then self:resume() end

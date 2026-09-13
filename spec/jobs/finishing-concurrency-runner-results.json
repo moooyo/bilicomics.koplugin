@@ -1,0 +1,1789 @@
+{
+    "scope": "Real Runner forks, pipes, SQLite and PageStore with synthetic images and accounts; no network or monetary operations",
+    "counts": {
+        "tests": 12,
+        "assertions": 258,
+        "actual_forks": 59
+    },
+    "tests": [
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap"
+        }
+    ],
+    "passed": true,
+    "suite": "runner",
+    "assertions": [
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: unspecified Runner options retain legacy defaults"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: the real Settings default is two"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: valid Settings values persist"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: valid Settings values persist"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: valid Settings values persist"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: valid Settings values persist"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: invalid Runner concurrency is rejected without changing capacity"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: corrupt persisted concurrency falls back to two"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: invalid Runner concurrency is rejected without changing capacity"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: corrupt persisted concurrency falls back to two"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: invalid Runner concurrency is rejected without changing capacity"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: corrupt persisted concurrency falls back to two"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: invalid Runner concurrency is rejected without changing capacity"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: corrupt persisted concurrency falls back to two"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: invalid Runner concurrency is rejected without changing capacity"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: corrupt persisted concurrency falls back to two"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "settings_and_runner_contracts: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: constructor sets image and total capacity"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: exactly the requested image window starts"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: metadata uses the additional total-worker slot"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image-5 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image-6 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: child timestamps prove the requested image overlap"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_1: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: constructor sets image and total capacity"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: exactly the requested image window starts"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: metadata uses the additional total-worker slot"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image-5 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image-6 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: child timestamps prove the requested image overlap"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_2: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: constructor sets image and total capacity"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: exactly the requested image window starts"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: metadata uses the additional total-worker slot"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image-5 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image-6 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: child timestamps prove the requested image overlap"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "runner_real_overlap_4: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: lowering the limit succeeds"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: lowering does not refill while an older worker remains"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: lowering does not refill while an older worker remains"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: lowering does not refill while an older worker remains"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: only one replacement runs"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-5 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-6 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-1 was neither killed nor restarted"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-2 was neither killed nor restarted"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-3 was neither killed nor restarted"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-4 was neither killed nor restarted"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-5 was neither killed nor restarted"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: drain-6 was neither killed nor restarted"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: post-drain image work is serial"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "running_four_to_one_drains_without_cancellation: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: the image limit drops to one"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary queued priorities start no replacement or cancellation"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary work waits while an original child still owns the reduced slot"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary work waits while an original child still owns the reduced slot"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary work waits while an original child still owns the reduced slot"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary priority twenty still waits for capacity"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-priority-10 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-priority-20 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-1 finishes its original real child without restart"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-2 finishes its original real child without restart"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-3 finishes its original real child without restart"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-drain-4 finishes its original real child without restart"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-priority-10 finishes its original real child without restart"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary-priority-20 finishes its original real child without restart"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: ordinary queued tasks execute serially after the downshift"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "ordinary_priorities_do_not_preempt_during_downshift: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: visible work preempts the lowest priority without a user callback"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: the interrupted attempt never reports a synthetic work end"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: download settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: prefetch settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: visible settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: preemption never exceeds the image capacity"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "visible_page_preempts_background_and_restarts_once: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: mutation settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: noncancelable settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: suspension keeps the visible request queued"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: protected work completes its original attempt"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: protected work completes its original attempt"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: visible settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "protected_work_survives_downshift_and_suspend: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: temporary reservations queue requests instead of failing them"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: one released reservation starts one waiting child"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: budget-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: budget-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: budget-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: budget-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: real work overlap respects the aggregate storage reservation"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: an individually oversized write fails before fork"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "parent_storage_reservations_bound_four_workers: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: retry settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: neighbor settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: the retry releases its reservation during backoff"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: preemption has no duplicate or early callback"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: background settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: urgent settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: preemption also respects aggregate reservations"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "retry_and_preemption_reacquire_storage_reservations: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: the fixture uses two different real filesystems"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: same-filesystem directories share one budget"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: a blocked filesystem does not starve a different one"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: filesystem-1 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: filesystem-2 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: filesystem-3 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: filesystem-4 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: filesystem-5 settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: separate filesystem budgets allow four real simultaneous workers"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: same-filesystem reservations remain capped at two"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "reservations_follow_the_filesystem_across_directories: image slots remain owned until children are reaped"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: cancel is accepted"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: a canceling child retains its reservation until reap"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: after-cancel settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: canceled work settles once"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: after-timeout settles exactly once successfully"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: timed-out work settles once and frees its reservation"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: cancellation and timeout never overbook actual storage work"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: every cleanup stage succeeds: "
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: Runner closes without active work"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: Runner has reaped every real child"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: standby ownership balances every fork"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: Runner close removes polling timers"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: trace proves a real child"
+        },
+        {
+            "passed": true,
+            "name": "cancel_and_timeout_release_reservations_after_reap: image slots remain owned until children are reaped"
+        }
+    ],
+    "traces": [
+        {
+            "maximum_image_workers": 0,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-1",
+            "forks": 0,
+            "records": {},
+            "maximum_unreaped_image_workers": 0,
+            "case": "settings_and_runner_contracts"
+        },
+        {
+            "maximum_image_workers": 1,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-2",
+            "forks": 7,
+            "records": [
+                {
+                    "ended_at": 1789292374.812145,
+                    "time": 1789292374.628538,
+                    "reaped_at": 1789292374.826439,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413087,
+                    "label": "image-1"
+                },
+                {
+                    "ended_at": 1789292374.725348,
+                    "time": 1789292374.704728,
+                    "reaped_at": 1789292374.745873,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "metadata",
+                    "pid": 413088,
+                    "label": "metadata"
+                },
+                {
+                    "ended_at": 1789292374.89581,
+                    "time": 1789292374.832738,
+                    "reaped_at": 1789292374.904831,
+                    "parent_pid": 413059,
+                    "kind": "download_cover",
+                    "resource": "image",
+                    "pid": 413089,
+                    "label": "image-2"
+                },
+                {
+                    "ended_at": 1789292374.975044,
+                    "time": 1789292374.910774,
+                    "reaped_at": 1789292374.982296,
+                    "parent_pid": 413059,
+                    "kind": "verify_source_page",
+                    "resource": "image",
+                    "pid": 413090,
+                    "label": "image-3"
+                },
+                {
+                    "ended_at": 1789292375.052175,
+                    "time": 1789292374.989044,
+                    "reaped_at": 1789292375.061202,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413091,
+                    "label": "image-4"
+                },
+                {
+                    "ended_at": 1789292375.13287,
+                    "time": 1789292375.067745,
+                    "reaped_at": 1789292375.142148,
+                    "parent_pid": 413059,
+                    "kind": "download_cover",
+                    "resource": "image",
+                    "pid": 413092,
+                    "label": "image-5"
+                },
+                {
+                    "ended_at": 1789292375.21151,
+                    "time": 1789292375.147855,
+                    "reaped_at": 1789292375.221851,
+                    "parent_pid": 413059,
+                    "kind": "verify_source_page",
+                    "resource": "image",
+                    "pid": 413093,
+                    "label": "image-6"
+                }
+            ],
+            "maximum_unreaped_image_workers": 1,
+            "case": "runner_real_overlap_1"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-3",
+            "forks": 7,
+            "records": [
+                {
+                    "ended_at": 1789292375.505507,
+                    "time": 1789292375.262184,
+                    "reaped_at": 1789292375.516911,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413094,
+                    "label": "image-1"
+                },
+                {
+                    "ended_at": 1789292375.505314,
+                    "time": 1789292375.305662,
+                    "reaped_at": 1789292375.512755,
+                    "parent_pid": 413059,
+                    "kind": "download_cover",
+                    "resource": "image",
+                    "pid": 413095,
+                    "label": "image-2"
+                },
+                {
+                    "ended_at": 1789292375.411502,
+                    "time": 1789292375.392099,
+                    "reaped_at": 1789292375.437883,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "metadata",
+                    "pid": 413096,
+                    "label": "metadata"
+                },
+                {
+                    "ended_at": 1789292375.584477,
+                    "time": 1789292375.521091,
+                    "reaped_at": 1789292375.652724,
+                    "parent_pid": 413059,
+                    "kind": "verify_source_page",
+                    "resource": "image",
+                    "pid": 413097,
+                    "label": "image-3"
+                },
+                {
+                    "ended_at": 1789292375.653383,
+                    "time": 1789292375.58901,
+                    "reaped_at": 1789292375.740207,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413098,
+                    "label": "image-4"
+                },
+                {
+                    "ended_at": 1789292375.723504,
+                    "time": 1789292375.659203,
+                    "reaped_at": 1789292375.743921,
+                    "parent_pid": 413059,
+                    "kind": "download_cover",
+                    "resource": "image",
+                    "pid": 413099,
+                    "label": "image-5"
+                },
+                {
+                    "ended_at": 1789292375.825929,
+                    "time": 1789292375.754492,
+                    "reaped_at": 1789292375.833746,
+                    "parent_pid": 413059,
+                    "kind": "verify_source_page",
+                    "resource": "image",
+                    "pid": 413100,
+                    "label": "image-6"
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "case": "runner_real_overlap_2"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-4",
+            "forks": 7,
+            "records": [
+                {
+                    "ended_at": 1789292376.205923,
+                    "time": 1789292375.869925,
+                    "reaped_at": 1789292376.220028,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413101,
+                    "label": "image-1"
+                },
+                {
+                    "ended_at": 1789292376.204911,
+                    "time": 1789292375.937649,
+                    "reaped_at": 1789292376.217614,
+                    "parent_pid": 413059,
+                    "kind": "download_cover",
+                    "resource": "image",
+                    "pid": 413102,
+                    "label": "image-2"
+                },
+                {
+                    "ended_at": 1789292376.205196,
+                    "time": 1789292375.990349,
+                    "reaped_at": 1789292376.215103,
+                    "parent_pid": 413059,
+                    "kind": "verify_source_page",
+                    "resource": "image",
+                    "pid": 413103,
+                    "label": "image-3"
+                },
+                {
+                    "ended_at": 1789292376.205906,
+                    "time": 1789292376.031864,
+                    "reaped_at": 1789292376.311424,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413104,
+                    "label": "image-4"
+                },
+                {
+                    "ended_at": 1789292376.121123,
+                    "time": 1789292376.100967,
+                    "reaped_at": 1789292376.141714,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "metadata",
+                    "pid": 413105,
+                    "label": "metadata"
+                },
+                {
+                    "ended_at": 1789292376.288244,
+                    "time": 1789292376.225035,
+                    "reaped_at": 1789292376.308462,
+                    "parent_pid": 413059,
+                    "kind": "download_cover",
+                    "resource": "image",
+                    "pid": 413106,
+                    "label": "image-5"
+                },
+                {
+                    "ended_at": 1789292376.332391,
+                    "time": 1789292376.268875,
+                    "reaped_at": 1789292376.338792,
+                    "parent_pid": 413059,
+                    "kind": "verify_source_page",
+                    "resource": "image",
+                    "pid": 413107,
+                    "label": "image-6"
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "case": "runner_real_overlap_4"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-5",
+            "forks": 6,
+            "records": [
+                {
+                    "ended_at": 1789292376.559176,
+                    "time": 1789292376.371732,
+                    "reaped_at": 1789292376.568553,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413108,
+                    "label": "drain-1"
+                },
+                {
+                    "ended_at": 1789292376.613167,
+                    "time": 1789292376.419614,
+                    "reaped_at": 1789292376.619362,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413109,
+                    "label": "drain-2"
+                },
+                {
+                    "ended_at": 1789292376.667424,
+                    "time": 1789292376.455632,
+                    "reaped_at": 1789292376.673531,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413110,
+                    "label": "drain-3"
+                },
+                {
+                    "ended_at": 1789292376.720737,
+                    "time": 1789292376.497364,
+                    "reaped_at": 1789292376.730225,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413111,
+                    "label": "drain-4"
+                },
+                {
+                    "ended_at": 1789292376.840424,
+                    "time": 1789292376.734831,
+                    "reaped_at": 1789292376.846434,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413112,
+                    "label": "drain-5"
+                },
+                {
+                    "ended_at": 1789292376.906094,
+                    "time": 1789292376.850686,
+                    "reaped_at": 1789292376.910557,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413113,
+                    "label": "drain-6"
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "case": "running_four_to_one_drains_without_cancellation"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-6",
+            "forks": 6,
+            "records": [
+                {
+                    "ended_at": 1789292377.163399,
+                    "time": 1789292376.944505,
+                    "reaped_at": 1789292377.168142,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413114,
+                    "label": "ordinary-drain-1"
+                },
+                {
+                    "ended_at": 1789292377.213303,
+                    "time": 1789292376.985079,
+                    "reaped_at": 1789292377.21942,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413115,
+                    "label": "ordinary-drain-2"
+                },
+                {
+                    "ended_at": 1789292377.266084,
+                    "time": 1789292377.019244,
+                    "reaped_at": 1789292377.271441,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413116,
+                    "label": "ordinary-drain-3"
+                },
+                {
+                    "ended_at": 1789292377.316292,
+                    "time": 1789292377.067276,
+                    "reaped_at": 1789292377.320558,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413117,
+                    "label": "ordinary-drain-4"
+                },
+                {
+                    "ended_at": 1789292377.400844,
+                    "time": 1789292377.323982,
+                    "reaped_at": 1789292377.405301,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413118,
+                    "label": "ordinary-priority-10"
+                },
+                {
+                    "ended_at": 1789292377.50441,
+                    "time": 1789292377.409449,
+                    "reaped_at": 1789292377.509416,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413119,
+                    "label": "ordinary-priority-20"
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "case": "ordinary_priorities_do_not_preempt_during_downshift"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-7",
+            "forks": 4,
+            "records": [
+                {
+                    "time": 1789292377.542033,
+                    "reaped_at": 1789292377.634616,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413120,
+                    "label": "download"
+                },
+                {
+                    "ended_at": 1789292377.802062,
+                    "time": 1789292377.586924,
+                    "reaped_at": 1789292377.812752,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413121,
+                    "label": "prefetch"
+                },
+                {
+                    "ended_at": 1789292377.658352,
+                    "time": 1789292377.639979,
+                    "reaped_at": 1789292377.688936,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413122,
+                    "label": "visible"
+                },
+                {
+                    "ended_at": 1789292377.799483,
+                    "time": 1789292377.694231,
+                    "reaped_at": 1789292377.80969,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413123,
+                    "label": "download"
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "case": "visible_page_preempts_background_and_restarts_once"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-8",
+            "forks": 3,
+            "records": [
+                {
+                    "ended_at": 1789292378.016827,
+                    "time": 1789292377.848223,
+                    "reaped_at": 1789292378.02809,
+                    "parent_pid": 413059,
+                    "kind": "set_favorite",
+                    "resource": "image",
+                    "pid": 413124,
+                    "label": "mutation"
+                },
+                {
+                    "ended_at": 1789292378.016324,
+                    "time": 1789292377.893374,
+                    "reaped_at": 1789292378.023462,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413125,
+                    "label": "noncancelable"
+                },
+                {
+                    "ended_at": 1789292378.080823,
+                    "time": 1789292378.060928,
+                    "reaped_at": 1789292378.097302,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413126,
+                    "label": "visible"
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "case": "protected_work_survives_downshift_and_suspend"
+        },
+        {
+            "maximum_image_workers": 2,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-9",
+            "forks": 4,
+            "records": [
+                {
+                    "ended_at": 1789292378.266457,
+                    "time": 1789292378.132389,
+                    "reaped_at": 1789292378.271718,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413127,
+                    "label": "budget-1"
+                },
+                {
+                    "ended_at": 1789292378.331705,
+                    "time": 1789292378.175258,
+                    "reaped_at": 1789292378.337283,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413128,
+                    "label": "budget-2"
+                },
+                {
+                    "ended_at": 1789292378.334782,
+                    "time": 1789292378.276517,
+                    "reaped_at": 1789292378.339931,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413129,
+                    "label": "budget-3"
+                },
+                {
+                    "ended_at": 1789292378.357521,
+                    "time": 1789292378.343363,
+                    "reaped_at": 1789292378.392822,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413130,
+                    "label": "budget-4"
+                }
+            ],
+            "maximum_unreaped_image_workers": 2,
+            "case": "parent_storage_reservations_bound_four_workers"
+        },
+        {
+            "maximum_image_workers": 1,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-10",
+            "forks": 6,
+            "records": [
+                {
+                    "ended_at": 1789292378.451123,
+                    "time": 1789292378.427652,
+                    "reaped_at": 1789292378.468128,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413131,
+                    "label": "retry"
+                },
+                {
+                    "ended_at": 1789292378.53846,
+                    "time": 1789292378.472239,
+                    "reaped_at": 1789292378.544017,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413132,
+                    "label": "neighbor"
+                },
+                {
+                    "ended_at": 1789292378.597312,
+                    "time": 1789292378.574291,
+                    "reaped_at": 1789292378.62051,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413133,
+                    "label": "retry"
+                },
+                {
+                    "time": 1789292378.6534,
+                    "reaped_at": 1789292378.716695,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413134,
+                    "label": "background"
+                },
+                {
+                    "ended_at": 1789292378.791879,
+                    "time": 1789292378.723407,
+                    "reaped_at": 1789292378.798062,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413135,
+                    "label": "urgent"
+                },
+                {
+                    "ended_at": 1789292378.91844,
+                    "time": 1789292378.802244,
+                    "reaped_at": 1789292378.924055,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413136,
+                    "label": "background"
+                }
+            ],
+            "maximum_unreaped_image_workers": 1,
+            "case": "retry_and_preemption_reacquire_storage_reservations"
+        },
+        {
+            "maximum_image_workers": 4,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-11",
+            "forks": 5,
+            "records": [
+                {
+                    "ended_at": 1789292379.263675,
+                    "time": 1789292378.962183,
+                    "reaped_at": 1789292379.272001,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413137,
+                    "label": "filesystem-1"
+                },
+                {
+                    "ended_at": 1789292379.262714,
+                    "time": 1789292379.009345,
+                    "reaped_at": 1789292379.269725,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413138,
+                    "label": "filesystem-2"
+                },
+                {
+                    "ended_at": 1789292379.2615,
+                    "time": 1789292379.077526,
+                    "reaped_at": 1789292379.274212,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413139,
+                    "label": "filesystem-4"
+                },
+                {
+                    "ended_at": 1789292379.259741,
+                    "time": 1789292379.156727,
+                    "reaped_at": 1789292379.26636,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413140,
+                    "label": "filesystem-5"
+                },
+                {
+                    "ended_at": 1789292379.297079,
+                    "time": 1789292379.277733,
+                    "reaped_at": 1789292379.349369,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413141,
+                    "label": "filesystem-3"
+                }
+            ],
+            "maximum_unreaped_image_workers": 4,
+            "case": "reservations_follow_the_filesystem_across_directories"
+        },
+        {
+            "maximum_image_workers": 1,
+            "path": "/var/tmp/bilicomics-finishing-OHQWOHTS/concurrency-20260913-third/concurrency-runner/case-12",
+            "forks": 4,
+            "records": [
+                {
+                    "time": 1789292379.385673,
+                    "reaped_at": 1789292379.425193,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413142,
+                    "label": "cancel-budget"
+                },
+                {
+                    "ended_at": 1789292379.496691,
+                    "time": 1789292379.429703,
+                    "reaped_at": 1789292379.500771,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413143,
+                    "label": "after-cancel"
+                },
+                {
+                    "time": 1789292379.532167,
+                    "reaped_at": 1789292379.605896,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413144,
+                    "label": "timeout-budget"
+                },
+                {
+                    "ended_at": 1789292379.676718,
+                    "time": 1789292379.611321,
+                    "reaped_at": 1789292379.681345,
+                    "parent_pid": 413059,
+                    "kind": "download_page",
+                    "resource": "image",
+                    "pid": 413145,
+                    "label": "after-timeout"
+                }
+            ],
+            "maximum_unreaped_image_workers": 1,
+            "case": "cancel_and_timeout_release_reservations_after_reap"
+        }
+    ]
+}

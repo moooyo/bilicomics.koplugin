@@ -42,7 +42,7 @@ local category_body_keys = keys("style_id,area_id,is_finish,is_free,special_tag,
 local category_m2_prefix = "error:BiliComics local reader has no browser fingerprint environment_"
 local category_data_sn = "1E74C20E5720FBF3BB351965D7A9DFC1"
 local auth_headers = keys("accept,referer,user-agent,origin,cookie,content-type")
-local auth_methods = keys("generateQR,pollQR,cookieInfo,refreshSession,confirmRefresh")
+local auth_methods = keys("generateQR,pollQR,cookieInfo,refreshSession,confirmRefresh,ensureSiteContext")
 local function fields(text, expected)
     if type(text) ~= "string" or #text == 0 or #text > 16384 or text:sub(1, 1) == "&"
         or text:sub(-1) == "&" or text:find("&&", 1, true) then return nil end

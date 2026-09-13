@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "phase": "read",
+  "passed": true,
+  "execution_host": "test-env",
+  "input_from_confirmed_qr": true,
+  "same_input_as_selection": true,
+  "input_unchanged": true,
+  "helper_sha256": "db1826164e64069433b7b1aaafb4db64adefe36877886dded26a83e03165bd3b",
+  "public_reports_sha256": {
+    "login": "159ebeda166cfb7034551e15705c6181ad7579b33f0f71e27e72805c184c4be4",
+    "restart": "7fdfaf2b9aee60921ae447778f7ed2cf38270d843b67b761d48c2c96a71b3de9",
+    "preflight": "6c9d8547173412e75cfaa3c36789bf776c6990f10609d9c09e0caf522082d892",
+    "reading": "988e2087fce84d9ed8b8cd7b918d302762dda92690281ea2f1ca5c315a2f1eea"
+  },
+  "private_input_contents_read_by_wrapper": false
+}

@@ -1,5 +1,7 @@
 # Native business UI verification
 
+The latest bookshelf/menu/navigation and image-concurrency UI evidence is in [bookshelf-finishing.md](bookshelf-finishing.md): 986 remote native assertions across Chinese/English and four screen sizes. It includes account-scoped view restoration, the reader-close return event, first-use help, explicit sync/empty states and confirmed settings after storage failure. Prior reports retain their original layout/source scope.
+
 The current category-selection evidence is in [bookstore-categories.md](bookstore-categories.md): 1,632 controlled category UI assertions, 760 Bookshelf regressions, and a real anonymous capture of the official 16-category picker and six loaded covers from the first Heat category page. Prior expanded reports remain historical evidence of their recorded sources.
 
 The current expanded bookstore evidence is in [bookstore-expanded.md](bookstore-expanded.md): 1,600 controlled compact-grid assertions, 760 unchanged-Bookshelf regression assertions, and a real anonymous 600 by 800 capture of two pages with six covers each. The previous [bookstore.md](bookstore.md) and [bookstore-live.md](bookstore-live.md) reports remain the records of the earlier seven-item/two-card presentation.

@@ -1,9 +1,17 @@
 # Integrated development package verification
 
-The latest default archive is the categorized Bookstore revision. Its
+The latest default archive is the 108-file finishing revision, with automatic
+site initialization, the quiet synchronized bookshelf and configurable concurrent
+downloads. Its [final binding](finishing-acceptance-binding.json),
+[package checks](finishing-results.json) and
+[real authenticated acceptance](../../docs/finishing-acceptance.md) identify the
+delivered source. The preceding categorized Bookstore candidate remains under
+`dist/history/bookstore-d0dcc11e/` with its original evidence below.
+
+The preceding categorized Bookstore revision's
 [source binding](bookstore-categories-source-evidence.json), [package checks](bookstore-categories-results.json)
-and [implementation/acceptance record](../../docs/bookstore-categories.md) supersede the
-default archive references below. The preceding 102-file compact bookshelf
+and [implementation/acceptance record](../../docs/bookstore-categories.md) retain
+their original snapshot. The preceding 102-file compact bookshelf
 archive remains under `dist/history/bookshelf-60ea9d6a/`, with its original
 [source binding](bookshelf-source-evidence.json). The 101-file stabilization
 archive remains under `dist/history/stabilization-45385c6f/`.

@@ -61,7 +61,7 @@ local network = { connected = true }
 function network:isConnected() return self.connected end
 local app = Controller.new{ root = output .. "/data", ui_manager = ui, runner_factory = runnerFactory, network = network }
 local function import(account_id)
-    local session = assert(Session.parse("SESSDATA=synthetic-feature-session; DedeUserID=" .. account_id))
+    local session = assert(Session.parse("SESSDATA=synthetic-feature-session; DedeUserID=" .. account_id .. "; buvid3=synthetic-feature-device"))
     assert(session:withIdentity({ id = account_id, name = "Synthetic feature account" }))
     local complete
     app:importSession("SESSDATA=synthetic-feature-session; DedeUserID=" .. account_id, function(value, err) assert(value, err and err.kind); complete = value end)

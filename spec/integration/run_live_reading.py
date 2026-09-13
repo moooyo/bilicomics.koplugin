@@ -157,7 +157,8 @@ def stage(args, report):
     source_hashes = code_manifest(args.source)
     driver = regular_path(Path(__file__).resolve().with_name("live_reading.lua"))
     launcher = regular_path(Path(__file__).resolve())
-    test_hashes = {driver.name: digest(driver), launcher.name: digest(launcher)}
+    scope = regular_path(Path(__file__).resolve().with_name("live_acceptance_scope.lua"))
+    test_hashes = {path.name: digest(path) for path in (driver, launcher, scope)}
     expected = {"schema": 1, "source_sha256": source_hashes, "test_sha256": test_hashes}
     package = args.work / "bundle/bilicomics.koplugin"
     tests = args.work / "spec/integration"
@@ -176,7 +177,7 @@ def stage(args, report):
             mkdir_private(path)
         for relative in source_hashes:
             copy_code(args.source / relative, package / relative)
-        for path in (driver, launcher):
+        for path in (driver, launcher, scope):
             copy_code(path, tests / path.name)
         settings = "return {quickstart_shown_version=9999999999,color_rendering=false," \
             "start_with=\"filemanager\",extra_plugin_paths={" + lua_literal(package.parent) + "}}\n"
@@ -210,7 +211,7 @@ def syntax_check(args, package, tests, report):
     mkdir_private(bytecode)
     compile((tests / "run_live_reading.py").read_bytes(), "run_live_reading.py", "exec")
     report["status"]["python_syntax_valid"] = True
-    paths = sorted(package.rglob("*.lua")) + [tests / "live_reading.lua"]
+    paths = sorted(package.rglob("*.lua")) + [tests / "live_reading.lua", tests / "live_acceptance_scope.lua"]
     if args.guard is not None:
         paths.append(args.guard)
     count = 0
@@ -516,6 +517,89 @@ def phase_report(work, phase):
     return value
 
 
+def interval_peak(intervals):
+    """Count strict overlap; touching endpoints do not establish concurrency."""
+    events = []
+    for item in intervals:
+        events.extend(((item["started"], 1), (item["finished"], -1)))
+    active = peak = 0
+    previous = None
+    overlap = 0.0
+    for moment, change in sorted(events):
+        if previous is not None and active >= 2:
+            overlap += moment - previous
+        active += change
+        peak = max(peak, active)
+        previous = moment
+    return peak, overlap
+
+
+def image_worker_timing(work, online):
+    """Read only fixed-schema observer records; raw process identifiers remain private."""
+    result = {"passed": False, "checks": {"records_valid": False}, "intervals": []}
+    try:
+        paths = sorted((work / "private").glob("image-worker-*.json"))
+        require(len(paths) <= 10000)
+        intervals = []
+        for path in paths:
+            match = re.fullmatch(r"image-worker-([1-9][0-9]*)-([0-9]+)\.json", path.name)
+            require(match is not None)
+            item = read_json(path, 4096)
+            require(type(item) is dict and set(item) == {
+                "schema", "pid", "started", "finished", "gate_open_at_start", "returned_normally"})
+            require(item["schema"] == 1 and type(item["pid"]) is int
+                    and item["pid"] == int(match[1]) and item["pid"] > 1)
+            require(all(type(item[key]) in (int, float) and math.isfinite(item[key]) and item[key] > 0
+                        for key in ("started", "finished")))
+            require(item["finished"] > item["started"] and item["finished"] - item["started"] <= 1800)
+            require(abs(int(match[2]) - item["started"] * 1000000) <= 1)
+            require(type(item["gate_open_at_start"]) is bool and type(item["returned_normally"]) is bool)
+            intervals.append(item)
+        intervals.sort(key=lambda item: (item["started"], item["pid"]))
+        counts = online.get("counts", {})
+        starts, pages = counts.get("image_worker_starts", 0), counts.get("completed_pages", 0)
+        require(type(starts) is int and type(pages) is int and len(intervals) <= starts)
+        peak, overlap = interval_peak(intervals)
+        ungated = [item for item in intervals if item["gate_open_at_start"]]
+        ungated_peak, ungated_overlap = interval_peak(ungated)
+        context = read_json(work / "private/image-timing-context.json", 4096)
+        require(type(context) is dict and set(context) == {"schema", "reader_closed"} and context["schema"] == 1)
+        closed = context["reader_closed"]
+        require(type(closed) in (int, float) and math.isfinite(closed) and closed > 0)
+        background = [item for item in ungated if item["started"] >= closed]
+        background_peak, background_overlap = interval_peak(background)
+        runner_peak = counts.get("peak_image_processes", 0)
+        origin = intervals[0]["started"] if intervals else 0
+        result.update({
+            "checks": {
+                "records_valid": True,
+                "default_configuration_is_two": counts.get("configured_download_concurrency") == 2,
+                "image_resource_limit_is_two": counts.get("configured_image_resource_limit") == 2,
+                "complete_chapter_has_call_observations": pages > 0 and len(intervals) >= pages,
+                "observed_worker_calls_stay_within_two": 0 < peak <= 2,
+                "all_started_image_processes_stay_within_two": type(runner_peak) is int and 0 < runner_peak <= 2,
+                "real_calls_overlap_after_initial_gate": ungated_peak == 2 and ungated_overlap > 0,
+            },
+            "observed_calls": len(intervals), "calls_without_complete_timing": starts - len(intervals),
+            "peak_worker_calls": peak, "peak_image_processes": runner_peak,
+            "peak_ungated_worker_calls": ungated_peak, "ungated_overlap_seconds": ungated_overlap,
+            "peak_background_worker_calls": background_peak, "background_overlap_seconds": background_overlap,
+            "all_call_overlap_seconds": overlap,
+            "clock_is_monotonic": True, "observer_file_writes_outside_call_interval": True,
+            "observer_adds_no_artificial_delay": True,
+            "intervals": [{"worker_number": index, "started_seconds": item["started"] - origin,
+                           "finished_seconds": item["finished"] - origin,
+                           "after_initial_gate": item["gate_open_at_start"],
+                           "returned_normally": item["returned_normally"]}
+                          for index, item in enumerate(intervals, 1)],
+        })
+        result["passed"] = all(result["checks"].values())
+    except Exception:
+        result["checks"]["records_valid"] = False
+        result["passed"] = False
+    return public_value(result)
+
+
 def run_phase(args, package, tests, phase):
     private = args.work / "private"
     cache = private / ("cache-" + phase)
@@ -603,6 +687,8 @@ def run_phase(args, package, tests, phase):
     }
     result["passed"] = result["passed"] and all(result["launcher"][key] for key in
         ("process_completed", "within_deadline", "children_cleaned", "pid_records_valid"))
+    if phase == "online":
+        result["image_worker_timing"] = image_worker_timing(args.work, result)
     write_json(args.work / (phase + "-results.json"), result)
     return result
 
@@ -652,6 +738,13 @@ def main():
     report = {"passed": False, "status": {"staged": False, "live_requested": False,
               "online_executed": False, "offline_executed": False,
               "unexpected_error": False}, "counts": {"isolated_sessions_removed": 0}}
+    report["image_worker_timing_note"] = (
+        "The observer preserves Worker.execute return arity and exceptions. Each completed download_page call "
+        "is timed with CLOCK_MONOTONIC; raw PID/times remain in private records. Clock reads and protected-call "
+        "bookkeeping add small unquantified overhead. The evidence write occurs after the measured call but "
+        "briefly retains its worker slot. Interrupted calls without an end record are counted, not given invented "
+        "end times. The overlap gate excludes calls begun before the existing first-image gate opened. No "
+        "artificial delay is added. Online/offline behavior runs still complete before this separate timing gate.")
     args = None
     trusted_work = False
     package = tests = None
@@ -707,7 +800,7 @@ def main():
             report["status"]["offline_executed"] = True
             report["offline"] = run_phase(args, package, tests, "offline")
             require(report["offline"]["passed"])
-        report["passed"] = True
+        report["passed"] = not args.execute_live_read or report["online"]["image_worker_timing"]["passed"]
     except (Exception, KeyboardInterrupt):
         report["status"]["unexpected_error"] = True
         report["passed"] = False

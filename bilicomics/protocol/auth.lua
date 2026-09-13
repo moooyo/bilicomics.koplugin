@@ -1,6 +1,7 @@
 local Errors = require("bilicomics/protocol/errors")
 local JSON = require("bilicomics/protocol/json")
 local Session = require("bilicomics/protocol/session")
+local SiteContext = require("bilicomics/protocol/site_context")
 local Transport = require("bilicomics/protocol/transport")
 
 local Auth = {}
@@ -180,11 +181,32 @@ function Auth:pollQR(key)
         or not candidate.cookies.SESSDATA or not candidate.cookies.bili_jct then
         return failure("protocol", "The confirmed login did not deliver its required session cookies.")
     end
+    candidate, err = SiteContext.ensure(candidate, self.transport, self.clock)
+    if not candidate then return nil, err end
     local validated
     validated, err = self:_validate(candidate)
     if not validated then return nil, err end
+    if not SiteContext.hasDevice(validated) then
+        return failure("protocol", "Identity validation did not retain the manga site device context.")
+    end
     self.session = validated
     return { status = "confirmed", session = validated:serialize() }
+end
+
+function Auth:ensureSiteContext()
+    local session = self.session
+    if not session or type(session.identity) ~= "table" or session.account_key ~= "bili_" .. tostring(session.identity.id)
+        or type(session.validated_at) ~= "number" or session.validated_at <= 0
+        or not session.cookies.SESSDATA then
+        return failure("authentication", "A verified account session is required for site recovery.", { transmitted = false })
+    end
+    local candidate, err = SiteContext.ensure(session, self.transport, self.clock)
+    if not candidate then return nil, err end
+    if not SiteContext.preservesSession(session, candidate) then
+        return failure("account_mismatch", "Site initialization changed the account session unexpectedly.", { transmitted = false })
+    end
+    self.session = candidate
+    return candidate:serialize()
 end
 
 function Auth:cookieInfo()

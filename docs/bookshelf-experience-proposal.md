@@ -1,6 +1,8 @@
 # Bookshelf experience proposal
 
-Status: design proposal, not implemented. Date: 2026-09-13.
+Status: implemented and verified in the [finishing acceptance](finishing-acceptance.md).
+Date: 2026-09-13. See [the finishing plan](finishing-plan.md) and
+[native UI evidence](../spec/ui/bookshelf-finishing.md).
 
 The user requested a considered redesign after finding the permanent Refresh
 bookshelf and All controls confusing. Earlier changes replaced rows with covers
@@ -11,7 +13,8 @@ remaining information hierarchy and behavior together.
 
 The normal bookshelf task is to recognize a comic, see the current reading
 position, and resume it. Default entry remains Bookshelf. Preserve the approved
-Bookshelf, History, Search and Downloads destinations in that order.
+Bookshelf, Bookstore, Search and Downloads destinations in that order. Bookstore
+supersedes the History destination from the original proposal.
 
 Use one quiet header and one bottom navigation band. The header has a return
 action, a clear screen title and a More menu. The return action leaves the plugin
@@ -87,5 +90,6 @@ Implement synchronization and view-state preservation before removing their
 manual affordances. Then implement the header/menu and visible filter state,
 followed by compact card captions and lighter navigation. Verify default,
 filtered, offline, empty and returning-from-reader states in the remote native
-runtime before replacing the current candidate. No production module or package
-was changed for this proposal.
+runtime before replacing the current candidate. The original proposal changed
+no production module or package; the subsequent finishing implementation and
+its evidence are tracked in the records linked above.

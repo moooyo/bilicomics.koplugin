@@ -167,7 +167,7 @@ local function finish()
 end
 
 if phase == "online" then
-    request("login", function() app:importSession("SESSDATA=synthetic-integration-session; DedeUserID=4242", callback) end)
+    request("login", function() app:importSession("SESSDATA=synthetic-integration-session; DedeUserID=4242; buvid3=synthetic-integration-device", callback) end)
 else
     local expected = read("expected-offline.json")
     descriptor_path, descriptor_bytes, position, online_pixel = expected.path, expected.bytes, expected.anchor, expected.pixel

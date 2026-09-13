@@ -1,0 +1,497 @@
+{
+  "assertions": 67,
+  "checks": [
+    {
+      "name": "exact_anonymous_site_context_login",
+      "passed": true
+    },
+    {
+      "name": "exact_anonymous_site_context_restart",
+      "passed": true
+    },
+    {
+      "name": "exact_anonymous_site_context_reading",
+      "passed": true
+    },
+    {
+      "name": "no_site_context_offline",
+      "passed": true
+    },
+    {
+      "name": "no_site_context_rehearse",
+      "passed": true
+    },
+    {
+      "name": "no_site_context_unknown",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_authorization",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_duplicate_header",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_newline",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_body",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_query",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_post",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_fragment",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_wrong_referer",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_userinfo",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_output",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_suffix_host",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_encoded_path",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_cookie",
+      "passed": true
+    },
+    {
+      "name": "reject_site_context_explicit_port",
+      "passed": true
+    },
+    {
+      "name": "production_qr_generation_request",
+      "passed": true
+    },
+    {
+      "name": "production_qr_poll_request",
+      "passed": true
+    },
+    {
+      "name": "production_cookie_info_request",
+      "passed": true
+    },
+    {
+      "name": "duplicate_cookie_info_csrf_rejected",
+      "passed": true
+    },
+    {
+      "name": "production_identity_request",
+      "passed": true
+    },
+    {
+      "name": "production_favorites_page_request",
+      "passed": true
+    },
+    {
+      "name": "production_history_request",
+      "passed": true
+    },
+    {
+      "name": "reject_library_page_num",
+      "passed": true
+    },
+    {
+      "name": "reject_library_page_size",
+      "passed": true
+    },
+    {
+      "name": "reject_library_type",
+      "passed": true
+    },
+    {
+      "name": "reject_library_order",
+      "passed": true
+    },
+    {
+      "name": "reject_library_source",
+      "passed": true
+    },
+    {
+      "name": "rotation_transport_denied_/x/passport-login/web/cookie/refresh_login",
+      "passed": true
+    },
+    {
+      "name": "rotation_transport_denied_/x/passport-login/web/cookie/refresh_restart",
+      "passed": true
+    },
+    {
+      "name": "rotation_transport_denied_/x/passport-login/web/cookie/refresh_reading",
+      "passed": true
+    },
+    {
+      "name": "rotation_transport_denied_/x/passport-login/web/confirm/refresh_login",
+      "passed": true
+    },
+    {
+      "name": "rotation_transport_denied_/x/passport-login/web/confirm/refresh_restart",
+      "passed": true
+    },
+    {
+      "name": "rotation_transport_denied_/x/passport-login/web/confirm/refresh_reading",
+      "passed": true
+    },
+    {
+      "name": "refresh_challenge_denied",
+      "passed": true
+    },
+    {
+      "name": "no_refresh_maintenance_admitted",
+      "passed": true
+    },
+    {
+      "name": "rotation_submission_denied_required",
+      "passed": true
+    },
+    {
+      "name": "rotation_submission_denied_unbound",
+      "passed": true
+    },
+    {
+      "name": "rotation_submission_denied_wrong_timestamp",
+      "passed": true
+    },
+    {
+      "name": "confirmation_submission_denied",
+      "passed": true
+    },
+    {
+      "name": "site_context_submission_admitted",
+      "passed": true
+    },
+    {
+      "name": "offline_auth_submission_denied",
+      "passed": true
+    },
+    {
+      "name": "offline_library_submission_denied",
+      "passed": true
+    },
+    {
+      "name": "unknown_auth_submission_denied",
+      "passed": true
+    },
+    {
+      "name": "refresh_true_defers",
+      "passed": true
+    },
+    {
+      "name": "refresh_false_does_not_defer",
+      "passed": true
+    },
+    {
+      "name": "declared_cover_admitted",
+      "passed": true
+    },
+    {
+      "name": "cover_cookie_denied",
+      "passed": true
+    },
+    {
+      "name": "cover_destination_denied",
+      "passed": true
+    },
+    {
+      "name": "cover_address_denied",
+      "passed": true
+    },
+    {
+      "name": "credential_route_cannot_be_a_declared_cover_https://passport.bilibili.com/x/passport-login/web/cookie/refresh",
+      "passed": true
+    },
+    {
+      "name": "credential_route_cannot_be_a_declared_cover_https://passport.bilibili.com/x/passport-login/web/confirm/refresh",
+      "passed": true
+    },
+    {
+      "name": "credential_route_cannot_be_a_declared_cover_https://www.bilibili.com/correspond/1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "passed": true
+    },
+    {
+      "name": "credential_route_cannot_be_a_declared_cover_https://www.bilibili.com/%63orrespond/1/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "passed": true
+    },
+    {
+      "name": "reading_guard_admits_site_context",
+      "passed": true
+    },
+    {
+      "name": "reading_guard_admits_library",
+      "passed": true
+    },
+    {
+      "name": "reading_guard_admits_cookie_info",
+      "passed": true
+    },
+    {
+      "name": "reading_guard_declares_visible_cover",
+      "passed": true
+    },
+    {
+      "name": "reading_guard_admits_declared_cover",
+      "passed": true
+    },
+    {
+      "name": "offline_guard_rejects_site_context",
+      "passed": true
+    },
+    {
+      "name": "offline_guard_rejects_cookie_info",
+      "passed": true
+    },
+    {
+      "name": "offline_guard_rejects_library",
+      "passed": true
+    },
+    {
+      "name": "offline_guard_rejects_cover",
+      "passed": true
+    }
+  ],
+  "constructed_requests": 6,
+  "execution_host": "test-env",
+  "guard_sha256": "378dc32e1caa0b42b547c1052e3eb334930cec673e6eb846f3d0dfefcec070fb",
+  "harness_sha256": {
+    "live_acceptance_scope.lua": "d68cbd52b62458a81980946c62bf7c1a4bb68c46dd81b5bf8a92f19119595b44",
+    "live_acceptance_scope_spec.lua": "6095e04e8295d1c8227fe89738f985ed30543536550b0c9f54245254ca9fa85d",
+    "run_live_acceptance_scope.py": "78eccf8109a214c5ef3d3426c8ff8af3bc2d03da3191f24ec0af9e9dc41d8995"
+  },
+  "network_namespace_isolated": true,
+  "passed": true,
+  "production_sha256": {
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac",
+    "bilicomics/bookshelf_state.lua": "9a69462ec2199299ca535a8c5b7dbd297bcdfbadf10d531d84ea66283c215e82",
+    "bilicomics/bookstore.lua": "edca2a2692c58064e972ced94fef1bfe790c8c3d2f9690f264089f41b55d91ce",
+    "bilicomics/bookstore_categories.lua": "4c916bdc9e1f0e864261d430b11166481f418aad3023955f3ed12f5299cd5f3d",
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+    "bilicomics/controller.lua": "0030a58cf4aa0d51da79ad88ca397f58277afa82b1f9e58583d7edaa3e9a598a",
+    "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "8235f7b2f0b045a40cc8fd8dfd1bbb61ddff7158cbc1033530fbdc95a58ffb57",
+    "bilicomics/jobs/runner.lua": "a4240bb54e3bfcd9c0a38f9091f61aed70eb2dedd91cb78153d2481139ec0c0c",
+    "bilicomics/jobs/session_runner.lua": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "a50252f77cc279408168c35d61f8e7e9d754bad5af3640dcdbdaa5609c2fbf59",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "8530c2e00d8315447cffcee90fda82d80704bba59895115af13b3a585149ba4b",
+    "bilicomics/protocol/README.md": "6b392a92887c6c7548a659c27594633fb6cbac473e4bf092def00aed8903a248",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/auth.lua": "a2ab806cf7496137306034d47a3cfc5177db8bf6f16d3ab562757d319b749e1f",
+    "bilicomics/protocol/auth_crypto.lua": "d09cca5a7660f94863a7aec42c62369525167ff58ef8a9dd41bfa5b7fc9180bf",
+    "bilicomics/protocol/categories.lua": "213e4033589cb81f0608a5bcbcc79d2f42d9243d9384cddb088fb0ebbff21242",
+    "bilicomics/protocol/client.lua": "c1334e3ec9b6a8b2fd4a607da3bb13309fd8f653c22d6a022153bcb2ddf1fdfa",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native/README.md": "68d0a254c63717fc6ea75efdc97f47dd27500a5d21f6a5adee9f819b3f410301",
+    "bilicomics/protocol/native/arm-relocations.ld": "e1de043851bb2fc479dba92ebe4028f649d817502bdc295f1b3bd7074312eef6",
+    "bilicomics/protocol/native/biliwasm.c": "a614ee2572e283fbf56c7ffd61ad3eae1bad9c30716b5b334f84ae2ce01368f2",
+    "bilicomics/protocol/native/biliwasm.exports.map": "53a04aacff1a72d81ed1849167857f7516fc2fff2f3238c9e7402652db31eead",
+    "bilicomics/protocol/native/biliwasm.h": "c6668541ef3c021100d138bc38931b3c64ba05c222fb61e880f4260dbd10042e",
+    "bilicomics/protocol/native/bin/android-arm64-v8a/libbilicrypto.so": "7bcdeabd8916fbdff8a645a09398eb601c449eae10575e2da60d7979eb94c849",
+    "bilicomics/protocol/native/bin/android-arm64-v8a/libbiliwasm.so": "ca890ba1e7e0065579fa5aea3bb19a9f9971830711ad0611aba742b9ffb87f4d",
+    "bilicomics/protocol/native/bin/android-armeabi-v7a/libbilicrypto.so": "f6f06f4ea99f4ca0c4b4c68d4d6e18120c0d1dd403147768da166f123e5e1f2a",
+    "bilicomics/protocol/native/bin/android-armeabi-v7a/libbiliwasm.so": "45961992fc646cbf9679f8959ab28b049f0b06504c1aac77eec1a88d471e60b4",
+    "bilicomics/protocol/native/bin/android-x86/libbilicrypto.so": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94",
+    "bilicomics/protocol/native/bin/android-x86/libbiliwasm.so": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4",
+    "bilicomics/protocol/native/bin/android-x86_64/libbilicrypto.so": "b6bb8460cfb2877b5492b9926d4a8a05a9ec7692ac2d1ec60118f7bf1d7fd39d",
+    "bilicomics/protocol/native/bin/android-x86_64/libbiliwasm.so": "5a0a4ab94c9faa3e33b21a002d3ea74e3d529329f37840a6464c363c34df31e2",
+    "bilicomics/protocol/native/bin/linux-aarch64/libbilicrypto.so": "21bfe78cd9a114e423a34e5b87008337624ac55e11f8c5f87417f3c50ed330e7",
+    "bilicomics/protocol/native/bin/linux-aarch64/libbiliwasm.so": "989a95fa445482e71fbb554a7d56d956d057aa05f9f2992218f735dd32912cf6",
+    "bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f",
+    "bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d",
+    "bilicomics/protocol/native/bin/linux-x86_64/libbilicrypto.so": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a",
+    "bilicomics/protocol/native/bin/linux-x86_64/libbiliwasm.so": "00f3200a8e276ea851722d3526105c84d0d13e5d0ebabe436227c9007149dc2d",
+    "bilicomics/protocol/native/build-android.sh": "62bf8be13873135419c781a07c73166fdcb667d3641c50f3d070d183d00ca3d2",
+    "bilicomics/protocol/native/build.sh": "ea0473fe754fdc29d6fbe029f456a882b92c528cae315e2406b337d302b0e480",
+    "bilicomics/protocol/native/legacy_v5/NOTICE": "a2736aee1d083931e3949ce0e3304772d6f6dfe4f056afec7ded36a00982f0fc",
+    "bilicomics/protocol/native/legacy_v5/README.md": "29bd1e0af3ea32a93ca8d47297fabba084127fa0a96d755bd65200b6f8f9b02e",
+    "bilicomics/protocol/native/legacy_v5/bili_mbedtls_config.h": "429bc9660a634151c5ef439c906a8e3f2454bb12e6c5d5d8b366b776c06920ec",
+    "bilicomics/protocol/native/legacy_v5/bili_v5.c": "9ec1ee9b9b9e3e3c24b3fc8c6f78b7841be49687fc182d7ccad427ffa504d6aa",
+    "bilicomics/protocol/native/legacy_v5/bili_v5.exports.map": "efcd0e7485204238b38a5ea4ec38f2f3050b8209119b216a109068df64e7c1dc",
+    "bilicomics/protocol/native/legacy_v5/bili_v5.h": "5233d78702009ee0a55dd08eb84e23ffa09a70c070130adbaf9ed88e6aae4b08",
+    "bilicomics/protocol/native/legacy_v5/build.sh": "dbb65504b6a87ee7d42362ee0895df86bb33a3325755155036b0cddf0d2decaf",
+    "bilicomics/protocol/native/legacy_v5/dependency.json": "374c14e7a614072184f1da25754a9f9e418df289feb48e380acb61dc32bb0567",
+    "bilicomics/protocol/native/legacy_v5/patches/0001-clear-p256-recoded-scalar.patch": "d938011cf0618272476138de93f9507ed37a4d95e79abf039fd7a496d79f972c",
+    "bilicomics/protocol/native/legacy_v5/patches/0002-clear-gcm-key-derived-temporaries.patch": "c56e2ae5e75f77a23efb7039fe13e6203dc8b37a9690ec7972cf1c768723da87",
+    "bilicomics/protocol/native/legacy_v5/sources.list": "4ffeee4ccc885629438e93ef8cf4d529be1dcf6cdf22485340e7f63cbe07e459",
+    "bilicomics/protocol/native/legacy_v5/upstream-sha256.json": "f63631211895c25ffaa92188a5ce9c4194bda457e3b30ed8744c1cc2960b2bcb",
+    "bilicomics/protocol/native/legacy_v5/vendor-files.list": "dd02e9b1b9239af0f9dfa07d13ef4b772054049cb11daf21224da4bd34ff2b7c",
+    "bilicomics/protocol/native/legacy_v5/vendor-refresh.py": "3c3375b8c40f652a2543a16b09342f22d052b92dd30c2288c5fb522db107a182",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/LICENSE": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/aes.h": "ce71f35d91cf1609bddff21d613863c1177bccc97327f7994c39965ebf044b56",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/asn1.h": "bff209b57c95feb92edf78194f77bcc139172ff2c78b5aa0ad25a9739ce570bc",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/asn1write.h": "28187d70e8e6ed663053c748628eff16aa94aacf356664caa646139f30b27ae4",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/bignum.h": "f4167d7a91c3431f37341d0d32c72280fd912dfaf360d6fccb1cd9c5fa9da92c",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/block_cipher.h": "edddbf6b03a54e04b2ae3ee3da00a7e243a7ef3f81db5747c69884b222980898",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/build_info.h": "4bb715278f3199298220b930514ace4f461ed0e9ff27b656d6e2616a1ca3287f",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/chacha20.h": "ebbced7d6162fda31d953b5de77733371375b5bbeba959c14eb8576c18773c2b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/chachapoly.h": "edef9e38e446b87289b20bb7b7db6a9f5792a25ad00beb567732088d4e4ba67f",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/check_config.h": "66696df9cc3f7cbbe84786046937242b18140963b94c34347404f7827c428efa",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/cipher.h": "9dc945cc9ad4a97e656d435ece879c207df249b037d8b7cd1a5d9efeceeeb577",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/cmac.h": "181015eae9af1a0e3ed94f54d42c806ee7897f623968eeece045d7c46cc347e9",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/config_adjust_legacy_crypto.h": "f404960e2878c21c22a5d67caba6cd1d29f382b3d913a56ce856931dd15b2886",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/config_adjust_ssl.h": "2d37a7552566e9fbd8a5a8b3e6cf6d4e21125a5e48a7e24ca30f3c683d141871",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/config_adjust_x509.h": "92909d91c59340f13eb2b447cf44e0075a0ee742a18f22fb7843f6a18c5af5dc",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/constant_time.h": "1f4196abb876364c85bcc044990b01661114e32d5ddeade427259adb58bb0c79",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ecdsa.h": "c4e419b690d0da2631d7c1f6893e392f7ad02a818b8cb24a323b66caea9eada0",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ecjpake.h": "13a7908d6c9193ef176baf4250bd235ae6813b2a44d7c5dc2692294587df5d42",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ecp.h": "f0cb2c6d6962623e7b379bcacb8a188cee24285adb31823b89fe05749187ed36",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/error.h": "ddcb14c1bf9d6fd2f2f1d2eb62117ce9bf05a0f9430c6931d7555b23f9ed3ddb",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/gcm.h": "e28c3e5923269dbc921bc57e83e0ab2a6488a16e1bcbae943e5ad36ccc57d1f4",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/md.h": "89c41b36251ab26facdedc7b379ad5236af8f941cae58941be7f6de690fecd4e",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/md5.h": "21893a1ffcb6d65057178a45977774ed249387ace6d733f32434d8546dd827f7",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/pkcs5.h": "d461711e57754093228a127268303bf03f33522d05aff3d1e0f3915bb5e4e370",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/platform.h": "e6e1edc99d90698acf751d5d837c9b59898d7277deb993bcbf7473172b7a3523",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/platform_util.h": "1237d849e96bc15b479e8086160e4568c1de86563bb51c60eead45b99ad1b4ac",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/poly1305.h": "393389d0f437930fae11e0cc1f325bbd82282723dffd57f080a08f82453d1e6e",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/private_access.h": "c897213b3e534e8d5db83629177f9c01d90461ed6fea57906836262dba87056d",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/psa_util.h": "382c0cc5184a102f7a6ee2ada6ebaf95c327bad7e08d9fa2ff2940e9585dde1b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/ripemd160.h": "138b3cd792a3301fb869e5303fe0dd317743b2009b7a8f8423a51511444e23dc",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha1.h": "e644d96d46d44da66e160eb69ad637f13caef1d192e3361616833b342c6a859b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha256.h": "a2ee050ca15b7598a8d227cac0e0ec9fd6c38615b817737a8007e90b3feab0d9",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha3.h": "8cc0b3928976871e2a4847d0f6bf02da4663a94cc0779afdec3438a0c76a5499",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/sha512.h": "0f77abf1b4dfc18b865725e8a221d5d9279899c274e993005359be182b7574a2",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/mbedtls/threading.h": "5688b2bef81fa61b9d29bca9383931db26b7dcb8a96785dbc957b95e01292b72",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/build_info.h": "9eb0dbed47ac851acee62bd0829ce177aac6fe8515a4ce7e904ecf71829cb3d0",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto.h": "1f5b3a248a348ea39d093208067e377e5c8908718e71e396f9ff4d2c7fb5ebdd",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_builtin_composites.h": "1e2eec329b2b4ec3b5da3f9d5761bc5645833445401a43cbff812fdb76b0ae9e",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_builtin_key_derivation.h": "8b3d5d3174dbd33e5e332f51e5f00d2734716f3e744656631bccb4d355e92bdc",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_builtin_primitives.h": "a3078c5637a4ef2a40ef022f89881b8ca5d3321bcab31f6f550c6154c58543c5",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_compat.h": "0c0396d7f339f9207af3a003e98e9921516367c71d53724cb42e32f0f66142f7",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_common.h": "25207d12a91fc8c0670370596c3306c256ec054b4d6a6d1dd9b5bbb7d5bbe35b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_contexts_composites.h": "9f6bc40047a2d0d48361d82e5a5b05c477d946518b0091a3d4cb8c2cd0c877fd",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_contexts_key_derivation.h": "77c8ef9b7a8fac177a53472c7a39a9835da61bf864df951979cd15f71143796f",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_driver_contexts_primitives.h": "829aaa3fbf90beeb20bf989a9db20829469d4875d514d0cc18591f8748a0ba0c",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_extra.h": "7357e1a806b9cf2fc677d9b0d4890eb1876a9430167955921bca6b8b0b98d2a0",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_platform.h": "26db28657e60ff6c3198b83e10ba86b25ced721cdda1d67e1c0ec679f1f7d041",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_sizes.h": "a2ec8ebd505ba034ea8916cacd10734c9b82850b120a78c0ce7944e26ee0fb2b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_struct.h": "0f5b72d1c0f7ff64a4823998d4641c80f29091a372bce8385261bf7419c81655",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_types.h": "219ac995d8c48ee0a70a35f1bb70c92215151862c2a1c22385c7018c9ccb7aa6",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/include/psa/crypto_values.h": "bbb8fea69782eb077317e973e6ba92d3024e69932f284265041cadc35307f0e3",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/aes.c": "f30e6b7139527b41c32f68cc5430ceafa213e7fdf7a39bf4981f6a20cd0e77a1",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/alignment.h": "e97b8844abfadc4cc2fecce5b040d58cd53f549c42712205a267e00e372efd3d",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum.c": "8aead491e4f7756e4e112e4731cb74f43b3fd736d08e5009443436b7c15f431d",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_core.c": "0881aacce52499184aa33641c24ca6075bf533b31f61c5358923a655490bcfa6",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_core.h": "1df926337d83adddd398a979ed580c037e595b592699c68dbe2867b26eb9003a",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_core_invasive.h": "502ecdb0e785711a5a0cd9a318e9868501856fbff9f4a9a65c051964dba8b215",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_internal.h": "4eba771567115b06edb44e2ac5ad1cdad9be7baab568942beb7a6a62ef23847f",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_mod.c": "de6608fc08ed5e61d22ac11f2369484c5a837ac4e1f58d450befc51d3674e68e",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_mod.h": "734a0ba272bc72ddfae51cc677258e6ef8e8cfcd65b6925cf78f2fea59ae996f",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bignum_mod_raw.c": "77d7b5fa4fe55d982d5a7be330fb0ca2de9bb254736c2a3e7716029fec49d118",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/block_cipher.c": "90d8a053a836d747d5ead61890e711f7150987017912fafc00c4ba08d6a80796",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/block_cipher_internal.h": "cfaf450de93abf79ae6efc3b66f2c97e4389730f48b50abd323929a0e4ce30aa",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/bn_mul.h": "245587dbae16540f6109d0e670f544d1a3c512edc3c463541a0d02ccb512aa10",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/common.h": "adfd493f8ecb11f87f7e75f270a97cbd05d1902345ef32db51d39c076e4f8fde",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/constant_time.c": "1a573edd420fece73f996b70cdf6bb58a05a468e434a6ac0c562df592048d3c6",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/constant_time_impl.h": "5afbdaa93eaa2c750c4f3f2d0338409d8e15845823f870a39744d1cc197b4e60",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/constant_time_internal.h": "cb5acff773c6129b5dcc29052dc927d9aa474a2e6b7f7e27e5fac0e7d7023463",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ctr.h": "63331eb36d8ea69b4b4dcd2ec059582bcabf51a8ea891db26d37ab033967789f",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp.c": "8a9ed1e3485fe48c632bdd64edf0098cef85671fe4d064e253ad288575d7fa1c",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp_curves.c": "db2d2c08fd5b7a28d9a082cdce1af6c266bafd5dfbdee0f162183a07fa0bfe86",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp_internal_alt.h": "f6d3594e9e3cab0d3d79bb9c3b054ac2558559ba6456299b6b230b0718c5abda",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/ecp_invasive.h": "f50a6ca7196b8b828ac5a82e4ac5eb262ca7bcf8051e18a39ffeba5e94f46ebd",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/gcm.c": "55cc1ea3e6dc411abed4c03ae49bfb434cdf242886957a9e3c6029fbe8050a11",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/md.c": "5ba79d51ff85951cb4001a22b2428568e4bc1072b367222808f3eac1ad91884d",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/md_wrap.h": "383077e483c60893f8256db246a7bd1fb1fc30bc7dd8e15133d2cb16b9dc5c82",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/pkcs5.c": "1d29edc77054f108a204b7358eb039dbc506ed485871708dc35857d7836eee07",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/platform_util.c": "83051fddcd37171831ff5706613dc3d336b2e53c42e6515f2f14ac0f8aa649f1",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/psa_util_internal.h": "342d2699a1ad757d27325be03b06501b4e3acc46d8e72ddcda6238ecdcca447b",
+    "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/library/sha512.c": "d5f237a4f40660dd4fcd09ee995a67a2811a62f4e93348f837bc30e3a76693b7",
+    "bilicomics/protocol/native/legacy_v5/vendored-sha256.json": "846131617d29db8a32c73d4b58b50bc2b6db88183880f3c995bde1824dc05ba3",
+    "bilicomics/protocol/native/licenses/android-ndk-NOTICE": "4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323",
+    "bilicomics/protocol/native/licenses/android-ndk-NOTICE.toolchain": "cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e",
+    "bilicomics/protocol/native/licenses/cJSON-LICENSE": "a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c",
+    "bilicomics/protocol/native/licenses/wasm3-LICENSE": "c67aa5c0d77ea831c9a9a025fcbdb69d8241da5d7c673243ae34b1a660afcda2",
+    "bilicomics/protocol/native/licenses/zig-LICENSE": "5c537d6853e005298a285d508cff9ac7192cea23576c840d485b2b586a7ff177",
+    "bilicomics/protocol/native/manifest.json": "fca424d7a36fc59c6446025cc63a9eb6993aed92bbefa1c03825bfe9b5a95c5f",
+    "bilicomics/protocol/native/portable/README.md": "38dd6f533c61f7b333e4d49e7b92a7f6ecb4394031e25a41814efece1013a9ca",
+    "bilicomics/protocol/native/portable/bili_secure.h": "9ef06ea469ed071c5e360a627b40741b479527953cb005af3d9ed76a2c97a866",
+    "bilicomics/protocol/native/portable/bilicrypto.c": "83dfb00cb1021aeb4e4b4d2ccec0587a4edb6a403db8fbe30a54f522c53a7b60",
+    "bilicomics/protocol/native/portable/bilicrypto.exports.map": "38e3171eee0dc038c6ae6e32c9470f20721be2157857eac0fc71250e5c1a656a",
+    "bilicomics/protocol/native/portable/bilicrypto.h": "4b51688f7cf15833f1ecb66c908ae4f0be9be1bea996f016625e4742492c19bf",
+    "bilicomics/protocol/native/portable/build.sh": "537c1e77374843a804a3acf43763b4850fcca2587054418a184ff7aba5f2398f",
+    "bilicomics/protocol/native/portable/manifest.json": "44551fefc40baed96b5770631bfe3d0c85c178881eeaef7e729d1702c019cb6b",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "1358072c2095922872509faab3bd4823bc5c7e28d390234671eb50bbe1464087",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/recommendations.lua": "12320090d2e49188797ec95fbdd2d772c932f817c28d47cde062b86a224e4dc2",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+    "bilicomics/protocol/site_context.lua": "5a627e4875f1cc2f9e2b0d79ae4aeed316d83bb51f98e53f12a13741999c2406",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/README.md": "4255bb17ed1e72382f0f119f420f4abfd6ca40fd9c46d7c8ebb7e1df74c65039",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+    "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+    "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+    "bilicomics/purchase/selection-contract.md": "6290d77e3e0ca3cc63ac352137b060200608243f6fcab747c5dc35b7656b33fd",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/service.lua": "6eac520fbbc9d140b6f9f503a6cfa5623743e0b6b2ce8be9d2b0f46fdcf51296",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/README.md": "fd60a58c27d7e6a1f7d4dad5daf189e7f6b81a36c46fcf095625649058dde3fd",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_manager.lua": "a6b85152487c3c4cc783848f8c805d3c6928af38a465ed5d1f7aa4b0833517c3",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "13f30fd427c3751f3dc907831804c3785332ef6c93cebb3f316eedcd382b1c95",
+    "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+    "bilicomics/ui/screens.lua": "f3cc7864397b3cb7bcb9cb84d74846633f44e2c7a2b94c4ac667cb7eae9ad262",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "7b2a548c084a561944415f40d6f6cd54e4f2d218e60357fd83d9f3cac65fc492",
+    "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+    "l10n/bilicomics_zh_CN.lua": "a7bc78d826120e7a16afe6fc21ea6f514b6b6d875a08c174035498adc2d39a58",
+    "main.lua": "efb88912f6d0da2b096cff675fe4f4e3fa900ad1affa187dd17e6f848f07d6b9",
+    "patches/2-bilicomics-provider.lua": "0385ec5135d8edfee278c7fe0c789053cbb94aef2f1808eb67e4041d69f32834"
+  },
+  "real_network_requests": 0,
+  "runtime_version": "v2026.07.1",
+  "scope": "Synthetic construction with production Auth/Client and no real transport",
+  "source_unchanged": true
+}

@@ -1,0 +1,87 @@
+{
+  "scope": "Synthetic native bookshelf finishing: sync, menu, view-state, category and navigation checks; original synthetic covers; no HTTP, account or purchase",
+  "cases": [
+    {
+      "width": 480,
+      "height": 640,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 138,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 139,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 157,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 143,
+      "failures": []
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 138,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 139,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 157,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 143,
+      "failures": []
+    }
+  ],
+  "sources": {
+    "main.lua": "efb88912f6d0da2b096cff675fe4f4e3fa900ad1affa187dd17e6f848f07d6b9",
+    "bilicomics/ui/screens.lua": "9ef7f49a1d13e994be97e9f88ff5ac55bb100caf907d0a71670b187a0d66133c",
+    "bilicomics/ui/widgets.lua": "b865eac227976851b8b2b7962e6bb0409d8dc19103aaa3b77e6987a03306a680",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "l10n/bilicomics_zh_CN.lua": "ef8aa4d91a18fdf64db90f629ec08aba0b9cf4e309725c412ea9ccde02b9ed56",
+    "spec/ui/bookshelf_finishing_spec.lua": "bb02e1fe470a23e481c39873f52287a057c55f88c28880924e9f7845939c15d1",
+    "spec/ui/run_bookshelf_finishing.py": "a546f63db8fdca365e8a5ff0fe812920e061d24b6b8b240c0782a177be6e621c"
+  },
+  "passed": true
+}

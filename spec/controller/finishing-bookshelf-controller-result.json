@@ -1,0 +1,134 @@
+{
+    "host": "test-env",
+    "passed": true,
+    "synthetic_data": true,
+    "network_workers_executed": false,
+    "scheduler_scope": "Controller wiring with a controlled runner; real worker concurrency is covered separately",
+    "tests": [
+        {
+            "name": "Uncached getters and unauthenticated automatic entry never dispatch",
+            "passed": true
+        },
+        {
+            "name": "A successful empty bookshelf is cached and stays distinct from no cache after restart",
+            "passed": true
+        },
+        {
+            "name": "Corrupt or cross account snapshot metadata cannot certify an empty bookshelf cache",
+            "passed": true
+        },
+        {
+            "name": "Legacy favorites are usable stale cache and synchronize in server order",
+            "passed": true
+        },
+        {
+            "name": "The fifteen minute boundary refreshes once and manual refresh bypasses freshness",
+            "passed": true
+        },
+        {
+            "name": "Both library responses publish atomically when favorites completes first",
+            "passed": true
+        },
+        {
+            "name": "Both library responses publish atomically when history completes first",
+            "passed": true
+        },
+        {
+            "name": "A failed favorites response retains the entire preceding snapshot",
+            "passed": true
+        },
+        {
+            "name": "A failed history response retains the entire preceding snapshot",
+            "passed": true
+        },
+        {
+            "name": "A snapshot storage failure rolls back both libraries and their comic mutations",
+            "passed": true
+        },
+        {
+            "name": "Submission exceptions finish single flight and allow a clean manual retry",
+            "passed": true
+        },
+        {
+            "name": "Repeated worker completion cannot publish a partial result or invoke waiters twice",
+            "passed": true
+        },
+        {
+            "name": "Malformed and duplicate synchronized identities never replace usable cache",
+            "passed": true
+        },
+        {
+            "name": "Local exact anchors survive conflicting chapter level server history",
+            "passed": true
+        },
+        {
+            "name": "A completed concurrent following change to false wins over old sync data",
+            "passed": true
+        },
+        {
+            "name": "A completed concurrent following change to true wins over old sync data",
+            "passed": true
+        },
+        {
+            "name": "An in flight following operation preserves prior state until its confirmed completion",
+            "passed": true
+        },
+        {
+            "name": "A late library completion after account does not notify or publish",
+            "passed": true
+        },
+        {
+            "name": "A late library completion after close does not notify or publish",
+            "passed": true
+        },
+        {
+            "name": "Automatic entry respects reader activity suspension offline state and invalid authentication",
+            "passed": true
+        },
+        {
+            "name": "Offline cache and failure backoff stay usable while manual retry can immediately recover",
+            "passed": true
+        },
+        {
+            "name": "Automatic retry begins at sixty seconds and a clock rollback makes cache stale",
+            "passed": true
+        },
+        {
+            "name": "View changes merge preserve focus and persist across a restart",
+            "passed": true
+        },
+        {
+            "name": "View state and sync snapshots are account scoped and reject stale account saves",
+            "passed": true
+        },
+        {
+            "name": "Corrupt view fields normalize safely and a failed save retains prior persistent view",
+            "passed": true
+        },
+        {
+            "name": "Concurrency settings initialize the runner persist and notify both live schedulers",
+            "passed": true
+        },
+        {
+            "name": "Invalid concurrency values cannot change persistent settings or scheduler policy",
+            "passed": true
+        },
+        {
+            "name": "A concurrency persistence failure cannot alter the effective setting or runtime policy",
+            "passed": true
+        },
+        {
+            "name": "A native settings write failure is detected even when LuaSettings flush returns normally",
+            "passed": true
+        },
+        {
+            "name": "Reader close returns on the next tick and newer reader or opening state suppresses it",
+            "passed": true
+        },
+        {
+            "name": "Closing the active reader cannot return while another tracked reader is still open",
+            "passed": true
+        }
+    ],
+    "spec": "finishing-bookshelf-controller"
+}

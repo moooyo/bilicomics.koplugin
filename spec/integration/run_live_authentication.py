@@ -22,7 +22,7 @@ import time
 
 PRODUCTION_ROOTS = ("bilicomics", "patches", "l10n", "main.lua", "_meta.lua")
 RUNTIME_FILES = ("luajit", "git-rev", "frontend/ui/widget/qrwidget.lua")
-FILES = ("live_authentication.lua", "run_live_authentication.py")
+FILES = ("live_authentication.lua", "run_live_authentication.py", "live_acceptance_scope.lua")
 MAX_JSON = 2 * 1024 * 1024
 cancelled = False
 GATED_EXEC = (
@@ -217,7 +217,7 @@ def prepare(args):
                 b"return {quickstart_shown_version=9999999999,color_rendering=false}\n")
     compile((work / "spec/integration/run_live_authentication.py").read_bytes(), "run_live_authentication.py", "exec")
     count = 0
-    for path in sorted(bundle.rglob("*.lua")) + [work / "spec/integration/live_authentication.lua"]:
+    for path in sorted(bundle.rglob("*.lua")) + [work / "spec/integration" / name for name in FILES if name.endswith(".lua")]:
         completed = subprocess.run([str(runtime / "luajit"), "-b", str(path), str(work / "private/syntax.bc")],
                                    cwd=runtime, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL, timeout=20, check=False)
@@ -264,7 +264,7 @@ def status(work):
 def sanitize_driver(value):
     require(isinstance(value, dict))
     result = {}
-    for key in ("schema", "code", "passed", "running", "service_code", "http_code"):
+    for key in ("schema", "code", "passed", "running", "deferred", "service_code", "http_code"):
         if key in value:
             require(type(value[key]) in (int, bool))
             result[key] = value[key]
@@ -400,6 +400,7 @@ def serve(args):
         passed = (driver.get("passed") is True and child is not None and child.returncode == 0
                   and cleaned and within_deadline and not cancelled and not error and unchanged)
         report = {"schema": 1, "code": driver.get("code", 49), "passed": passed,
+                  "deferred": driver.get("deferred") is True,
                   "live_executed": phase != "rehearse", "children_cleaned": cleaned,
                   "within_deadline": within_deadline, "cancelled": cancelled or (private / "stop").exists(),
                   "sources_unchanged": unchanged, "qr_removed": not png.exists(),

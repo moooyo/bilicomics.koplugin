@@ -1,4 +1,5 @@
 local Session = require("bilicomics/protocol/session")
+local SiteContext = require("bilicomics/protocol/site_context")
 local Util = require("bilicomics/util")
 
 local SessionManager = {}
@@ -44,6 +45,39 @@ function SessionManager:_finish(active, session, err)
     for _, callback in pairs(waiters) do Util.callback(callback, session, err) end
 end
 
+function SessionManager:_ready(active, session)
+    if not self:_live(active) then return end
+    if SiteContext.hasDevice(session) and active.site_only and active.force_check and renewable(session) then
+        active.site_only, active.force_check = nil, nil
+        self:_check(active)
+        return
+    end
+    if not SiteContext.needed(session) then self:_finish(active, session); return end
+    self:_state("initializing_site")
+    self:_auth(active, "ensureSiteContext", session, function(fields, err)
+        if not fields then self:_finish(active, nil, err or failure("site_context", "The manga site could not be initialized.")); return end
+        local candidate = Session.new(fields.session or fields)
+        if not SiteContext.preservesSession(active.source, candidate) then
+            self:_finish(active, nil, failure("account_mismatch", "Site initialization did not preserve the current account."))
+            return
+        end
+        self:_persist(active, { session = candidate, source = active.source, checked = false,
+            site_only = active.site_only, force_check = active.force_check })
+    end)
+end
+
+function SessionManager:_returnReady(identifier, callback, session)
+    if not SiteContext.needed(session) then Util.callback(callback, session); return end
+    if self.suspended then
+        Util.callback(callback, nil, failure("canceled", "Session maintenance is suspended."))
+        return
+    end
+    self.waiters[identifier] = callback or function() end
+    local active = { epoch = self.epoch, source = session, site_only = true }
+    self.active = active
+    self:_ready(active, session)
+end
+
 function SessionManager:_auth(active, method, session, callback, arguments)
     if not self:_live(active) then return end
     local completed = false
@@ -71,6 +105,11 @@ end
 
 function SessionManager:_persist(active, candidate)
     if not self:_live(active) then return end
+    if candidate.site_only then
+        active.site_only = true
+        active.force_check = active.force_check or candidate.force_check
+        candidate.force_check = active.force_check
+    end
     if self.get_session() ~= candidate.source then
         self.candidate = nil
         self:_finish(active, self.get_session())
@@ -94,11 +133,11 @@ function SessionManager:_persist(active, candidate)
     elseif candidate.blocked_error then
         self:_finish(active, nil, candidate.blocked_error)
     elseif active.source.pending_refresh_token then
-        if active.source.confirmation_blocked then self:_finish(active, active.source)
+        if active.source.confirmation_blocked then self:_ready(active, active.source)
         else self:_confirm(active) end
     else
         if candidate.checked ~= false then self.last_checked_at = self.clock() end
-        self:_finish(active, active.source)
+        self:_ready(active, active.source)
     end
 end
 
@@ -123,7 +162,7 @@ function SessionManager:adoptResponse(fields, expected_session)
 end
 
 function SessionManager:_confirm(active)
-    if active.source.confirmation_blocked then self:_finish(active, active.source); return end
+    if active.source.confirmation_blocked then self:_ready(active, active.source); return end
     local marked = Session.new(active.source:serialize())
     marked.confirmation_blocked = true
     local ok, saved, save_error = pcall(self.save_session, marked)
@@ -137,7 +176,7 @@ function SessionManager:_confirm(active)
     self:_auth(active, "confirmRefresh", active.source, function(value, err)
         if not value then
             self.confirmation_error = err or failure("confirmation_unknown", "The renewed session confirmation is uncertain.")
-            self:_finish(active, active.source)
+            self:_ready(active, active.source)
             return
         end
         local cleaned = Session.new(active.source:serialize())
@@ -223,6 +262,7 @@ function SessionManager:ensure(callback, force)
         return identifier
     end
     if self.active then
+        if force and self.active.site_only and renewable(self.get_session()) then self.active.force_check = true end
         self.waiters[identifier] = callback or function() end
         return identifier
     end
@@ -231,13 +271,13 @@ function SessionManager:ensure(callback, force)
         local err = failure("confirmation_unknown", "Sign in again to restore automatic session renewal after an uncertain confirmation.")
         self:_state("confirmation_unknown", self.confirmation_error or err)
         if force then Util.callback(callback, nil, err)
-        else Util.callback(callback, session) end
+        else self:_returnReady(identifier, callback, session) end
         return identifier
     end
     if not self.candidate and not (session and session.pending_refresh_token) and not renewable(session) then
         if force and session and session.refresh_blocked then
             Util.callback(callback, nil, failure("refresh_unknown", "Sign in again to restore automatic session renewal."))
-        else Util.callback(callback, session) end
+        else self:_returnReady(identifier, callback, session) end
         return identifier
     end
     if self.suspended then
@@ -247,12 +287,15 @@ function SessionManager:ensure(callback, force)
     if not self.active and not self.candidate and not session.pending_refresh_token and not force
         and self.last_checked_at and self.clock() >= self.last_checked_at
         and self.clock() - self.last_checked_at < self.interval then
-        Util.callback(callback, session)
+        self:_returnReady(identifier, callback, session)
         return identifier
     end
     self.waiters[identifier] = callback or function() end
     if self.active then return identifier end
-    local active = { epoch = self.epoch, source = session }
+    local active = { epoch = self.epoch, source = session,
+        site_only = self.candidate and self.candidate.site_only,
+        force_check = self.candidate and self.candidate.site_only and renewable(session)
+            and (force or self.candidate.force_check) or nil }
     self.active = active
     if self.candidate then self:_persist(active, self.candidate)
     elseif session.pending_refresh_token then self:_confirm(active)

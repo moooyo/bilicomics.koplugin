@@ -23,7 +23,7 @@ return function(options)
     local mid = options.mid or "987650" .. tostring(os.time())
     local key, other_key = "bili_" .. mid, "bili_" .. mid .. "1"
     local function session(identifier, suffix)
-        local value = assert(Session.parse("SESSDATA=synthetic-private-" .. suffix .. "; DedeUserID=" .. identifier))
+        local value = assert(Session.parse("SESSDATA=synthetic-private-" .. suffix .. "; DedeUserID=" .. identifier .. "; buvid3=synthetic-storage-device"))
         return assert(value:withIdentity({ id = identifier, name = "Synthetic private session" }))
     end
     local original = session(mid, "legacy")

@@ -24,7 +24,7 @@ function DownloadService.new(options)
         authentication_valid = options.authentication_valid, network_available = options.network_available,
         on_authentication_error = options.on_authentication_error or function() end,
         page_ready = options.page_ready or function() end, ui = options.ui or require("ui/uimanager"),
-        settings = options.settings, requests = {}, failures = {}, pending_job_states = {}, generation = 1, closed = false }, DownloadService)
+        settings = options.settings, requests = {}, failures = {}, job_pumps = {}, pending_job_states = {}, generation = 1, closed = false }, DownloadService)
 end
 function DownloadService:_defer(fn)
     local generation = self.generation
@@ -124,6 +124,28 @@ function DownloadService:_pageReady(page, descriptor)
 end
 function DownloadService:_minimumFree()
     return self.settings and self.settings:get("minimum_free_bytes") or Budget.default_minimum
+end
+function DownloadService:_concurrency()
+    local value = self.settings and self.settings:get("download_concurrency")
+    return type(value) == "number" and value % 1 == 0 and value >= 1 and value <= 4 and value or 1
+end
+function DownloadService:refreshConcurrency()
+    for _, pump in pairs(self.job_pumps or {}) do
+        if not pump.stopped then self:_defer(pump.advance) end
+    end
+end
+function DownloadService:_releaseJobRequests(id)
+    local pump = self.job_pumps and self.job_pumps[id]
+    if pump then pump.stopped = true; self.job_pumps[id] = nil end
+    local retiring = {}
+    for key, request in pairs(self.requests) do
+        request.owners["job:" .. id] = nil
+        if not next(request.owners) then
+            request.retired = true; self.requests[key] = nil
+            retiring[#retiring + 1] = request
+        end
+    end
+    for _, request in ipairs(retiring) do self.runner:cancel(request.task_id) end
 end
 function DownloadService:_ensureSpace()
     local available, err = Budget.available(self.pages.temporary_root)
@@ -359,30 +381,87 @@ function DownloadService:_run(job)
         self.pages:pinEpisode(job.episode_id, job.revision, true)
         job.state, job.error = "running", nil
         self:_update(job)
-        local function advance()
-            if self.closed or service_generation ~= self.generation then return end
-            job = self.store:getJob(job.id)
-            if not job or job.state ~= "running" or job.run_generation ~= run_generation then return end
-            local next_index
-            job.completed = 0
-            for index = 1, #descriptor.pages do
-                local page = self.pages:getPage(job.episode_id, job.revision, index)
-                if page and page.state == "ready" then job.completed = job.completed + 1
-                elseif not next_index then next_index = index end
+        local job_id = job.id
+        local pump = { pending = {}, count = 0 }
+        self.job_pumps[job_id] = pump
+        local function activeJob()
+            if pump.stopped or self.closed or service_generation ~= self.generation then return nil end
+            local current = self.store:getJob(job_id)
+            if not current or current.state ~= "running" or current.run_generation ~= run_generation then
+                pump.stopped = true
+                if self.job_pumps[job_id] == pump then self.job_pumps[job_id] = nil end
+                return nil
             end
-            if not next_index then job.state = "complete"; self:_update(job, true); return end
-            self:_update(job)
-            self:requestPage(descriptor, next_index, { owner = "job:" .. job.id, priority = 40, retry = true }, function(_, page_error)
-                if self.closed or service_generation ~= self.generation then return end
-                job = self.store:getJob(job.id)
-                if not job or job.state ~= "running" or job.run_generation ~= run_generation then return end
-                if page_error then
-                    job.state = interruptedState(page_error)
-                    job.error = page_error; self:_update(job, true)
-                else self:_defer(advance) end
-            end)
+            return current
         end
-        self:_defer(advance)
+        local function fail(current, failure)
+            pump.stopped = true
+            -- Another concurrent page may have committed before this failure in the same runner tick.
+            local counted, completed = pcall(function()
+                local total = 0
+                for index = 1, #descriptor.pages do
+                    local page = self.pages:getPage(current.episode_id, current.revision, index)
+                    if page and page.state == "ready" then total = total + 1 end
+                end
+                return total
+            end)
+            if counted then current.completed = completed end
+            current.state, current.error = interruptedState(failure), failure
+            local updated, update_error = pcall(self._update, self, current, true)
+            self:_releaseJobRequests(job_id)
+            if not updated then error(update_error, 0) end
+        end
+        pump.advance = function()
+            if pump.advancing then pump.again = true; return end
+            pump.advancing = true
+            local advanced, advance_error = pcall(function()
+                local current = activeJob()
+                if not current then return end
+                local missing = {}
+                current.completed = 0
+                for index = 1, #descriptor.pages do
+                    local page = self.pages:getPage(current.episode_id, current.revision, index)
+                    if page and page.state == "ready" then current.completed = current.completed + 1
+                    elseif not pump.pending[index] then missing[#missing + 1] = index end
+                end
+                if current.completed == #descriptor.pages then
+                    pump.stopped = true
+                    current.state = "complete"
+                    local updated, update_error = pcall(self._update, self, current, true)
+                    self:_releaseJobRequests(job_id)
+                    if not updated then error(update_error, 0) end
+                    return
+                end
+                self:_update(current)
+                for _, index in ipairs(missing) do
+                    if pump.stopped or self.closed or pump.count >= self:_concurrency() then break end
+                    pump.pending[index], pump.count = true, pump.count + 1
+                    self:requestPage(descriptor, index, { owner = "job:" .. job_id, priority = 40, retry = true }, function(_, page_error)
+                        if pump.pending[index] then pump.pending[index], pump.count = nil, pump.count - 1 end
+                        local latest = activeJob()
+                        if not latest then return end
+                        if page_error then fail(latest, page_error)
+                        else self:_defer(pump.advance) end
+                    end)
+                end
+            end)
+            pump.advancing = false
+            if not advanced then
+                self:_releaseJobRequests(job_id)
+                if not self.closed and service_generation == self.generation then
+                    local readable, current = pcall(self.store.getJob, self.store, job_id)
+                    if readable and current and current.state == "running" and current.run_generation == run_generation then
+                        current.state = "paused"
+                        current.error = type(advance_error) == "table" and advance_error.kind and advance_error
+                            or Util.error("storage", "The download could not advance safely. Restore storage and resume.")
+                        pcall(self._update, self, current, true)
+                    end
+                end
+                return
+            end
+            if pump.again and not pump.stopped then pump.again = nil; self:_defer(pump.advance) end
+        end
+        self:_defer(pump.advance)
     end
     if job.revision then
         -- Durable jobs belong to one snapshot, even when a newer catalog version exists.
@@ -433,13 +512,7 @@ function DownloadService:pause(id, canceled)
     job.state = canceled and "canceled" or "paused"
     job.run_generation = (job.run_generation or 0) + 1
     self:_update(job)
-    for key, request in pairs(self.requests) do
-        request.owners["job:" .. id] = nil
-        if not next(request.owners) then
-            request.retired = true; self.requests[key] = nil
-            self.runner:cancel(request.task_id)
-        end
-    end
+    self:_releaseJobRequests(id)
     return true
 end
 function DownloadService:resume(id)
@@ -507,6 +580,6 @@ function DownloadService:close()
     self.closed = true
     self.generation = self.generation + 1
     for _, request in pairs(self.requests) do self.runner:cancel(request.task_id) end
-    self.requests = {}
+    self.requests, self.job_pumps = {}, {}
 end
 return DownloadService

@@ -4,10 +4,19 @@ A Bilibili Comics plugin with its own comic library UI and KOReader's native rea
 
 ## Development status
 
+The current [finishing work](docs/finishing-plan.md) adds QR-session site
+initialization, the quiet bookshelf with automatic synchronization and restored
+view state, and 1–4 concurrent image downloads (default 2). All 34 common
+synthetic suites pass; actual parallel workers and focused UI/controller checks
+also pass. Fresh phone-confirmed login, restart, and a complete real 45-page
+online/download/offline workflow passed on the same production source, including
+observed two-image concurrency. See [the final acceptance](docs/finishing-acceptance.md).
+The canonical archive and `dist/bilicomics-finishing-preview.zip` have identical bytes.
+
 The current [Bookstore subject browsing](docs/bookstore-categories.md) adds the
 official category selector to the compact recommendation grid. Navigation is Bookshelf,
 Bookstore, Search and Downloads; the cover-grid Bookshelf remains the default.
-Bookshelf cards retain current reading positions and latest updates. Bookstore
+Bookshelf cards show the title and current reading position. Bookstore
 combines four official homepage sections with deduplication, showing six cards
 at 600 by 800. Cards show the title, source and tag; tap opens chapters and hold
 opens the full synopsis. All recommendations uses one anonymous homepage request.
@@ -71,17 +80,17 @@ Runtime checks must run through `ssh test-env` unless local verification is expl
 The packaging script is `tools/package.py`. Execute it on the remote environment after integration checks; it writes a deterministic ZIP and file-hash manifest. Native protocol binaries and their platform compatibility remain explicit package dependencies.
 
 The canonical candidate is `dist/bilicomics-0.1.0-dev.zip`, with its exact adjacent
-manifest. The [bookstore package/source record](spec/package/bookstore-categories-source-evidence.json)
-identifies this revision and its focused remote verification. No session, acquired
+manifest. The [finishing package/source record](spec/package/finishing-acceptance-binding.json)
+identifies this revision and its complete remote acceptance. No session, acquired
 comic content or diagnostic loader is included.
 
 The earlier 101-file stabilization candidate is retained under
 `dist/history/stabilization-45385c6f/`. Its [34-suite regression](spec/integration/stabilization-regression-results.json)
 and [local acceptance addendum](spec/package/local-acceptance-source-evidence.json)
 remain evidence for that earlier production tree, not a repeat of whole-chapter
-or live-account acceptance for the new bookstore revision. Authentication-only,
+or live-account acceptance for the finishing revision. Authentication-only,
 ordinal preview and older integrated archives are historical candidates.
 
-The archive retains the session file importer, reader prefetch policy and previously live-tested image protocol fixes. Same-snapshot recovery verifies historical image bytes before updating mutable addresses. Unknown or changed content requires the separate [new-version confirmation](docs/partial-download-recovery.md): both versions remain pinned and independently removable, the new version starts from the beginning, and the old version reads cached pages only. The current [ordinal range contract](docs/ordinal-range-contract.md) has focused construction, UI and transaction-recovery evidence. The earlier ordinal integration did not repeat the complete live reading workflow; the subsequent stabilization and local acceptance records above establish that workflow for the preceding 101-file candidate. The full live workflow has not been repeated for the bookstore revision. Synthetic purchase outcomes do not establish real charging behavior.
+The archive retains the session file importer, reader prefetch policy and previously live-tested image protocol fixes. Same-snapshot recovery verifies historical image bytes before updating mutable addresses. Unknown or changed content requires the separate [new-version confirmation](docs/partial-download-recovery.md): both versions remain pinned and independently removable, the new version starts from the beginning, and the old version reads cached pages only. The current [ordinal range contract](docs/ordinal-range-contract.md) has focused construction, UI and transaction-recovery evidence. The earlier ordinal integration did not repeat the complete live reading workflow; the subsequent stabilization records establish that workflow for their preceding candidate. The final finishing run repeats it on the current production tree. Synthetic purchase outcomes do not establish real charging behavior.
 
 To prepare the private account input for read-only integration, follow [browser session import](docs/session-import.md). Do not place session contents in Git or messages.

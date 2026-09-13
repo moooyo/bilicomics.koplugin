@@ -2,12 +2,18 @@
 
 Date: 2026-09-13. Version: `0.1.0-dev`.
 
-Latest change: [Bookstore subject browsing](bookstore-categories.md) adds current
-official categories and anonymously initialized popularity-ordered catalog pages
-alongside the expanded homepage feed. It retains six cards at 600 by 800 and
-replaces the independent History tab. Bookshelf remains the default first
-tab and retains reading progress. The bookshelf toolbar simplification remains
-a [design proposal](bookshelf-experience-proposal.md).
+The [finishing branch](finishing-plan.md) implements automatic site initialization
+for QR and saved sessions, the approved quiet bookshelf with automatic sync and
+view restoration, and configurable 1–4 concurrent image downloads (default 2).
+Directed checks, real parallel-worker scenarios and all 34 common synthetic
+regressions pass. Fresh phone-confirmed QR login, independent session restart and
+the complete real 45-page reading/download/offline workflow also pass, including
+observed two-image concurrency. The [final finishing acceptance](finishing-acceptance.md)
+identifies the new canonical candidate and its source-bound evidence.
+
+[Bookstore subject browsing](bookstore-categories.md) retains its official
+categories and popularity-ordered catalog pages. Bookshelf remains the default
+first tab; the [toolbar plan](bookshelf-experience-proposal.md) is now implemented.
 The following stabilization records retain their earlier source snapshots.
 
 The preceding [architecture stabilization](architecture-stabilization.md)
@@ -27,8 +33,9 @@ Subsequent [interactive account reading](live-ui-reading-2026-09-13.md) exposed
 a missing site-initialization step for fresh QR sessions: login and following
 worked, but protected catalogs returned code `99` without `buvid3`. Completing
 the official site initialization repaired the current session and enabled real
-page-by-page reading. Automatic initialization is still missing in production;
-the current package has not been changed to fix it.
+page-by-page reading. The finishing source now implements automatic initialization,
+with [protocol and lifecycle evidence](qr-site-initialization.md); fresh
+authenticated end-to-end acceptance now passes as recorded above.
 
 ## Historical implementation and evidence
 

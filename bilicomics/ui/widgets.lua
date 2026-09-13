@@ -58,6 +58,22 @@ function W.button(text, width, callback, options)
     return button
 end
 
+function W.navigation(entries, total_width)
+    local cells, buttons = {}, {}
+    for index, entry in ipairs(entries) do
+        local width = math.floor(total_width * index / #entries) - math.floor(total_width * (index - 1) / #entries)
+        local selected = entry.selected == true
+        local button = W.button(entry.text, width, entry.callback,
+            { borderless = true, bold = selected, height = 30, size = 18 })
+        button.selected = selected
+        local underline = selected and W.rule(math.floor(width * 0.36), true) or W.space(0)
+        cells[#cells + 1] = W.column{ button,
+            CenterContainer:new{ dimen = Geom:new{ w = width, h = W.scale(3) }, underline } }
+        buttons[#buttons + 1] = button
+    end
+    return W.column{ W.rule(total_width), W.space(5), W.row(cells) }, buttons
+end
+
 function W.cover(comic, width, height)
     local path = comic.cover_path or (comic.extra or {}).cover_path
     local image
@@ -102,6 +118,11 @@ function CoverCard:init()
         content[#content + 1] = W.space(2)
         content[#content + 1] = W.text(self.update or "", inner, 12,
             { muted = true, height = W.scale(18), fixed_height = true })
+    elseif self.bookshelf then
+        content[#content + 1] = W.space(7)
+        content[#content + 1] = W.text(self.text, inner, 18, { bold = true, height = W.scale(42), fixed_height = true })
+        content[#content + 1] = W.space(3)
+        content[#content + 1] = W.text(self.progress, inner, 14, { height = W.scale(20), fixed_height = true })
     else
         content[#content + 1] = W.space(7)
         content[#content + 1] = W.text(self.text, inner, 18, { bold = true, height = W.scale(44), fixed_height = true })
@@ -121,7 +142,12 @@ function CoverCard:init()
     }
 end
 
-function CoverCard:onFocus() self.focused = true; self.frame.color = W.ink; return true end
+function CoverCard:onFocus()
+    self.focused = true
+    self.frame.color = W.ink
+    if self.focus_callback then self.focus_callback(self.comic) end
+    return true
+end
 function CoverCard:onUnfocus() self.focused = false; self.frame.color = W.paper; return true end
 function CoverCard:onTapSelect()
     if self.enabled and self.callback then self.callback() end

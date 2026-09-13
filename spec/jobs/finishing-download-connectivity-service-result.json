@@ -1,0 +1,276 @@
+{
+    "tests": [
+        {
+            "name": "offline_enqueue_without_descriptor",
+            "passed": true
+        },
+        {
+            "name": "partial_resume_offline_preserves_cached_page",
+            "passed": true
+        },
+        {
+            "name": "ready_page_precedes_session_and_network_checks",
+            "passed": true
+        },
+        {
+            "name": "complete_cache_can_pin_and_complete_without_session",
+            "passed": true
+        },
+        {
+            "name": "throwing_connection_predicate_fails_closed",
+            "passed": true
+        },
+        {
+            "name": "disconnect_after_async_preparation",
+            "passed": true
+        },
+        {
+            "name": "preparation_network_pauses",
+            "passed": true
+        },
+        {
+            "name": "preparation_timeout_pauses",
+            "passed": true
+        },
+        {
+            "name": "disconnect_between_page_commits",
+            "passed": true
+        },
+        {
+            "name": "image_network_pauses",
+            "passed": true
+        },
+        {
+            "name": "image_timeout_pauses",
+            "passed": true
+        },
+        {
+            "name": "cancellation_rejects_late_preparation",
+            "passed": true
+        },
+        {
+            "name": "service_close_rejects_late_preparation",
+            "passed": true
+        },
+        {
+            "name": "explicit_resume_after_reconnect_reuses_job",
+            "passed": true
+        },
+        {
+            "name": "page_before_start_guard_rechecks_connection",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards",
+            "passed": true
+        }
+    ],
+    "assertions": [
+        {
+            "name": "offline_enqueue_without_descriptor: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "offline_enqueue_without_descriptor: no index preparation or worker is dispatched",
+            "passed": true
+        },
+        {
+            "name": "offline_enqueue_without_descriptor: no placeholder revision is invented",
+            "passed": true
+        },
+        {
+            "name": "partial_resume_offline_preserves_cached_page: resume returns the connectivity failure",
+            "passed": true
+        },
+        {
+            "name": "partial_resume_offline_preserves_cached_page: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "partial_resume_offline_preserves_cached_page: network pause advances the job generation",
+            "passed": true
+        },
+        {
+            "name": "partial_resume_offline_preserves_cached_page: the ready file stays usable with zero acquisition",
+            "passed": true
+        },
+        {
+            "name": "ready_page_precedes_session_and_network_checks: cache callback remains asynchronous",
+            "passed": true
+        },
+        {
+            "name": "ready_page_precedes_session_and_network_checks: cached page is returned",
+            "passed": true
+        },
+        {
+            "name": "ready_page_precedes_session_and_network_checks: ready cache bypasses all network work",
+            "passed": true
+        },
+        {
+            "name": "complete_cache_can_pin_and_complete_without_session: local resume is accepted",
+            "passed": true
+        },
+        {
+            "name": "complete_cache_can_pin_and_complete_without_session: the complete local chapter is pinned and complete",
+            "passed": true
+        },
+        {
+            "name": "complete_cache_can_pin_and_complete_without_session: complete local work never prepares or dispatches",
+            "passed": true
+        },
+        {
+            "name": "throwing_connection_predicate_fails_closed: predicate failure becomes a paused network error",
+            "passed": true
+        },
+        {
+            "name": "throwing_connection_predicate_fails_closed: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "throwing_connection_predicate_fails_closed: missing page rejects failed predicate",
+            "passed": true
+        },
+        {
+            "name": "throwing_connection_predicate_fails_closed: predicate exception starts no worker and returns once",
+            "passed": true
+        },
+        {
+            "name": "disconnect_after_async_preparation: one index preparation is pending",
+            "passed": true
+        },
+        {
+            "name": "disconnect_after_async_preparation: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "disconnect_after_async_preparation: no image worker starts after preparation returns offline",
+            "passed": true
+        },
+        {
+            "name": "preparation_network_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "preparation_network_pauses: failed preparation dispatches no image",
+            "passed": true
+        },
+        {
+            "name": "preparation_timeout_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "preparation_timeout_pauses: failed preparation dispatches no image",
+            "passed": true
+        },
+        {
+            "name": "disconnect_between_page_commits: only the first page is in flight",
+            "passed": true
+        },
+        {
+            "name": "disconnect_between_page_commits: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "disconnect_between_page_commits: arriving valid bytes commit but no next page starts",
+            "passed": true
+        },
+        {
+            "name": "image_network_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "image_network_pauses: terminal acquisition failure does not advance",
+            "passed": true
+        },
+        {
+            "name": "image_timeout_pauses: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "image_timeout_pauses: terminal acquisition failure does not advance",
+            "passed": true
+        },
+        {
+            "name": "cancellation_rejects_late_preparation: the late callback cannot undo cancellation",
+            "passed": true
+        },
+        {
+            "name": "service_close_rejects_late_preparation: closed lifetime does not publish running state or images",
+            "passed": true
+        },
+        {
+            "name": "explicit_resume_after_reconnect_reuses_job: connectivity alone does not add polling or automatic work",
+            "passed": true
+        },
+        {
+            "name": "explicit_resume_after_reconnect_reuses_job: the explicit retry can resume",
+            "passed": true
+        },
+        {
+            "name": "explicit_resume_after_reconnect_reuses_job: the original durable job completes",
+            "passed": true
+        },
+        {
+            "name": "page_before_start_guard_rechecks_connection: page task carries a parent-side guard",
+            "passed": true
+        },
+        {
+            "name": "page_before_start_guard_rechecks_connection: the queued task becomes unavailable",
+            "passed": true
+        },
+        {
+            "name": "page_before_start_guard_rechecks_connection: job remains durable and paused with an explicit reason",
+            "passed": true
+        },
+        {
+            "name": "page_before_start_guard_rechecks_connection: guard rejection never advances to another image",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: production account service receives the connection callback",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: suspended app rejects acquisition",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: offline app rejects acquisition",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: device connectivity exception fails closed",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: obsolete account generation rejects acquisition",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: old account closure stays invalid after replacement",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: production index preparation carries its own start guard",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: queued index work is blocked after disconnection",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: old index start guard rejects the new account",
+            "passed": true
+        },
+        {
+            "name": "controller_injects_account_lifecycle_and_index_guards: late old-account metadata cannot enter the new store",
+            "passed": true
+        }
+    ],
+    "passed": true,
+    "scope": "Real DownloadService/Controller/SQLite/PageStore; controlled asynchronous image results, synthetic accounts, no network or monetary operations",
+    "counts": {
+        "cases": 16,
+        "assertions": 50
+    }
+}

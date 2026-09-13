@@ -208,7 +208,7 @@ local function controller(root)
 end
 local function seed()
     app = controller(work .. "/plugin")
-    app:importSession("SESSDATA=synthetic-only; DedeUserID=42; bili_jct=synthetic-csrf", function(value, err)
+    app:importSession("SESSDATA=synthetic-only; DedeUserID=42; bili_jct=synthetic-csrf; buvid3=synthetic-version-device", function(value, err)
         response, response_error, completed = value, err, true
     end)
     await(function() return completed end, "synthetic session validation")
@@ -434,7 +434,7 @@ local function workflow()
             local old_key, old_session = account.key, account.session
             local switched, switch_error
             Files.write(work .. "/switch-account", "second synthetic account")
-            app:importSession("SESSDATA=synthetic-only-second; DedeUserID=84; bili_jct=synthetic-csrf-second", function(value, err)
+            app:importSession("SESSDATA=synthetic-only-second; DedeUserID=84; bili_jct=synthetic-csrf-second; buvid3=synthetic-version-device-second", function(value, err)
                 switched, switch_error = value, err
             end)
             await(function() return switched or switch_error end, "second synthetic session validation")

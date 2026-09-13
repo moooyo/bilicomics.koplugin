@@ -1,0 +1,551 @@
+{
+    "language": "zh_CN",
+    "scope": "Native bookshelf synchronization, menu, view persistence, category and navigation widgets; synthetic data; no HTTP, account credentials or purchases",
+    "width": 600,
+    "height": 800,
+    "passed": true,
+    "assertions": [
+        {
+            "name": "main_entry_opens_the_remembered_bookshelf",
+            "passed": true
+        },
+        {
+            "name": "default_bookshelf_has_a_quiet_header",
+            "passed": true
+        },
+        {
+            "name": "default_bookshelf_card_mode_1",
+            "passed": true
+        },
+        {
+            "name": "default_fixed_title_and_single_position_1",
+            "passed": true
+        },
+        {
+            "name": "default_no_latest_chapter_metadata_1",
+            "passed": true
+        },
+        {
+            "name": "default_card_bounds_1",
+            "passed": true
+        },
+        {
+            "name": "default_bookshelf_card_mode_2",
+            "passed": true
+        },
+        {
+            "name": "default_fixed_title_and_single_position_2",
+            "passed": true
+        },
+        {
+            "name": "default_no_latest_chapter_metadata_2",
+            "passed": true
+        },
+        {
+            "name": "default_card_bounds_2",
+            "passed": true
+        },
+        {
+            "name": "default_equal_row_baselines_2",
+            "passed": true
+        },
+        {
+            "name": "default_four_native_navigation_buttons",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_label_1",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_state_1",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_touch_height_1",
+            "passed": true
+        },
+        {
+            "name": "default_static_selection_underline_1",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_label_2",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_state_2",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_touch_height_2",
+            "passed": true
+        },
+        {
+            "name": "default_static_selection_underline_2",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_single_row_2",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_label_3",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_state_3",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_touch_height_3",
+            "passed": true
+        },
+        {
+            "name": "default_static_selection_underline_3",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_single_row_3",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_label_4",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_state_4",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_touch_height_4",
+            "passed": true
+        },
+        {
+            "name": "default_static_selection_underline_4",
+            "passed": true
+        },
+        {
+            "name": "default_navigation_single_row_4",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-default_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "background_source_and_cover_repaint_preserve_the_visible_order",
+            "passed": true
+        },
+        {
+            "name": "more_preserves_the_last_confirmed_sync_time",
+            "passed": true
+        },
+        {
+            "name": "more_exposes_Refresh_bookshelf",
+            "passed": true
+        },
+        {
+            "name": "more_exposes_Filter_bookshelf",
+            "passed": true
+        },
+        {
+            "name": "more_exposes_Sort_bookshelf",
+            "passed": true
+        },
+        {
+            "name": "more_exposes_Open_chapter_catalog",
+            "passed": true
+        },
+        {
+            "name": "more_exposes_Account_and_settings",
+            "passed": true
+        },
+        {
+            "name": "more_exposes_Bookshelf_help",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-more_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-more_dialog_bounds",
+            "detail": {
+                "h": 434,
+                "w": 564
+            },
+            "passed": true
+        },
+        {
+            "name": "manual_sync_explicitly_adopts_the_new_official_order",
+            "passed": true
+        },
+        {
+            "name": "active_filter_is_visible_with_a_direct_clear_action",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-filter_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "clearing_filter_returns_to_the_quiet_default",
+            "passed": true
+        },
+        {
+            "name": "native_card_focus_keeps_its_border",
+            "passed": true
+        },
+        {
+            "name": "more_can_take_native_focus_before_opening_its_menu",
+            "passed": true
+        },
+        {
+            "name": "more_opens_the_last_focused_comic_after_taking_focus",
+            "passed": true
+        },
+        {
+            "name": "leaving_saves_filter_sort_page_focus_and_order",
+            "passed": true
+        },
+        {
+            "name": "returning_from_another_route_restores_the_same_view",
+            "passed": true
+        },
+        {
+            "name": "reading_dispatch_saves_the_current_bookshelf_view",
+            "passed": true
+        },
+        {
+            "name": "successful_reader_handoff_closes_the_plugin",
+            "passed": true
+        },
+        {
+            "name": "native_reader_close_automatically_restores_the_saved_bookshelf",
+            "passed": true
+        },
+        {
+            "name": "native_reader_return_restores_the_selected_comic_focus",
+            "passed": true
+        },
+        {
+            "name": "back_returns_from_the_plugin_and_keeps_its_view",
+            "passed": true
+        },
+        {
+            "name": "back_does_not_reopen_the_plugin_on_a_later_reader_event",
+            "passed": true
+        },
+        {
+            "name": "explicit_close_retires_a_ready_reader_return_intent",
+            "passed": true
+        },
+        {
+            "name": "an_account_change_retires_the_reader_return_intent",
+            "passed": true
+        },
+        {
+            "name": "switching_account_loads_its_own_default_view",
+            "passed": true
+        },
+        {
+            "name": "recent_sort_uses_trusted_local_time_instead_of_server_time",
+            "passed": true
+        },
+        {
+            "name": "recent_sort_preserves_source_order_for_unknown_times",
+            "passed": true
+        },
+        {
+            "name": "another_account_does_not_overwrite_the_first_view",
+            "passed": true
+        },
+        {
+            "name": "switching_back_restores_the_first_account_view",
+            "passed": true
+        },
+        {
+            "name": "first_visit_explains_bookshelf_controls",
+            "passed": true
+        },
+        {
+            "name": "acknowledging_help_is_saved_for_this_account",
+            "passed": true
+        },
+        {
+            "name": "acknowledged_help_does_not_repeat_on_entry",
+            "passed": true
+        },
+        {
+            "name": "help_remains_available_from_more",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-help_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-help_dialog_bounds",
+            "detail": {
+                "h": 319,
+                "w": 564
+            },
+            "passed": true
+        },
+        {
+            "name": "offline_sync_failure_keeps_all_cached_cards",
+            "passed": true
+        },
+        {
+            "name": "more_retains_the_last_sync_failure",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-offline-cache_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "never_synced_empty_cache_starts_an_automatic_sync",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-initial-sync_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "failed_initial_sync_does_not_claim_an_empty_server_bookshelf",
+            "passed": true
+        },
+        {
+            "name": "confirmed_empty_bookshelf_is_distinct_from_missing_cache",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-confirmed-empty_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "empty_filter_keeps_a_clear_action_and_does_not_change_the_cache",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-filter-empty_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "anonymous_empty_bookshelf_exposes_qr_sign_in",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-anonymous_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "category_keeps_two_compact_rows_after_navigation_changes",
+            "passed": true
+        },
+        {
+            "name": "category_still_shows_six_cards_at_600x800",
+            "passed": true
+        },
+        {
+            "name": "category_four_native_navigation_buttons",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_label_1",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_state_1",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_touch_height_1",
+            "passed": true
+        },
+        {
+            "name": "category_static_selection_underline_1",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_label_2",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_state_2",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_touch_height_2",
+            "passed": true
+        },
+        {
+            "name": "category_static_selection_underline_2",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_single_row_2",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_label_3",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_state_3",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_touch_height_3",
+            "passed": true
+        },
+        {
+            "name": "category_static_selection_underline_3",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_single_row_3",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_label_4",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_state_4",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_touch_height_4",
+            "passed": true
+        },
+        {
+            "name": "category_static_selection_underline_4",
+            "passed": true
+        },
+        {
+            "name": "category_navigation_single_row_4",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-category_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "more_account_action_opens_settings",
+            "passed": true
+        },
+        {
+            "name": "concurrency_dialog_explains_active_image_behavior",
+            "passed": true
+        },
+        {
+            "name": "concurrency_options_are_exactly_one_through_four",
+            "passed": true
+        },
+        {
+            "name": "concurrency_selection_persists_1",
+            "passed": true
+        },
+        {
+            "name": "concurrency_selection_persists_2",
+            "passed": true
+        },
+        {
+            "name": "concurrency_selection_persists_3",
+            "passed": true
+        },
+        {
+            "name": "concurrency_selection_persists_4",
+            "passed": true
+        },
+        {
+            "name": "failed_concurrency_storage_keeps_the_previous_setting_and_reports_recovery",
+            "passed": true
+        },
+        {
+            "name": "reopening_after_storage_failure_retains_the_confirmed_selection",
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-concurrency_screen_bounds",
+            "detail": {
+                "h": 784,
+                "w": 568
+            },
+            "passed": true
+        },
+        {
+            "name": "synthetic-bookshelf-finishing-concurrency_dialog_bounds",
+            "detail": {
+                "h": 285,
+                "w": 564
+            },
+            "passed": true
+        },
+        {
+            "name": "all_controlled_requests_complete",
+            "passed": true
+        },
+        {
+            "name": "all_scenarios_preserve_network_purchase_and_authentication_boundaries",
+            "detail": {},
+            "passed": true
+        }
+    ],
+    "screenshots": [
+        "synthetic-bookshelf-finishing-default.png",
+        "synthetic-bookshelf-finishing-more.png",
+        "synthetic-bookshelf-finishing-filter.png",
+        "synthetic-bookshelf-finishing-help.png",
+        "synthetic-bookshelf-finishing-offline-cache.png",
+        "synthetic-bookshelf-finishing-initial-sync.png",
+        "synthetic-bookshelf-finishing-confirmed-empty.png",
+        "synthetic-bookshelf-finishing-filter-empty.png",
+        "synthetic-bookshelf-finishing-anonymous.png",
+        "synthetic-bookshelf-finishing-category.png",
+        "synthetic-bookshelf-finishing-concurrency.png"
+    ]
+}
