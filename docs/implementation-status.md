@@ -3,10 +3,16 @@
 Date: 2026-09-13. Version: `0.1.0-dev`.
 
 Current follow-up: [architecture stabilization](architecture-stabilization.md)
-tracks the reviewed dispatch/completion fixes, common-source regression,
-canonical packaging, and live/device acceptance. The user confirmed that the
-physical Scribe is currently unavailable. Historical results below must not be
-promoted to evidence for an unverified later candidate.
+has completed the reviewed dispatch/completion fixes, all 34 unified remote
+suites, canonical packaging, and a real 45-page online/offline run against the
+matching production tree. Live QR confirmation/renewal and physical-device
+acceptance remain open. The user confirmed that the Scribe is currently
+unavailable. Actual purchasing remains separately unauthorized.
+
+## Historical implementation and evidence
+
+The following records describe their original snapshots. Use the stabilization
+record above for the current candidate, common-source verification, and gates.
 
 The subsequent [QR sign-in and renewable-session change](session-renewal.md) is implemented in the current source and an authentication development candidate. It adds private refresh credentials, serialized maintenance, crash markers, and native QR UI. Its own remote synthetic evidence is separate from the older integrated package and reading evidence below. Real QR confirmation, authenticated refresh/confirmation, long-duration retention, and physical Scribe execution remain unverified.
 

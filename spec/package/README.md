@@ -1,5 +1,13 @@
 # Integrated development package verification
 
+This is the historical 96-file integrated build record. The current canonical
+candidate and its exact production/reading bindings are recorded in
+[stabilization-source-evidence.json](stabilization-source-evidence.json), with
+[package checks](stabilization-results.json) and the
+[unified regression](../integration/stabilization-regression-results.json).
+The default ZIP filename has been reused for that newer candidate; the historical
+hash and file count below continue to identify the earlier artifact only.
+
 The current default archive contains **96 files** and integrates the quote and
 ordinal-range UI. `dist/bilicomics-quote-preview.zip` is an identical-byte alias
 of `dist/bilicomics-0.1.0-dev.zip`; it no longer selects a different code variant.

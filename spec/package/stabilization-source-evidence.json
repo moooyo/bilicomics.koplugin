@@ -1,0 +1,972 @@
+{
+  "acceptance_limits": {
+    "actual_charge_verified": false,
+    "coupon_consumption_verified": false,
+    "note": "The synthetic authentication regression and real free-chapter reading do not establish real QR, long-term renewal, device, or payment acceptance.",
+    "physical_scribe_verified": false,
+    "real_qr_login_verified": false,
+    "real_renewal_verified": false
+  },
+  "bound_at": "2026-09-13T02:21:03.177558+00:00",
+  "candidate_commit": "7cfdc660bf7c21256bf900ea82d36ae5cae80c01",
+  "candidate_git_archive": {
+    "all_archive_sources_match_frozen_snapshot": true,
+    "commit": "7cfdc660bf7c21256bf900ea82d36ae5cae80c01",
+    "frozen_source_and_test_files_verified": 340,
+    "git_archive_sha256": "98c816910f27c6cba7c9730757f1b207db14a5f566ae30050115c52cb60916cc",
+    "git_pax_commit_verified": true,
+    "production_files": 201,
+    "production_manifest_sha256": "6b326bf5ca777176c25a5972938921ca43331e441f821fcf7d3f595f479f82f7"
+  },
+  "candidate_snapshot_sha256": "5e665ad960c27891d706be95016bf4aa6b884e4bd3e33a979ee401e57eb82caa",
+  "execution_host": "test-env",
+  "live_reading": {
+    "comparison": "Exact equality of every production path and SHA256 value, including native binaries, startup patches, translations, and production documentation",
+    "credentials_or_selection_contents_read_by_binder": false,
+    "executed_commit": "d7617f2889c47463e04e3b88b7d2135c0c22cabd",
+    "executed_git_archive": {
+      "all_archive_sources_match_frozen_snapshot": true,
+      "commit": "d7617f2889c47463e04e3b88b7d2135c0c22cabd",
+      "frozen_source_and_test_files_verified": 338,
+      "git_archive_sha256": "89028145c05127f8dc832d7dbb73db355bfcfaca0e8f78a0752e896c98ee8d2e",
+      "git_pax_commit_verified": true,
+      "production_files": 201,
+      "production_manifest_sha256": "6b326bf5ca777176c25a5972938921ca43331e441f821fcf7d3f595f479f82f7"
+    },
+    "isolated_sessions_absent": true,
+    "pages_completed_after_reader_close": 43,
+    "passed": true,
+    "phases": {
+      "offline": {
+        "checks_passed": 30,
+        "completed_pages": 45,
+        "image_bytes": 92022101,
+        "launcher_clean": true,
+        "passed": true,
+        "transport_requests": 0
+      },
+      "online": {
+        "checks_passed": 51,
+        "completed_pages": 45,
+        "image_bytes": 92022101,
+        "launcher_clean": true,
+        "passed": true,
+        "transport_requests": 95
+      }
+    },
+    "production_identical_to_candidate": true,
+    "report_sha256": "71cf4e3ac7c4df6abf1cf82affd718e06907840c012e1fc13ea86ab261ab912a",
+    "runtime_files_rehashed": true,
+    "staged_production_rehashed": true,
+    "staged_test_sources_rehashed": true
+  },
+  "package": {
+    "all_archive_entries_match_candidate_production": true,
+    "archive": "bilicomics-0.1.0-dev.zip",
+    "bytes": 2466094,
+    "entries": [
+      {
+        "bytes": 223,
+        "candidate_source_matches": true,
+        "path": "_meta.lua",
+        "sha256": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+      },
+      {
+        "bytes": 8158,
+        "candidate_source_matches": true,
+        "path": "bilicomics/bootstrap.lua",
+        "sha256": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d"
+      },
+      {
+        "bytes": 409,
+        "candidate_source_matches": true,
+        "path": "bilicomics/catalog/comic_id.lua",
+        "sha256": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf"
+      },
+      {
+        "bytes": 24892,
+        "candidate_source_matches": true,
+        "path": "bilicomics/catalog/init.lua",
+        "sha256": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1"
+      },
+      {
+        "bytes": 83637,
+        "candidate_source_matches": true,
+        "path": "bilicomics/controller.lua",
+        "sha256": "5e8eda4ca2e3d0742c737c6ffe90839d3c4a26c5a09a730b1df78e73327ee1e0"
+      },
+      {
+        "bytes": 403,
+        "candidate_source_matches": true,
+        "path": "bilicomics/image_policy.lua",
+        "sha256": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4"
+      },
+      {
+        "bytes": 27067,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/download_service.lua",
+        "sha256": "5c1a99cf6c144d10f252242632799b87bd04744567a41587c515414f0b48ed58"
+      },
+      {
+        "bytes": 14698,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/runner.lua",
+        "sha256": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782"
+      },
+      {
+        "bytes": 9839,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/session_runner.lua",
+        "sha256": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0"
+      },
+      {
+        "bytes": 11676,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/source_refresh.lua",
+        "sha256": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c"
+      },
+      {
+        "bytes": 1243,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/storage_budget.lua",
+        "sha256": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4"
+      },
+      {
+        "bytes": 6818,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/version_replacement.lua",
+        "sha256": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6"
+      },
+      {
+        "bytes": 18467,
+        "candidate_source_matches": true,
+        "path": "bilicomics/jobs/worker.lua",
+        "sha256": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081"
+      },
+      {
+        "bytes": 9256,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/README.md",
+        "sha256": "6b392a92887c6c7548a659c27594633fb6cbac473e4bf092def00aed8903a248"
+      },
+      {
+        "bytes": 2635,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/assets.lua",
+        "sha256": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab"
+      },
+      {
+        "bytes": 14827,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/auth.lua",
+        "sha256": "9257e2efc00448e651c6cb4feef2e525b23606bea6241945b31f6ecd53f9ad7a"
+      },
+      {
+        "bytes": 7377,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/auth_crypto.lua",
+        "sha256": "d09cca5a7660f94863a7aec42c62369525167ff58ef8a9dd41bfa5b7fc9180bf"
+      },
+      {
+        "bytes": 24741,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/client.lua",
+        "sha256": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f"
+      },
+      {
+        "bytes": 2233,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/crypto.lua",
+        "sha256": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61"
+      },
+      {
+        "bytes": 16189,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/ecdh.lua",
+        "sha256": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29"
+      },
+      {
+        "bytes": 2044,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/errors.lua",
+        "sha256": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be"
+      },
+      {
+        "bytes": 6864,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/image.lua",
+        "sha256": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf"
+      },
+      {
+        "bytes": 12682,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/image_crypto.lua",
+        "sha256": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d"
+      },
+      {
+        "bytes": 924,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/json.lua",
+        "sha256": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e"
+      },
+      {
+        "bytes": 7901,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/README.md",
+        "sha256": "68d0a254c63717fc6ea75efdc97f47dd27500a5d21f6a5adee9f819b3f410301"
+      },
+      {
+        "bytes": 63032,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-arm64-v8a/libbilicrypto.so",
+        "sha256": "7bcdeabd8916fbdff8a645a09398eb601c449eae10575e2da60d7979eb94c849"
+      },
+      {
+        "bytes": 310808,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-arm64-v8a/libbiliwasm.so",
+        "sha256": "ca890ba1e7e0065579fa5aea3bb19a9f9971830711ad0611aba742b9ffb87f4d"
+      },
+      {
+        "bytes": 59844,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-armeabi-v7a/libbilicrypto.so",
+        "sha256": "f6f06f4ea99f4ca0c4b4c68d4d6e18120c0d1dd403147768da166f123e5e1f2a"
+      },
+      {
+        "bytes": 313396,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-armeabi-v7a/libbiliwasm.so",
+        "sha256": "45961992fc646cbf9679f8959ab28b049f0b06504c1aac77eec1a88d471e60b4"
+      },
+      {
+        "bytes": 75652,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-x86/libbilicrypto.so",
+        "sha256": "fcf59f168d51e12be9eddaed014ee447c12a399e1f42b22e53ff93b555486c94"
+      },
+      {
+        "bytes": 348004,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-x86/libbiliwasm.so",
+        "sha256": "e5241398edae74d2e7dd1eaa1be427e0771099a55339adaeec016f510c38ace4"
+      },
+      {
+        "bytes": 72240,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-x86_64/libbilicrypto.so",
+        "sha256": "b6bb8460cfb2877b5492b9926d4a8a05a9ec7692ac2d1ec60118f7bf1d7fd39d"
+      },
+      {
+        "bytes": 308288,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/android-x86_64/libbiliwasm.so",
+        "sha256": "5a0a4ab94c9faa3e33b21a002d3ea74e3d529329f37840a6464c363c34df31e2"
+      },
+      {
+        "bytes": 61032,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/linux-aarch64/libbilicrypto.so",
+        "sha256": "21bfe78cd9a114e423a34e5b87008337624ac55e11f8c5f87417f3c50ed330e7"
+      },
+      {
+        "bytes": 1252264,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/linux-aarch64/libbiliwasm.so",
+        "sha256": "989a95fa445482e71fbb554a7d56d956d057aa05f9f2992218f735dd32912cf6"
+      },
+      {
+        "bytes": 59880,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so",
+        "sha256": "56422e6570e954710769dfcd730b51eb1c2e7e0080d78ea9814f09eba73cd36f"
+      },
+      {
+        "bytes": 1715052,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so",
+        "sha256": "6dd731ec75e1c4144ad3f6ba56c6a6b37b3db7c234f578a2596fa77b0b17608d"
+      },
+      {
+        "bytes": 71528,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/linux-x86_64/libbilicrypto.so",
+        "sha256": "8e50c8a822d88472d7bb7933c0c014c79ab15fde0ff98db0436433b8f29c519a"
+      },
+      {
+        "bytes": 1168744,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/bin/linux-x86_64/libbiliwasm.so",
+        "sha256": "00f3200a8e276ea851722d3526105c84d0d13e5d0ebabe436227c9007149dc2d"
+      },
+      {
+        "bytes": 1076,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/legacy_v5/NOTICE",
+        "sha256": "a2736aee1d083931e3949ce0e3304772d6f6dfe4f056afec7ded36a00982f0fc"
+      },
+      {
+        "bytes": 5988,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/legacy_v5/README.md",
+        "sha256": "29bd1e0af3ea32a93ca8d47297fabba084127fa0a96d755bd65200b6f8f9b02e"
+      },
+      {
+        "bytes": 593,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/legacy_v5/dependency.json",
+        "sha256": "374c14e7a614072184f1da25754a9f9e418df289feb48e380acb61dc32bb0567"
+      },
+      {
+        "bytes": 7949,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/legacy_v5/upstream-sha256.json",
+        "sha256": "f63631211895c25ffaa92188a5ce9c4194bda457e3b30ed8744c1cc2960b2bcb"
+      },
+      {
+        "bytes": 29852,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/legacy_v5/vendor/mbedtls/LICENSE",
+        "sha256": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b"
+      },
+      {
+        "bytes": 7949,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/legacy_v5/vendored-sha256.json",
+        "sha256": "846131617d29db8a32c73d4b58b50bc2b6db88183880f3c995bde1824dc05ba3"
+      },
+      {
+        "bytes": 522923,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/licenses/android-ndk-NOTICE",
+        "sha256": "4d5224d1c0b54ffa88b0dc0088191638fdbb7227835095dfb98f7f66b416a323"
+      },
+      {
+        "bytes": 806124,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/licenses/android-ndk-NOTICE.toolchain",
+        "sha256": "cbe3237be53c0a819f8df6aac5358fdee848eee3b6571b4e2ca20767ebd7465e"
+      },
+      {
+        "bytes": 1084,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/licenses/cJSON-LICENSE",
+        "sha256": "a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c"
+      },
+      {
+        "bytes": 1092,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/licenses/wasm3-LICENSE",
+        "sha256": "c67aa5c0d77ea831c9a9a025fcbdb69d8241da5d7c673243ae34b1a660afcda2"
+      },
+      {
+        "bytes": 1080,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/licenses/zig-LICENSE",
+        "sha256": "5c537d6853e005298a285d508cff9ac7192cea23576c840d485b2b586a7ff177"
+      },
+      {
+        "bytes": 5306,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/manifest.json",
+        "sha256": "fca424d7a36fc59c6446025cc63a9eb6993aed92bbefa1c03825bfe9b5a95c5f"
+      },
+      {
+        "bytes": 5466,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/portable/README.md",
+        "sha256": "38dd6f533c61f7b333e4d49e7b92a7f6ecb4394031e25a41814efece1013a9ca"
+      },
+      {
+        "bytes": 6042,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native/portable/manifest.json",
+        "sha256": "44551fefc40baed96b5770631bfe3d0c85c178881eeaef7e729d1702c019cb6b"
+      },
+      {
+        "bytes": 8566,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native_backend.lua",
+        "sha256": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7"
+      },
+      {
+        "bytes": 12977,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/native_library.lua",
+        "sha256": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f"
+      },
+      {
+        "bytes": 4372,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/normalize.lua",
+        "sha256": "1358072c2095922872509faab3bd4823bc5c7e28d390234671eb50bbe1464087"
+      },
+      {
+        "bytes": 793,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/platform.lua",
+        "sha256": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a"
+      },
+      {
+        "bytes": 7554,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/portable_crypto.lua",
+        "sha256": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da"
+      },
+      {
+        "bytes": 9285,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/response_crypto.lua",
+        "sha256": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d"
+      },
+      {
+        "bytes": 16555,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/session.lua",
+        "sha256": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1"
+      },
+      {
+        "bytes": 6787,
+        "candidate_source_matches": true,
+        "path": "bilicomics/protocol/transport.lua",
+        "sha256": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb"
+      },
+      {
+        "bytes": 10681,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/README.md",
+        "sha256": "4255bb17ed1e72382f0f119f420f4abfd6ca40fd9c46d7c8ebb7e1df74c65039"
+      },
+      {
+        "bytes": 15823,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/candidate.lua",
+        "sha256": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da"
+      },
+      {
+        "bytes": 10944,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/quote.lua",
+        "sha256": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc"
+      },
+      {
+        "bytes": 6606,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/quote_fetch.lua",
+        "sha256": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750"
+      },
+      {
+        "bytes": 12551,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/range.lua",
+        "sha256": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c"
+      },
+      {
+        "bytes": 5033,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/selection-contract.md",
+        "sha256": "6290d77e3e0ca3cc63ac352137b060200608243f6fcab747c5dc35b7656b33fd"
+      },
+      {
+        "bytes": 7680,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/selection.lua",
+        "sha256": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a"
+      },
+      {
+        "bytes": 22624,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/service.lua",
+        "sha256": "6eac520fbbc9d140b6f9f503a6cfa5623743e0b6b2ce8be9d2b0f46fdcf51296"
+      },
+      {
+        "bytes": 3302,
+        "candidate_source_matches": true,
+        "path": "bilicomics/purchase/value.lua",
+        "sha256": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37"
+      },
+      {
+        "bytes": 10524,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/README.md",
+        "sha256": "fd60a58c27d7e6a1f7d4dad5daf189e7f6b81a36c46fcf095625649058dde3fd"
+      },
+      {
+        "bytes": 4132,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/anchors.lua",
+        "sha256": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff"
+      },
+      {
+        "bytes": 6788,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/compatibility.lua",
+        "sha256": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587"
+      },
+      {
+        "bytes": 5662,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/defaults.lua",
+        "sha256": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24"
+      },
+      {
+        "bytes": 14098,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/document.lua",
+        "sha256": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c"
+      },
+      {
+        "bytes": 12326,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/geometry.lua",
+        "sha256": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc"
+      },
+      {
+        "bytes": 6697,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/image_backend.lua",
+        "sha256": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66"
+      },
+      {
+        "bytes": 9032,
+        "candidate_source_matches": true,
+        "path": "bilicomics/reader/integration.lua",
+        "sha256": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce"
+      },
+      {
+        "bytes": 946,
+        "candidate_source_matches": true,
+        "path": "bilicomics/runtime.lua",
+        "sha256": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6"
+      },
+      {
+        "bytes": 123,
+        "candidate_source_matches": true,
+        "path": "bilicomics/services.lua",
+        "sha256": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a"
+      },
+      {
+        "bytes": 14127,
+        "candidate_source_matches": true,
+        "path": "bilicomics/session_manager.lua",
+        "sha256": "a5fb493670d4418842f8a5d3556b67486e885437c61384133f8da37275c4a8d6"
+      },
+      {
+        "bytes": 10934,
+        "candidate_source_matches": true,
+        "path": "bilicomics/session_storage.lua",
+        "sha256": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395"
+      },
+      {
+        "bytes": 961,
+        "candidate_source_matches": true,
+        "path": "bilicomics/settings.lua",
+        "sha256": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f"
+      },
+      {
+        "bytes": 2276,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/codec.lua",
+        "sha256": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec"
+      },
+      {
+        "bytes": 4259,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/files.lua",
+        "sha256": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812"
+      },
+      {
+        "bytes": 6526,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/image_header.lua",
+        "sha256": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6"
+      },
+      {
+        "bytes": 2362,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/migrations.lua",
+        "sha256": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c"
+      },
+      {
+        "bytes": 24640,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/page_store.lua",
+        "sha256": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a"
+      },
+      {
+        "bytes": 14243,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/source_refresh.lua",
+        "sha256": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7"
+      },
+      {
+        "bytes": 13994,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/store.lua",
+        "sha256": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38"
+      },
+      {
+        "bytes": 15005,
+        "candidate_source_matches": true,
+        "path": "bilicomics/storage/version_replacement.lua",
+        "sha256": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b"
+      },
+      {
+        "bytes": 335,
+        "candidate_source_matches": true,
+        "path": "bilicomics/ui/i18n.lua",
+        "sha256": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9"
+      },
+      {
+        "bytes": 13938,
+        "candidate_source_matches": true,
+        "path": "bilicomics/ui/model.lua",
+        "sha256": "965abaa32c74bf3defde60c7cb9e48bb36be7bef4a18ac355d963f1d04de9261"
+      },
+      {
+        "bytes": 5673,
+        "candidate_source_matches": true,
+        "path": "bilicomics/ui/qr_login.lua",
+        "sha256": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6"
+      },
+      {
+        "bytes": 84469,
+        "candidate_source_matches": true,
+        "path": "bilicomics/ui/screens.lua",
+        "sha256": "676a23cb530555a15867f26141914cf9b9826f1864566a6f54f5aee01390d977"
+      },
+      {
+        "bytes": 2375,
+        "candidate_source_matches": true,
+        "path": "bilicomics/ui/session_input.lua",
+        "sha256": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a"
+      },
+      {
+        "bytes": 5178,
+        "candidate_source_matches": true,
+        "path": "bilicomics/ui/widgets.lua",
+        "sha256": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c"
+      },
+      {
+        "bytes": 1209,
+        "candidate_source_matches": true,
+        "path": "bilicomics/util.lua",
+        "sha256": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65"
+      },
+      {
+        "bytes": 26422,
+        "candidate_source_matches": true,
+        "path": "l10n/bilicomics_zh_CN.lua",
+        "sha256": "2d8427b559508dcbb3bf42d3e8a23ded1aaacef926d4c0cd6192014a2288b9d2"
+      },
+      {
+        "bytes": 4135,
+        "candidate_source_matches": true,
+        "path": "main.lua",
+        "sha256": "503afa4127abd1d45acd1eabc9e917abac705c6ce9b7b2900b0c54e24f4ce817"
+      },
+      {
+        "bytes": 1726,
+        "candidate_source_matches": true,
+        "path": "patches/2-bilicomics-provider.lua",
+        "sha256": "0385ec5135d8edfee278c7fe0c789053cbb94aef2f1808eb67e4041d69f32834"
+      }
+    ],
+    "files": 101,
+    "manifest_sha256": "e91b6315e168e568457a9c65b4ac85f0ea81e498e678f1d00996f200f92310ba",
+    "sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+    "verification_report_sha256": "996fcab03ae5ed8f7317896127e17cbae10b9a6016d800085ba71925b27bdb4f"
+  },
+  "passed": true,
+  "production_files": 201,
+  "production_manifest_sha256": "6b326bf5ca777176c25a5972938921ca43331e441f821fcf7d3f595f479f82f7",
+  "regression": {
+    "all_nested_report_hashes_match": true,
+    "all_nested_schemas_pass": true,
+    "all_recorded_unchanged_fields_true": true,
+    "passed": true,
+    "public_assets_rehashed": true,
+    "release_report_sha256": "153245fafd738224c302c66bf72444b8916dd572cc5c6e186fc702163172f8ed",
+    "runtime_files_rehashed": true,
+    "source_files_rehashed": true,
+    "suite_bindings": [
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "package/data/result.json",
+        "report_sha256": "996fcab03ae5ed8f7317896127e17cbae10b9a6016d800085ba71925b27bdb4f",
+        "suite": "package"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "reader-native/data/results.json",
+        "report_sha256": "5a3912d28f93def260f9f0cbe10f62ba0ad7234a232bc76352eefb11fbc09d06",
+        "suite": "reader-native"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "auth-protocol/data/auth-result.json",
+        "report_sha256": "3ac8290b3dde27878f456bb4b8c29260587f243cfb2f1c81fa2ec3743173c1e8",
+        "suite": "auth-protocol"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "auth-crypto/data/auth-crypto-result.json",
+        "report_sha256": "0c8e41a9fa933a958b3aab894a20be388c7eab91e056834e529630df7b5440a7",
+        "suite": "auth-crypto"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "session-manager/data/session-manager-result.json",
+        "report_sha256": "02aa8942f3215fefd3aa6a14fc23b42c313a555e0f7d5275a1b945c59f63072a",
+        "suite": "session-manager"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "session-controller/data/session-authentication-summary.json",
+        "report_sha256": "a731bfae91e63156bd3e5bb6c8d2fe08274cba7f1a33a395f835b6051d4e62e0",
+        "suite": "session-controller"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "session-storage/data/session-storage-result.json",
+        "report_sha256": "e00a369e88a2faadb3a29fd3ec70250b8691b56a79acbb89341713246d2bce6d",
+        "suite": "session-storage"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "session-import/data/session-import-result.json",
+        "report_sha256": "be04d7635060c06df60eee2553f6b9bf21b303a42f4a7f52cf43dd1d1675ce22",
+        "suite": "session-import"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "qr-ui-zh/data/qr-login-verification.json",
+        "report_sha256": "425fe361a6a2ff8829b3e440945338114d9a146d9c17feab5e733f3627739327",
+        "suite": "qr-ui-zh"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "qr-ui-en/data/qr-login-verification.json",
+        "report_sha256": "68df2a001e76dd07c6e38f441cf7fb1ee23875abb1af89523d232a07d8c35d88",
+        "suite": "qr-ui-en"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "protocol-client/data/summary.json",
+        "report_sha256": "fcb740946c375022b05d2c4d5178b8ee3abd3947488aaca116bbcf47a9a56347",
+        "suite": "protocol-client"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "protocol-native-crypto/data/crypto-result.json",
+        "report_sha256": "8475aa1c4d9972ce156e746b96ed7acd8ad4029341f729a4380b9ba168495855",
+        "suite": "protocol-native-crypto"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "controller/data/controller-result.json",
+        "report_sha256": "ae877330c811491b1c6f59558d46ee8759fec79e90df12158633e440e22f5870",
+        "suite": "controller"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "controller-authentication/data/authentication-result.json",
+        "report_sha256": "595cef3ae4ced8fdfc6db1f5a5097cd2b560b4522a660bc525143bd63e44b63f",
+        "suite": "controller-authentication"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "controller-product/data/product-features-result.json",
+        "report_sha256": "aacd4a7f66d42a4131339dc69602dccb3500e85abcd2049c3bca1b22d86f59b4",
+        "suite": "controller-product"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "controller-diagnostics/data/diagnostics-native-result.json",
+        "report_sha256": "f0a0b538426532d667adee293caf0f43d4044c99b2314825dbc2db3bf9c3bcba",
+        "suite": "controller-diagnostics"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "controller-prefetch/data/prefetch-result.json",
+        "report_sha256": "ae26434ad0d1b90ebe294669a15a4a108936ae6d29536fb58969897eae7bfcbf",
+        "suite": "controller-prefetch"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "purchase-dispatch/data/purchase-dispatch-report.json",
+        "report_sha256": "1a6111d210ab3232641160c2cc215db944de304b1902dafd465a24e5ff640bac",
+        "suite": "purchase-dispatch"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "jobs/data/results.json",
+        "report_sha256": "a31c657c4162df258754ddd61c95e8093f447dd88a1d38edac5e15ef3e538f4a",
+        "suite": "jobs"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "download-connectivity/data/results.json",
+        "report_sha256": "6f1376359e7bb95a2bedcc0ccf1648cdfa86fceadb3a95d2d9b5a172fbcfada0",
+        "suite": "download-connectivity"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "storage/data/summary.json",
+        "report_sha256": "3fb8dc83524aa98e4b7cce3902a96ac42b1ecf089231523da4eea027d862c83c",
+        "suite": "storage"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "storage-source-refresh/data/results.json",
+        "report_sha256": "e13b92497ca5db0ca3789f8658f7542cb7f565cde69645f6c40afc40fd211ee5",
+        "suite": "storage-source-refresh"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "storage-version-replacement/data/results.json",
+        "report_sha256": "b615e7c6451f92d30af946c699edcf035c44118af4de8747b28fa11747394e11",
+        "suite": "storage-version-replacement"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "source-refresh-workflow/data/results.json",
+        "report_sha256": "0083554634ae028b2bbcbf6a1339a734bf968f68a2fe66ce32d670a600998246",
+        "suite": "source-refresh-workflow"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "version-replacement-workflow/data/results.json",
+        "report_sha256": "98ed48bf2b9600a8a6440653c6929a7e0513e8cc472a046dcd1f8297f4ed1c3b",
+        "suite": "version-replacement-workflow"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "purchase-single/data/results.json",
+        "report_sha256": "c0ca580b5ecd4198053138bbf620e929d8b0185dd3d3319da015448b5f369d09",
+        "suite": "purchase-single"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "purchase-ordinal-range/data/results.json",
+        "report_sha256": "79d98f8c9527803428c41644c02255797ca60b0891c37ccc5d1ceb8cd1c5b47a",
+        "suite": "purchase-ordinal-range"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "purchase-ordinal-transaction/data/results.json",
+        "report_sha256": "005d05859cfe468b0276245e95c3c725c18da4271cdadbc1db8692b73a9141c0",
+        "suite": "purchase-ordinal-transaction"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "purchase-selection/data/results.json",
+        "report_sha256": "11f418706785e32af589125cc2f2cee79ff0cb6eca4bd73e330e5c2a72d679de",
+        "suite": "purchase-selection"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "reader-defaults/data/results.json",
+        "report_sha256": "a684f8e271606ba0a16137ae5efa38e8031b4eb1126a42cf814f495b8ef62a29",
+        "suite": "reader-defaults"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "startup-contract/data/startup-results.json",
+        "report_sha256": "c198c75edd53510348b03eb7e9b6ebd2ea0f2e39518c14ea686efc7507532af1",
+        "suite": "startup-contract"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "startup-production/data/production-startup-results.json",
+        "report_sha256": "e353b75e1598b7ec0dd222c62f3448cfcc21b9a8b1ef292c3d74ff83f089fe84",
+        "suite": "startup-production"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "startup-fallback/data/fallback-results.json",
+        "report_sha256": "c3faa6690633abea35894f1f3403c7123b379c91bc5f2add08aa19c79c3467b0",
+        "suite": "startup-fallback"
+      },
+      {
+        "nested_schema_valid": true,
+        "network_and_pid_namespaces_verified": true,
+        "passed": true,
+        "report": "reading-integration/data/integration-results.json",
+        "report_sha256": "829c62eed2b742d047dfc2329801b2bc6dede32b33e4c3bef9a90bdd541dd62d",
+        "suite": "reading-integration"
+      }
+    ],
+    "suites": 34,
+    "unchanged_fields_checked": 26
+  },
+  "scope": "Read-only binding of the frozen candidate, its 34-suite synthetic regression, deterministic package, and independently executed real free-chapter reading evidence",
+  "suites_rerun": false,
+  "test_source_files": 139
+}

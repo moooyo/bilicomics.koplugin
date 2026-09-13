@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "all_deletion_paths_prevalidated": true,
+    "all_recorded_processes_terminal": true,
+    "authorized_linux_root": true,
+    "copied_input_owned_and_restricted": true,
+    "copied_remote_input_absent": true,
+    "exact_copied_input": true,
+    "exact_private_root": true,
+    "live_workflow_completed": true,
+    "local_original_and_other_tasks_outside_deletion_scope": true,
+    "no_process_references_work": true,
+    "offline_launcher_terminal": true,
+    "online_launcher_terminal": true,
+    "private_directory_empty": true,
+    "private_directory_owned_and_restricted": true,
+    "public_reports_and_code_unchanged": true
+  },
+  "code_sha256": {
+    "cleanup_script": "dbfd37948b93dd6af51f7c24880303529f67d5d36ea27f6a65201e3859d05464",
+    "live_results": "71cf4e3ac7c4df6abf1cf82affd718e06907840c012e1fc13ea86ab261ab912a",
+    "production_manifest": "6b326bf5ca777176c25a5972938921ca43331e441f821fcf7d3f595f479f82f7"
+  },
+  "counts": {
+    "copied_inputs_removed": 1,
+    "matching_recorded_processes": 0,
+    "preserved_outer_files": 256,
+    "private_directories_removed": 139,
+    "private_files_removed": 390,
+    "process_record_files": 1,
+    "process_records": 49,
+    "processes_referencing_work": 0
+  },
+  "passed": true
+}
