@@ -1,0 +1,102 @@
+{
+  "host": "test-env",
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "scope": "Real POSIX subprocesses, pipes, SQLite and synthetic image files; injected download runner and protocol client; no account or real purchase",
+  "source_sha256": {
+    "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+    "bilicomics/jobs/download_service.lua": "5c1a99cf6c144d10f252242632799b87bd04744567a41587c515414f0b48ed58",
+    "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+    "bilicomics/controller.lua": "e93a9b75c116e1ab83e9596ac96b1037877ac3263935e134b7c7fdc87727ecb8",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+  },
+  "test_source_sha256": {
+    "spec/jobs/cancel_race.lua": "18c70589bf9eba82cc9ceea86d1c3ec98fb131fe8ce753a3bece1b97095648f0",
+    "spec/jobs/cover_policy_spec.lua": "90151a0bc1bcda89a45a35a8f0d135fba09bbf6b97cfc8aa84f57801bfc01b1d",
+    "spec/jobs/cover_thumbnail_live_spec.lua": "5cbb332c89d5511129eb09a3bb0bdb706470cc795a82bd084ed1009309fe43c9",
+    "spec/jobs/download_connectivity_runner_spec.lua": "a33d6d682a2bd91849af396faa53070799cf1927d6f620a8adf12841855703c0",
+    "spec/jobs/download_connectivity_spec.lua": "d490f9de1d73900cbdd5d2c0ea53c166b9bf83ff22579bda48c4dc3de486edbd",
+    "spec/jobs/download_service_spec.lua": "4a53fe261051507b78efacfa82398f975a1b110610dedfdcb05e428862758b28",
+    "spec/jobs/parent_exit_fixture.lua": "780ae6a03177aa2d20509ad3822898d352112f9530b8d14b2cb537e71de63219",
+    "spec/jobs/parent_exit_spec.py": "f687b15fb24cf101a6f2eaab1949a5da9a0db42c2424391f95789a13b8466dc1",
+    "spec/jobs/run_download_connectivity.py": "d7a8c395ded0e3059d98db71a2cd05893666b2418c910d5f98314eb97b5fe403",
+    "spec/jobs/run_remote.py": "8d8f0326dd72d4146d5c2bec0f9e6af9f592b38c69b3c487ae81a8d684d9817a",
+    "spec/jobs/runner_spec.lua": "17e2b8f86997eec16f8a4421e307428a126bcec1d4c101dbd105881dfa03c2b7",
+    "spec/jobs/source_epoch_spec.lua": "4a746b5ebffe6f027ef6da9a4ae1fe1028d0253cb654cd971aad31adec8cd2fb",
+    "spec/jobs/source_verification_spec.lua": "5cad7d757f35552ab9b29b57562319407a8c8cc96f73438f8728bda02529f043",
+    "spec/jobs/storage_budget_spec.lua": "4625dfa58fe4068bb28b431b9f6325bba462584ff7e4dcd89c21a70da8b2deb1",
+    "spec/jobs/worker_extensions_spec.lua": "85d85ac73fe4c06a844d8df1624942227851e8cbe0b45edbb181c36436487310",
+    "spec/jobs/worker_spec.lua": "7184dcd84f767c2904f39ba4d09dda4dcc0d7b48032bcfa763e8d3617f7fa69d"
+  },
+  "image_fixtures": [
+    {
+      "name": "cover-6mp.png",
+      "width": 3000,
+      "height": 2000,
+      "pixels": 6000000,
+      "encoded_bytes": 5908,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    },
+    {
+      "name": "cover-4mp.png",
+      "width": 2000,
+      "height": 2000,
+      "pixels": 4000000,
+      "encoded_bytes": 3958,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    }
+  ],
+  "suites": [
+    {
+      "suite": "cover",
+      "returncode": 0,
+      "result": {
+        "tests": [
+          {
+            "name": "Large grayscale fixtures are complete PNG containers with the intended geometry",
+            "passed": true
+          },
+          {
+            "name": "Worker rejects an oversized cover even when its client ignores the budget and lies about geometry",
+            "passed": true
+          },
+          {
+            "name": "Worker accepts a cover exactly at the four-million-pixel boundary",
+            "passed": true
+          },
+          {
+            "name": "Worker does not apply the cover budget to a six-million-pixel chapter page",
+            "passed": true
+          },
+          {
+            "name": "Production client rejects and removes a six-million-pixel image under the cover budget",
+            "passed": true
+          },
+          {
+            "name": "Production client retains a complete cover exactly at the pixel budget",
+            "passed": true
+          },
+          {
+            "name": "Production client accepts the same six-million-pixel image without a cover budget",
+            "passed": true
+          },
+          {
+            "name": "Worker keeps direct cover URLs unchanged through the production client",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "scope": "Real compressed PNG containers and headers; production Worker and Client with injected transfers; no image decoding or live network"
+      }
+    }
+  ],
+  "passed": true
+}

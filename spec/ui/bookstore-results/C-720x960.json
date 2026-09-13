@@ -1,0 +1,227 @@
+{
+    "assertions": [
+        {
+            "passed": true,
+            "name": "bookstore_replaces_the_second_tab"
+        },
+        {
+            "passed": true,
+            "name": "entering_an_empty_bookstore_loads_anonymously"
+        },
+        {
+            "passed": true,
+            "name": "initial_load_has_visible_loading_feedback"
+        },
+        {
+            "passed": true,
+            "name": "repaints_do_not_duplicate_the_initial_refresh"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 681
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-loading_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "recommendations_load_without_a_session"
+        },
+        {
+            "passed": true,
+            "name": "the_store_identifies_official_recommendations_and_catalog_activation"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 681
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-recommendations_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "loaded_has_native_cover_cards"
+        },
+        {
+            "passed": true,
+            "name": "loaded_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "loaded_focus_matches_visual_order_1"
+        },
+        {
+            "passed": true,
+            "name": "loaded_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "loaded_focus_matches_visual_order_2"
+        },
+        {
+            "passed": true,
+            "name": "loaded_aligned_card_2"
+        },
+        {
+            "passed": true,
+            "name": "loaded_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "loaded_focus_matches_visual_order_3"
+        },
+        {
+            "passed": true,
+            "name": "loaded_aligned_card_3"
+        },
+        {
+            "passed": true,
+            "name": "loaded_every_card_is_focusable"
+        },
+        {
+            "passed": true,
+            "name": "loaded_has_no_history_or_unsupported_store_actions"
+        },
+        {
+            "passed": true,
+            "name": "cover_acquisition_is_limited_to_visible_recommendations"
+        },
+        {
+            "passed": true,
+            "name": "pagination_preserves_official_recommendation_order"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 681
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-last-page_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "the_last_local_page_does_not_fetch_another_feed"
+        },
+        {
+            "passed": true,
+            "name": "fresh_cached_recommendations_open_without_a_new_request"
+        },
+        {
+            "passed": true,
+            "name": "recommendation_tap_opens_the_chapter_catalog_only"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 682
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-chapters_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "opening_recommendations_never_reads_or_buys"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_old_recommendation_callbacks"
+        },
+        {
+            "passed": true,
+            "name": "stale_saved_recommendations_remain_visible_during_refresh"
+        },
+        {
+            "passed": true,
+            "name": "offline_refresh_retains_the_saved_recommendations"
+        },
+        {
+            "passed": true,
+            "name": "offline_cache_feedback_is_explicit"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 681
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-cached-offline_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "repeated_refresh_actions_queue_only_one_request"
+        },
+        {
+            "passed": true,
+            "name": "first_load_failure_has_no_invented_recommendations"
+        },
+        {
+            "passed": true,
+            "name": "first_load_failure_explains_connectivity"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 681
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-load-error_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "failed_initial_load_can_be_retried"
+        },
+        {
+            "passed": true,
+            "name": "retry_requests_anonymous_recommendations"
+        },
+        {
+            "passed": true,
+            "name": "retry_replaces_the_error_with_recommendations"
+        },
+        {
+            "detail": {
+                "h": 940,
+                "w": 681
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-retry-loaded_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_delayed_refresh_errors"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_delayed_refresh_success"
+        },
+        {
+            "passed": true,
+            "name": "returning_after_an_obsolete_refresh_is_usable"
+        },
+        {
+            "passed": true,
+            "name": "returned_has_no_history_or_unsupported_store_actions"
+        },
+        {
+            "detail": {},
+            "passed": true,
+            "name": "all_scenarios_preserve_read_payment_and_account_isolation"
+        }
+    ],
+    "screenshots": [
+        "synthetic-bookstore-loading.png",
+        "synthetic-bookstore-recommendations.png",
+        "synthetic-bookstore-last-page.png",
+        "synthetic-bookstore-chapters.png",
+        "synthetic-bookstore-cached-offline.png",
+        "synthetic-bookstore-load-error.png",
+        "synthetic-bookstore-retry-loaded.png"
+    ],
+    "width": 720,
+    "height": 960,
+    "passed": true,
+    "scope": "Native bookstore widgets; original synthetic illustrations; anonymous injected data; no HTTP, account, purchase or reader",
+    "language": "C"
+}

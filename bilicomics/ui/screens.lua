@@ -21,6 +21,17 @@ local function accountKey(controller)
     local account = controller:getAccount() or {}
     return account.account_key or account.id
 end
+local function bookstoreQuery(query)
+    if not query then return nil end
+    return { kind = "category", category_id = tostring(query.category_id), sort = 0 }
+end
+local function bookstoreQueryKey(query)
+    return query and ("category:" .. tostring(query.category_id)) or "homepage"
+end
+local function sameFeedIdentity(left, right)
+    return left and right and left.account_key == right.account_key
+        and left.query_key == right.query_key and left.revision == right.revision
+end
 local function purchasePurpose(intent, fallback)
     local purpose = intent and intent.purpose or fallback
     return purpose == "download" and "download" or "read"
@@ -35,12 +46,20 @@ function Screens:_navigate(route, id)
     self:_closeDialog()
     self.purchase_visible = false
     self.epoch = self.epoch + 1
+    if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
+    self.bookstore_sequence = (self.bookstore_sequence or 0) + 1
+    self.bookstore_loading, self.bookstore_error, self.bookstore_loading_more, self.bookstore_more_error = false, nil, false, nil
     self.route, self.comic_id, self.page = route, id, 1
     self.status, self.filter, self.selecting, self.selected = nil, "all", false, {}
     self:_render()
 end
 
-function Screens:showLibrary(kind) self:_navigate(kind == "favorites" and "favorites" or "continue") end
+-- Legacy continue/history links now return to the bookshelf without discarding progress.
+function Screens:showLibrary() self:_navigate("favorites") end
+function Screens:showBookstore()
+    self:_navigate("bookstore")
+    if self.controller:getBookstore(self.bookstore_query).stale then self:_refreshBookstore() end
+end
 function Screens:showComic(id)
     self:_navigate("comic", tostring(id))
     if not self.loaded["comic:" .. tostring(id)] then self:_refreshComic() end
@@ -52,6 +71,9 @@ function Screens:refresh() if self.route then self:_render() end end
 
 function Screens:close()
     self.epoch = self.epoch + 1
+    self.bookstore_sequence = (self.bookstore_sequence or 0) + 1
+    self.bookstore_loading = false
+    if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
     self:_closeDialog()
     if self.scope_dialog then UIManager:close(self.scope_dialog); self.scope_dialog = nil end
     if self.dialog then UIManager:close(self.dialog); self.dialog = nil end
@@ -61,6 +83,8 @@ end
 
 function Screens:_closeDialog(keep_purchase)
     if not keep_purchase then self.purchase_visible = false end
+    self.bookstore_synopsis, self.bookstore_synopsis_dirty = nil, nil
+    self.bookstore_picker, self.bookstore_picker_state, self.bookstore_picker_dirty = nil, nil, nil
     self.session_input = nil
     if self.qr_login then self.qr_login:close(); self.qr_login = nil end
     if self.dialog then UIManager:close(self.dialog); self.dialog = nil end
@@ -124,7 +148,7 @@ function Screens:_buttons(entries)
     return W.row(widgets)
 end
 
-function Screens:_paginate(items, row_height, fixed_height, render)
+function Screens:_paginate(items, row_height, fixed_height, render, empty_message)
     local available = self.body_height - fixed_height - W.scale(51)
     local capacity = math.max(1, math.floor(available / W.scale(row_height)))
     self.pages = math.max(1, math.ceil(#items / capacity))
@@ -133,8 +157,8 @@ function Screens:_paginate(items, row_height, fixed_height, render)
     for index = (self.page - 1) * capacity + 1, math.min(self.page * capacity, #items) do
         rows[#rows + 1] = render(items[index], index)
     end
-    if #items == 0 then
-        rows[#rows + 1] = W.text(_("Nothing here yet. Refresh your library or search for a comic."), self.width, 20,
+    if #items == 0 and empty_message ~= false then
+        rows[#rows + 1] = W.text(empty_message or _("Nothing here yet. Refresh your library or search for a comic."), self.width, 20,
             { height = W.scale(95) })
     end
     rows[#rows + 1] = W.space(8)
@@ -147,32 +171,49 @@ function Screens:_paginate(items, row_height, fixed_height, render)
 end
 
 function Screens:_changePage(delta)
-    self.page = math.max(1, math.min(self.pages or 1, self.page + delta)); self:_render()
+    if self.route == "bookstore" and delta > 0 and self.page >= (self.pages or 1) then
+        if self.controller:getBookstore(self.bookstore_query).can_load_more then self:_requestBookstore(true) end
+        return
+    end
+    local page = math.max(1, math.min(self.pages or 1, self.page + delta))
+    if page == self.page then return end
+    self.epoch, self.page, self.status = self.epoch + 1, page, nil
+    if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
+    self:_render()
 end
 
 function Screens:_render()
     if not self.route then return end
+    if self.bookstore_synopsis and self.dialog == self.bookstore_synopsis then
+        self.bookstore_synopsis_dirty = true
+        return
+    end
+    if self.bookstore_picker and self.dialog == self.bookstore_picker then
+        self.bookstore_picker_dirty = true
+        return
+    end
     if self.qr_login then self.qr_login:_current() end
-    self.focus = {}
+    self.focus, self.cards, self.pagination = {}, {}, nil
+    self.render_generation = (self.render_generation or 0) + 1
     self.width = Device.screen:getWidth() - W.scale(32)
     self.height = Device.screen:getHeight()
     self.body_height = self.height - W.scale(150)
-    local headings = { continue = _("Continue reading"), favorites = _("Following"), comic = _("Chapters"),
+    local headings = { bookstore = _("Bookstore"), favorites = _("Bookshelf"), comic = _("Chapters"),
         downloads = _("Downloads"), search = _("Search"), account = _("Account and settings") }
     local side_width = W.scale(78)
     local header = W.row{
         self:_button(_("Close"), side_width, function() self:close() end, { borderless = true, size = 16 }),
         W.text(headings[self.route], self.width - 2 * side_width, 25, { bold = true, align = "center", height = W.scale(38) }),
-        self:_button(self.route == "account" and _("Library") or _("Account"), side_width,
+        self:_button(self.route == "account" and _("Bookshelf") or _("Account"), side_width,
             function() if self.route == "account" then self:showLibrary() else self:showAccount() end end,
             { borderless = true, size = 16 }),
     }
-    local builders = { continue = self._library, favorites = self._library, comic = self._comic,
+    local builders = { bookstore = self._bookstore, favorites = self._library, comic = self._comic,
         downloads = self._downloads, search = self._search, account = self._account }
     local body = builders[self.route](self)
     local navigation = self:_buttons{
-        { text = _("Reading"), primary = self.route == "continue", callback = function() self:showLibrary() end },
-        { text = _("Following"), primary = self.route == "favorites", callback = function() self:showLibrary("favorites") end },
+        { text = _("Bookshelf"), primary = self.route == "favorites", callback = function() self:showLibrary() end },
+        { text = _("Bookstore"), primary = self.route == "bookstore", callback = function() self:showBookstore() end },
         { text = _("Search"), primary = self.route == "search", callback = function() self:showSearch() end },
         { text = _("Downloads"), primary = self.route == "downloads", callback = function() self:showDownloads() end },
     }
@@ -182,96 +223,396 @@ function Screens:_render()
     content[#content + 1] = navigation
     content:resetLayout()
     local previous = self.widget
-    self.widget = W.Panel:new{ content = content, layout = self.focus,
+    local selected, restore_focus
+    if previous and previous.view_epoch == self.epoch and previous.view_route == self.route
+        and previous.view_page == self.page and previous.selected then
+        local old = previous:getFocusItem()
+        local position = previous.selected
+        if self.focus[position.y] and self.focus[position.y][position.x] then selected = position end
+        restore_focus = old and (old.focused or old[1] and old[1].invert)
+    end
+    self.widget = W.Panel:new{ content = content, layout = self.focus, selected = selected,
+        view_epoch = self.epoch, view_route = self.route, view_page = self.page,
         close_callback = function() self:close() end,
         next_page = function() self:_changePage(1) end,
         previous_page = function() self:_changePage(-1) end }
     if previous then UIManager:close(previous) end
     UIManager:show(self.widget)
+    if selected and restore_focus then
+        local focused = self.widget:getFocusItem()
+        if focused and focused.onFocus then focused:onFocus() end
+    end
 end
 
-function Screens:_comicCard(comic, prominent)
+function Screens:_comicCard(comic)
     if self.controller.requestCover then self.controller:requestCover(comic.id) end
-    local cover_width, cover_height = W.scale(prominent and 88 or 52), W.scale(prominent and 116 or 70)
+    local cover_width, cover_height = W.scale(52), W.scale(70)
     local text_width = self.width - cover_width - W.scale(14)
-    local episodes = Model.array(self.controller:getEpisodes(comic.id))
-    local current = Model.currentEpisode(comic, episodes)
     local subtitle = comic.latest_episode_title or (comic.extra or {}).latest_episode_title
         or (comic.latest_order and string.format(_("Latest chapter: %s"), tostring(comic.latest_order))) or _("Open chapter catalog")
-    local current_episode
-    for _index, episode in ipairs(episodes) do if tostring(episode.id) == current then current_episode = episode; break end end
-    if prominent and current_episode then subtitle = title(current_episode) end
-    local anchor = comic.reading_position or (comic.extra or {}).reading_position
-    if prominent and anchor then subtitle = subtitle .. " · " .. string.format(_("Image %d"), anchor.page or anchor.index or 1) end
     local title_button = W.button(title(comic), text_width, function() self:showComic(comic.id) end,
-        { borderless = true, align = "left", bold = true, size = prominent and 24 or 20, height = 27 })
+        { borderless = true, align = "left", bold = true, size = 20, height = 27 })
     self.focus[#self.focus + 1] = { title_button }
-    local texts = { title_button }
-    if self.route == "favorites" and not prominent then
-        local button_width = W.scale(92)
-        local finished = current_episode and (current_episode.read == true or current_episode.read == "complete"
-            or current_episode.read == "finished" or current_episode.read == "read")
-        local read_button = W.button(finished and _("Read next") or (current_episode and _("Resume comic") or _("Read comic")), button_width,
-            function()
-                self:_invoke("resolveReadingEpisode", { tostring(comic.id) }, function(target, error)
-                    if error then self:_error(error) else self:_read(target.comic, target.episode) end
-                end)
-            end, { size = 16, height = 23 })
-        self.focus[#self.focus + 1] = { read_button }
-        texts[#texts + 1] = W.row{ W.text(subtitle, text_width - button_width - W.scale(6), 16, { muted = true, height = W.scale(23) }),
-            W.gap(W.scale(6)), read_button }
-    else
-        texts[#texts + 1] = W.text(subtitle, text_width, 16, { muted = true, height = W.scale(23) })
-    end
-    if prominent then
-        texts[#texts + 1] = W.space(8)
-        texts[#texts + 1] = self:_button(_("Resume reading"), text_width, function()
-            if current_episode then self:_read(comic, current_episode) else self:showComic(comic.id) end
-        end, { primary = true })
-    end
+    local texts = { title_button, W.text(subtitle, text_width, 16, { muted = true, height = W.scale(23) }) }
     local cover = W.cover(comic, cover_width, cover_height)
     local row = W.row{ cover, W.gap(W.scale(12)), W.column(texts) }
     local rows = {}
-    if prominent then rows[#rows + 1] = W.text(_("BOOKMARK"), self.width, 12, { bold = true }); rows[#rows + 1] = W.space(4) end
     rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = row, W.space(8), W.rule(self.width)
     rows[#rows + 1] = W.space(7)
     return W.column(rows)
 end
 
-function Screens:_library()
-    local kind = self.route == "favorites" and "favorites" or "history"
-    local items = copy(Model.array(self.controller:getLibrary(kind)))
-    if self.route == "favorites" and self.filter ~= "all" then
-        local filtered = {}
-        for _index, comic in ipairs(items) do
-            local updated = comic.updated or comic.has_update or (comic.extra or {}).has_update
-            if (self.filter == "updated" and updated) or (self.filter == "completed" and comic.finished) then
-                filtered[#filtered + 1] = comic
-            end
+function Screens:_readComic(comic)
+    self.epoch = self.epoch + 1
+    if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
+    local key, epoch = accountKey(self.controller), self.epoch
+    self:_invoke("resolveReadingEpisode", { tostring(comic.id) }, function(target, error)
+        if accountKey(self.controller) ~= key or self.epoch ~= epoch then return end
+        if error then self:_error(error) else self:_read(target.comic, target.episode) end
+    end)
+end
+
+function Screens:_bookshelfFilter()
+    self:_closeDialog()
+    local rows, epoch, account = {}, self.epoch, accountKey(self.controller)
+    local dialog
+    for _, option in ipairs{
+        { "all", _("All") }, { "reading", _("Currently reading") }, { "unknown", _("No reading record") },
+        { "updated", _("Updated") }, { "completed", _("Completed series") },
+    } do
+        local key = option[1]
+        rows[#rows + 1] = { { text = option[2], callback = function()
+            if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= account then return end
+            self:_closeDialog()
+            self.filter, self.page, self.status, self.epoch = key, 1, nil, self.epoch + 1
+            if self.controller.cancelPendingRead then self.controller:cancelPendingRead() end
+            self:_render()
+        end } }
+    end
+    rows[#rows + 1] = { { text = _("Cancel"), callback = function()
+        if self.dialog == dialog then self:_closeDialog() end
+    end } }
+    dialog = ButtonDialog:new{ title = _("Filter bookshelf"), buttons = rows, modal = true }
+    self.dialog = dialog
+    UIManager:show(dialog)
+end
+
+function Screens:_bookshelf(items)
+    local labels = { all = _("All"), reading = _("Currently reading"), unknown = _("No reading record"),
+        updated = _("Updated"), completed = _("Completed series") }
+    local entries = {}
+    for _, comic in ipairs(items) do
+        local episodes = Model.array(self.controller:getEpisodes(comic.id))
+        local progress = Model.comicProgress(comic, episodes)
+        local updated = comic.updated or comic.has_update or (comic.extra or {}).has_update
+        if self.filter == "all" or self.filter == progress.state
+            or self.filter == "updated" and updated or self.filter == "completed" and comic.finished then
+            entries[#entries + 1] = { comic = comic, progress = progress }
         end
-        items = filtered
     end
-    local controls = self:_buttons{
-        { text = self.status or _("Refresh library"), callback = function()
-            self:_invoke("refreshLibrary", { kind }, function(_value, error) if error then self:_error(error) end end)
+    local rows = { self:_buttons{
+        { text = self.status or _("Refresh bookshelf"), callback = function()
+            self:_invoke("refreshLibrary", { "favorites" }, function(_value, error) if error then self:_error(error) end end)
         end },
-        { text = self.route == "favorites" and ({ all = _("All"), updated = _("Updated"), completed = _("Completed") })[self.filter]
-            or _("Find a comic"), callback = function()
-            if self.route == "favorites" then
-                self.filter = ({ all = "updated", updated = "completed", completed = "all" })[self.filter]
-                self.page = 1; self:_render()
-            else self:showSearch() end
-        end },
-    }
-    local rows, fixed = { controls, W.space(12) }, W.scale(54)
-    if self.route == "continue" and #items > 0 then
-        local recent = table.remove(items, 1)
-        local card = self:_comicCard(recent, true)
-        rows[#rows + 1], rows[#rows + 2] = card, W.space(6)
-        fixed = fixed + card:getSize().h + W.scale(6)
+        { text = labels[self.filter] or labels.all, callback = function() self:_bookshelfFilter() end },
+    }, W.space(8) }
+    return self:_coverGrid(entries, { rows = rows, empty_message = #items == 0
+        and _("Your bookshelf is empty. Search for a comic to follow.") or _("No comics match this filter.") })
+end
+
+function Screens:_coverGrid(entries, options)
+    options = options or {}
+    local gap = W.scale(12)
+    local screen_width = Device.screen:getWidth()
+    local columns = screen_width >= 720 and 3 or 2
+    if options.bookstore then columns = screen_width >= 900 and 4 or screen_width >= 600 and 3 or 2 end
+    local width = math.floor((self.width - gap * (columns - 1)) / columns)
+    local available = self.body_height - W.scale(options.fixed_height or 96)
+    local cover_height = math.max(W.scale(70), math.min(math.floor((width - W.scale(12)) * 1.34), available - W.scale(130)))
+    local row_height = cover_height + W.scale(128)
+    local row_count = math.max(1, math.floor((available + gap) / (row_height + gap)))
+    if options.bookstore then
+        -- Reserve two browsing rows before sizing covers, including rounded widget padding.
+        local metadata_height, minimum_cover = W.scale(84), W.scale(80)
+        local ordinary_height = self.body_height - W.scale(76)
+        row_count = ordinary_height >= 2 * (metadata_height + minimum_cover) + gap and 2 or 1
+        cover_height = math.max(W.scale(60), math.min(math.floor((width - W.scale(12)) * 1.34),
+            math.floor((available - gap * (row_count - 1)) / row_count) - metadata_height))
     end
-    rows[#rows + 1] = self:_paginate(items, 91, fixed, function(comic) return self:_comicCard(comic, false) end)
+    local capacity = columns * row_count
+    self.pages = math.max(1, math.ceil(#entries / capacity))
+    self.page = math.max(1, math.min(self.page, self.pages))
+    local rows = options.rows or {}
+    local hint = options.hint or _("Tap to read · Hold for chapters")
+    local epoch, key, render_generation = self.epoch, accountKey(self.controller), self.render_generation
+    local route, query_key = self.route, bookstoreQueryKey(options.query)
+    local function currentGrid()
+        return self.route == route and self.epoch == epoch and accountKey(self.controller) == key
+            and self.render_generation == render_generation
+            and (not options.bookstore or bookstoreQueryKey(self.bookstore_query) == query_key)
+    end
+    if self.pages > 1 or options.can_load_more then
+        local arrow_width, counter_width = W.scale(36), W.scale(64)
+        local previous = W.button("‹", arrow_width, function() if currentGrid() then self:_changePage(-1) end end,
+            { borderless = true, size = 22, height = 24, enabled = self.page > 1 })
+        local next_page = W.button("›", arrow_width, function() if currentGrid() then self:_changePage(1) end end,
+            { borderless = true, size = 22, height = 24,
+                enabled = self.page < self.pages or options.can_load_more == true and not self.bookstore_loading })
+        local page_label = options.remote_pagination and string.format(_("Page %d"), self.page)
+            or string.format(_("%d / %d"), self.page, self.pages)
+        local counter = W.text(page_label, counter_width, 13,
+            { muted = true, align = "center" })
+        local hint_width = self.width - 2 * arrow_width - counter_width - W.scale(8)
+        rows[#rows + 1] = W.row{
+            W.text(hint, hint_width, 12, { muted = true, height = W.scale(20) }),
+            W.gap(W.scale(8)), previous, counter, next_page,
+        }
+        self.focus[#self.focus + 1] = { previous, next_page }
+        self.pagination = { previous = previous, next = next_page, counter = counter }
+    else
+        rows[#rows + 1] = W.text(hint, self.width, 12,
+            { muted = true, height = W.scale(20) })
+    end
+    rows[#rows + 1] = W.space(8)
+    self.cards, self.grid_columns, self.grid_rows = {}, columns, row_count
+    local row, focus
+    for index = (self.page - 1) * capacity + 1, math.min(self.page * capacity, #entries) do
+        if not row or #focus == columns then
+            if row then rows[#rows + 1] = W.row(row); rows[#rows + 1] = W.spacePixels(gap); self.focus[#self.focus + 1] = focus end
+            row, focus = {}, {}
+        end
+        local entry = entries[index]
+        local comic = entry.comic
+        if options.bookstore then self.controller:requestBookstoreCover(comic.id, options.feed_identity)
+        elseif self.controller.requestCover then self.controller:requestCover(comic.id) end
+        local function current()
+            if not currentGrid() then return false end
+            return not options.bookstore or sameFeedIdentity(options.feed_identity,
+                self.controller:getBookstore(self.bookstore_query).identity)
+        end
+        local card = W.CoverCard:new{ comic = comic, text = title(comic), width = width, cover_height = cover_height,
+            compact = options.bookstore,
+            progress = entry.description or entry.progress and entry.progress.label or "",
+            update = options.bookstore and (entry.tags or "") or Model.comicUpdate(comic),
+            callback = function()
+                if not current() then return end
+                if options.bookstore then self:showComic(comic.id) else self:_readComic(comic) end
+            end,
+            hold_callback = function()
+                if not current() then return end
+                if options.bookstore then self:_bookstoreSynopsis(comic) else self:showComic(comic.id) end
+            end }
+        if #row > 0 then row[#row + 1] = W.gap(gap) end
+        row[#row + 1], focus[#focus + 1], self.cards[#self.cards + 1] = card, card, card
+    end
+    if row then rows[#rows + 1] = W.row(row); self.focus[#self.focus + 1] = focus end
+    if #entries == 0 then
+        rows[#rows + 1] = W.text(options.empty_message or _("No recommendations are available."), self.width, 18,
+            { height = W.scale(80) })
+        if options.retry then
+            rows[#rows + 1] = self:_button(_("Retry"), W.scale(130), function() self:_refreshBookstore() end)
+        end
+    end
     return W.column(rows)
+end
+
+function Screens:_library()
+    return self:_bookshelf(copy(Model.array(self.controller:getLibrary("favorites"))))
+end
+
+function Screens:_refreshBookstore() self:_requestBookstore(false) end
+
+function Screens:_requestBookstore(append)
+    if self.route ~= "bookstore" or self.bookstore_loading then return end
+    local query = bookstoreQuery(self.bookstore_query)
+    local feed = self.controller:getBookstore(query)
+    if append and not feed.can_load_more then return end
+    local old_count, old_page = #feed.items, self.page
+    local capacity = (self.grid_columns or 1) * (self.grid_rows or 1)
+    if not append then self.page = 1 end
+    self.bookstore_sequence = (self.bookstore_sequence or 0) + 1
+    local sequence, key, query_key = self.bookstore_sequence, accountKey(self.controller), bookstoreQueryKey(query)
+    self.bookstore_loading, self.bookstore_error, self.bookstore_loading_more, self.bookstore_more_error = true, nil, append, nil
+    self:_render()
+    local completed = false
+    local function done(value, error)
+        if completed then return end
+        completed = true
+        if sequence ~= self.bookstore_sequence or key ~= accountKey(self.controller)
+            or query_key ~= bookstoreQueryKey(self.bookstore_query) or self.route ~= "bookstore" then return end
+        self.bookstore_loading, self.bookstore_error, self.bookstore_loading_more = false, error, false
+        self.bookstore_more_error = append and error or nil
+        if append and not error and self.page == old_page then
+            local updated = self.controller:getBookstore(query)
+            -- Fill a partial cached page before advancing, so newly appended comics are not skipped.
+            if #updated.items > old_count then self.page = math.floor(old_count / capacity) + 1 end
+        end
+        if self.route == "bookstore" then self:_render() end
+    end
+    local ok
+    if append then ok = pcall(self.controller.loadMoreBookstore, self.controller, query, done)
+    elseif query then ok = pcall(self.controller.refreshBookstore, self.controller, query, done)
+    else ok = pcall(self.controller.refreshBookstore, self.controller, done) end
+    if not ok then done(nil, { kind = "internal" }) end
+end
+
+function Screens:_selectBookstoreCategory(category)
+    self.bookstore_category = category and { id = tostring(category.id), name = category.name } or nil
+    self.bookstore_query = category and { kind = "category", category_id = tostring(category.id), sort = 0 } or nil
+    self:showBookstore()
+end
+
+function Screens:_bookstoreCategoryPicker()
+    if self.route ~= "bookstore" then return end
+    self:_closeDialog()
+    local state = { epoch = self.epoch, account = accountKey(self.controller) }
+    self.bookstore_picker_state = state
+    self:_renderBookstoreCategoryPicker(state)
+    if self.controller:getBookstoreCategories().stale then self:_refreshBookstoreCategories(state) end
+end
+
+function Screens:_refreshBookstoreCategories(state)
+    if state ~= self.bookstore_picker_state or state.loading then return end
+    state.loading, state.error = true, nil
+    self:_renderBookstoreCategoryPicker(state)
+    local completed = false
+    local function done(value, error)
+        if completed then return end
+        completed = true
+        if state ~= self.bookstore_picker_state or state.epoch ~= self.epoch
+            or state.account ~= accountKey(self.controller) or self.route ~= "bookstore" then return end
+        state.loading, state.error = false, error
+        self:_renderBookstoreCategoryPicker(state)
+    end
+    local ok = pcall(self.controller.refreshBookstoreCategories, self.controller, done)
+    if not ok then done(nil, { kind = "internal" }) end
+end
+
+function Screens:_renderBookstoreCategoryPicker(state)
+    if state ~= self.bookstore_picker_state or state.epoch ~= self.epoch or state.account ~= accountKey(self.controller) then return end
+    local catalogue = self.controller:getBookstoreCategories()
+    local heading = _("Choose a category")
+    if state.loading then heading = heading .. "\n" .. _("Loading categories…")
+    elseif state.error then
+        heading = heading .. "\n" .. (#catalogue.items > 0 and _("Could not update categories. Choose a saved category.")
+            or _("Categories could not be loaded. Retry to choose a category."))
+    end
+    local dialog
+    local function current()
+        return self.dialog == dialog and self.bookstore_picker == dialog and self.bookstore_picker_state == state
+            and self.route == "bookstore" and self.epoch == state.epoch and accountKey(self.controller) == state.account
+    end
+    local buttons = { { { text = (self.bookstore_query and "[ ] " or "[x] ") .. _("All recommendations"),
+        callback = function() if current() then self:_selectBookstoreCategory(nil) end end } } }
+    local row
+    for index, category in ipairs(catalogue.items) do
+        if (index - 1) % 3 == 0 then row = {}; buttons[#buttons + 1] = row end
+        local selected = self.bookstore_query and tostring(category.id) == self.bookstore_query.category_id
+        row[#row + 1] = { text = (selected and "[x] " or "[ ] ") .. category.name,
+            callback = function() if current() then self:_selectBookstoreCategory(category) end end }
+    end
+    if state.error then
+        buttons[#buttons + 1] = { { text = _("Retry"), callback = function()
+            if current() then self:_refreshBookstoreCategories(state) end
+        end } }
+    end
+    buttons[#buttons + 1] = { { text = _("Cancel"), callback = function() if current() then dialog:onClose() end end } }
+    dialog = ButtonDialog:new{ title = heading, buttons = buttons, modal = true, width_factor = 0.94, rows_per_page = 8 }
+    local owner = self
+    function dialog:onCloseWidget()
+        ButtonDialog.onCloseWidget(self)
+        if owner.bookstore_picker ~= self then return end
+        local dirty = owner.bookstore_picker_dirty
+        owner.bookstore_picker, owner.bookstore_picker_state, owner.bookstore_picker_dirty = nil, nil, nil
+        if owner.dialog == self then owner.dialog = nil end
+        if dirty and owner.route == "bookstore" then owner:_render() end
+    end
+    local previous = self.bookstore_picker
+    self.dialog, self.bookstore_picker = dialog, dialog
+    if previous then UIManager:close(previous) end
+    UIManager:show(dialog)
+end
+
+function Screens:_bookstore()
+    local query = bookstoreQuery(self.bookstore_query)
+    local feed = self.controller:getBookstore(query)
+    local category_name = self.bookstore_category and self.bookstore_category.name or _("Category")
+    local entries = {}
+    local sections = { recommendation = _("Recommended"), hot_seller = _("Bestsellers"),
+        internet_hot = _("Trending"), completed = _("Completed picks") }
+    for _index, comic in ipairs(Model.array(feed.items)) do
+        local extra, tags = comic.extra or {}, {}
+        for _tag_index, tag in ipairs(extra.tags or {}) do if type(tag) == "string" then tags[#tags + 1] = tag end end
+        local section = query and category_name or sections[extra.recommendation_section] or _("Recommended")
+        entries[#entries + 1] = { comic = comic, description = extra.recommendation or extra.evaluate or "",
+            tags = section .. (#tags > 0 and " · " .. tags[1] or "") }
+    end
+    local epoch, generation, key = self.epoch, self.render_generation, accountKey(self.controller)
+    local query_key = bookstoreQueryKey(query)
+    local function current()
+        return self.route == "bookstore" and self.epoch == epoch and self.render_generation == generation
+            and accountKey(self.controller) == key and bookstoreQueryKey(self.bookstore_query) == query_key
+    end
+    local category_width, refresh_width = math.floor(self.width * 0.43), W.scale(88)
+    self.bookstore_category_button = W.button((query and category_name or _("All recommendations")) .. " ▾",
+        category_width, function() if current() then self:_bookstoreCategoryPicker() end end,
+        { borderless = true, size = 16, bold = true, align = "left" })
+    local refresh = W.button(_("Refresh"), refresh_width, function() if current() then self:_refreshBookstore() end end,
+        { borderless = true, size = 15, enabled = not self.bookstore_loading })
+    local count_label = string.format(query and _("Loaded: %d comics") or _("%d comics"), #entries)
+    local rows = { W.row{ self.bookstore_category_button,
+        W.text(count_label, self.width - category_width - refresh_width, 14, { muted = true, align = "center" }), refresh }, W.space(8) }
+    self.focus[#self.focus + 1] = { self.bookstore_category_button, refresh }
+    local offset = 76
+    if self.bookstore_error and #entries > 0 then
+        local message = self.bookstore_more_error and _("Could not load more. Tap the next arrow to retry.")
+            or query and _("Could not refresh. Showing saved comics.") or _("Could not refresh. Showing saved recommendations.")
+        rows[#rows + 1] = W.text(message, self.width, 13,
+            { muted = true, height = W.scale(30) })
+        offset = offset + 30
+    elseif self.bookstore_loading and #entries > 0 then
+        local message = self.bookstore_loading_more and _("Loading more comics…")
+            or query and _("Refreshing comics…") or _("Refreshing recommendations…")
+        rows[#rows + 1] = W.text(message, self.width, 13,
+            { muted = true, height = W.scale(24) })
+        offset = offset + 24
+    elseif query and feed.limit_reached then
+        rows[#rows + 1] = W.text(_("Browsing limit reached. Use Search to find more comics."), self.width, 13,
+            { muted = true, height = W.scale(30) })
+        offset = offset + 30
+    elseif query and #entries > 0 and (feed.loaded_pages or 0) > 0 and feed.has_more == false then
+        rows[#rows + 1] = W.text(_("All available comics are loaded."), self.width, 13,
+            { muted = true, height = W.scale(24) })
+        offset = offset + 24
+    end
+    local empty = query and _("No comics are available in this category.") or _("No recommendations are available.")
+    if self.bookstore_loading then empty = query and _("Loading comics…") or _("Loading recommendations…")
+    elseif self.bookstore_error then
+        if query then empty = self.bookstore_error.kind == "network" and _("Connect to load this category.")
+            or _("This category could not be loaded. Try again.")
+        else empty = self.bookstore_error.kind == "network" and _("Connect to load recommendations.")
+            or _("Recommendations could not be loaded. Try again.") end
+    end
+    return self:_coverGrid(entries, { rows = rows, bookstore = true, fixed_height = offset,
+        hint = _("Tap: chapters · Hold: synopsis"), empty_message = empty, retry = self.bookstore_error and not self.bookstore_loading,
+        query = query, feed_identity = feed.identity, can_load_more = feed.can_load_more == true, remote_pagination = query ~= nil })
+end
+
+function Screens:_bookstoreSynopsis(comic)
+    self:_closeDialog()
+    local extra = comic.extra or {}
+    local dialog
+    dialog = TextViewer:new{ title = title(comic),
+        text = extra.recommendation or extra.evaluate or _("No synopsis is available."), modal = true,
+        close_callback = function()
+            if self.bookstore_synopsis ~= dialog then return end
+            local dirty = self.bookstore_synopsis_dirty
+            self.bookstore_synopsis, self.bookstore_synopsis_dirty = nil, nil
+            if self.dialog == dialog then self.dialog = nil end
+            if dirty and self.route == "bookstore" then self:_render() end
+        end }
+    self.dialog, self.bookstore_synopsis = dialog, dialog
+    UIManager:show(dialog)
 end
 
 function Screens:_read(comic, episode)

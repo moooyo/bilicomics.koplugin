@@ -1,0 +1,263 @@
+{
+  "environment": "ssh test-env",
+  "runtime": "/var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "runtime_luajit_sha256": "d45e2e20df501f0aabc2eb55c5e6138090d48bae423d4de87ac3df113e8eee3c",
+  "source_sha256": {
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac",
+    "bilicomics/bookstore.lua": "155035ceb05ea6874dcfbb18b551b4cd4015c48cb4648bcb69556af6327b10ff",
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+    "bilicomics/controller.lua": "90cdc3210008f10df1e2cb85b70cd0f6429f29d95cef578394e3bfc676597150",
+    "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "5c1a99cf6c144d10f252242632799b87bd04744567a41587c515414f0b48ed58",
+    "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+    "bilicomics/jobs/session_runner.lua": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "57409e0154379c9992ccea22429915cb3fa37d91075134e9b7c59d39e183de37",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/auth.lua": "9257e2efc00448e651c6cb4feef2e525b23606bea6241945b31f6ecd53f9ad7a",
+    "bilicomics/protocol/auth_crypto.lua": "d09cca5a7660f94863a7aec42c62369525167ff58ef8a9dd41bfa5b7fc9180bf",
+    "bilicomics/protocol/client.lua": "2c0ecceac9d8e8e82fcb2505fc84d9290051838111dff27b67cde340f48b529a",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "1358072c2095922872509faab3bd4823bc5c7e28d390234671eb50bbe1464087",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/recommendations.lua": "66464dac8a29352dd70887da9fcd69d8ec997ec1ade4873c98d5edbce94c45c8",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+    "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+    "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/service.lua": "6eac520fbbc9d140b6f9f503a6cfa5623743e0b6b2ce8be9d2b0f46fdcf51296",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_manager.lua": "a5fb493670d4418842f8a5d3556b67486e885437c61384133f8da37275c4a8d6",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+    "bilicomics/ui/screens.lua": "ee699dd55a23ca68e81dc2d5f611e24ef97f08e0942416f2e6792e6cfa86b03a",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "2034932a7b6277859eb7dace6b7e72b7e603f087be88a3bc9478f4ebd7c94631",
+    "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+    "l10n/bilicomics_zh_CN.lua": "c5f2c221c7ee99682c94138f5f2b0afc6f0d86a8c7bec6a8859d57cc7539b5b2",
+    "main.lua": "efb88912f6d0da2b096cff675fe4f4e3fa900ad1affa187dd17e6f848f07d6b9",
+    "patches/2-bilicomics-provider.lua": "0385ec5135d8edfee278c7fe0c789053cbb94aef2f1808eb67e4041d69f32834",
+    "spec/local/readonly_guard.lua": "ec6c5b8c13ac635d6e08276cc3c18b09a856e1a255121b12718dd7162165888d",
+    "spec/ui/bookstore_live.lua": "2b6d0af682280ccad353f7998362ea10ea6a195c7df06e8e30a8fa0b81dff947",
+    "spec/ui/run_bookstore_live.py": "1e4354e954ce0b6961ecb47c40326c3d51eecb78d3c2407b5e2570602f619039"
+  },
+  "source_unchanged": true,
+  "returncode": 0,
+  "timed_out": false,
+  "native_result": {
+    "width": 600,
+    "loaded_sources": {
+      "runner": "@/var/tmp/bilicomics-bookstore-7zKUkTCU/source/bilicomics/jobs/runner.lua",
+      "controller": "@/var/tmp/bilicomics-bookstore-7zKUkTCU/source/bilicomics/controller.lua",
+      "runtime": "@/var/tmp/bilicomics-bookstore-7zKUkTCU/source/bilicomics/runtime.lua",
+      "screens": "@/var/tmp/bilicomics-bookstore-7zKUkTCU/source/bilicomics/ui/screens.lua"
+    },
+    "height": 800,
+    "worker_submissions": [
+      {
+        "kind": "client",
+        "anonymous": true,
+        "method": "recommendations"
+      },
+      {
+        "kind": "download_cover",
+        "comic_id": "25477",
+        "anonymous": true
+      },
+      {
+        "kind": "download_cover",
+        "comic_id": "26731",
+        "anonymous": true
+      }
+    ],
+    "runtime_closed": true,
+    "screenshot": "bookstore-live.png",
+    "download_count": 0,
+    "history_count": 0,
+    "visible_cards": [
+      {
+        "id": "25477",
+        "title": "约定的梦幻岛",
+        "cover_height": 640,
+        "cover_format": "jpg",
+        "cached_cover_url": "https://i0.hdslb.com/bfs/manga-static/4b2c2b1e4ee8ebb7ad28215114e8d16beff57acb.jpg@480w.jpg",
+        "cover_loaded": true,
+        "cover_width": 480
+      },
+      {
+        "id": "26731",
+        "title": "在魔王城说晚安",
+        "cover_height": 640,
+        "cover_format": "jpg",
+        "cached_cover_url": "https://i0.hdslb.com/bfs/manga-static/2958043a10024ddebfafc4fd47d3566043689300.jpg@480w.jpg",
+        "cover_loaded": true,
+        "cover_width": 480
+      }
+    ],
+    "recommendations": [
+      {
+        "id": "25477",
+        "title": "约定的梦幻岛"
+      },
+      {
+        "id": "26731",
+        "title": "在魔王城说晚安"
+      },
+      {
+        "id": "26550",
+        "title": "某科学的超电磁炮"
+      },
+      {
+        "id": "25332",
+        "title": "大理寺日志"
+      },
+      {
+        "id": "25471",
+        "title": "黑色四叶草"
+      },
+      {
+        "id": "29988",
+        "title": "我的后宫全是反派魔女"
+      },
+      {
+        "id": "27877",
+        "title": "极主夫道"
+      }
+    ],
+    "first_screen_covers_loaded": true,
+    "runner_idle": true,
+    "feed_source": "official_homepage",
+    "personalized": false,
+    "favorite_count": 0,
+    "reason": "loaded",
+    "elapsed_seconds": 1.249403953552246,
+    "account_key": "anonymous",
+    "session_present": false,
+    "route": "bookstore",
+    "page": 1,
+    "pages": 4,
+    "passed": true,
+    "scope": "Real Runtime, Controller, Screens, Runner and TLS transport; anonymous official recommendations and visible CDN covers only",
+    "session_lookups": [
+      "anonymous"
+    ],
+    "synthetic_data": false,
+    "isolated_profile": true,
+    "request_boundary_installed": true
+  },
+  "requests": [
+    {
+      "category": "official_recommendations",
+      "url": "https://manga.bilibili.com/index.pageContext.json",
+      "max_bytes": 4194304,
+      "event": "request",
+      "header_names": [
+        "accept",
+        "referer",
+        "user-agent"
+      ],
+      "pid": 335220,
+      "method": "GET",
+      "body_absent": true,
+      "credentials_absent": true
+    },
+    {
+      "category": "visible_official_cover",
+      "url": "https://i0.hdslb.com/bfs/manga-static/4b2c2b1e4ee8ebb7ad28215114e8d16beff57acb.jpg@480w.jpg",
+      "max_bytes": 4194304,
+      "event": "request",
+      "header_names": [
+        "referer",
+        "user-agent"
+      ],
+      "pid": 335221,
+      "method": "GET",
+      "body_absent": true,
+      "credentials_absent": true
+    },
+    {
+      "category": "visible_official_cover",
+      "url": "https://i0.hdslb.com/bfs/manga-static/2958043a10024ddebfafc4fd47d3566043689300.jpg@480w.jpg",
+      "max_bytes": 4194304,
+      "event": "request",
+      "header_names": [
+        "referer",
+        "user-agent"
+      ],
+      "pid": 335226,
+      "method": "GET",
+      "body_absent": true,
+      "credentials_absent": true
+    }
+  ],
+  "responses": [
+    {
+      "pid": 335220,
+      "status": 200,
+      "category": "official_recommendations",
+      "url": "https://manga.bilibili.com/index.pageContext.json",
+      "event": "response",
+      "bytes": 156501
+    },
+    {
+      "pid": 335221,
+      "status": 200,
+      "category": "visible_official_cover",
+      "url": "https://i0.hdslb.com/bfs/manga-static/4b2c2b1e4ee8ebb7ad28215114e8d16beff57acb.jpg@480w.jpg",
+      "event": "response",
+      "bytes": 76300
+    },
+    {
+      "pid": 335226,
+      "status": 200,
+      "category": "visible_official_cover",
+      "url": "https://i0.hdslb.com/bfs/manga-static/2958043a10024ddebfafc4fd47d3566043689300.jpg@480w.jpg",
+      "event": "response",
+      "bytes": 75536
+    }
+  ],
+  "boundary_failures": [],
+  "all_requests_public_and_read_only": true,
+  "all_responses_successful": true,
+  "isolated_profile_contains_no_session_file": true,
+  "screenshot_sha256": "6d9c7ca8fbcedc7adc0bbc36fa249e6916e60e6ff4d4c31d06685e1c235f6a31",
+  "passed": true
+}

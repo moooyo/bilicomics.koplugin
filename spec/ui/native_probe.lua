@@ -127,11 +127,18 @@ local function capture(name)
     output.screens[#output.screens + 1] = name .. ".png"
 end
 
-screens:showLibrary()
-capture("continue")
-check("continue_has_prominent_resume", screens.pages > 1)
-press("Resume reading")
-check("reading_uses_async_controller", controller.waiting[1].method == "readEpisode")
+screens:showLibrary("history")
+check("legacy_history_navigation_opens_bookshelf", screens.route == "favorites" and #screens.cards > 0)
+screens:showLibrary("continue")
+check("legacy_continue_navigation_opens_bookshelf", screens.route == "favorites" and #screens.cards > 0)
+capture("bookshelf")
+check("bookshelf_paginates_comic_cards", screens.pages > 1)
+screens.cards[1].callback()
+check("bookshelf_read_resolves_the_selected_comic", controller.waiting[1].method == "resolveReadingEpisode"
+    and controller.calls[#controller.calls].args[1] == "1")
+finish({ comic = controller.comics[1], episode = controller.episodes[2] })
+check("reading_uses_async_controller", controller.waiting[1].method == "readEpisode"
+    and controller.calls[#controller.calls].args[1] == "1" and controller.calls[#controller.calls].args[2] == "2")
 finish(nil, { kind = "network" })
 check("network_failure_is_actionable", screens.dialog.title:find(_("Connection failed"), 1, true) ~= nil)
 check("async_error_dialog_stays_above_refreshed_screen", UIManager:getTopmostVisibleWidget() == screens.dialog)
@@ -140,7 +147,7 @@ screens:showLibrary("favorites")
 capture("following")
 controller.episodes[2].read = "complete"
 controller.episodes[3].access, controller.episodes[3].downloaded = "locked", false
-screens:refresh(); press("Read next")
+screens:refresh(); screens.cards[1].callback()
 check("following_card_has_direct_read_action", controller.waiting[1].method == "resolveReadingEpisode")
 finish({ comic = controller.comics[1], episode = controller.episodes[3] })
 check("locked_next_chapter_enters_quote_instead_of_read_or_purchase", controller.waiting[1].method == "quotePurchase")
@@ -148,6 +155,7 @@ finish(nil, { kind = "capability" }); screens:_closeDialog()
 controller.episodes[2].read = false
 controller.episodes[3].access, controller.episodes[3].downloaded = "free", true
 press("All")
+dialog_press("Updated")
 check("following_filter_changes", screens.filter == "updated")
 screens:showComic("1")
 finish(true)
@@ -249,7 +257,8 @@ local quote = { id = "quote", episode_id = "8", comic_id = "1", episode_ids = { 
     payments = { { method = "coin", available = true }, { method = "coupon", available = true } } }
 finish(quote)
 capture("purchase")
-dialog_press(string.format(_("Batch %s"), "3"))
+dialog_press("Choose range")
+dialog_press("[ ] " .. string.format(_("Supported batch %s"), "3"))
 check("batch_selection_requests_a_new_server_quote", controller.calls[#controller.calls].args[2].kind == "batch"
     and controller.calls[#controller.calls].args[2].batch_limit == 3)
 local batch_quote = {}
@@ -263,7 +272,8 @@ check("quote_shows_permanent_access", screens.dialog.title:find(_("Permanent own
 screens:_quote(nil, nil)
 check("quote_refresh_preserves_selected_scope", controller.calls[#controller.calls].args[2].kind == "batch")
 finish(batch_quote)
-dialog_press("Single chapter")
+dialog_press("Choose range")
+dialog_press("[ ] " .. _("Single chapter"))
 finish(quote)
 dialog_press(string.format(_("Confirm purchase · %s %s"), "20", _("coins")))
 check("purchase_is_async", controller.waiting[1].method == "purchase")
@@ -324,12 +334,15 @@ download_quote.expected_access = { [download_episode_id] = { access = "owned" } 
 finish(download_quote)
 check("download_purpose_is_visible_before_payment_confirmation", screens.dialog.title:find(_("Next action: download this chapter"), 1, true) ~= nil)
 local offers_batch = false
+dialog_press("Choose range")
 for _index, row in ipairs(screens.dialog.buttons) do for _index, button in ipairs(row) do
-    if button.text == string.format(_("Batch %s"), "3") then offers_batch = true end
+    if button.text:find(string.format(_("Supported batch %s"), "3"), 1, true) then offers_batch = true end
 end end
 check("single_download_entry_never_offers_a_batch_purchase", not offers_batch)
+dialog_press("Back to quote")
 capture("purchase-download")
 local obsolete_confirmation = dialog_button(string.format(_("Confirm purchase · %s %s"), "20", _("coins"))).callback
+dialog_press("Choose payment")
 dialog_press("[ ] " .. _("coupons"))
 local before_obsolete_confirmation = #controller.calls
 obsolete_confirmation()
@@ -384,7 +397,7 @@ screens:showLibrary()
 local before_closed_result = #controller.calls
 download_intent.state, download_intent.transaction_evidence = "access_confirmed", "server_accepted"; controller.purchases = {}
 finish(download_intent)
-check("closed_result_callback_neither_reopens_nor_downloads", screens.dialog == nil and screens.route == "continue" and #controller.calls == before_closed_result)
+check("closed_result_callback_neither_reopens_nor_downloads", screens.dialog == nil and screens.route == "favorites" and #controller.calls == before_closed_result)
 screens:_purchaseFor(controller.comics[1], controller.episodes[tonumber(download_episode_id)], "download")
 finish(download_quote)
 local account_confirmation = dialog_button(string.format(_("Confirm purchase · %s %s"), "20", _("coins"))).callback
@@ -407,7 +420,7 @@ check("account_switch_retires_a_displayed_download_continuation", #controller.ca
 controller.account_key = nil
 screens:_closeDialog()
 screens:showLibrary()
-press("Refresh library")
+press("Refresh bookshelf")
 screens:close()
 finish(true)
 check("stale_callback_does_not_reopen_closed_ui", screens.widget == nil and screens.route == nil)

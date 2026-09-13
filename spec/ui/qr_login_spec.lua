@@ -176,7 +176,8 @@ check("account_switch_stops_polling", screens.qr_login == nil and screens.dialog
 start()
 local navigation_timer = screens.qr_login.timer
 screens:showLibrary()
-check("navigation_stops_polling", screens.qr_login == nil and screens.dialog == nil and timers[navigation_timer] == nil)
+check("navigation_stops_polling", screens.qr_login == nil and screens.dialog == nil and timers[navigation_timer] == nil
+    and screens.route == "favorites")
 
 start()
 tick()

@@ -1,0 +1,893 @@
+{
+    "passed": true,
+    "width": 720,
+    "height": 960,
+    "assertions": [
+        {
+            "passed": true,
+            "name": "homepage_initial_load_is_anonymous"
+        },
+        {
+            "passed": true,
+            "name": "homepage_toolbar_identifies_all_and_count"
+        },
+        {
+            "passed": true,
+            "name": "homepage_native_two_row_capacity"
+        },
+        {
+            "passed": true,
+            "name": "homepage_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "homepage_focus_order_1"
+        },
+        {
+            "passed": true,
+            "name": "homepage_portrait_cover_1"
+        },
+        {
+            "passed": true,
+            "name": "homepage_compact_synopsis_1"
+        },
+        {
+            "passed": true,
+            "name": "homepage_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "homepage_focus_order_2"
+        },
+        {
+            "passed": true,
+            "name": "homepage_portrait_cover_2"
+        },
+        {
+            "passed": true,
+            "name": "homepage_compact_synopsis_2"
+        },
+        {
+            "passed": true,
+            "name": "homepage_column_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "homepage_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "homepage_focus_order_3"
+        },
+        {
+            "passed": true,
+            "name": "homepage_portrait_cover_3"
+        },
+        {
+            "passed": true,
+            "name": "homepage_compact_synopsis_3"
+        },
+        {
+            "passed": true,
+            "name": "homepage_column_alignment_3"
+        },
+        {
+            "passed": true,
+            "name": "homepage_card_bounds_4"
+        },
+        {
+            "passed": true,
+            "name": "homepage_focus_order_4"
+        },
+        {
+            "passed": true,
+            "name": "homepage_portrait_cover_4"
+        },
+        {
+            "passed": true,
+            "name": "homepage_compact_synopsis_4"
+        },
+        {
+            "passed": true,
+            "name": "homepage_row_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "homepage_card_bounds_5"
+        },
+        {
+            "passed": true,
+            "name": "homepage_focus_order_5"
+        },
+        {
+            "passed": true,
+            "name": "homepage_portrait_cover_5"
+        },
+        {
+            "passed": true,
+            "name": "homepage_compact_synopsis_5"
+        },
+        {
+            "passed": true,
+            "name": "homepage_column_alignment_5"
+        },
+        {
+            "passed": true,
+            "name": "homepage_card_bounds_6"
+        },
+        {
+            "passed": true,
+            "name": "homepage_focus_order_6"
+        },
+        {
+            "passed": true,
+            "name": "homepage_portrait_cover_6"
+        },
+        {
+            "passed": true,
+            "name": "homepage_compact_synopsis_6"
+        },
+        {
+            "passed": true,
+            "name": "homepage_column_alignment_6"
+        },
+        {
+            "passed": true,
+            "name": "homepage_all_cards_focusable"
+        },
+        {
+            "passed": true,
+            "name": "homepage_one_bottom_navigation_row"
+        },
+        {
+            "passed": true,
+            "name": "homepage_visible_cover_scope_matches_query_identity"
+        },
+        {
+            "passed": true,
+            "name": "homepage_reaches_a_second_local_page"
+        },
+        {
+            "passed": true,
+            "name": "picker_uses_all_sixteen_official_options_in_three_columns"
+        },
+        {
+            "passed": true,
+            "name": "picker_has_the_category_selection_title"
+        },
+        {
+            "passed": true,
+            "name": "picker_first_row_is_the_all_recommendations_option"
+        },
+        {
+            "passed": true,
+            "name": "picker_marks_the_selected_all_option"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-picker_screen_bounds"
+        },
+        {
+            "detail": {
+                "w": 676,
+                "h": 524
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-picker_dialog_bounds"
+        },
+        {
+            "passed": true,
+            "name": "cancel_keeps_the_existing_page_and_selection"
+        },
+        {
+            "passed": true,
+            "name": "switching_category_resets_local_page_without_borrowing_homepage_cards"
+        },
+        {
+            "passed": true,
+            "name": "uncached_category_explains_its_loading_state"
+        },
+        {
+            "passed": true,
+            "name": "category_toolbar_counts_loaded_comics"
+        },
+        {
+            "passed": true,
+            "name": "category_page_counter_does_not_claim_a_total"
+        },
+        {
+            "passed": true,
+            "name": "category_a_native_two_row_capacity"
+        },
+        {
+            "passed": true,
+            "name": "category_a_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "category_a_focus_order_1"
+        },
+        {
+            "passed": true,
+            "name": "category_a_portrait_cover_1"
+        },
+        {
+            "passed": true,
+            "name": "category_a_compact_synopsis_1"
+        },
+        {
+            "passed": true,
+            "name": "category_a_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "category_a_focus_order_2"
+        },
+        {
+            "passed": true,
+            "name": "category_a_portrait_cover_2"
+        },
+        {
+            "passed": true,
+            "name": "category_a_compact_synopsis_2"
+        },
+        {
+            "passed": true,
+            "name": "category_a_column_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "category_a_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "category_a_focus_order_3"
+        },
+        {
+            "passed": true,
+            "name": "category_a_portrait_cover_3"
+        },
+        {
+            "passed": true,
+            "name": "category_a_compact_synopsis_3"
+        },
+        {
+            "passed": true,
+            "name": "category_a_column_alignment_3"
+        },
+        {
+            "passed": true,
+            "name": "category_a_card_bounds_4"
+        },
+        {
+            "passed": true,
+            "name": "category_a_focus_order_4"
+        },
+        {
+            "passed": true,
+            "name": "category_a_portrait_cover_4"
+        },
+        {
+            "passed": true,
+            "name": "category_a_compact_synopsis_4"
+        },
+        {
+            "passed": true,
+            "name": "category_a_row_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "category_a_card_bounds_5"
+        },
+        {
+            "passed": true,
+            "name": "category_a_focus_order_5"
+        },
+        {
+            "passed": true,
+            "name": "category_a_portrait_cover_5"
+        },
+        {
+            "passed": true,
+            "name": "category_a_compact_synopsis_5"
+        },
+        {
+            "passed": true,
+            "name": "category_a_column_alignment_5"
+        },
+        {
+            "passed": true,
+            "name": "category_a_card_bounds_6"
+        },
+        {
+            "passed": true,
+            "name": "category_a_focus_order_6"
+        },
+        {
+            "passed": true,
+            "name": "category_a_portrait_cover_6"
+        },
+        {
+            "passed": true,
+            "name": "category_a_compact_synopsis_6"
+        },
+        {
+            "passed": true,
+            "name": "category_a_column_alignment_6"
+        },
+        {
+            "passed": true,
+            "name": "category_a_all_cards_focusable"
+        },
+        {
+            "passed": true,
+            "name": "category_a_one_bottom_navigation_row"
+        },
+        {
+            "passed": true,
+            "name": "category_a_visible_cover_scope_matches_query_identity"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-loaded_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "picker_marks_the_current_official_category"
+        },
+        {
+            "passed": true,
+            "name": "all_recommendations_restores_its_own_cache_at_page_one"
+        },
+        {
+            "passed": true,
+            "name": "uncached_b_never_displays_a_while_its_request_is_pending"
+        },
+        {
+            "passed": true,
+            "name": "older_a_success_cannot_replace_b_or_its_loading_state"
+        },
+        {
+            "passed": true,
+            "name": "older_a_error_cannot_attach_to_b"
+        },
+        {
+            "passed": true,
+            "name": "category_b_after_out_of_order_callbacks_visible_cover_scope_matches_query_identity"
+        },
+        {
+            "passed": true,
+            "name": "stale_category_uses_only_its_own_cached_cards"
+        },
+        {
+            "passed": true,
+            "name": "cached_category_explains_its_refresh_state"
+        },
+        {
+            "passed": true,
+            "name": "offline_category_failure_retains_its_own_cache"
+        },
+        {
+            "passed": true,
+            "name": "cached_category_failure_identifies_the_saved_data"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_native_two_row_capacity"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_focus_order_1"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_portrait_cover_1"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_compact_synopsis_1"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_focus_order_2"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_portrait_cover_2"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_compact_synopsis_2"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_column_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_focus_order_3"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_portrait_cover_3"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_compact_synopsis_3"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_column_alignment_3"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_card_bounds_4"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_focus_order_4"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_portrait_cover_4"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_compact_synopsis_4"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_row_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_card_bounds_5"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_focus_order_5"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_portrait_cover_5"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_compact_synopsis_5"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_column_alignment_5"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_card_bounds_6"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_focus_order_6"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_portrait_cover_6"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_compact_synopsis_6"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_column_alignment_6"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_all_cards_focusable"
+        },
+        {
+            "passed": true,
+            "name": "category_cached_offline_one_bottom_navigation_row"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-cached-offline_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "uncached_category_does_not_borrow_the_previous_category"
+        },
+        {
+            "passed": true,
+            "name": "offline_uncached_category_remains_empty"
+        },
+        {
+            "passed": true,
+            "name": "uncached_category_failure_explains_the_connection_requirement"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-uncached-offline_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "retry_stays_scoped_to_the_selected_category"
+        },
+        {
+            "passed": true,
+            "name": "category_directory_loading_is_visible"
+        },
+        {
+            "passed": true,
+            "name": "picker_defers_asynchronous_base_repaints"
+        },
+        {
+            "passed": true,
+            "name": "category_directory_failure_keeps_saved_choices_and_explains_retry"
+        },
+        {
+            "passed": true,
+            "name": "category_directory_retry_is_visible_and_does_not_duplicate_requests"
+        },
+        {
+            "passed": true,
+            "name": "directory_refresh_keeps_the_picker_above_the_unchanged_base"
+        },
+        {
+            "passed": true,
+            "name": "replaced_picker_callbacks_cannot_change_the_category"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-picker-refreshed_screen_bounds"
+        },
+        {
+            "detail": {
+                "w": 676,
+                "h": 524
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-picker-refreshed_dialog_bounds"
+        },
+        {
+            "passed": true,
+            "name": "closing_picker_applies_the_deferred_base_repaint"
+        },
+        {
+            "passed": true,
+            "name": "an_empty_category_directory_shows_loading_without_invented_choices"
+        },
+        {
+            "passed": true,
+            "name": "an_empty_category_directory_failure_explains_how_to_retry"
+        },
+        {
+            "passed": true,
+            "name": "retry_populates_only_the_returned_category_directory"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_an_old_category_directory_response"
+        },
+        {
+            "passed": true,
+            "name": "cached_category_pages_do_not_fetch_more_early"
+        },
+        {
+            "passed": true,
+            "name": "the_last_cached_page_offers_the_next_server_page"
+        },
+        {
+            "passed": true,
+            "name": "append_loading_uses_the_existing_grid_and_next_arrow"
+        },
+        {
+            "passed": true,
+            "name": "repeated_next_clicks_share_one_append_request"
+        },
+        {
+            "detail": {
+                "capacity": 6,
+                "first_new_index": 19,
+                "old_page": 3,
+                "new_page": 4
+            },
+            "passed": true,
+            "name": "append_lands_on_the_page_containing_the_first_new_comic"
+        },
+        {
+            "passed": true,
+            "name": "append_keeps_partial_last_page_in_place_or_advances_a_full_page"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_native_two_row_capacity"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_focus_order_1"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_portrait_cover_1"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_compact_synopsis_1"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_focus_order_2"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_portrait_cover_2"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_compact_synopsis_2"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_column_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_focus_order_3"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_portrait_cover_3"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_compact_synopsis_3"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_column_alignment_3"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_card_bounds_4"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_focus_order_4"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_portrait_cover_4"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_compact_synopsis_4"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_row_alignment_2"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_card_bounds_5"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_focus_order_5"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_portrait_cover_5"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_compact_synopsis_5"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_column_alignment_5"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_card_bounds_6"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_focus_order_6"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_portrait_cover_6"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_compact_synopsis_6"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_column_alignment_6"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_all_cards_focusable"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_one_bottom_navigation_row"
+        },
+        {
+            "passed": true,
+            "name": "category_appended_visible_cover_scope_matches_query_identity"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-appended_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "append_failure_preserves_loaded_cards_and_explains_next_arrow_retry"
+        },
+        {
+            "passed": true,
+            "name": "repeated_append_retry_clicks_dispatch_only_one_request"
+        },
+        {
+            "passed": true,
+            "name": "an_empty_server_page_marks_the_real_end_without_losing_loaded_comics"
+        },
+        {
+            "passed": true,
+            "name": "server_end_is_identified_as_complete"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-server-end_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "the_ninety_comic_limit_disables_append_without_claiming_server_end"
+        },
+        {
+            "passed": true,
+            "name": "the_browsing_limit_is_distinct_from_the_server_end"
+        },
+        {
+            "passed": true,
+            "name": "disabled_limit_navigation_cannot_dispatch_another_request"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-cache-limit_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "hold_keeps_the_full_synopsis_out_of_the_grid_and_never_reads"
+        },
+        {
+            "detail": {
+                "w": 681,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-synopsis_screen_bounds"
+        },
+        {
+            "detail": {
+                "w": 688,
+                "h": 930
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-synopsis_dialog_bounds"
+        },
+        {
+            "passed": true,
+            "name": "synopsis_still_defers_base_repaint"
+        },
+        {
+            "passed": true,
+            "name": "synopsis_close_restores_the_refreshed_grid"
+        },
+        {
+            "passed": true,
+            "name": "obsolete_synopsis_close_cannot_restore_the_bookstore"
+        },
+        {
+            "passed": true,
+            "name": "tap_opens_only_the_selected_chapter_catalog"
+        },
+        {
+            "detail": {
+                "w": 682,
+                "h": 940
+            },
+            "passed": true,
+            "name": "synthetic-bookstore-categories-chapters_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "obsolete_grid_callbacks_cannot_open_catalog_or_synopsis"
+        },
+        {
+            "detail": {},
+            "passed": true,
+            "name": "all_cover_requests_respect_their_query_revision"
+        },
+        {
+            "detail": {},
+            "passed": true,
+            "name": "all_category_scenarios_preserve_reader_purchase_and_account_isolation"
+        },
+        {
+            "passed": true,
+            "name": "all_controlled_requests_have_completed"
+        }
+    ],
+    "screenshots": [
+        "synthetic-bookstore-categories-picker.png",
+        "synthetic-bookstore-categories-loaded.png",
+        "synthetic-bookstore-categories-cached-offline.png",
+        "synthetic-bookstore-categories-uncached-offline.png",
+        "synthetic-bookstore-categories-picker-refreshed.png",
+        "synthetic-bookstore-categories-appended.png",
+        "synthetic-bookstore-categories-server-end.png",
+        "synthetic-bookstore-categories-cache-limit.png",
+        "synthetic-bookstore-categories-synopsis.png",
+        "synthetic-bookstore-categories-chapters.png"
+    ],
+    "language": "zh_CN",
+    "scope": "Native category picker and bookstore widgets; original synthetic covers; query-isolated anonymous caches; no HTTP, account, purchase or reader"
+}

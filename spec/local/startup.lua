@@ -32,7 +32,7 @@ local function openNativeUI()
             assert(app and not app.closed and app.account and screens and screens.widget,
                 "The native plugin UI did not initialize successfully")
             local function finishStartup()
-            if app.account.key == "anonymous" and app.account.session == nil and screens.route == "continue"
+            if app.account.key == "anonymous" and app.account.session == nil and screens.route == "favorites"
                 and not screens.dialog and not screens.session_input then
                 UIManager:forceRePaint()
                 require("device").screen.bb:writePNG(profile .. "/native-ui-before-import.png")
@@ -40,7 +40,7 @@ local function openNativeUI()
                     screens:showAccount()
                     UIManager:forceRePaint()
                     require("device").screen.bb:writePNG(profile .. "/native-account-before-import.png")
-                    screens:showLibrary("continue")
+                    screens:showLibrary()
                 end
             end
             local file = assert(io.open(profile .. "/native-ui-ready.json", "wb"))

@@ -1,8 +1,10 @@
 local Crypto = require("bilicomics/protocol/crypto")
+local Categories = require("bilicomics/protocol/categories")
 local Errors = require("bilicomics/protocol/errors")
 local Image = require("bilicomics/protocol/image")
 local JSON = require("bilicomics/protocol/json")
 local Normalize = require("bilicomics/protocol/normalize")
+local Recommendations = require("bilicomics/protocol/recommendations")
 local Session = require("bilicomics/protocol/session")
 local Transport = require("bilicomics/protocol/transport")
 
@@ -56,7 +58,7 @@ end
 function Client:capabilities()
     local crypto = self.crypto:capabilities()
     return {
-        session = true, library = true, search = true, wallet = true, quoting = true,
+        session = true, library = true, search = true, recommendations = true, wallet = true, quoting = true,
         purchase = true, plain_images = true,
         protected_catalog = crypto.request_signing and crypto.response_decoding,
         image_index = crypto.request_signing and crypto.response_decoding and (crypto.index_challenge or crypto.index_error_reporting),
@@ -212,6 +214,18 @@ function Client:listHistory(opts)
     }, { auth = true })
     if not data then return nil, err end
     return Normalize.comicList(data)
+end
+
+function Client:recommendations()
+    return Recommendations.fetch(self.transport)
+end
+
+function Client:bookstoreCategories()
+    return Categories.metadata(self.transport)
+end
+
+function Client:bookstoreCategoryPage(query, page)
+    return Categories.page(self, query, page)
 end
 
 function Client:search(query, opts)

@@ -1,0 +1,87 @@
+{
+  "scope": "Native bookstore official category picker, query isolation and append navigation; synthetic original covers and anonymous data; no HTTP or account",
+  "cases": [
+    {
+      "width": 480,
+      "height": 640,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 163,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 207,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 203,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 243,
+      "failures": []
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 163,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 207,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 203,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 243,
+      "failures": []
+    }
+  ],
+  "sources": {
+    "main.lua": "efb88912f6d0da2b096cff675fe4f4e3fa900ad1affa187dd17e6f848f07d6b9",
+    "bilicomics/ui/screens.lua": "f3cc7864397b3cb7bcb9cb84d74846633f44e2c7a2b94c4ac667cb7eae9ad262",
+    "bilicomics/ui/widgets.lua": "7b2a548c084a561944415f40d6f6cd54e4f2d218e60357fd83d9f3cac65fc492",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "l10n/bilicomics_zh_CN.lua": "a7bc78d826120e7a16afe6fc21ea6f514b6b6d875a08c174035498adc2d39a58",
+    "spec/ui/bookstore_categories_spec.lua": "d64054f3173ec45249b4f63221819edd7469107c849894434e24879df5b0b4eb",
+    "spec/ui/run_bookstore_categories.py": "b6ac1e6d7a6690f86af11cc8b6048af45debde14607c5f904d5c75783cde2c70"
+  },
+  "passed": true
+}

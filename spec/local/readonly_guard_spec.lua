@@ -25,7 +25,11 @@ function Transport:request(request)
     original_transport_calls = original_transport_calls + 1
     assert(current and current.allow_transport, "The guard forwarded a forbidden request to the strict fake")
     last_request = request
-    return { status = 200, body = '{"code":0,"data":{}}', bytes = 20, transmitted = false }
+    current.transport_requests = current.transport_requests or {}
+    current.transport_requests[#current.transport_requests + 1] = request
+    if current.response_for then return current.response_for(request) end
+    local body = current.response_body or '{"code":0,"data":{}}'
+    return { status = 200, body = body, bytes = #body, transmitted = false }
 end
 function Runner:submit(request, options, callback)
     original_runner_calls = original_runner_calls + 1
@@ -96,6 +100,336 @@ local function blocked(name, request)
         check("the original transport is never called", original_transport_calls == before)
     end)
 end
+
+local recommendations_url = "https://manga.bilibili.com/index.pageContext.json"
+local function recommendationsRequest()
+    return { url = recommendations_url, method = "GET", max_bytes = 4194304,
+        headers = { accept = "application/json", referer = "https://manga.bilibili.com/", ["user-agent"] = "Synthetic" } }
+end
+allowed("anonymous_recommendations_exact_route", recommendationsRequest())
+allowed("anonymous_recommendations_without_optional_headers", { url = recommendations_url, method = "GET" })
+test("production_client_recommendations_isolates_synthetic_session", true, false, function()
+    current.response_body = '{"pageId":"/pages/index","data":{"recommendation":{"comics":[]}}}'
+    local before = original_transport_calls
+    local value, err = client:recommendations()
+    check("real Client recommendations pass through the guard", value and not err and value.source == "official_homepage"
+        and value.personalized == false and #value.items == 0 and original_transport_calls == before + 1)
+    check("the request is the exact anonymous GET", last_request.url == recommendations_url
+        and last_request.method == "GET" and last_request.body == nil and last_request.output_path == nil)
+    local anonymous = true
+    for key in pairs(last_request.headers or {}) do
+        key = tostring(key):lower()
+        anonymous = anonymous and key ~= "cookie" and key ~= "authorization" and key ~= "proxy-authorization"
+    end
+    check("synthetic Client credentials never enter recommendation headers", anonymous)
+end)
+for _, method in ipairs({ "POST", "PUT", "PATCH", "DELETE", "HEAD", "get" }) do
+    local request = recommendationsRequest(); request.method = method
+    blocked("recommendations_rejects_method_" .. method, request)
+end
+for _, body in ipairs({ "", "{}", false, 0 }) do
+    local request = recommendationsRequest(); request.body = body
+    blocked("recommendations_rejects_body_" .. (#report.tests + 1), request)
+end
+for _, name in ipairs({ "Cookie", "cookie", "cOoKiE", "Authorization", "authorization", "aUtHoRiZaTiOn",
+    "Proxy-Authorization", "x-api-key", "Host", "content-type" }) do
+    local request = recommendationsRequest(); request.headers[name] = "synthetic"
+    blocked("recommendations_rejects_header_" .. name, request)
+end
+for _, headers in ipairs({ { accept = "application/json\r\nCookie: synthetic" }, { accept = false },
+    { accept = "application/json", Accept = "application/json" }, false, "accept: application/json" }) do
+    local request = recommendationsRequest(); request.headers = headers
+    blocked("recommendations_rejects_malformed_headers_" .. (#report.tests + 1), request)
+end
+for _, url in ipairs({ recommendations_url .. "?", recommendations_url .. "?device=pc", recommendations_url .. "/",
+    recommendations_url .. "#fragment", "http://manga.bilibili.com/index.pageContext.json",
+    "https://manga.bilibili.com:443/index.pageContext.json", "https://manga.bilibili.com.evil.invalid/index.pageContext.json",
+    "https://manga.bilibili.com/other.pageContext.json", "https://manga.bilibili.com/%69ndex.pageContext.json",
+    "https://manga.bilibili.com/a/../index.pageContext.json" }) do
+    local request = recommendationsRequest(); request.url = url
+    blocked("recommendations_rejects_route_variant_" .. (#report.tests + 1), request)
+end
+local recommendations_output = recommendationsRequest(); recommendations_output.output_path = output .. "/recommendations.json"
+blocked("recommendations_rejects_output_file", recommendations_output)
+for _, limit in ipairs({ 0, -1, 1.5, 4194305, "4194304", false }) do
+    local request = recommendationsRequest(); request.max_bytes = limit
+    blocked("recommendations_rejects_invalid_limit_" .. (#report.tests + 1), request)
+end
+
+local category_m2 = "error:BiliComics local reader has no browser fingerprint environment_1789171200000"
+local category_sn = "1E74C20E5720FBF3BB351965D7A9DFC1"
+local category_buvid_url = "https://manga.bilibili.com/ductape/buvid"
+local category_test_start = #report.tests
+local function categoryRequest(kind)
+    local headers = { accept = "application/json, text/plain, */*", referer = "https://manga.bilibili.com/",
+        ["user-agent"] = "Synthetic" }
+    if kind == "buvid" then return { url = category_buvid_url, method = "GET", headers = headers, max_bytes = 1048576 } end
+    headers.origin, headers["content-type"] = "https://manga.bilibili.com", "application/json;charset=UTF-8"
+    local request = rpc("comic.v1.Comic/" .. (kind == "labels" and "AllLabel" or "ClassPage"), {})
+    request.headers, request.max_bytes = headers, 8388608
+    if kind == "page" then
+        request.url = request.url .. "&ultra_sign=synthetic-sign"
+        headers.cookie, headers["x-bili-data-sn"] = "buvid3=synthetic-server-issued", category_sn
+        request.body = assert(JSON.encode({ style_id = 101, area_id = -1, is_finish = -1, is_free = -1,
+            special_tag = 0, order = 0, page_num = 1, page_size = 18, m2 = category_m2 }))
+    end
+    return request
+end
+local function categoryBodyRequest(changes, missing)
+    local request = categoryRequest("page")
+    local body = assert(JSON.decode(request.body))
+    for key, value in pairs(changes or {}) do body[key] = value end
+    if missing then body[missing] = nil end
+    request.body = assert(JSON.encode(body))
+    return request
+end
+allowed("category_labels_exact_anonymous_route", categoryRequest("labels"))
+allowed("category_buvid_exact_anonymous_route", categoryRequest("buvid"))
+for _, sort in ipairs({ 0, 1, 3 }) do
+    for _, page in ipairs({ 1, 5 }) do
+        allowed("category_page_bounded_sort_" .. sort .. "_page_" .. page, categoryBodyRequest({ order = sort, page_num = page }))
+    end
+end
+allowed("category_page_maximum_identifier", categoryBodyRequest({ style_id = 999999999999999 }))
+local escaped_signature = categoryRequest("page")
+escaped_signature.url = escaped_signature.url:gsub("synthetic%-sign", "synthetic%%2B%%2F%%3Dsignature")
+allowed("category_page_percent_escaped_signature", escaped_signature)
+local mixed_headers = categoryRequest("page")
+mixed_headers.headers.Cookie, mixed_headers.headers.cookie = mixed_headers.headers.cookie, nil
+mixed_headers.headers["X-Bili-Data-Sn"], mixed_headers.headers["x-bili-data-sn"] = category_sn, nil
+allowed("category_page_single_case_insensitive_headers", mixed_headers)
+for _, kind in ipairs({ "labels", "buvid", "page" }) do
+    for _, method in ipairs({ "PUT", "DELETE", "PATCH", "HEAD", "post", kind == "buvid" and "POST" or "GET" }) do
+        local request = categoryRequest(kind); request.method = method
+        blocked("category_" .. kind .. "_rejects_method_" .. method, request)
+    end
+    for _, header in ipairs({ "Authorization", "Proxy-Authorization", "x-api-key", "x-xsrf-token", "SESSDATA", "bili_jct",
+        "Host", "Content-Length", "Transfer-Encoding" }) do
+        local request = categoryRequest(kind); request.headers[header] = "synthetic"
+        blocked("category_" .. kind .. "_rejects_header_" .. header, request)
+    end
+    for _, headers in ipairs({ false, "accept: application/json", { [1] = "synthetic" },
+        { referer = "https://manga.bilibili.com/", accept = "application/json\r\nCookie: synthetic" },
+        { referer = "https://manga.bilibili.com/", accept = false } }) do
+        local request = categoryRequest(kind); request.headers = headers
+        blocked("category_" .. kind .. "_rejects_malformed_headers_" .. (#report.tests + 1), request)
+    end
+    local duplicate_header = categoryRequest(kind); duplicate_header.headers.Accept = duplicate_header.headers.accept
+    blocked("category_" .. kind .. "_rejects_duplicate_header", duplicate_header)
+    for _, origin in ipairs({ "https://manga.bilibili.com.evil.invalid/", "https://www.bilibili.com/" }) do
+        local request = categoryRequest(kind); request.headers.referer = origin
+        blocked("category_" .. kind .. "_rejects_foreign_referer_" .. (#report.tests + 1), request)
+    end
+    for _, limit in ipairs({ false, 0, -1, 0.5, "8388608", 8388609 }) do
+        local request = categoryRequest(kind); request.max_bytes = limit
+        blocked("category_" .. kind .. "_rejects_invalid_limit_" .. (#report.tests + 1), request)
+    end
+    for _, destination in ipairs({ false, output .. "/category.json" }) do
+        local request = categoryRequest(kind); request.output_path = destination
+        blocked("category_" .. kind .. "_rejects_output_" .. (#report.tests + 1), request)
+    end
+    local valid_url = categoryRequest(kind).url
+    for _, url in ipairs({ valid_url .. "&csrf=synthetic", valid_url .. "#fragment", valid_url:gsub("^https:", "http:"),
+        valid_url:gsub("manga%.bilibili%.com", "manga.bilibili.com.evil.invalid"),
+        valid_url:gsub("manga%.bilibili%.com", "manga.bilibili.com:443"),
+        valid_url:gsub("/comic%.v1%.Comic/", "/comic.v1.Comic/../comic.v1.Comic/"),
+        (valid_url:gsub("/ductape/", "/ductape/../ductape/")) }) do
+        if url ~= valid_url then
+            local request = categoryRequest(kind); request.url = url
+            blocked("category_" .. kind .. "_rejects_route_variant_" .. (#report.tests + 1), request)
+        end
+    end
+end
+for _, kind in ipairs({ "labels", "buvid" }) do
+    for _, cookie in ipairs({ "buvid3=synthetic", "SESSDATA=synthetic", "bili_jct=synthetic" }) do
+        local request = categoryRequest(kind); request.headers.Cookie = cookie
+        blocked("category_" .. kind .. "_rejects_every_cookie_" .. (#report.tests + 1), request)
+    end
+end
+for _, body in ipairs({ "", " {}", "{ }", "[]", "null", '{"csrf":"synthetic"}', false, 0 }) do
+    local request = categoryRequest("labels"); request.body = body
+    blocked("category_labels_rejects_nonempty_or_noncanonical_body_" .. (#report.tests + 1), request)
+end
+local no_labels_body = categoryRequest("labels"); no_labels_body.body = nil
+blocked("category_labels_requires_empty_object_body", no_labels_body)
+for _, body in ipairs({ "", "{}", false, 0 }) do
+    local request = categoryRequest("buvid"); request.body = body
+    blocked("category_buvid_rejects_any_body_" .. (#report.tests + 1), request)
+end
+for _, suffix in ipairs({ "?", "?device=pc", "?buvid3=synthetic", "/", "?csrf=synthetic" }) do
+    local request = categoryRequest("buvid"); request.url = request.url .. suffix
+    blocked("category_buvid_rejects_route_suffix_" .. (#report.tests + 1), request)
+end
+for _, kind in ipairs({ "labels", "page" }) do
+    local request = categoryRequest(kind); request.headers.origin = "https://www.bilibili.com"
+    blocked("category_" .. kind .. "_rejects_foreign_origin", request)
+    request = categoryRequest(kind); request.headers["content-type"] = "application/x-www-form-urlencoded"
+    blocked("category_" .. kind .. "_rejects_form_content_type", request)
+end
+for _, cookie in ipairs({ "", "buvid3=", "BUVID3=synthetic", "SESSDATA=synthetic", "bili_jct=synthetic",
+    "buvid4=synthetic", "buvid3=synthetic; SESSDATA=synthetic", "buvid3=synthetic; bili_jct=synthetic",
+    "buvid3=synthetic; buvid3=duplicate", "buvid3=synthetic,other", "buvid3=synthetic value",
+    "buvid3=\"synthetic\"", "buvid3=synthetic\\other", "buvid3=synthetic\r\nAuthorization: synthetic",
+    "buvid3=" .. string.rep("a", 257) }) do
+    local request = categoryRequest("page"); request.headers.cookie = cookie
+    blocked("category_page_rejects_cookie_" .. (#report.tests + 1), request)
+end
+local no_cookie = categoryRequest("page"); no_cookie.headers.cookie = nil
+blocked("category_page_requires_anonymous_buvid_cookie", no_cookie)
+local duplicate_cookie = categoryRequest("page"); duplicate_cookie.headers.Cookie = duplicate_cookie.headers.cookie
+blocked("category_page_rejects_duplicate_cookie_header", duplicate_cookie)
+local duplicate_sn = categoryRequest("page"); duplicate_sn.headers["X-Bili-Data-Sn"] = category_sn
+blocked("category_page_rejects_duplicate_data_sn_header", duplicate_sn)
+for _, serial in ipairs({ "", "synthetic", category_sn:lower(), false }) do
+    local request = categoryRequest("page"); request.headers["x-bili-data-sn"] = serial
+    blocked("category_page_rejects_invalid_data_sn_" .. (#report.tests + 1), request)
+end
+local no_sn = categoryRequest("page"); no_sn.headers["x-bili-data-sn"] = nil
+blocked("category_page_requires_data_sn", no_sn)
+for _, suffix in ipairs({ "", "&ultra_sign=", "&ultra_sign=synthetic&ultra_sign=duplicate", "&%75ltra_sign=synthetic",
+    "&ultra_sign=%", "&ultra_sign=%GG", "&ultra_sign=%0D%0A", "&ultra_sign=synthetic&cpx=1",
+    "&ultra_sign=synthetic&m1=synthetic", "&ultra_sign=synthetic&getEpisodeDiscounts", "&ultra_sign=synthetic&device=pc",
+    "&ultra_sign=synthetic&", "&&ultra_sign=synthetic", "&ultra_sign=" .. string.rep("a", 8193) }) do
+    local request = categoryRequest("page"); request.url = base .. "comic.v1.Comic/ClassPage" .. query .. suffix
+    blocked("category_page_rejects_signature_query_" .. (#report.tests + 1), request)
+end
+for _, kind in ipairs({ "labels", "page" }) do
+    local request = categoryRequest(kind); request.url = request.url:gsub("device=pc", "device=mobile")
+    blocked("category_" .. kind .. "_requires_exact_device", request)
+    request = categoryRequest(kind); request.url = request.url:gsub("nov=27", "nov=28")
+    blocked("category_" .. kind .. "_requires_pinned_version", request)
+end
+for _, change in ipairs({ { style_id = 0 }, { style_id = -1 }, { style_id = 1.5 }, { style_id = "101" },
+    { style_id = 1000000000000000 }, { area_id = 0 }, { is_finish = 0 }, { is_free = 0 }, { special_tag = 1 },
+    { order = -1 }, { order = 2 }, { order = "0" }, { page_num = 0 }, { page_num = 6 }, { page_num = 1.5 },
+    { page_num = "1" }, { page_size = 1 }, { page_size = 100 }, { page_size = "18" },
+    { m2 = "" }, { m2 = "synthetic" }, { m2 = category_m2 .. "_extra" }, { m2 = category_m2 .. "\n" },
+    { m2 = false }, { m2 = {} }, { m2 = "error:BiliComics local reader has no browser fingerprint environment_" .. string.rep("1", 32769) },
+    { buy_method = 3 }, { pay_amount = 0 }, { csrf = "synthetic" }, { comic_id = 101 } }) do
+    blocked("category_page_rejects_body_mutation_" .. (#report.tests + 1), categoryBodyRequest(change))
+end
+for _, key in ipairs({ "style_id", "area_id", "is_finish", "is_free", "special_tag", "order", "page_num", "page_size", "m2" }) do
+    blocked("category_page_requires_body_" .. key, categoryBodyRequest(nil, key))
+end
+for _, body in ipairs({ "[]", "null", "{}", "{", false, 0 }) do
+    local request = categoryRequest("page"); request.body = body
+    blocked("category_page_rejects_malformed_body_" .. (#report.tests + 1), request)
+end
+for _, extra in ipairs({ '"style_id":0,', '"style_id":101,', '"\\u0073tyle_id":101,' }) do
+    local request = categoryRequest("page"); request.body = "{" .. extra .. request.body:sub(2)
+    blocked("category_page_rejects_duplicate_or_escaped_body_key_" .. (#report.tests + 1), request)
+end
+local duplicate_suffix = categoryRequest("page")
+duplicate_suffix.body = duplicate_suffix.body:sub(1, -2) .. ',"style_id":0}'
+blocked("category_page_rejects_duplicate_body_key_at_end", duplicate_suffix)
+local escaped_key = categoryRequest("page"); escaped_key.body = escaped_key.body:gsub('"style_id"', '"\\u0073tyle_id"')
+blocked("category_page_rejects_escaped_body_key", escaped_key)
+for _, position in ipairs({ "prefix", "middle", "suffix" }) do
+    local request = categoryRequest("page")
+    if position == "prefix" then request.body = "{," .. request.body:sub(2)
+    elseif position == "suffix" then request.body = request.body:sub(1, -2) .. ",}"
+    else request.body = request.body:gsub(",", ",,", 1) end
+    blocked("category_page_rejects_extra_separator_" .. position, request)
+end
+for _, key in ipairs({ "SESSDATA", "bili_jct", "authorization", "buy_method", "pay_amount" }) do
+    local request = categoryRequest("page"); request.body = request.body:sub(1, -2) .. ',"' .. key .. '":0}'
+    blocked("category_page_rejects_credential_or_write_body_" .. key, request)
+end
+local function syntheticCategoryResponse(body, headers)
+    body = type(body) == "string" and body or assert(JSON.encode(body))
+    return { status = 200, body = body, bytes = #body, headers = headers or {}, transmitted = false }
+end
+test("production_client_category_metadata_isolates_synthetic_session", true, false, function()
+    local before, parent_session = original_transport_calls, client.session
+    current.response_for = function(request)
+        check("metadata uses only its exact official route", request.url == base .. "comic.v1.Comic/AllLabel" .. query
+            and request.body == "{}" and request.headers.cookie == nil and request.headers.authorization == nil)
+        return syntheticCategoryResponse({ code = 0, data = { styles = { { id = 101, name = "Synthetic category" } },
+            orders = { { id = 0, name = "Popular" }, { id = 1, name = "Updated" }, { id = 3, name = "New" } } } },
+            { ["set-cookie"] = "SESSDATA=synthetic-response-cookie; Path=/" })
+    end
+    local value, err = client:bookstoreCategories()
+    check("real Client metadata passes through the guard once", value and not err and value.source == "official_categories"
+        and #value.items == 1 and value.items[1].id == "101" and #value.orders == 3 and original_transport_calls == before + 1)
+    check("metadata never captures a response account cookie", client.session == parent_session
+        and client.session.cookies.SESSDATA == "synthetic-not-an-account" and not client._session_changed)
+end)
+local function categoryClient()
+    local Native = require("bilicomics/protocol/native_backend")
+    return Client.new{ transport = transport, clock = function() return 1789171200 end,
+        session = { cookies = { SESSDATA = "synthetic-parent-account", bili_jct = "synthetic-parent-csrf",
+            buvid3 = "synthetic-parent-buvid", ["XSRF-TOKEN"] = "synthetic-parent-xsrf" } },
+        crypto = {
+            prepareCatalog = function(_, context)
+                current.category_preparation = Native.prepareCatalog({}, context)
+                return current.category_preparation
+            end,
+            signRequest = function(_, context)
+                current.category_signed_context = context
+                return { ultra_sign = "synthetic+/=signature", data_sn = category_sn }
+            end,
+        } }
+end
+local function categoryProductionResponse(request)
+    current.category_device_count = current.category_device_count or 0
+    if request.url == category_buvid_url then
+        current.category_device_count = current.category_device_count + 1
+        current.category_current_device = "synthetic-device-" .. current.category_device_count
+        check("each device request has no body or credentials", request.method == "GET" and request.body == nil
+            and request.headers.cookie == nil and request.headers.authorization == nil)
+        return syntheticCategoryResponse({}, { ["set-cookie"] = {
+            "buvid3=" .. current.category_current_device .. "; Path=/; HttpOnly",
+            "SESSDATA=synthetic-unrelated-device-cookie; Path=/",
+            "bili_jct=synthetic-unrelated-device-csrf; Path=/",
+        } })
+    end
+    check("real Client signs the exact category route", request.url == base .. "comic.v1.Comic/ClassPage" .. query
+        .. "&ultra_sign=synthetic%2B%2F%3Dsignature" and request.headers["x-bili-data-sn"] == category_sn)
+    check("only the current server-issued synthetic buvid enters the page", request.headers.cookie == "buvid3=" .. current.category_current_device
+        and request.headers["x-xsrf-token"] == nil and request.headers.authorization == nil)
+    local signed = current.category_signed_context
+    check("guard forwards the exact signed body and device context", signed and signed.body == request.body
+        and signed.buvid == current.category_current_device and signed.endpoint == "ClassPage")
+    local body = assert(JSON.decode(request.body))
+    check("the real native catalog preparation is preserved in the signed body", body.m2 == current.category_preparation.m2
+        and body.m2 == category_m2 and current.category_preparation.challenge_status == "environment_error_reported")
+    return syntheticCategoryResponse({ code = 0, data = { { type = 0, season_id = 9101, title = "Synthetic comic",
+        vertical_cover = "https://i0.hdslb.com/bfs/manga/synthetic.jpg", is_finish = 0, author = { "Synthetic author" } } } },
+        { ["set-cookie"] = "SESSDATA=synthetic-unrelated-page-cookie; Path=/" })
+end
+for _, sort in ipairs({ 0, 1, 3 }) do
+    test("production_client_category_pages_isolate_session_sort_" .. sort, true, false, function()
+        local category_client, before = categoryClient(), original_transport_calls
+        local parent_session = category_client.session
+        current.response_for = categoryProductionResponse
+        for _, page in ipairs({ 1, 5 }) do
+            local value, err = category_client:bookstoreCategoryPage({ kind = "category", category_id = "101", sort = sort }, page)
+            check("real Client category page crosses the guard and normalizes comics", value and not err and value.source == "official_category"
+                and value.personalized == false and value.page == page and value.page_size == 18 and #value.items == 1
+                and value.items[1].id == "9101" and value.query.kind == "category" and value.query.category_id == "101" and value.query.sort == sort)
+            local body = assert(JSON.decode(last_request.body))
+            check("the selected page and sort remain within the admitted body", body.page_num == page and body.order == sort and body.style_id == 101)
+        end
+        check("every category page obtains one fresh anonymous device", current.category_device_count == 2 and original_transport_calls == before + 4)
+        check("category reads never replace or mutate the synthetic parent session", category_client.session == parent_session
+            and parent_session.cookies.SESSDATA == "synthetic-parent-account" and parent_session.cookies.bili_jct == "synthetic-parent-csrf"
+            and parent_session.cookies.buvid3 == "synthetic-parent-buvid" and not category_client._session_changed)
+    end)
+end
+test("production_client_category_never_inspects_parent_session", true, false, function()
+    local category_client = categoryClient()
+    category_client.session = setmetatable({}, { __index = function() error("Category reads must not inspect a parent session") end })
+    current.response_for = categoryProductionResponse
+    local value, err = category_client:bookstoreCategoryPage({ category_id = 101 })
+    check("category defaults produce a complete canonical query without touching the parent session", value and not err
+        and value.query.kind == "category" and value.query.category_id == "101" and value.query.sort == 0 and value.page == 1)
+end)
+report.category_contract = { case_count = #report.tests - category_test_start, source = "official_categories",
+    exact_public_metadata_route = true, exact_anonymous_buvid_route = true, isolated_signed_page_route = true,
+    actual_native_m2_shape_only = true, single_anonymous_buvid_cookie_only = true,
+    signed_body_forwarded_unchanged = true, native_catalog_preparation = true, synthetic_signing_adapter = true,
+    real_client_constructs_category_requests = true, fresh_server_device_for_each_page = true,
+    parent_session_not_inspected_or_mutated = true, server_issued_buvid_provenance_is_production_client_responsibility = true }
 
 allowed("wallet_empty_object", rpc("user.v1.User/GetWallet", {}))
 allowed("basic_episode_information", rpc("comic.v1.Comic/GetEpisodeBuyInfo", { ep_id = 101 }))
@@ -275,7 +609,7 @@ for _, path in ipairs({ "/bfs/../twirp/user.v1.User/UnknownRead", "/bfs/%2e%2e/t
 end
 blocked("output_parent_segment_is_rejected", { url = asset, method = "GET", output_path = output .. "/.." })
 
-for _, method in ipairs({ "validateSession", "listFavorites", "listHistory", "search", "comicDetail", "imageIndex", "imageTokens",
+for _, method in ipairs({ "validateSession", "listFavorites", "listHistory", "recommendations", "bookstoreCategories", "bookstoreCategoryPage", "search", "comicDetail", "imageIndex", "imageTokens",
     "wallet", "purchaseInfo", "discountList", "discountPrice", "freeGoldCardInfo" }) do
     test("runner_admits_client_" .. method, false, true, function()
         local request, options, callback = { kind = "client", method = method }, {}, function() end

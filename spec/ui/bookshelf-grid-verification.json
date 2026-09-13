@@ -1,0 +1,85 @@
+{
+  "scope": "Synthetic native bookshelf UI only; no real account; isolated network namespace",
+  "cases": [
+    {
+      "width": 480,
+      "height": 640,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    }
+  ],
+  "sources": {
+    "main.lua": "efb88912f6d0da2b096cff675fe4f4e3fa900ad1affa187dd17e6f848f07d6b9",
+    "bilicomics/ui/screens.lua": "ee699dd55a23ca68e81dc2d5f611e24ef97f08e0942416f2e6792e6cfa86b03a",
+    "bilicomics/ui/widgets.lua": "2034932a7b6277859eb7dace6b7e72b7e603f087be88a3bc9478f4ebd7c94631",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "l10n/bilicomics_zh_CN.lua": "c5f2c221c7ee99682c94138f5f2b0afc6f0d86a8c7bec6a8859d57cc7539b5b2"
+  },
+  "passed": true
+}

@@ -1,0 +1,97 @@
+{
+    "passed": true,
+    "host": "test-env",
+    "read_only_metadata": true,
+    "synthetic_data": true,
+    "tests": [
+        {
+            "passed": true,
+            "name": "Local chapter and page override a stale server chapter without using latest publication metadata"
+        },
+        {
+            "passed": true,
+            "name": "Remote chapter history never establishes a precise page even when raw input claims one"
+        },
+        {
+            "passed": true,
+            "name": "A position without local provenance cannot display a claimed page"
+        },
+        {
+            "passed": true,
+            "name": "A favorite with no history is unknown even when its publication is complete"
+        },
+        {
+            "passed": true,
+            "name": "Completing a chapter keeps the comic in known reading history"
+        },
+        {
+            "passed": true,
+            "name": "An incomplete local anchor wins over a stale complete chapter flag"
+        },
+        {
+            "passed": true,
+            "name": "Chapter completion from catalog metadata remains useful without a native anchor"
+        },
+        {
+            "passed": true,
+            "name": "History without chapter identity is known history with an unavailable position"
+        },
+        {
+            "passed": true,
+            "name": "A chapter ID without catalog metadata is not presented as a chapter number"
+        },
+        {
+            "passed": true,
+            "name": "An empty catalog has an unknown reading state"
+        },
+        {
+            "passed": true,
+            "name": "A catalog reading marker can identify a chapter without guessing from publication order"
+        },
+        {
+            "passed": true,
+            "name": "Completed earlier chapters prove history without selecting an arbitrary continuation"
+        },
+        {
+            "passed": true,
+            "name": "Invalid page values are omitted instead of being rounded or defaulted to page one"
+        },
+        {
+            "passed": true,
+            "name": "Missing or invalid totals retain only the trustworthy page number"
+        },
+        {
+            "passed": true,
+            "name": "A page outside the known matching snapshot is not displayed as a valid ratio"
+        },
+        {
+            "passed": true,
+            "name": "A retained snapshot page never uses the current snapshot page total"
+        },
+        {
+            "passed": true,
+            "name": "A missing snapshot identity keeps the page without claiming a matching total"
+        },
+        {
+            "passed": true,
+            "name": "Legacy extra fields retain a precise local chapter and numeric page strings"
+        },
+        {
+            "passed": true,
+            "name": "An untitled chapter can show a local page without turning an identity into a title"
+        },
+        {
+            "passed": true,
+            "name": "Publication-only labels remain independent from reading history"
+        },
+        {
+            "passed": true,
+            "name": "Actual catalog favorites do not become unread and remote history stays chapter-only"
+        },
+        {
+            "passed": true,
+            "name": "Actual catalog native progress survives a newer server hint and matches descriptor page count"
+        }
+    ],
+    "spec": "bookshelf-model"
+}

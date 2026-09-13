@@ -1,0 +1,520 @@
+{
+    "assertions": [
+        {
+            "passed": true,
+            "name": "main_entry_defaults_to_bookshelf"
+        },
+        {
+            "passed": true,
+            "name": "bookshelf_is_the_first_tab"
+        },
+        {
+            "passed": true,
+            "name": "navigation_has_no_separate_history_tab"
+        },
+        {
+            "passed": true,
+            "name": "default_bookshelf_is_selected"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-bookshelf_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "first_page_responsive_columns"
+        },
+        {
+            "passed": true,
+            "name": "first_page_focus_row_width_1"
+        },
+        {
+            "passed": true,
+            "name": "first_page_focus_identity_1"
+        },
+        {
+            "passed": true,
+            "name": "first_page_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "first_page_focus_identity_2"
+        },
+        {
+            "passed": true,
+            "name": "first_page_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "first_page_horizontal_gap_2"
+        },
+        {
+            "passed": true,
+            "name": "first_page_focus_identity_3"
+        },
+        {
+            "passed": true,
+            "name": "first_page_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "first_page_horizontal_gap_3"
+        },
+        {
+            "passed": true,
+            "name": "first_page_every_card_has_one_focus_slot"
+        },
+        {
+            "passed": true,
+            "name": "first_page_pager_is_above_the_first_cover"
+        },
+        {
+            "passed": true,
+            "name": "first_page_compact_counter_shows_the_current_page"
+        },
+        {
+            "passed": true,
+            "name": "first_page_page_counter_and_arrows_share_a_center_line"
+        },
+        {
+            "passed": true,
+            "name": "first_page_pager_is_compact_and_borderless"
+        },
+        {
+            "detail": [
+                "Bookshelf",
+                "Bookstore",
+                "Search",
+                "Downloads"
+            ],
+            "passed": true,
+            "name": "first_page_has_only_navigation_below_covers"
+        },
+        {
+            "passed": true,
+            "name": "first_page_disables_previous_but_keeps_next"
+        },
+        {
+            "passed": true,
+            "name": "chapter_and_local_page_are_visible"
+        },
+        {
+            "passed": true,
+            "name": "latest_update_is_not_reading_progress"
+        },
+        {
+            "passed": true,
+            "name": "only_visible_covers_are_requested"
+        },
+        {
+            "passed": true,
+            "name": "panel_moves_native_focus_to_cover"
+        },
+        {
+            "passed": true,
+            "name": "repaint_preserves_focused_comic_and_border"
+        },
+        {
+            "passed": true,
+            "name": "page_change_cancels_pending_reader_handoff"
+        },
+        {
+            "passed": true,
+            "name": "previous_page_card_callbacks_are_retired"
+        },
+        {
+            "passed": true,
+            "name": "second_page_starts_after_previous_capacity"
+        },
+        {
+            "passed": true,
+            "name": "second_page_responsive_columns"
+        },
+        {
+            "passed": true,
+            "name": "second_page_focus_row_width_1"
+        },
+        {
+            "passed": true,
+            "name": "second_page_focus_identity_1"
+        },
+        {
+            "passed": true,
+            "name": "second_page_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "second_page_focus_identity_2"
+        },
+        {
+            "passed": true,
+            "name": "second_page_card_bounds_2"
+        },
+        {
+            "passed": true,
+            "name": "second_page_horizontal_gap_2"
+        },
+        {
+            "passed": true,
+            "name": "second_page_focus_identity_3"
+        },
+        {
+            "passed": true,
+            "name": "second_page_card_bounds_3"
+        },
+        {
+            "passed": true,
+            "name": "second_page_horizontal_gap_3"
+        },
+        {
+            "passed": true,
+            "name": "second_page_every_card_has_one_focus_slot"
+        },
+        {
+            "passed": true,
+            "name": "last_page_contains_the_remainder"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-bookshelf-last-page_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "last_page_responsive_columns"
+        },
+        {
+            "passed": true,
+            "name": "last_page_focus_row_width_1"
+        },
+        {
+            "passed": true,
+            "name": "last_page_focus_identity_1"
+        },
+        {
+            "passed": true,
+            "name": "last_page_card_bounds_1"
+        },
+        {
+            "passed": true,
+            "name": "last_page_every_card_has_one_focus_slot"
+        },
+        {
+            "passed": true,
+            "name": "last_page_pager_is_above_the_first_cover"
+        },
+        {
+            "passed": true,
+            "name": "last_page_compact_counter_shows_the_current_page"
+        },
+        {
+            "passed": true,
+            "name": "last_page_page_counter_and_arrows_share_a_center_line"
+        },
+        {
+            "passed": true,
+            "name": "last_page_pager_is_compact_and_borderless"
+        },
+        {
+            "detail": [
+                "Bookshelf",
+                "Bookstore",
+                "Search",
+                "Downloads"
+            ],
+            "passed": true,
+            "name": "last_page_has_only_navigation_below_covers"
+        },
+        {
+            "passed": true,
+            "name": "last_page_disables_next_but_keeps_previous"
+        },
+        {
+            "passed": true,
+            "name": "short_last_row_stays_left_aligned"
+        },
+        {
+            "passed": true,
+            "name": "page_key_clamps_at_last_page"
+        },
+        {
+            "passed": true,
+            "name": "page_key_moves_one_grid_page"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-bookshelf-filters_screen_bounds"
+        },
+        {
+            "detail": {
+                "h": 410,
+                "w": 648
+            },
+            "passed": true,
+            "name": "synthetic-bookshelf-filters_dialog_bounds"
+        },
+        {
+            "passed": true,
+            "name": "filter_change_cancels_pending_reader_handoff"
+        },
+        {
+            "passed": true,
+            "name": "unknown_progress_filter_is_not_labeled_unread"
+        },
+        {
+            "passed": true,
+            "name": "previous_filter_card_callback_is_retired"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-bookshelf-no-record_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "reading_is_a_bookshelf_filter"
+        },
+        {
+            "passed": true,
+            "name": "native_card_focus_border_is_visible"
+        },
+        {
+            "passed": true,
+            "name": "native_card_unfocus_clears_border"
+        },
+        {
+            "passed": true,
+            "name": "tap_resolves_the_reading_target"
+        },
+        {
+            "passed": true,
+            "name": "owned_target_dispatches_read"
+        },
+        {
+            "passed": true,
+            "name": "successful_reader_handoff_closes_bookshelf"
+        },
+        {
+            "passed": true,
+            "name": "successive_same_page_taps_retire_prior_read_work"
+        },
+        {
+            "passed": true,
+            "name": "latest_out_of_order_resolution_prepares_the_last_selected_comic"
+        },
+        {
+            "passed": true,
+            "name": "older_resolution_cannot_replace_the_latest_read"
+        },
+        {
+            "passed": true,
+            "name": "new_same_page_selection_cancels_earlier_reader_preparation"
+        },
+        {
+            "passed": true,
+            "name": "obsolete_reader_completion_does_not_close_the_new_selection"
+        },
+        {
+            "passed": true,
+            "name": "replacement_selection_prepares_only_its_own_comic"
+        },
+        {
+            "passed": true,
+            "name": "locked_target_only_requests_a_quote"
+        },
+        {
+            "passed": true,
+            "name": "hold_opens_chapters_without_reading"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 922
+            },
+            "passed": true,
+            "name": "synthetic-chapters-after-hold_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "navigation_cancels_pending_reader_handoff"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_card_callbacks"
+        },
+        {
+            "passed": true,
+            "name": "account_change_retires_card_callbacks"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_pending_target_resolution"
+        },
+        {
+            "passed": true,
+            "name": "account_change_retires_pending_target_resolution"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-bookshelf-single-page_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "single_page_hides_compact_pagination"
+        },
+        {
+            "passed": true,
+            "name": "single_page_omits_the_redundant_page_count"
+        },
+        {
+            "detail": [
+                "Bookshelf",
+                "Bookstore",
+                "Search",
+                "Downloads"
+            ],
+            "passed": true,
+            "name": "single_page_has_only_navigation_below_covers"
+        },
+        {
+            "passed": true,
+            "name": "legacy_history_entry_opens_bookshelf"
+        },
+        {
+            "passed": true,
+            "name": "legacy_history_refresh_dispatches_the_bookshelf_collection"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-legacy-history-entry_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "legacy_continue_entry_also_opens_bookshelf"
+        },
+        {
+            "passed": true,
+            "name": "legacy_entries_do_not_render_obsolete_history_messages"
+        },
+        {
+            "detail": {
+                "h": 700,
+                "w": 921
+            },
+            "passed": true,
+            "name": "synthetic-empty-bookshelf_screen_bounds"
+        },
+        {
+            "passed": true,
+            "name": "empty_bookshelf_has_its_own_message"
+        },
+        {
+            "passed": true,
+            "name": "empty_bookshelf_also_hides_pagination"
+        },
+        {
+            "passed": true,
+            "name": "empty_legacy_history_entry_uses_bookshelf_empty_state"
+        },
+        {
+            "passed": true,
+            "name": "library_ui_never_requests_a_history_collection"
+        },
+        {
+            "passed": true,
+            "name": "closing_cancels_pending_reader_handoff"
+        }
+    ],
+    "screenshots": [
+        "synthetic-bookshelf.png",
+        "synthetic-bookshelf-last-page.png",
+        "synthetic-bookshelf-filters.png",
+        "synthetic-bookshelf-no-record.png",
+        "synthetic-chapters-after-hold.png",
+        "synthetic-bookshelf-single-page.png",
+        "synthetic-legacy-history-entry.png",
+        "synthetic-empty-bookshelf.png"
+    ],
+    "language": "C",
+    "scope": "Native KOReader widgets; original synthetic cover illustrations; controlled controller; no account or HTTP",
+    "first_page": [
+        {
+            "id": "1",
+            "w": 297,
+            "h": 447,
+            "x": 19,
+            "y": 188
+        },
+        {
+            "id": "2",
+            "w": 297,
+            "h": 447,
+            "x": 331,
+            "y": 188
+        },
+        {
+            "id": "3",
+            "w": 297,
+            "h": 447,
+            "x": 643,
+            "y": 188
+        }
+    ],
+    "second_page": [
+        {
+            "id": "4",
+            "w": 297,
+            "h": 447,
+            "x": 19,
+            "y": 188
+        },
+        {
+            "id": "5",
+            "w": 297,
+            "h": 447,
+            "x": 331,
+            "y": 188
+        },
+        {
+            "id": "6",
+            "w": 297,
+            "h": 447,
+            "x": 643,
+            "y": 188
+        }
+    ],
+    "last_page": [
+        {
+            "id": "7",
+            "w": 297,
+            "h": 447,
+            "x": 19,
+            "y": 188
+        }
+    ],
+    "passed": true,
+    "width": 960,
+    "height": 720
+}

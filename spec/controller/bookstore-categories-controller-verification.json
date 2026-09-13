@@ -1,0 +1,137 @@
+{
+  "host": "test-env",
+  "runtime": "v2026.07.1",
+  "network_isolated": true,
+  "source_sha256": {
+    "bilicomics/controller.lua": "9ea3d9772b5124b59ca28eed66bc8d7020291fc1acfea22dddc6f5da83292c29",
+    "bilicomics/bookstore.lua": "edca2a2692c58064e972ced94fef1bfe790c8c3d2f9690f264089f41b55d91ce",
+    "bilicomics/bookstore_categories.lua": "4c916bdc9e1f0e864261d430b11166481f418aad3023955f3ed12f5299cd5f3d",
+    "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+    "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "spec/controller/bookstore_categories_spec.lua": "a694db941226684e457cee0839e01af2c4306194e7a8579058060061367ce1d6",
+    "spec/controller/run_bookstore_categories.py": "e3b88ab3cff85486c066e628758f8e8814f24595dbfa97295dca402f298e2e62"
+  },
+  "source_after_sha256": {
+    "bilicomics/controller.lua": "9ea3d9772b5124b59ca28eed66bc8d7020291fc1acfea22dddc6f5da83292c29",
+    "bilicomics/bookstore.lua": "edca2a2692c58064e972ced94fef1bfe790c8c3d2f9690f264089f41b55d91ce",
+    "bilicomics/bookstore_categories.lua": "4c916bdc9e1f0e864261d430b11166481f418aad3023955f3ed12f5299cd5f3d",
+    "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+    "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "spec/controller/bookstore_categories_spec.lua": "a694db941226684e457cee0839e01af2c4306194e7a8579058060061367ce1d6",
+    "spec/controller/run_bookstore_categories.py": "e3b88ab3cff85486c066e628758f8e8814f24595dbfa97295dca402f298e2e62"
+  },
+  "source_unchanged": true,
+  "returncode": 0,
+  "result": {
+    "host": "test-env",
+    "synthetic_data": true,
+    "network_workers_executed": false,
+    "passed": true,
+    "spec": "bookstore-categories-controller",
+    "tests": [
+      {
+        "name": "Metadata and feed getters never dispatch anonymous workers",
+        "passed": true
+      },
+      {
+        "name": "Metadata and pages remain anonymous for every account session state",
+        "passed": true
+      },
+      {
+        "name": "Only categories present in current official metadata may dispatch",
+        "passed": true
+      },
+      {
+        "name": "Malformed queries and out of range public pages are rejected before dispatch",
+        "passed": true
+      },
+      {
+        "name": "Default queries coalesce while categories and official orders remain independent",
+        "passed": true
+      },
+      {
+        "name": "Metadata refresh coalesces and failures retain the last official list",
+        "passed": true
+      },
+      {
+        "name": "Malformed metadata responses preserve the last usable official category list",
+        "passed": true
+      },
+      {
+        "name": "Failed first page retains all pages and a successful refresh replaces them atomically",
+        "passed": true
+      },
+      {
+        "name": "Starting a first page refresh invalidates an older append even if refresh fails",
+        "passed": true
+      },
+      {
+        "name": "Append coalesces callers and preserves order across duplicate and short nonempty pages",
+        "passed": true
+      },
+      {
+        "name": "Failed append retries the same page without modifying the cached order",
+        "passed": true
+      },
+      {
+        "name": "Five remote pages impose an independent ninety comic cap per category and order",
+        "passed": true
+      },
+      {
+        "name": "Duplicate pages also stop at the fifth remote request",
+        "passed": true
+      },
+      {
+        "name": "Mismatched category order and page responses cannot replace a cached snapshot",
+        "passed": true
+      },
+      {
+        "name": "Category snapshot and comic persistence roll back together after a storage failure",
+        "passed": true
+      },
+      {
+        "name": "Queued anonymous category work rechecks offline suspension and account generation",
+        "passed": true
+      },
+      {
+        "name": "Offline restart retains metadata query order and the next page without dispatch",
+        "passed": true
+      },
+      {
+        "name": "Expired metadata still allows offline browsing of saved category feeds",
+        "passed": true
+      },
+      {
+        "name": "Category editorial projections preserve homepage provenance favorites and exact reading anchors",
+        "passed": true
+      },
+      {
+        "name": "Category covers require the correct snapshot member and identity",
+        "passed": true
+      },
+      {
+        "name": "A refreshed category revision rejects old covers before start and after completion",
+        "passed": true
+      },
+      {
+        "name": "Changed cover URLs cannot authorize downloads through an older category snapshot",
+        "passed": true
+      },
+      {
+        "name": "Account changes and close discard pending metadata and page callbacks",
+        "passed": true
+      },
+      {
+        "name": "Account changes invalidate category cover identities and clean late temporary files",
+        "passed": true
+      },
+      {
+        "name": "Forged credentials are stripped from otherwise valid anonymous category requests",
+        "passed": true
+      }
+    ]
+  },
+  "passed": true
+}

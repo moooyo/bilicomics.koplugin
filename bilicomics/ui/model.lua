@@ -1,6 +1,54 @@
 local _ = require("bilicomics/ui/i18n")
 local Model = {}
 
+local function record(value)
+    return type(value) == "table" and value or {}
+end
+
+local function identity(value)
+    if type(value) ~= "string" and type(value) ~= "number" then return nil end
+    if type(value) == "number" and (value ~= value or value <= 0 or value == math.huge or value % 1 ~= 0) then return nil end
+    value = tostring(value)
+    if value == "" or value == "0" or value:match("^%s*$") then return nil end
+    return value
+end
+
+local function positive(value, integer)
+    local number = (type(value) == "string" or type(value) == "number") and tonumber(value)
+    if not number or number ~= number or number <= 0 or number == math.huge
+        or (integer and (number > 2147483647 or number % 1 ~= 0)) then return nil end
+    return number
+end
+
+local function nonempty(value)
+    return type(value) == "string" and value:find("%S") and value or nil
+end
+
+local function localPosition(comic)
+    local extra = record(comic.extra)
+    if (comic.progress_source or extra.progress_source) ~= "local" then return nil end
+    local anchor = comic.reading_position or extra.reading_position
+    return type(anchor) == "table" and anchor or nil
+end
+
+local function chapterFinished(episode)
+    local state = episode and episode.read
+    return state == true or state == "read" or state == "complete" or state == "finished"
+end
+
+local function chapterTitle(episode)
+    if not episode then return nil end
+    local short_title = nonempty(episode.short_title)
+    if short_title then
+        if positive(short_title) then return string.format(_("Chapter %s"), short_title) end
+        return short_title
+    end
+    local name = nonempty(episode.title)
+    if name then return name end
+    local order = positive(episode.order)
+    if order then return string.format(_("Chapter %s"), tostring(order)) end
+end
+
 function Model.array(value)
     if type(value) ~= "table" then return {} end
     return value.items or value.comics or value.episodes or value.jobs or value
@@ -17,12 +65,74 @@ function Model.downloadable(episode)
 end
 
 function Model.currentEpisode(comic, episodes)
-    local extra = comic.extra or {}
-    local id = comic.current_episode_id or comic.last_episode_id or extra.current_episode_id or extra.last_episode_id
-    if id then return tostring(id) end
-    for _index, episode in ipairs(episodes or {}) do
-        if episode.current or episode.read == "reading" then return tostring(episode.id) end
+    comic = record(comic)
+    local extra, anchor = record(comic.extra), localPosition(comic)
+    local id = anchor and identity(anchor.episode_id)
+        or identity(comic.current_episode_id) or identity(comic.last_episode_id)
+        or identity(extra.current_episode_id) or identity(extra.last_episode_id)
+    if id then return id end
+    for _index, episode in ipairs(Model.array(episodes)) do
+        if type(episode) == "table" and (episode.current or episode.read == "reading" or episode.read == "in_progress") then
+            id = identity(episode.id)
+            if id then return id end
+        end
     end
+end
+
+-- Reading describes known history, not whether the current chapter is unfinished.
+-- A favorite without history is unknown; publication completion proves no reading state.
+function Model.comicProgress(comic, episodes)
+    comic, episodes = record(comic), Model.array(episodes)
+    local extra, anchor = record(comic.extra), localPosition(comic)
+    local current_id = Model.currentEpisode(comic, episodes)
+    local current, has_history
+    for _index, episode in ipairs(episodes) do
+        if type(episode) == "table" then
+            if current_id and identity(episode.id) == current_id then current = episode end
+            if chapterFinished(episode) or episode.read == "reading" or episode.read == "in_progress" then has_history = true end
+        end
+    end
+    local page = anchor and positive(anchor.index or anchor.page, true)
+    local total = current and positive(current.total_pages or record(current.extra).total_pages, true)
+    if page and current then
+        local current_extra = record(current.extra)
+        local revision = identity(current.current_revision) or identity(current_extra.current_revision)
+            or identity(current.local_revision) or identity(current_extra.local_revision)
+        -- Episode totals describe the selected snapshot, which may differ from a retained anchor.
+        -- Missing version metadata does not establish that the page and total share a snapshot.
+        local anchor_revision = identity(anchor.revision)
+        if not anchor_revision or not revision or anchor_revision ~= revision then total = nil end
+        if total and page > total then page, total = nil, nil end
+    end
+    if not page then total = nil end
+    local known = current_id ~= nil or page ~= nil or has_history
+        or positive(comic.last_read_at or extra.last_read_at) ~= nil
+    local result = {
+        state = known and "reading" or "unknown", episode_id = current_id, current_episode = current,
+        page = page, total_pages = total,
+        chapter_finished = anchor and anchor.finished == true or (not anchor and chapterFinished(current)),
+    }
+    local name = chapterTitle(current)
+    if name and page and total then result.label = string.format(_("Read to: %s · %d/%d"), name, page, total)
+    elseif name and page then result.label = string.format(_("Read to: %s · page %d"), name, page)
+    elseif name then result.label = string.format(_("Read to: %s"), name)
+    elseif page and total then result.label = string.format(_("Read to page %d/%d"), page, total)
+    elseif page then result.label = string.format(_("Read to page %d"), page)
+    else result.label = known and _("Reading position unavailable") or _("No reading position") end
+    return result
+end
+
+function Model.comicUpdate(comic)
+    comic = record(comic)
+    local extra = record(comic.extra)
+    local latest = nonempty(comic.latest_episode_title) or nonempty(extra.latest_episode_title)
+    if latest then return string.format(_("Latest: %s"), latest) end
+    local order = positive(comic.latest_order or extra.latest_order)
+    if order then return string.format(_("Latest chapter: %s"), tostring(order)) end
+    if comic.has_update == true or comic.has_update == 1 or extra.has_update == true or extra.has_update == 1 then
+        return _("New chapters")
+    end
+    if comic.finished == true then return _("Completed") end
 end
 
 function Model.reading(episode, current_id)

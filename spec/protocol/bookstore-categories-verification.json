@@ -1,0 +1,769 @@
+{
+  "passed": true,
+  "environment": "ssh test-env",
+  "runtime": "/var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader",
+  "source_hashes": {
+    "bilicomics/protocol/categories.lua": "213e4033589cb81f0608a5bcbcc79d2f42d9243d9384cddb088fb0ebbff21242",
+    "bilicomics/protocol/client.lua": "c1334e3ec9b6a8b2fd4a607da3bb13309fd8f653c22d6a022153bcb2ddf1fdfa",
+    "bilicomics/jobs/worker.lua": "dd6b3d03494e91a1b66be3c73eeecaefe3ed5b26ca3f11051d1609958776daad",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "spec/local/readonly_guard.lua": "424f2a2273359fa6c5458e3e075ff4ad800363b9139de9d38e09429ef2bb36e0",
+    "spec/protocol/categories_spec.lua": "9f21b2513ecb83edaf067b31fecb782487ac63debeebb6fcae457a1e1d77e986",
+    "spec/protocol/categories_live.lua": "a3ec1c6b9552265430eb3ce9a0ecff1c4432f3ea2181c4b4c7e8415a9f028557"
+  },
+  "source_unchanged": true,
+  "focused": {
+    "cases": [
+      {
+        "passed": true,
+        "name": "Official metadata remains anonymous and preserves its actual category order"
+      },
+      {
+        "passed": true,
+        "name": "Malformed metadata and scalar JSON return protocol errors without throwing"
+      },
+      {
+        "passed": true,
+        "name": "Invalid query fields and page bounds are rejected before device initialization"
+      },
+      {
+        "passed": true,
+        "name": "Each supported official sort uses a canonical query and fixed noncategory dimensions"
+      },
+      {
+        "passed": true,
+        "name": "Each page creates a fresh guest device cookie without reading or changing the parent"
+      },
+      {
+        "passed": true,
+        "name": "Missing conflicting and malformed anonymous cookies stop before ClassPage"
+      },
+      {
+        "passed": true,
+        "name": "Category metadata retains public display fields and rejects query-bearing covers"
+      },
+      {
+        "passed": true,
+        "name": "Pagination follows raw array emptiness rather than comic chapter totals or short pages"
+      },
+      {
+        "passed": true,
+        "name": "Encrypted pages use the issued device context and never persist response cookies"
+      },
+      {
+        "passed": true,
+        "name": "Transport and service failures remain explicit without account fallback"
+      },
+      {
+        "passed": true,
+        "name": "Production Worker discards supplied login sessions and returns no guest session update"
+      }
+    ],
+    "fake_transport_calls": 47,
+    "account_sessions_read": 0,
+    "real_transport_attempts": 0,
+    "passed": true,
+    "assertions": 541
+  },
+  "focused_network_namespace_isolated": true,
+  "live": {
+    "official_page": {
+      "personalized": false,
+      "page_size": 18,
+      "has_more": true,
+      "page": 1,
+      "items": [
+        {
+          "title": "鬼灭之刃",
+          "id": "25717",
+          "extra": {
+            "tags": [
+              "温柔",
+              "非人"
+            ],
+            "recommendation": "进来捕捉可爱的祢豆子！",
+            "evaluate": "卖炭少年·炭治郎，他那平凡而幸福的日常生活，在家人遭到恶鬼袭击的那一天发生剧变。母亲与四个弟妹惨遭杀害，而与他一起生还的妹妹：祢豆子亦异变成凶暴的鬼。\n在猎鬼人的指引下，立志成为猎鬼人的炭治郎与变成鬼却尚存理智的祢豆子二人踏上了旅程。通过艰苦的剑术修行与赌命试炼，炭治郎成为了鬼猎人组织“鬼杀队”的一员。\n为了让妹妹祢豆子变回人类，为了讨伐杀害家人的恶鬼，为了斩断悲伤的连锁，少年与鬼的战斗不曾停歇。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "吾峠呼世晴",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/8b843504867408d80c3a75fa2bb7132212379320.jpg"
+        },
+        {
+          "title": "咒术回战",
+          "id": "26505",
+          "extra": {
+            "tags": [
+              "战斗"
+            ],
+            "recommendation": "死亡？还是战斗？就当选个自己喜欢的地狱吧！",
+            "evaluate": "咒术回战0卷 东京都立咒术高等专门学校（全一册）已更新在第1话前拥有超人般身体能力的男子高中生虎杖悠仁的黑暗幻想故事。因为某种理由，想要每天17点之前回家的虎杖悠仁来到了不强制出席的灵异现象研究会，享受着悠闲的活动。这样的某一天，来学校寻找被封印的诅咒之物的青年伏黑恵出现于虎杖的面前。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "芥见下下",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/ca4c24bd8bf896545811f401106c19588b80549d.png"
+        },
+        {
+          "title": "一拳超人",
+          "id": "26470",
+          "extra": {
+            "tags": [
+              "懒散"
+            ],
+            "recommendation": "【一拳超人】我变秃了！也变强了！",
+            "evaluate": "【由于该作品重置，会包含部分重复内容，请酌情购买】主人公埼玉原本是一名整日奔波于求职的普通人。三年前的一天偶然遇到了要对淘气少年下杀手的异变螃蟹人后，回忆起年少时“想要成为英雄”的梦想，最终拼尽全力救下了淘气少年。重拾对于成为英雄的兴趣之后，通过拼命锻炼，埼玉终于脱胎换骨获得了最强的力量，但同时失去了头发成了光头，似乎还失去了某些感情。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "ONE",
+            "村田雄介",
+            "集英社"
+          ],
+          "finished": false,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/accd35013c082cb622fb8749c86aec3bd4fb9253.jpg"
+        },
+        {
+          "title": "航海王",
+          "id": "24742",
+          "extra": {
+            "tags": [
+              "勇敢",
+              "战斗"
+            ],
+            "recommendation": "大妈复活变身美女，新老四皇大战爆发",
+            "evaluate": "拥有财富、名声、权力、这世界上的一切的男人 “海盗王”高路德·罗杰，在临死之前说了一句话，让全世界的人都涌向了大海。“想要我的财宝吗？想要的话，就去拿吧，我把世界上的一切都放在了那里！”，这个世界迎来了“大海盗时代”。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "尾田荣一郎",
+            "集英社"
+          ],
+          "finished": false,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/ac575cdf576bd5eb7775a5371d44e0809235bf20.jpg"
+        },
+        {
+          "title": "Chainsaw Man（电锯人）",
+          "id": "28376",
+          "extra": {
+            "tags": [
+              "异能",
+              "暗黑"
+            ],
+            "recommendation": "让恶魔寄宿在自己的身体，再去狩猎恶魔…",
+            "evaluate": "【此漫画的翻译由杭州翻翻公司提供】被骗得负债累累，过着贫困生活的少年电次，与链锯恶魔波奇塔一起做恶魔猎人勉强活了下去。最底层的生活，因为一次残忍的背叛全都改变了！！让恶魔寄宿在自己的身体去狩猎恶魔，新时代黑暗英雄故事，开幕！！",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "藤本树",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/fef4e807325510365fb87389a4e2c1695360249a.jpg"
+        },
+        {
+          "title": "我独自升级",
+          "id": "34027",
+          "extra": {
+            "tags": [
+              "逆袭"
+            ],
+            "recommendation": "君王的S级，是因为最高只有S级！",
+            "evaluate": "10年前，世界与其他次元连接的“门”被打开，各种魔物不断出现，于是乎能力各异的猎魔者也随之出现，被称为“猎人”。程肖宇是一名实力最弱的E级猎人，在一次挑战任务中，遇到了可怕的隐藏挑战。生死存亡之际，他居然获得了升级系统！在系统的利用下，他能成为最强猎人吗",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "DUBU(REDICE STUDIO)",
+            "DISCIPLES(REDICE STUDIO)",
+            "Chugong、h-goon",
+            "D&C MEDIA CO.,Ltd"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/c077371d238f5c89d69ac3f96a7483cc287c287f.png"
+        },
+        {
+          "title": "石纪元（Dr.Stone）",
+          "id": "25718",
+          "extra": {
+            "tags": [
+              "战斗",
+              "冒险"
+            ],
+            "recommendation": "那一天，世界上所有的人类都...变成了石头！",
+            "evaluate": "那一天，世界上所有的人类都……变成了石头！ 告白未果的热血少年大木大树和怪异度100亿%的理科天才千空 在灾难中生存下来的唯二两人 将如何开辟这石之纪元？ 原作:稻垣理一郎（光速蒙面侠原作） 作画：BOICHI(最强不良传说作者) 空前的SF冒险故事即将开幕!!【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "稻垣理一郎",
+            "Boichi",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/57bf8b25a06c4d1f8ad80e6e9b4af39d6c336f5d.png"
+        },
+        {
+          "title": "怪兽8号",
+          "id": "30124",
+          "extra": {
+            "tags": [
+              "中二"
+            ],
+            "recommendation": "【怪兽8号】与恶魔为伍的勇气，你有吗？",
+            "evaluate": "在怪兽出现率首屈一指的日本——怪兽无情地蹂躏着这个国家，践踏人们的日常。曾经立志要成为防卫队员，而今从事怪兽专门清扫行业的主人公日比野卡夫卡在某一天因为受到谜之生物的影响，身体开始怪兽化。担任讨伐怪兽工作的日本防卫队将这样的他称作“怪兽8号”。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "松本直也",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/86c5eafcfabd3dd6af7f8030ee16e90c83f32100.jpg"
+        },
+        {
+          "title": "镇魂街",
+          "id": "31581",
+          "extra": {
+            "tags": [
+              "杀伐果断",
+              "升级"
+            ],
+            "recommendation": "充满恶灵的世界，你能与你的守护灵携手生存下去吗？",
+            "evaluate": "镇魂街乃吸纳亡灵镇压恶灵之地。这是一个人灵共存的世界，但不是每个人都能进入镇魂街，只有拥有守护灵的寄灵人才可进入。夏铃原本是一名普通的大学实习生，但一次偶然导致她的人生从此不再平凡……在这个充满恶灵的世界，你能与你的守护灵携手生存下去吗？",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "许辰"
+          ],
+          "finished": false,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/3d15ccdb72e2020e3c1de288886e0a646863aeab.jpg"
+        },
+        {
+          "title": "境·界（死神）",
+          "id": "24726",
+          "extra": {
+            "tags": [
+              "勇敢",
+              "经典"
+            ],
+            "recommendation": "以死神之名，斩断黑暗！",
+            "evaluate": "橘发少年黑崎一护是个正义感爆棚的高中生，与父亲、两个妹妹共同生活，从小他就有能看见鬼魂的本事，但并不以为意。一天夜里一只叫“虚”的怪物攻击了一护和他的家人，尾随怪物而来的死神朽木露琪亚身负重伤，只得将灵力转给一护，由他代死神之职。岂料“代职”一发不可收拾，一段时间后，尸魂界发现露琪亚的违规行为，来人将她抓走。为救出朋友，一护在浦原商店店主浦原喜助的帮助下，集结了井上织姬、石田雨龙、茶渡泰虎几位好友，一同前往尸魂界。与此同时，尸魂界瀞灵廷内一场惊天阴谋也在慢慢掀开……【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "久保带人",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/4c4b0666f1d4dd762d0a5d580ba94ee92dfa805f.jpg"
+        },
+        {
+          "title": "石之海（乔乔的奇妙冒险第6部）",
+          "id": "25451",
+          "extra": {
+            "tags": [
+              "勇敢"
+            ],
+            "recommendation": "你对我来说，一直很重要!",
+            "evaluate": "2011年，美国。\n空条承太郎的女儿——空条徐伦被人设计陷害，在与男友“车祸肇事逃逸”后，被捕入狱。\n空条承太郎在营救徐伦逃狱时，遭到敌人替身——白蛇（White Snake）的攻击，变成了没有精神与记忆的植物人。\n徐伦为了救父亲，留在了监狱中与她的敌人作战。\n却发现夺走她父亲记忆和替身能力的人居然是监狱的神父——普奇神父。\n原来普奇神父是DIO的忠实信徒，在DIO死后为了寻找DIO遗留下的“上天堂的方法（当然不是去死）”而袭击了承太郎，掏出了承太郎的替身和记忆disc。\n在获得方法后神父迅速离开了监狱，希望实现这一夙愿，而空条徐伦与她在监狱里结识的朋友们一同出击阻止普奇神父。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "荒木飞吕彦",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/929ff617e0e668ef37326ce9fccb95e384a47bf4.jpg"
+        },
+        {
+          "title": "全知读者视角",
+          "id": "36970",
+          "extra": {
+            "tags": [
+              "智斗"
+            ],
+            "recommendation": "残忍的鬼怪和逐渐升级的逃杀游戏向人们袭来",
+            "evaluate": "“这是我读过的内容。” 当小说中的世界和现实重合，残忍的鬼怪和逐渐升级的逃杀游戏向人们袭来。唯一阅读过全文的金独子拥有了超越他人的优势。但是当熟悉的小说角色一个个出现在他身边，‘主角’对他的敌意和戒备愈发明显，神秘的背后星们也加入乱局。金独子将做出如何的选择，故事将会有怎样的发展？",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "Sleepy-C(3B2S STUDIO)",
+            "UMI(REDICE STUDIO)",
+            "singNsong",
+            "RIVERSE"
+          ],
+          "finished": false,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/4cacc2e766eb07ad99aa1983f293d23627ae34a1.png"
+        },
+        {
+          "title": "火影忍者",
+          "id": "24733",
+          "extra": {
+            "tags": [
+              "勇敢"
+            ],
+            "recommendation": "漩涡鸣人的孤儿生活开始，他的父母为了保护村子，将攻击村子的九尾妖狐封印到了他体内，鸣人因此受尽了村人的冷落，只是拼命用各种恶作剧试图吸引大家的注意力。好在还是有伊鲁卡老师的关心，鸣人的性格才没有变得扭曲，他总是干劲十足、非常乐观。\n【此漫画的翻译由版权方提供】",
+            "evaluate": "漩涡鸣人的孤儿生活开始，他的父母为了保护村子，将攻击村子的九尾妖狐封印到了他体内，鸣人因此受尽了村人的冷落，只是拼命用各种恶作剧试图吸引大家的注意力。好在还是有伊鲁卡老师的关心，鸣人的性格才没有变得扭曲，他总是干劲十足、非常乐观。\n【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "岸本齐史",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/58929c534fd79acdee18c6e3caf6cd77c5a107ca.jpg"
+        },
+        {
+          "title": "终末的女武神",
+          "id": "29838",
+          "extra": {
+            "tags": [
+              "嚣张"
+            ],
+            "recommendation": "人类的十三名最强战士，是否能与神一搏？！",
+            "evaluate": "延续了七百万年的人类历史，此刻将迎来闭幕——\n而缘由竟是因为神的旨意。\n作为人类最后的机会，被挑选出的13名最强战士，将与诸神进行战斗！\n世上的人们能否存续下来，在此一搏。\n赌上人类存亡的战斗，现在开始！",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "鯵力",
+            "梅村真也",
+            "福井巧",
+            "COAMIX"
+          ],
+          "finished": false,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/81da1fa76a6424c587366b2e2d259bc98bd635d0.png"
+        },
+        {
+          "title": "STEEL BALL RUN（乔乔的奇妙冒险第7部）",
+          "id": "25479",
+          "extra": {
+            "tags": [
+              "杀伐果断",
+              "西方"
+            ],
+            "recommendation": "1890年，一场世纪大赛「SBR」於美国举开。全长共6000公里，是人类史上第一场骑乘马匹横越北美大陆的比赛！为了拿下高达5千万美元（60亿日元）的冠军奖金，一群强悍的冒险家们正式展开了他们的争战！【此漫画的翻译由版权方提供】",
+            "evaluate": "1890年，一场世纪大赛「SBR」於美国举开。全长共6000公里，是人类史上第一场骑乘马匹横越北美大陆的比赛！为了拿下高达5千万美元（60亿日元）的冠军奖金，一群强悍的冒险家们正式展开了他们的争战！【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "荒木飞吕彦",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/0b48fd8074cf0ff8a0f98cc4fe3c8007f299ab65.jpg"
+        },
+        {
+          "title": "冰海战记",
+          "id": "25983",
+          "extra": {
+            "tags": [
+              "勇敢"
+            ],
+            "recommendation": "神作！真正的战士，不需要剑！",
+            "evaluate": "在中世纪时，维京人号称是地表最强的民族，他们有自己的战船，以残暴的手段攻击欧陆。而其中被称之为“战鬼”的战士——托尔兹之子托尔芬，跟随着他的杀父仇人阿谢拉特，一边寻找传说之地“文兰”，一边寻找复仇的机会……\n【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "幸村诚",
+            "讲谈社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/1803adcfe5a8fcb5ad527fc8bab292e59ef44013.jpg"
+        },
+        {
+          "title": "黑色四叶草",
+          "id": "25471",
+          "extra": {
+            "tags": [
+              "勇敢"
+            ],
+            "recommendation": "王道热血长篇！绝对会让你燃起来！",
+            "evaluate": "曾经险些遭到魔神毁灭的世界，拯救它的是一位被后世称为“魔法帝”的魔导士……两位被遗弃在教堂的少年，一位是有魔法才能和四叶草魔导书的尤诺，另一位魔法值为零但却意外获得黑色五叶草的魔法书的阿斯塔……这是关于一位没魔法能力的少年却想要成为魔法帝的故事。【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "田畠裕基",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/ca294910aff8c13edc98c8913d07a07075af16f9.jpg"
+        },
+        {
+          "title": "龙珠",
+          "id": "24743",
+          "extra": {
+            "tags": [
+              "勇敢"
+            ],
+            "recommendation": "很久很久以前，地球上散落着七颗神奇的龙珠，传说只要聚齐它们，神龙就会出现，并可以为人实现一个愿望。为了寻找龙珠，布尔玛和孙悟空踏上了奇妙的寻珠之旅……【此漫画的翻译由版权方提供】",
+            "evaluate": "很久很久以前，地球上散落着七颗神奇的龙珠，传说只要聚齐它们，神龙就会出现，并可以为人实现一个愿望。为了寻找龙珠，布尔玛和孙悟空踏上了奇妙的寻珠之旅……【此漫画的翻译由版权方提供】",
+            "category_names": [
+              "热血"
+            ],
+            "category_id": "999"
+          },
+          "authors": [
+            "鸟山明",
+            "集英社"
+          ],
+          "finished": true,
+          "cover_url": "https://i0.hdslb.com/bfs/manga-static/7b5bd977824adf39a8c62ad05f1fccfd1778bc8f.jpg"
+        }
+      ],
+      "source": "official_category",
+      "query": {
+        "category_id": "999",
+        "kind": "category",
+        "sort": 0
+      }
+    },
+    "readonly_guard_installed": true,
+    "parent_session_absent": true,
+    "parent_session_update_absent": true,
+    "account_credentials_used": false,
+    "device_cookie_persisted": false,
+    "requests": [
+      {
+        "route": "AllLabel",
+        "encrypted_response": false,
+        "account_credentials_absent": true,
+        "method": "POST",
+        "code": 0,
+        "status": 200,
+        "bytes": 1004,
+        "anonymous_device_cookie_only": false
+      },
+      {
+        "route": "AnonymousDevice",
+        "method": "GET",
+        "account_credentials_absent": true,
+        "status": 200,
+        "bytes": 88,
+        "anonymous_device_cookie_only": false
+      },
+      {
+        "route": "ClassPage",
+        "encrypted_response": true,
+        "account_credentials_absent": true,
+        "method": "POST",
+        "code": 0,
+        "status": 200,
+        "bytes": 28807,
+        "anonymous_device_cookie_only": true
+      }
+    ],
+    "passed": true,
+    "official_metadata": {
+      "items": [
+        {
+          "id": "999",
+          "name": "热血"
+        },
+        {
+          "id": "997",
+          "name": "古风"
+        },
+        {
+          "id": "1016",
+          "name": "玄幻"
+        },
+        {
+          "id": "998",
+          "name": "奇幻"
+        },
+        {
+          "id": "1023",
+          "name": "悬疑"
+        },
+        {
+          "id": "1002",
+          "name": "都市"
+        },
+        {
+          "id": "1096",
+          "name": "历史"
+        },
+        {
+          "id": "1092",
+          "name": "武侠仙侠"
+        },
+        {
+          "id": "1088",
+          "name": "游戏竞技"
+        },
+        {
+          "id": "1081",
+          "name": "悬疑灵异"
+        },
+        {
+          "id": "1063",
+          "name": "架空"
+        },
+        {
+          "id": "1060",
+          "name": "青春"
+        },
+        {
+          "id": "1054",
+          "name": "西幻"
+        },
+        {
+          "id": "1048",
+          "name": "现代"
+        },
+        {
+          "id": "1028",
+          "name": "正能量"
+        },
+        {
+          "id": "1015",
+          "name": "科幻"
+        }
+      ],
+      "source": "official_categories",
+      "orders": [
+        {
+          "id": 0,
+          "name": "人气推荐"
+        },
+        {
+          "id": 1,
+          "name": "更新时间"
+        },
+        {
+          "id": 3,
+          "name": "上架时间"
+        }
+      ]
+    }
+  },
+  "session_files_absent": true,
+  "official_sources": [
+    {
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/static/js/classify.119a8e5b12.js",
+      "bytes": 262802,
+      "sha256": "97517814c6d6c6b0894860e81fc249507bf99114d42581d094d32a71b5649738"
+    },
+    {
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/static/js/bili.9409128c39.js",
+      "bytes": 537221,
+      "sha256": "8202851c77a8e8a58dab2fc2529542c09b6b6c296e26fe78390ee1206aae6908"
+    }
+  ],
+  "classification_html": {
+    "requested_url": "https://manga.bilibili.com/classify",
+    "url": "https://manga.bilibili.com/classify",
+    "status": 200,
+    "content_type": "text/html",
+    "bytes": 4728,
+    "sha256": "885c3ffd25f6b377bf5dc6bcb1ca00ee382a8361e17221e781d8c68786d3ea7f"
+  },
+  "actual_classpage_shape": {
+    "count": 18,
+    "unique_ids": 18,
+    "type_counts": {
+      "0": 18
+    },
+    "field_types": {
+      "title": [
+        "str"
+      ],
+      "discount_type": [
+        "int"
+      ],
+      "allow_wait_free": [
+        "bool"
+      ],
+      "bottom_info": [
+        "str"
+      ],
+      "bottom_info_v2": [
+        "list"
+      ],
+      "is_finish": [
+        "int"
+      ],
+      "rd_tag": [
+        "str"
+      ],
+      "vertical_cover": [
+        "str"
+      ],
+      "author": [
+        "list"
+      ],
+      "is_free": [
+        "int"
+      ],
+      "introduction": [
+        "str"
+      ],
+      "animated_vertical_cover": [
+        "str"
+      ],
+      "status": [
+        "int"
+      ],
+      "release_time": [
+        "str"
+      ],
+      "styles": [
+        "list"
+      ],
+      "type": [
+        "int"
+      ],
+      "horizontal_cover": [
+        "str"
+      ],
+      "season_id": [
+        "int"
+      ],
+      "last_short_title": [
+        "str"
+      ],
+      "evaluate": [
+        "str"
+      ],
+      "square_cover": [
+        "str"
+      ],
+      "last_ord": [
+        "float",
+        "int"
+      ],
+      "total": [
+        "int"
+      ]
+    },
+    "styles": [
+      "热血"
+    ]
+  },
+  "anonymous_controls": {
+    "strict_cookie_free": {
+      "anonymous": true,
+      "cookie_state_absent": true,
+      "requests": [
+        {
+          "bytes": 2158373,
+          "status": 200,
+          "method": "GET",
+          "credentials_absent": true,
+          "category": "pinned_signing_asset"
+        },
+        {
+          "bytes": 52,
+          "status": 200,
+          "body": {
+            "style_id": 999,
+            "area_id": -1,
+            "is_finish": -1,
+            "order": 0,
+            "special_tag": 0,
+            "page_num": 1,
+            "page_size": 18,
+            "is_free": -1,
+            "m2": "actual native environment error report; timestamp omitted"
+          },
+          "method": "POST",
+          "code": 99,
+          "message": "请求失败,请稍后重试。",
+          "encrypted_bytes": 0,
+          "credentials_absent": true,
+          "category": "anonymous_class_page"
+        }
+      ],
+      "success": false,
+      "error": {
+        "code": 99,
+        "retryable": false,
+        "kind": "business",
+        "message": "The service rejected this request."
+      }
+    },
+    "official_anonymous_device": {
+      "account_credentials_used": false,
+      "anonymous_device_cookie_obtained": true,
+      "requests": [
+        {
+          "account_credentials_absent": true,
+          "category": "official_anonymous_device_context",
+          "status": 200,
+          "bytes": 88,
+          "method": "GET"
+        },
+        {
+          "account_credentials_absent": true,
+          "encrypted_bytes": 28780,
+          "code": 0,
+          "message": "",
+          "status": 200,
+          "bytes": 28827,
+          "category": "class_page_with_anonymous_device_cookie",
+          "method": "POST"
+        }
+      ],
+      "success": true,
+      "comic_count": 18
+    }
+  },
+  "guard_evidence": "spec/local/category-guard-results.json"
+}

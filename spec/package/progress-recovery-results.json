@@ -1,0 +1,69 @@
+{
+  "scope": "Read-only public artifact and source identity recovery; no behavior suites rerun",
+  "execution_host": "test-env",
+  "verified_at": "2026-09-13T04:47:08.062664+00:00",
+  "source_commit": "e86f894742dba66242e582dbfb8510e941ebd616",
+  "source_archive_sha256": "f0006a2451506a5c30884d94e83c148f585b0f3a1df2b137c4f436da9fba9f8e",
+  "archive": "dist/bilicomics-0.1.0-dev.zip",
+  "archive_sha256": "45385c6ff3cc99d2639f92575fb6db0ac363ab20aa76800aa7bbdbdbe93f5342",
+  "archive_bytes": 2466094,
+  "manifest_file_sha256": "e91b6315e168e568457a9c65b4ac85f0ea81e498e678f1d00996f200f92310ba",
+  "packaged_source_map_sha256": "a8c7e93eae557ec9f59f1404848d7fc82de5282c7fd4ef989c760ba3d136d21e",
+  "production_files": 201,
+  "packaged_files": 101,
+  "checks": [
+    {
+      "name": "source_archive_identifies_merged_commit",
+      "passed": true
+    },
+    {
+      "name": "complete_production_map_matches_unified_regression",
+      "passed": true
+    },
+    {
+      "name": "historical_regression_report_matches_bound_digest",
+      "passed": true
+    },
+    {
+      "name": "historical_regression_records_all_34_suites_passed",
+      "passed": true
+    },
+    {
+      "name": "later_acceptance_records_passed",
+      "passed": true
+    },
+    {
+      "name": "canonical_archive_matches_both_acceptance_bindings",
+      "passed": true
+    },
+    {
+      "name": "canonical_manifest_file_matches_original_binding",
+      "passed": true
+    },
+    {
+      "name": "canonical_packaged_source_map_matches_later_acceptance",
+      "passed": true
+    },
+    {
+      "name": "archive_has_exact_unique_manifest_paths",
+      "passed": true
+    },
+    {
+      "name": "all_packaged_bytes_match_manifest_and_current_source",
+      "passed": true
+    }
+  ],
+  "historical_regression_suites": 34,
+  "behavior_suites_rerun": false,
+  "local_verification_run": false,
+  "credentials_read": false,
+  "account_requests": 0,
+  "actual_purchases_executed": false,
+  "evidence_sha256": {
+    "spec/integration/stabilization-regression-results.json": "153245fafd738224c302c66bf72444b8916dd572cc5c6e186fc702163172f8ed",
+    "spec/package/stabilization-source-evidence.json": "ae5f4ca33c63537ae7c0ced26949782ed5c77f31a93286c70442e2cc1a2380ef",
+    "spec/package/local-acceptance-source-evidence.json": "35b3b51611c74033ef74e1840d40ba4933e424fa69c8247723c39bb4e5dc1d2e"
+  },
+  "verifier_sha256": "718cb81cb369a16cfa7eb11c782198a6cf8bd95d30337386b6cf7314fb5c7ed4",
+  "passed": true
+}

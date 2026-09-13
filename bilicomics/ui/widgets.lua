@@ -6,11 +6,13 @@ local FocusManager = require("ui/widget/focusmanager")
 local Font = require("ui/font")
 local FrameContainer = require("ui/widget/container/framecontainer")
 local Geom = require("ui/geometry")
+local GestureRange = require("ui/gesturerange")
 local HorizontalGroup = require("ui/widget/horizontalgroup")
 local HorizontalSpan = require("ui/widget/horizontalspan")
 local ImageWidget = require("ui/widget/imagewidget")
 local ImageHeader = require("bilicomics/storage/image_header")
 local ImagePolicy = require("bilicomics/image_policy")
+local InputContainer = require("ui/widget/container/inputcontainer")
 local TextBoxWidget = require("ui/widget/textboxwidget")
 local UIManager = require("ui/uimanager")
 local VerticalGroup = require("ui/widget/verticalgroup")
@@ -32,7 +34,7 @@ function W.text(text, width, size, options)
         text = tostring(text or ""), width = width, face = Font:getFace(options.display and "tfont" or "cfont", size or 18),
         bold = options.bold or false, fgcolor = options.muted and W.muted or W.ink,
         alignment = options.align or "left", height = options.height,
-        height_adjust = options.height ~= nil, height_overflow_show_ellipsis = true,
+        height_adjust = options.height ~= nil and options.fixed_height ~= true, height_overflow_show_ellipsis = true,
         line_height = 0, padding = 0,
     }
 end
@@ -82,6 +84,54 @@ function W.cover(comic, width, height)
     end
     return FrameContainer:new{ padding = 0, bordersize = W.scale(1), margin = 0, image }
 end
+
+local CoverCard = InputContainer:extend{ enabled = true }
+
+function CoverCard:init()
+    local border, padding = W.scale(2), W.scale(4)
+    local inner = self.width - 2 * (border + padding)
+    local image_border = W.scale(1)
+    local cover_width = math.min(inner, math.floor(self.cover_height / 1.34))
+    local content = {
+        CenterContainer:new{ dimen = Geom:new{ w = inner, h = self.cover_height },
+            W.cover(self.comic, cover_width - 2 * image_border, self.cover_height - 2 * image_border) },
+    }
+    if self.compact then
+        content[#content + 1] = W.space(5)
+        content[#content + 1] = W.text(self.text, inner, 16, { bold = true, height = W.scale(40), fixed_height = true })
+        content[#content + 1] = W.space(2)
+        content[#content + 1] = W.text(self.update or "", inner, 12,
+            { muted = true, height = W.scale(18), fixed_height = true })
+    else
+        content[#content + 1] = W.space(7)
+        content[#content + 1] = W.text(self.text, inner, 18, { bold = true, height = W.scale(44), fixed_height = true })
+        content[#content + 1] = W.space(3)
+        content[#content + 1] = W.text(self.progress, inner, 14, { height = W.scale(38), fixed_height = true })
+        content[#content + 1] = W.space(2)
+        content[#content + 1] = W.text(self.update or "", inner, 13,
+            { muted = true, height = W.scale(22), fixed_height = true })
+    end
+    self.frame = FrameContainer:new{ padding = padding, margin = 0, bordersize = border,
+        color = W.paper, background = W.paper, W.column(content) }
+    self[1] = self.frame
+    self.dimen = Geom:new{ x = 0, y = 0, w = self.width, h = self.frame:getSize().h }
+    self.ges_events = {
+        TapSelect = { GestureRange:new{ ges = "tap", range = self.dimen } },
+        HoldSelect = { GestureRange:new{ ges = "hold", range = self.dimen } },
+    }
+end
+
+function CoverCard:onFocus() self.focused = true; self.frame.color = W.ink; return true end
+function CoverCard:onUnfocus() self.focused = false; self.frame.color = W.paper; return true end
+function CoverCard:onTapSelect()
+    if self.enabled and self.callback then self.callback() end
+    return true
+end
+function CoverCard:onHoldSelect()
+    if self.enabled and self.hold_callback then self.hold_callback() end
+    return true
+end
+W.CoverCard = CoverCard
 
 local Panel = FocusManager:extend{ name = "bilicomics", covers_fullscreen = true }
 

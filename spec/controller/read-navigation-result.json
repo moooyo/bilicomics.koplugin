@@ -1,0 +1,70 @@
+{
+    "spec": "read-navigation",
+    "passed": true,
+    "host": "test-env",
+    "tests": [
+        {
+            "name": "Navigation during delayed chapter preparation never opens the obsolete reader",
+            "passed": true
+        },
+        {
+            "name": "An obsolete preparation failure cannot show an error after navigation",
+            "passed": true
+        },
+        {
+            "name": "A newer reading request supersedes earlier preparation without canceling shared workers",
+            "passed": true
+        },
+        {
+            "name": "An already dispatched native opener retains the existing busy contract",
+            "passed": true
+        },
+        {
+            "name": "Explicit navigation releases an in-flight opener lease and closes its late native reader",
+            "passed": true
+        },
+        {
+            "name": "A canceled opener cannot claim a replacement opening for the same path",
+            "passed": true
+        },
+        {
+            "name": "Navigation during temporary-access refresh cannot grant or open the obsolete chapter",
+            "passed": true
+        },
+        {
+            "name": "An obsolete temporary-access failure remains silent after navigation",
+            "passed": true
+        },
+        {
+            "name": "A newer request retires earlier temporary-access refresh",
+            "passed": true
+        },
+        {
+            "name": "A current temporary-access request still confirms the grant before opening",
+            "passed": true
+        },
+        {
+            "name": "Normal opening transfers the lease to the reader and later navigation leaves it open",
+            "passed": true
+        },
+        {
+            "name": "Reusing an existing reader preserves its active lease and needs no second native opener",
+            "passed": true
+        },
+        {
+            "name": "Canceling foreground reading does not alter durable downloads or pending purchase records",
+            "passed": true
+        },
+        {
+            "name": "The optional opener generation preserves other native-opening callers",
+            "passed": true
+        }
+    ],
+    "synthetic_data": true,
+    "controlled_async_boundaries": [
+        "prepareEpisode",
+        "refreshComic",
+        "reader_opener"
+    ],
+    "native_reader_rendered": false
+}

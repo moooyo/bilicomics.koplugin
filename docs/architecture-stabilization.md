@@ -1,5 +1,10 @@
 # Architecture stabilization and acceptance
 
+This completed task records the earlier 101-file candidate, now retained under
+`dist/history/stabilization-45385c6f/`. The default ZIP was subsequently updated
+by [the bookshelf revision](bookshelf-grid.md); its separate evidence does not
+relabel the source snapshots recorded here.
+
 Started on 2026-09-13 from `658650b28b4620187d9f5b2d3d0680c051753dd2`.
 The user requested implementation of the architecture review plan. This record
 separates current work from historical verification and keeps every remaining

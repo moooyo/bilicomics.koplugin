@@ -58,6 +58,7 @@ end
 local screens = Screens.new{ controller = app }
 app:setScreens(screens)
 screens:showLibrary(); flush()
+check("session_import_default_destination_is_bookshelf", screens.route == "favorites")
 local function dialogButton(message)
     for _index, row in ipairs(screens.dialog.buttons) do
         for _index, button in ipairs(row) do if button.text == _(message) then return button end end
@@ -147,7 +148,7 @@ selectFile("session.txt")
 local closed_task = requests[#requests]
 dialogButton("Close").callback()
 validated(closed_task)
-check("closed_status_does_not_reopen_success_feedback", screens.dialog == nil and screens.route == "continue")
+check("closed_status_does_not_reopen_success_feedback", screens.dialog == nil and screens.route == "favorites")
 
 screens:_importSessionFile(); picker = screens.dialog
 picker:onMenuSelect({ path = fixtures .. "/session.txt", is_file = true })

@@ -20,7 +20,7 @@ local Worker = require("bilicomics/jobs/worker")
 package.loaded[protocol_key] = original_client
 
 local method_names = {
-    "listFavorites", "listHistory", "search", "comicDetail", "imageIndex", "wallet",
+    "listFavorites", "listHistory", "recommendations", "search", "comicDetail", "imageIndex", "wallet",
     "purchaseInfo", "validateSession", "buyEpisode", "imageTokens", "downloadImage", "addHistory",
 }
 
@@ -103,7 +103,7 @@ run("Read-only operation whitelist", function()
         local result, err = Worker.execute({ kind = "client", method = method, arguments = { "10" } })
         check("Read workers reject " .. method, result == nil and err.kind == "invalid_request" and #scenario.calls == 0)
     end
-    for _, method in ipairs({ "listFavorites", "listHistory", "search", "comicDetail", "imageIndex", "wallet", "purchaseInfo" }) do
+    for _, method in ipairs({ "listFavorites", "listHistory", "recommendations", "search", "comicDetail", "imageIndex", "wallet", "purchaseInfo" }) do
         local expected, first, second = { marker = method }, { page_num = 7 }, "second-argument"
         client({ [method] = function(a, b)
             check(method .. " preserves the request arguments", a == first and b == second)
@@ -113,8 +113,10 @@ run("Read-only operation whitelist", function()
             session = { cookies = { SESSDATA = "synthetic-session" } }, asset_root = "/synthetic/protocol-assets",
             transport_options = { timeout = 9 } })
         check(method .. " returns its read result", result == expected and err == nil and #scenario.calls == 1)
-        check(method .. " constructs an isolated client with supplied configuration", scenario.constructions == 1
-            and scenario.options.session.cookies.SESSDATA == "synthetic-session"
+        local expected_session = method == "recommendations" and scenario.options.session == nil
+            or method ~= "recommendations" and scenario.options.session.cookies.SESSDATA == "synthetic-session"
+        check(method .. " constructs an isolated client with the expected configuration", scenario.constructions == 1
+            and expected_session
             and scenario.options.transport_options.timeout == 9 and scenario.options.asset_root == "/synthetic/protocol-assets")
     end
 end)

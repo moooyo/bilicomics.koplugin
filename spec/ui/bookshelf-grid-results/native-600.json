@@ -1,0 +1,582 @@
+{
+    "assertions": [
+        {
+            "passed": true,
+            "name": "oversized_cover_fixture_is_a_real_six_megapixel_png"
+        },
+        {
+            "passed": true,
+            "name": "oversized_cached_cover_never_reaches_image_widget"
+        },
+        {
+            "passed": true,
+            "name": "legacy_history_navigation_opens_bookshelf"
+        },
+        {
+            "passed": true,
+            "name": "legacy_continue_navigation_opens_bookshelf"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "bookshelf_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "bookshelf_paginates_comic_cards"
+        },
+        {
+            "passed": true,
+            "name": "bookshelf_read_resolves_the_selected_comic"
+        },
+        {
+            "passed": true,
+            "name": "reading_uses_async_controller"
+        },
+        {
+            "passed": true,
+            "name": "network_failure_is_actionable"
+        },
+        {
+            "passed": true,
+            "name": "async_error_dialog_stays_above_refreshed_screen"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "following_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "following_card_has_direct_read_action"
+        },
+        {
+            "passed": true,
+            "name": "locked_next_chapter_enters_quote_instead_of_read_or_purchase"
+        },
+        {
+            "passed": true,
+            "name": "following_filter_changes"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "chapters_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "follow_click_waits_for_server_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "pending_follow_button_prevents_repeat_clicks"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "follow-pending_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "server_confirmation_updates_follow_action"
+        },
+        {
+            "passed": true,
+            "name": "failed_unfollow_keeps_confirmed_state"
+        },
+        {
+            "passed": true,
+            "name": "chapter_three_axes"
+        },
+        {
+            "passed": true,
+            "name": "locked_and_online_only_chapters_never_selected"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "download-selection_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "selection_dispatches_exact_ids"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "downloads_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "pause_calls_controller"
+        },
+        {
+            "passed": true,
+            "name": "resume_calls_controller"
+        },
+        {
+            "passed": true,
+            "name": "download_failure_exposes_login_recovery"
+        },
+        {
+            "passed": true,
+            "name": "remove_download_requires_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "remove_download_uses_async_controller"
+        },
+        {
+            "passed": true,
+            "name": "partial_download_can_be_removed"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "account_fits_screen"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "account-pending_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "reader_default_controls_persist_exact_enums"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "reader-defaults_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 285,
+                "x": 30,
+                "w": 540,
+                "y": 257
+            },
+            "passed": true,
+            "name": "reader-defaults_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "diagnostics_uses_async_controller"
+        },
+        {
+            "passed": true,
+            "name": "diagnostics_explains_local_verification_boundary"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "local-diagnostics_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 776,
+                "x": 13,
+                "w": 574,
+                "y": 12
+            },
+            "passed": true,
+            "name": "local-diagnostics_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "closed_diagnostic_request_does_not_reopen_dialog"
+        },
+        {
+            "passed": true,
+            "name": "prefetch_setting_persists"
+        },
+        {
+            "passed": true,
+            "name": "session_input_is_private"
+        },
+        {
+            "passed": true,
+            "name": "session_render_masks_characters"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "search_fits_screen"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "comic-id-input_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 192,
+                "x": 58,
+                "w": 484,
+                "y": 304
+            },
+            "passed": true,
+            "name": "comic-id-input_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "id_lookup_is_explicit_and_separate_from_title_search"
+        },
+        {
+            "passed": true,
+            "name": "id_lookup_opens_returned_details_without_second_refresh"
+        },
+        {
+            "passed": true,
+            "name": "older_id_response_does_not_override_latest_query"
+        },
+        {
+            "passed": true,
+            "name": "latest_id_response_opens_requested_comic"
+        },
+        {
+            "passed": true,
+            "name": "quote_is_async"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "purchase_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 499,
+                "x": 18,
+                "w": 564,
+                "y": 150
+            },
+            "passed": true,
+            "name": "purchase_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "batch_selection_requests_a_new_server_quote"
+        },
+        {
+            "passed": true,
+            "name": "batch_uses_returned_total"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "purchase-batch_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 561,
+                "x": 18,
+                "w": 564,
+                "y": 119
+            },
+            "passed": true,
+            "name": "purchase-batch_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "quote_shows_permanent_access"
+        },
+        {
+            "passed": true,
+            "name": "quote_refresh_preserves_selected_scope"
+        },
+        {
+            "passed": true,
+            "name": "purchase_is_async"
+        },
+        {
+            "passed": true,
+            "name": "read_purchase_passes_explicit_read_purpose"
+        },
+        {
+            "passed": true,
+            "name": "purchase_freezes_scope_payment_and_submission"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "purchase-unknown_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 333,
+                "x": 18,
+                "w": 564,
+                "y": 233
+            },
+            "passed": true,
+            "name": "purchase-unknown_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "unknown_result_has_no_repeat_purchase"
+        },
+        {
+            "passed": true,
+            "name": "reopened_purchase_preserves_pending_intent"
+        },
+        {
+            "passed": true,
+            "name": "pending_action_reconciles"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "purchase-confirmed_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 333,
+                "x": 18,
+                "w": 564,
+                "y": 233
+            },
+            "passed": true,
+            "name": "purchase-confirmed_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "entitlement_only_result_does_not_claim_confirmed_payment"
+        },
+        {
+            "passed": true,
+            "name": "read_continuation_uses_the_original_selected_chapter"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "purchase-low-balance_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 561,
+                "x": 18,
+                "w": 564,
+                "y": 119
+            },
+            "passed": true,
+            "name": "purchase-low-balance_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "low_balance_has_refresh_without_purchase"
+        },
+        {
+            "passed": true,
+            "name": "dismissed_quote_does_not_reopen"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "locked-download-action_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "locked_download_entry_quotes_only_the_selected_single_chapter"
+        },
+        {
+            "passed": true,
+            "name": "download_purpose_is_visible_before_payment_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "single_download_entry_never_offers_a_batch_purchase"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "purchase-download_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 499,
+                "x": 18,
+                "w": 564,
+                "y": 150
+            },
+            "passed": true,
+            "name": "purchase-download_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "changing_payment_invalidates_the_previous_confirmation_button"
+        },
+        {
+            "passed": true,
+            "name": "explicit_download_purchase_freezes_and_passes_its_purpose"
+        },
+        {
+            "passed": true,
+            "name": "unknown_download_result_has_no_automatic_acquisition"
+        },
+        {
+            "passed": true,
+            "name": "pending_list_restores_the_durable_download_purpose"
+        },
+        {
+            "passed": true,
+            "name": "read_entry_cannot_replace_an_existing_download_intent"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "download-access-confirmed_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 333,
+                "x": 18,
+                "w": 564,
+                "y": 233
+            },
+            "passed": true,
+            "name": "download-access-confirmed_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "confirmed_download_waits_for_explicit_continuation"
+        },
+        {
+            "passed": true,
+            "name": "download_continuation_queues_only_its_original_chapter_once"
+        },
+        {
+            "passed": true,
+            "name": "download_failure_keeps_confirmed_access_and_has_no_new_quote"
+        },
+        {
+            "detail": {
+                "w": 568,
+                "h": 784
+            },
+            "passed": true,
+            "name": "download-continuation-retry_fits_screen"
+        },
+        {
+            "detail": {
+                "h": 426,
+                "x": 18,
+                "w": 564,
+                "y": 187
+            },
+            "passed": true,
+            "name": "download-continuation-retry_dialog_fits_screen"
+        },
+        {
+            "passed": true,
+            "name": "successful_continuation_opens_downloads"
+        },
+        {
+            "passed": true,
+            "name": "navigation_retires_the_old_continuation_button"
+        },
+        {
+            "passed": true,
+            "name": "closed_result_callback_neither_reopens_nor_downloads"
+        },
+        {
+            "passed": true,
+            "name": "account_switch_retires_a_displayed_purchase_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "server_accepted_evidence_can_display_confirmed_purchase"
+        },
+        {
+            "passed": true,
+            "name": "account_switch_retires_a_displayed_download_continuation"
+        },
+        {
+            "passed": true,
+            "name": "stale_callback_does_not_reopen_closed_ui"
+        }
+    ],
+    "screens": [
+        "bookshelf.png",
+        "following.png",
+        "chapters.png",
+        "follow-pending.png",
+        "download-selection.png",
+        "downloads.png",
+        "account.png",
+        "account-pending.png",
+        "reader-defaults.png",
+        "local-diagnostics.png",
+        "search.png",
+        "comic-id-input.png",
+        "purchase.png",
+        "purchase-batch.png",
+        "purchase-unknown.png",
+        "purchase-confirmed.png",
+        "purchase-low-balance.png",
+        "locked-download-action.png",
+        "purchase-download.png",
+        "download-access-confirmed.png",
+        "download-continuation-retry.png"
+    ],
+    "runtime": "KOReader v2026.07.1"
+}

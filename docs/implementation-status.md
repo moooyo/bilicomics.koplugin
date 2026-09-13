@@ -2,7 +2,15 @@
 
 Date: 2026-09-13. Version: `0.1.0-dev`.
 
-Current follow-up: [architecture stabilization](architecture-stabilization.md)
+Latest change: [Bookstore subject browsing](bookstore-categories.md) adds current
+official categories and anonymously initialized popularity-ordered catalog pages
+alongside the expanded homepage feed. It retains six cards at 600 by 800 and
+replaces the independent History tab. Bookshelf remains the default first
+tab and retains reading progress. The bookshelf toolbar simplification remains
+a [design proposal](bookshelf-experience-proposal.md).
+The following stabilization records retain their earlier source snapshots.
+
+The preceding [architecture stabilization](architecture-stabilization.md)
 has completed the reviewed dispatch/completion fixes, all 34 unified remote
 suites, canonical packaging, and real 45-page online/offline runs against the
 matching production tree on test-env and local WSL KOReader. Real QR confirmation,
@@ -11,12 +19,23 @@ replaced the physical Scribe gate with local KOReader acceptance and explicitly
 deferred credential rotation/old-token confirmation after the service returned
 refresh=false. Actual purchasing remains separately unauthorized.
 
+That stabilization work was merged into `main` at `e86f894`. The
+[progress recovery record](progress-recovery.md) identifies that earlier delivery
+and separates its completed acceptance from future release work.
+
+Subsequent [interactive account reading](live-ui-reading-2026-09-13.md) exposed
+a missing site-initialization step for fresh QR sessions: login and following
+worked, but protected catalogs returned code `99` without `buvid3`. Completing
+the official site initialization repaired the current session and enabled real
+page-by-page reading. Automatic initialization is still missing in production;
+the current package has not been changed to fix it.
+
 ## Historical implementation and evidence
 
 The following records describe their original snapshots. Use the stabilization
-record above for the current candidate, common-source verification, and gates.
+and bookstore records above for their respective source bindings and gates.
 
-The subsequent [QR sign-in and renewable-session change](session-renewal.md) is implemented in the current source and an authentication development candidate. It adds private refresh credentials, serialized maintenance, crash markers, and native QR UI. Its own remote synthetic evidence is separate from the older integrated package and reading evidence below. Real QR confirmation, authenticated refresh/confirmation, long-duration retention, and physical Scribe execution remain unverified.
+The earlier [QR sign-in and renewable-session change](session-renewal.md) introduced private refresh credentials, serialized maintenance, crash markers, and native QR UI. At that authentication candidate's original snapshot, real QR confirmation, authenticated refresh/confirmation, long-duration retention, and physical Scribe execution were unverified. Subsequent stabilization verified real QR confirmation, private saving and restart on that stabilization production tree; actual credential rotation and physical-device behavior retain the limits stated above.
 
 This is a development implementation, not a completed release. A complete real free chapter passes the production plugin's native online reading, prefetch, retained download and new-process offline reopening workflow: 45 pages and 92,022,101 image bytes, with 51 online and 30 offline checks. The independent comic UI, reader integration, storage, workers and explicit-purchase state workflow are implemented. Standard coin batches now support the strict ordinal range primitive, including positive and remaining ranges; extra discount/card choices remain advisory. The user has authorized operations other than actual purchases. Read-only live quotation and isolated synthetic transaction regressions have run, while actual charging and physical target-device acceptance remain unverified.
 
@@ -24,7 +43,7 @@ The primary device is Kindle Scribe, first generation, running Kindle firmware 5
 
 The [quote-selection and ordinal implementation](quote-selection-implementation.md) now has focused module, native UI, transaction-state and SQLite restart evidence. Production Range/Fetch/Quote also constructed submittable positive and remaining quotes from newly captured authenticated reads. The proof retains server_confirmed_ids=false: the UI presents the ordinal rule and current expected episode list, not a server receipt. Extra-asset consumption and live post-purchase membership remain untested.
 
-The integrated default development package includes the bounded [download connectivity correction](download-connectivity.md), [temporary-access expiry display](entitlement-display-update.md), and quote-selection/ordinal changes. Twenty-five focused connectivity cases passed, including real queue retries and callback suspension, and 132 native display checks passed at each of two screen sizes. These reading results retain their original snapshots. Package manifests and source provenance identify the integrated build; earlier reading and preview archives are historical variants. The current integrated revision has no local interactive or physical Scribe execution evidence.
+The earlier 96-file integrated development package included the bounded [download connectivity correction](download-connectivity.md), [temporary-access expiry display](entitlement-display-update.md), and quote-selection/ordinal changes. Twenty-five focused connectivity cases passed, including real queue retries and callback suspension, and 132 native display checks passed at each of two screen sizes. These reading results retain their original snapshots. That historical integrated revision had no local interactive or physical Scribe execution evidence. The subsequent 101-file stabilization candidate has separate local KOReader acceptance recorded above; physical Scribe execution remains unverified.
 
 The [official koxtoolchain target guidance](https://github.com/koreader/koxtoolchain/blob/2026.08/README.md) maps firmware >= 5.16.3 to `kindlehf`, making that the package choice for the stated 5.19.3 firmware. The toolchain loader's original failure is now traced to its old Thumb load-bias code; a private diagnostic correction permits startup. A separate old-glibc BIND_NOW relocation-gap failure in the plugin ARM libraries is fixed by their link layout. Rebuilt libraries passed nine bounded QEMU primitive checks each with that diagnostic glibc 2.20 environment and unmodified Debian glibc 2.41. The loader correction is not packaged. These results do not establish the Scribe's actual libc or physical execution. The softfp branch remains incompatible. See [the correction and evidence](kindle-native-compatibility-fix.md).
 
@@ -155,9 +174,13 @@ The historical Android Runner checks covered large-pipe transfer, UI heartbeat, 
 
 Image processing applies bounded compressed-input and pixel/format limits. Initial defaults are safeguards based on remote measurements, not published device capacity claims. An oversized unsupported image is reported rather than decoded without a bound.
 
-## Next integration steps
+## Future release acceptance
 
-1. Validate installation, native startup, session file import, reading, memory pressure, suspend/resume, touch and e-ink refresh on the declared physical Scribe. The complete live chapter workflow already passes on the official Linux runtime.
-2. Preserve the prohibition on actual purchases. Read-only quote/wallet operations and non-spending synthetic checks are authorized, but they do not establish actual deduction, coupon/card consumption or delivered post-purchase range membership. Keep extra discounts advisory until their contract is established.
-3. Resolve any further observed read-protocol or device incompatibility using actual evidence. Do not silently add a companion service, widen access eligibility or mark a rejected request successful.
-4. Complete the declared KOReader/device acceptance matrix before promoting the development package to a release.
+The architecture stabilization and the revised local KOReader acceptance are
+complete; see [the completion record](architecture-stabilization.md#completion-rule).
+The items below are future release work, not remaining gates for that task.
+
+1. Before advertising physical Scribe support, verify installation, native startup, session import, reading, memory pressure, suspend/resume, touch and e-ink refresh on the declared device and exact KOReader build. Physical execution was removed from the completed local acceptance task and remains unverified.
+2. Preserve the prohibition on actual purchases. Real debit, coupon/card consumption and post-purchase range membership require separate explicit authorization for the concrete account, chapter/range and asset amount. Keep extra discount choices advisory until their contract is established.
+3. Keep server-required credential rotation and old-token confirmation deferred. The completed real login and restart checks returned `refresh=false`; they do not establish live rotation or long-term session retention.
+4. Address further observed protocol or device incompatibilities using actual evidence, and complete the declared KOReader/device release matrix before promoting the development candidate. Do not infer support from emulated or synthetic results.

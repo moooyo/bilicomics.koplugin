@@ -1,6 +1,22 @@
 # Integrated development package verification
 
-This is the historical 96-file integrated build record. The current canonical
+The latest default archive is the categorized Bookstore revision. Its
+[source binding](bookstore-categories-source-evidence.json), [package checks](bookstore-categories-results.json)
+and [implementation/acceptance record](../../docs/bookstore-categories.md) supersede the
+default archive references below. The preceding 102-file compact bookshelf
+archive remains under `dist/history/bookshelf-60ea9d6a/`, with its original
+[source binding](bookshelf-source-evidence.json). The 101-file stabilization
+archive remains under `dist/history/stabilization-45385c6f/`.
+
+The initial 104-file Bookstore package, manifest and original evidence archive
+remain under `dist/history/bookstore-43a82cca/`. Its seven-comic feed and two-card
+layout are superseded by the current four-section, compact-grid implementation.
+
+The 104-file expanded homepage candidate and its evidence are retained under
+`dist/history/bookstore-c6fca6fe/`. The current candidate adds official subject
+browsing and independently scoped category-cache and protocol evidence.
+
+This is the historical 96-file integrated build record. The preceding stabilization
 candidate and its exact production/reading bindings are recorded in
 [stabilization-source-evidence.json](stabilization-source-evidence.json), with
 [package checks](stabilization-results.json) and the
@@ -8,10 +24,15 @@ candidate and its exact production/reading bindings are recorded in
 The default ZIP filename has been reused for that newer candidate; the historical
 hash and file count below continue to identify the earlier artifact only.
 
-The current default archive contains **96 files** and integrates the quote and
-ordinal-range UI. `dist/bilicomics-quote-preview.zip` is an identical-byte alias
-of `dist/bilicomics-0.1.0-dev.zip`; it no longer selects a different code variant.
-Both archives have SHA256
+The subsequent [progress recovery](../../docs/progress-recovery.md) rechecked
+the then-current stabilization delivery against the merged production tree and both acceptance
+bindings through `ssh test-env`, without rerunning behavioral suites.
+
+That historical default archive contained **96 files** and integrated the quote
+and ordinal-range UI. At that snapshot, `dist/bilicomics-quote-preview.zip` was an
+identical-byte alias of `dist/bilicomics-0.1.0-dev.zip`. The preview still identifies
+the older snapshot; it is not an alias of the subsequent 101-file stabilization candidate.
+Both historical archives had SHA256
 `8891f287f3cc87904589bee378afdfb0b0bc1cdb5257dc6cece79968d18e6530`
 and contain 2,446,099 bytes. Their separate manifests name their respective ZIPs.
 

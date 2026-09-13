@@ -1,0 +1,651 @@
+{
+  "environment": "ssh test-env",
+  "runtime": "/var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "source_sha256": {
+    "bilicomics/protocol/recommendations.lua": "12320090d2e49188797ec95fbdd2d772c932f817c28d47cde062b86a224e4dc2",
+    "bilicomics/protocol/client.lua": "2c0ecceac9d8e8e82fcb2505fc84d9290051838111dff27b67cde340f48b529a",
+    "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+    "spec/protocol/recommendations_spec.lua": "11d6c3df562eb97338bbdf98a0aee95a237a680308fa3cb3ad8456a87757a9a0"
+  },
+  "source_unchanged": true,
+  "returncode": 0,
+  "network_namespace_isolated": true,
+  "official_source": {
+    "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc-ssr/assets/entries/pages_index.B7vjAQej.js",
+    "sha256": "f3dec7912ae8d6357166ce3681d4b409f795485088f607e170e852269f2b136a",
+    "bytes": 51891,
+    "modules": [
+      "recommendation",
+      "hotSeller",
+      "internetHot",
+      "completedComic",
+      "ranking"
+    ]
+  },
+  "official_observations": [
+    {
+      "section": "recommendation",
+      "count": 7,
+      "new_unique": 7,
+      "cumulative_unique": 7,
+      "ids": [
+        25471,
+        30154,
+        28427,
+        24743,
+        27098,
+        29126,
+        26742
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "": 7
+      },
+      "key_sets": [
+        [
+          "evaluate",
+          "horizontal_cover",
+          "id",
+          "tags",
+          "title",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "hotSeller.firstGroup",
+      "count": 5,
+      "new_unique": 5,
+      "cumulative_unique": 12,
+      "ids": [
+        26470,
+        30613,
+        39656,
+        26518,
+        26395
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 5
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "hotSeller.secondGroup",
+      "count": 5,
+      "new_unique": 5,
+      "cumulative_unique": 17,
+      "ids": [
+        29039,
+        29196,
+        34355,
+        25966,
+        25539
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 5
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "internetHot.firstGroup",
+      "count": 5,
+      "new_unique": 4,
+      "cumulative_unique": 21,
+      "ids": [
+        27660,
+        25137,
+        40837,
+        41583,
+        29039
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 5
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "internetHot.secondGroup",
+      "count": 5,
+      "new_unique": 4,
+      "cumulative_unique": 25,
+      "ids": [
+        40520,
+        38803,
+        24733,
+        38804,
+        34355
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 5
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "completedComic.firstGroup",
+      "count": 5,
+      "new_unique": 5,
+      "cumulative_unique": 30,
+      "ids": [
+        40595,
+        28386,
+        24794,
+        25501,
+        25717
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 5
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "completedComic.secondGroup",
+      "count": 5,
+      "new_unique": 4,
+      "cumulative_unique": 34,
+      "ids": [
+        27545,
+        25718,
+        30123,
+        24743,
+        32749
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 5
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "ranking.JP",
+      "count": 50,
+      "new_unique": 41,
+      "cumulative_unique": 75,
+      "ids": [
+        25969,
+        27189,
+        24742,
+        30613,
+        26470,
+        28201,
+        26444,
+        30145,
+        25539,
+        26468,
+        31443,
+        24726,
+        33215,
+        31344,
+        24733,
+        32263,
+        36564,
+        40389,
+        27654,
+        26446,
+        31446,
+        36271,
+        25717,
+        32020,
+        25900,
+        25966,
+        25137,
+        32197,
+        31447,
+        30759,
+        25475,
+        42018,
+        26731,
+        28284,
+        41572,
+        32282,
+        27857,
+        24866,
+        24743,
+        28218,
+        34166,
+        32210,
+        30460,
+        27346,
+        32025,
+        25505,
+        27344,
+        30123,
+        27379,
+        26804
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 50
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "ranking.CN",
+      "count": 50,
+      "new_unique": 39,
+      "cumulative_unique": 114,
+      "ids": [
+        29039,
+        27854,
+        39919,
+        30430,
+        29329,
+        32835,
+        29196,
+        34377,
+        34355,
+        36091,
+        38804,
+        25501,
+        34370,
+        33501,
+        31329,
+        25506,
+        26518,
+        41583,
+        27591,
+        39692,
+        26742,
+        26723,
+        39317,
+        26551,
+        34159,
+        38803,
+        27660,
+        31237,
+        37651,
+        24442,
+        32716,
+        26908,
+        40270,
+        29839,
+        41997,
+        39433,
+        30657,
+        35924,
+        29040,
+        40462,
+        36300,
+        39456,
+        32437,
+        40233,
+        40530,
+        33136,
+        41046,
+        36301,
+        39724,
+        40520
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 50
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    },
+    {
+      "section": "ranking.KO",
+      "count": 50,
+      "new_unique": 50,
+      "cumulative_unique": 164,
+      "ids": [
+        36970,
+        41689,
+        34027,
+        41658,
+        40154,
+        33600,
+        33601,
+        41022,
+        34224,
+        41674,
+        41120,
+        41123,
+        40034,
+        41691,
+        36824,
+        36826,
+        39522,
+        41951,
+        40150,
+        38932,
+        41129,
+        28630,
+        41023,
+        39520,
+        39283,
+        37835,
+        28241,
+        41692,
+        41756,
+        40731,
+        38933,
+        38825,
+        34438,
+        41130,
+        38194,
+        36076,
+        40810,
+        39846,
+        41690,
+        33917,
+        39843,
+        41754,
+        27915,
+        34329,
+        42000,
+        27499,
+        40809,
+        34246,
+        39519,
+        39285
+      ],
+      "all_numeric_comic_ids": true,
+      "all_titles_covers": true,
+      "jump_values": {
+        "bilicomic://reader_progress/<id>": 50
+      },
+      "key_sets": [
+        [
+          "allow_wait_free",
+          "author",
+          "comic_id",
+          "comic_introduction",
+          "discount_type",
+          "fans",
+          "home_block_jump_value",
+          "is_finish",
+          "last_ep",
+          "last_ord",
+          "last_rank",
+          "last_short_title",
+          "mangaman_text",
+          "reward_users",
+          "rookie_type",
+          "styles",
+          "tags",
+          "text",
+          "text_pos",
+          "title",
+          "total",
+          "vertical_cover"
+        ]
+      ]
+    }
+  ],
+  "result": {
+    "passed": true,
+    "fake_transport_calls": 10,
+    "cases": [
+      {
+        "name": "The official route remains anonymous even when Client has a session",
+        "passed": true
+      },
+      {
+        "name": "Recommendations preserve official order and public display metadata",
+        "passed": true
+      },
+      {
+        "name": "Invalid items cannot introduce malformed identifiers titles or cover sources",
+        "passed": true
+      },
+      {
+        "name": "Missing malformed and redirected page contexts do not become empty success",
+        "passed": true
+      },
+      {
+        "name": "Optional descriptions and tags are bounded and sanitized independently",
+        "passed": true
+      },
+      {
+        "name": "Transport HTTP and malformed JSON errors remain actionable",
+        "passed": true
+      },
+      {
+        "name": "Expanded homepage sections retain official section and group order",
+        "passed": true
+      },
+      {
+        "name": "Duplicates retain their first valid occurrence across every selected section",
+        "passed": true
+      },
+      {
+        "name": "Optional missing or malformed groups preserve the compatible original feed",
+        "passed": true
+      },
+      {
+        "name": "Advertisement cards rankings and unobserved section aliases never enter the feed",
+        "passed": true
+      },
+      {
+        "name": "The expanded response limit counts distinct valid comics without changing order",
+        "passed": true
+      },
+      {
+        "name": "The larger response still uses exactly one anonymous request",
+        "passed": true
+      },
+      {
+        "name": "The anonymously captured official response matches the implemented contract",
+        "passed": true
+      }
+    ],
+    "assertions": 153,
+    "live_fixture_checked": true,
+    "real_transport_attempts": 0
+  },
+  "passed": true
+}

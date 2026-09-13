@@ -1,0 +1,119 @@
+{
+  "host": "test-env",
+  "runtime": "v2026.07.1",
+  "network_isolated": true,
+  "source_sha256": {
+    "bilicomics/controller.lua": "6a1aa63ca6d73633361277cc57a623e81c81f9e1cf310d9e9df691870e278605",
+    "bilicomics/bookstore.lua": "531855326966141dd76f3302bf72c420c56d36d40369d389037da7cd01657f19",
+    "bilicomics/cover_source.lua": "27b31bd7be2d13cc39ca0c5ccae32940e737d991ba24daece0dae7194ed12b38",
+    "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "spec/controller/bookstore_spec.lua": "d04057009d79497ce110630d3ec7b9afe304d2690b68aa1d9b9843a766e4b8aa",
+    "spec/controller/run_bookstore.py": "b67952c1dfe1313c13c2ae283c44a185a8d9a768d3cf81e666e687097cc19cc2"
+  },
+  "returncode": 0,
+  "source_unchanged": true,
+  "result": {
+    "synthetic_data": true,
+    "network_workers_executed": false,
+    "tests": [
+      {
+        "name": "Empty and cached bookstore getters never dispatch network requests",
+        "passed": true
+      },
+      {
+        "name": "Anonymous valid expired and invalidated sessions all use raw anonymous recommendations",
+        "passed": true
+      },
+      {
+        "name": "Refresh coalesces callers into one request and retains first-seen official order",
+        "passed": true
+      },
+      {
+        "name": "Four homepage sections retain their order and first-occurrence provenance in one request",
+        "passed": true
+      },
+      {
+        "name": "Recommendation refresh preserves favorites exact anchors and chapter state",
+        "passed": true
+      },
+      {
+        "name": "Each editorial refresh replaces shorter tags and clears removed descriptions",
+        "passed": true
+      },
+      {
+        "name": "Malformed cached editorial fields remain safe for the UI without mutating storage",
+        "passed": true
+      },
+      {
+        "name": "Section provenance accepts only the bounded official section identifiers",
+        "passed": true
+      },
+      {
+        "name": "Offline and failed refreshes preserve cached content and permit a later retry",
+        "passed": true
+      },
+      {
+        "name": "An invalid response cannot replace a usable cached feed",
+        "passed": true
+      },
+      {
+        "name": "Catalog changes and feed order roll back together if cache persistence fails",
+        "passed": true
+      },
+      {
+        "name": "Malformed copied and missing-comic caches are recognized without networking",
+        "passed": true
+      },
+      {
+        "name": "Cache expiry and clock rollback are stale while a valid empty snapshot remains fresh",
+        "passed": true
+      },
+      {
+        "name": "A restarted controller reads the ordered account cache without fetching",
+        "passed": true
+      },
+      {
+        "name": "Legacy snapshots remain browsable offline and refresh immediately into the expanded schema",
+        "passed": true
+      },
+      {
+        "name": "Queued public work rechecks connectivity suspension and account generation",
+        "passed": true
+      },
+      {
+        "name": "A late recommendation response cannot write to a changed account",
+        "passed": true
+      },
+      {
+        "name": "Public response authentication errors never invalidate or renew an account session",
+        "passed": true
+      },
+      {
+        "name": "Unknown public methods arguments and nonfeed covers cannot bypass authentication",
+        "passed": true
+      },
+      {
+        "name": "Public requests discard explicit transport and session credentials before raw dispatch",
+        "passed": true
+      },
+      {
+        "name": "Only visible feed covers download anonymously even when login is invalidated",
+        "passed": true
+      },
+      {
+        "name": "Removed recommendation covers are rejected both before start and after completion",
+        "passed": true
+      },
+      {
+        "name": "Late public cover completion after account change removes its temporary file",
+        "passed": true
+      }
+    ],
+    "spec": "bookstore-expanded-controller",
+    "passed": true,
+    "host": "test-env"
+  },
+  "passed": true
+}

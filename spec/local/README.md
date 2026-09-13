@@ -1,5 +1,10 @@
 # Local native KOReader acceptance
 
+The default development archive now contains the subsequent
+[bookshelf revision](../../docs/bookshelf-grid.md). This guide's recorded local
+acceptance identifies the earlier 101-file candidate; the bookshelf change was
+verified remotely and has not replaced or restarted the user's visible process.
+
 ## Current candidate acceptance
 
 On 2026-09-13 the user explicitly authorized local verification for this task and
@@ -148,3 +153,31 @@ alias. This package and guard update changes neither the startup script nor its
 package path and did not restart or inspect an interactive profile. The next
 new process uses the current archive and guard; its interactive execution is
 not covered by the historical startup records.
+
+## Anonymous bookstore request boundary
+
+The current guard admits the `recommendations` Client job and exactly
+`GET https://manga.bilibili.com/index.pageContext.json`. This route rejects every
+request body, output file, query variant and non-public request header, including
+Cookie and Authorization in any letter case. Its optional response budget must
+be a positive integer no greater than 4 MiB. The production recommendation
+worker also discards a supplied session before constructing its Client. Existing
+write-operation restrictions and all other route rules remain unchanged.
+
+The [recommendation guard regression](recommendations-guard-results.json) passed
+**208 cases and 369 assertions** through `ssh test-env`, using `unshare -n` and
+strict fake Transport/Runner originals. It covers the exact anonymous request,
+body and credential rejection, path/query disguises, production Client session
+isolation, and the existing purchase, favorite and history mutation rejections.
+It makes no real HTTP request and reads no real account session.
+
+A separate [live bookstore run](../ui/bookstore-live.md) used this guard with the
+actual production Runtime, Controller, Screens and subprocess Runner in a fresh
+anonymous remote profile. Its narrower capture boundary allowed only one
+recommendation GET and the two visible CDN thumbnail GETs; all three returned
+HTTP 200. Both first-page covers loaded in the
+[600x800 capture](../ui/screens/bookstore-live/600x800.png), with no session file,
+favorite/history records or download jobs. The
+[live evidence](../ui/bookstore-live-verification.json) binds the capture to the
+unchanged production source and records the exact request boundary. These checks
+ran only on `test-env` and did not start or modify the user's local application.

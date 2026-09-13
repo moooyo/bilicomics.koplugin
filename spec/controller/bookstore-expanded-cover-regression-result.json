@@ -1,0 +1,139 @@
+{
+    "count": 33,
+    "passed": true,
+    "scope": "Production controller, native SQLite and controlled asynchronous workers; synthetic accounts only",
+    "tests": [
+        {
+            "passed": true,
+            "name": "official_jpeg_width_transform"
+        },
+        {
+            "passed": true,
+            "name": "official_uppercase_jpeg_fallback"
+        },
+        {
+            "passed": true,
+            "name": "official_png_fallback_png"
+        },
+        {
+            "passed": true,
+            "name": "official_png_fallback_webp"
+        },
+        {
+            "passed": true,
+            "name": "official_png_fallback_avif"
+        },
+        {
+            "passed": true,
+            "name": "opaque_image_url_is_preserved_1"
+        },
+        {
+            "passed": true,
+            "name": "opaque_image_url_is_preserved_2"
+        },
+        {
+            "passed": true,
+            "name": "opaque_image_url_is_preserved_3"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_1"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_2"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_3"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_4"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_5"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_6"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_7"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_8"
+        },
+        {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_9"
+        },
+        {
+            "passed": true,
+            "name": "library_refresh_keeps_hidden_covers_out_of_worker_queue"
+        },
+        {
+            "passed": true,
+            "name": "search_results_keep_hidden_covers_out_of_worker_queue"
+        },
+        {
+            "passed": true,
+            "name": "only_explicit_visible_item_dispatches_its_cover"
+        },
+        {
+            "passed": true,
+            "name": "offline_cover_does_not_dispatch"
+        },
+        {
+            "passed": true,
+            "name": "cover_dispatch_uses_thumbnail_with_existing_budget"
+        },
+        {
+            "passed": true,
+            "name": "repeated_visible_card_requests_share_one_worker"
+        },
+        {
+            "passed": true,
+            "name": "cover_commits_an_atomic_strategy_bound_cache"
+        },
+        {
+            "passed": true,
+            "name": "matching_strategy_cache_avoids_transfer"
+        },
+        {
+            "passed": true,
+            "name": "legacy_original_cache_is_replaced"
+        },
+        {
+            "passed": true,
+            "name": "failed_thumbnail_keeps_five_minute_backoff"
+        },
+        {
+            "passed": true,
+            "name": "failed_thumbnail_retries_at_backoff_boundary"
+        },
+        {
+            "passed": true,
+            "name": "old_url_failure_does_not_delay_new_thumbnail"
+        },
+        {
+            "passed": true,
+            "name": "obsolete_cover_result_is_removed"
+        },
+        {
+            "passed": true,
+            "name": "changed_source_is_dispatched_after_old_result"
+        },
+        {
+            "passed": true,
+            "name": "changed_source_retries_after_old_failure"
+        },
+        {
+            "passed": true,
+            "name": "account_generation_discards_obsolete_cover"
+        }
+    ]
+}

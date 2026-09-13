@@ -4,7 +4,19 @@ A Bilibili Comics plugin with its own comic library UI and KOReader's native rea
 
 ## Development status
 
-The current [architecture stabilization](docs/architecture-stabilization.md)
+The current [Bookstore subject browsing](docs/bookstore-categories.md) adds the
+official category selector to the compact recommendation grid. Navigation is Bookshelf,
+Bookstore, Search and Downloads; the cover-grid Bookshelf remains the default.
+Bookshelf cards retain current reading positions and latest updates. Bookstore
+combines four official homepage sections with deduplication, showing six cards
+at 600 by 800. Cards show the title, source and tag; tap opens chapters and hold
+opens the full synopsis. All recommendations uses one anonymous homepage request.
+Choosing a subject loads its official popularity-ordered catalog, with separate
+cached pages and anonymous device initialization. Saved results remain browsable
+offline, and the existing next-page arrow loads additional category results.
+Both grids use bounded official cover thumbnails for visible cards only.
+
+The earlier [architecture stabilization](docs/architecture-stabilization.md)
 fixes purchase dispatch expiry and download completion during persistent storage
 failures. All 34 unified remote suites pass, and the matching production tree
 passes real 45-page online/download/offline workflows remotely and on local
@@ -14,6 +26,10 @@ physical Scribe gate and deferred actual credential rotation after the service
 reported that renewal was unnecessary. Actual payment and physical-device
 compatibility are not claimed.
 Historical results below retain their original source snapshots.
+
+That completed work was merged into `main` at `e86f894`. See the
+[progress recovery record](docs/progress-recovery.md) for its historical delivery,
+its evidence, and the explicitly deferred release work.
 
 The plugin is a development implementation, not a completed release. A complete real free chapter passes [native online reading, prefetch, retained download and new-process offline reopening](docs/reading-only-test-report.md): 45 pages, 92,022,101 image bytes, 51 online checks and 30 offline checks. Downloading continued after reader closure; offline reopening restored the source anchor with no session, no network routes and zero worker activity.
 
@@ -55,18 +71,17 @@ Runtime checks must run through `ssh test-env` unless local verification is expl
 The packaging script is `tools/package.py`. Execute it on the remote environment after integration checks; it writes a deterministic ZIP and file-hash manifest. Native protocol binaries and their platform compatibility remain explicit package dependencies.
 
 The canonical candidate is `dist/bilicomics-0.1.0-dev.zip`, with its exact adjacent
-manifest. The [current package/source binding](spec/package/stabilization-source-evidence.json),
-[package checks](spec/package/stabilization-results.json), and
-[34-suite regression](spec/integration/stabilization-regression-results.json)
-identify the verified candidate. It includes authentication and the dispatch and
-completion fixes. The earlier 96-file integrated build and
-`bilicomics-0.1.0-dev-auth.zip` are historical candidates; their older reports do
-not describe this archive. No session, acquired comic content or diagnostic
-loader is included. The [local acceptance addendum](spec/package/local-acceptance-source-evidence.json)
-also binds the successful real QR login, local native import/restart, first
-online request and complete online/offline reading to this candidate. See
-[completed task scope and deferred release work](docs/architecture-stabilization.md).
+manifest. The [bookstore package/source record](spec/package/bookstore-categories-source-evidence.json)
+identifies this revision and its focused remote verification. No session, acquired
+comic content or diagnostic loader is included.
 
-The archive retains the session file importer, reader prefetch policy and previously live-tested image protocol fixes. Same-snapshot recovery verifies historical image bytes before updating mutable addresses. Unknown or changed content requires the separate [new-version confirmation](docs/partial-download-recovery.md): both versions remain pinned and independently removable, the new version starts from the beginning, and the old version reads cached pages only. The current [ordinal range contract](docs/ordinal-range-contract.md) has focused construction, UI and transaction-recovery evidence. The complete live reading workflow was not repeated for this revision, and synthetic purchase outcomes do not establish real charging behavior.
+The earlier 101-file stabilization candidate is retained under
+`dist/history/stabilization-45385c6f/`. Its [34-suite regression](spec/integration/stabilization-regression-results.json)
+and [local acceptance addendum](spec/package/local-acceptance-source-evidence.json)
+remain evidence for that earlier production tree, not a repeat of whole-chapter
+or live-account acceptance for the new bookstore revision. Authentication-only,
+ordinal preview and older integrated archives are historical candidates.
+
+The archive retains the session file importer, reader prefetch policy and previously live-tested image protocol fixes. Same-snapshot recovery verifies historical image bytes before updating mutable addresses. Unknown or changed content requires the separate [new-version confirmation](docs/partial-download-recovery.md): both versions remain pinned and independently removable, the new version starts from the beginning, and the old version reads cached pages only. The current [ordinal range contract](docs/ordinal-range-contract.md) has focused construction, UI and transaction-recovery evidence. The earlier ordinal integration did not repeat the complete live reading workflow; the subsequent stabilization and local acceptance records above establish that workflow for the preceding 101-file candidate. The full live workflow has not been repeated for the bookstore revision. Synthetic purchase outcomes do not establish real charging behavior.
 
 To prepare the private account input for read-only integration, follow [browser session import](docs/session-import.md). Do not place session contents in Git or messages.

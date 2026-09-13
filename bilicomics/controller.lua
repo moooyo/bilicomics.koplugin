@@ -1,6 +1,9 @@
 local Catalog = require("bilicomics/catalog/init")
+local Bookstore = require("bilicomics/bookstore")
+local Categories = require("bilicomics/bookstore_categories")
 local Codec = require("bilicomics/storage/codec")
 local ComicID = require("bilicomics/catalog/comic_id")
+local CoverSource = require("bilicomics/cover_source")
 local DownloadService = require("bilicomics/jobs/download_service")
 local Files = require("bilicomics/storage/files")
 local Normalize = require("bilicomics/protocol/normalize")
@@ -28,6 +31,10 @@ end
 
 local function errorValue(kind, message, fields) return Util.error(kind, message, fields) end
 local function id(value) return value ~= nil and tostring(value) or nil end
+local function currentRead(controller, account, generation, read_generation)
+    return not controller.closed and controller.account == account and controller.generation == generation
+        and (read_generation == nil or controller.read_generation == read_generation)
+end
 
 function Controller.new(options)
     options = options or {}
@@ -39,7 +46,7 @@ function Controller.new(options)
     local self = setmetatable({ root = root, host_ui = options.ui,
         ui_manager = options.ui_manager or require("ui/uimanager"), runner_factory = options.runner_factory,
         reader_opener = options.reader_opener, settings = options.settings or Settings.open(root),
-        generation = 0, closed = false, preparing = {}, covers = {}, quotes = {}, purchase_inflight = {},
+        generation = 0, read_generation = 0, closed = false, preparing = {}, covers = {}, quotes = {}, purchase_inflight = {},
         clock = options.clock or os.time,
         integrations = {}, preloaded = {}, errors_shown = {}, reader_dialogs = {},
         network = options.network or require("ui/network/manager") }, Controller)
@@ -257,18 +264,56 @@ function Controller:_submit(request, options, callback)
     end
     local account, generation = self.account, self.generation
     local diagnostics = request.kind == "diagnostics"
+    local public_bookstore = request.public_bookstore == true
+    if public_bookstore then
+        if not self:_bookstoreRequestAllowed(request) then
+            self:_later(callback, nil, errorValue("invalid_request", "This operation is not a public bookstore request.", { transmitted = false }))
+            return
+        end
+        -- Use a narrow request shape so explicit or inherited session/transport credentials cannot escape.
+        if request.kind == "client" then
+            local arguments = {}
+            if request.method == "bookstoreCategoryPage" then
+                local query, page = Categories.arguments(request.arguments)
+                arguments = { query, page }
+            end
+            request = { kind = "client", method = request.method, arguments = arguments, public_bookstore = true }
+        else
+            request = { kind = "download_cover", comic_id = request.comic_id, url = request.url,
+                temporary_path = request.temporary_path, max_bytes = 4 * 1024 * 1024,
+                minimum_free_bytes = self.settings:get("minimum_free_bytes"), public_bookstore = true,
+                feed_identity = request.feed_identity and { account_key = request.feed_identity.account_key,
+                    query_key = request.feed_identity.query_key, revision = request.feed_identity.revision } or nil }
+        end
+    end
     local mutation = request.kind == "purchase_submit" or request.kind == "set_favorite"
-    local uses_current_session = not diagnostics and request.session == nil
+    local uses_current_session = not diagnostics and not public_bookstore and request.session == nil
     local authentication_generation = account.authentication_generation
     if uses_current_session and (account.authentication_invalidated or (account.session and not account.session_valid)) then
         self:_later(callback, nil, errorValue("authentication", "Import a verified session before using this account online.",
             { transmitted = false, definitive = true }))
         return
     end
-    if diagnostics then request.session = nil
+    if diagnostics or public_bookstore then request.session = nil
     else request.session = request.session or (account.session and account.session:serialize()) end
     options = options or {}
     options.timeout = options.timeout or self.settings:get("worker_timeout", 90)
+    if public_bookstore then
+        local before_start = options.before_start
+        options.before_start = function()
+            if self.closed or self.account ~= account or self.generation ~= generation then
+                return nil, errorValue("canceled", "The public bookstore request is no longer current.", { transmitted = false })
+            end
+            if self.suspended or not self:_connected() then
+                return nil, errorValue("network", "Connect before refreshing the public bookstore.", { transmitted = false })
+            end
+            if not self:_bookstoreRequestAllowed(request) then
+                return nil, errorValue("canceled", "The public bookstore item is no longer current.", { transmitted = false })
+            end
+            if before_start then return before_start() end
+            return true
+        end
+    end
     local task_id, completed
     local function cleanupCover()
         if request.kind == "download_cover" and request.temporary_path
@@ -276,7 +321,7 @@ function Controller:_submit(request, options, callback)
             pcall(os.remove, request.temporary_path)
         end
     end
-    local execution_runner = diagnostics and self:_diagnosticsRunner() or self.runner
+    local execution_runner = diagnostics and self:_diagnosticsRunner() or public_bookstore and account.raw_runner or self.runner
     task_id = execution_runner:submit(request, options, function(value, err)
         completed = true
         if task_id then account.read_requests[task_id] = nil end
@@ -377,39 +422,61 @@ function Controller:authorizeDescriptor(descriptor, expected_account)
     return nil, errorValue("locked", "This chapter needs a current online reading entitlement.")
 end
 
-function Controller:_cacheCover(comic)
-    if not comic or not comic.id or not comic.cover_url or self.covers[comic.id] or not self:_connected() then return end
-    if self.account.authentication_invalidated or (self.account.session and not self.account.session_valid) then return end
-    if (self.cover_failures[comic.id] or 0) > os.time() then return end
-    if comic.cover_path and Files.exists(comic.cover_path) and (comic.extra or {}).cached_cover_url == comic.cover_url then return end
-    local account, url = self.account, comic.cover_url
-    if not url:match("^https://") then return end
+function Controller:_cacheCover(comic, public_bookstore, feed_identity)
+    if not comic or not comic.id or not comic.cover_url or not self:_connected() then return end
+    if public_bookstore and feed_identity == nil then feed_identity = self:_bookstoreIdentity() end
+    local request_key = public_bookstore and "bookstore:" .. Util.hash(feed_identity or {}) .. ":" .. comic.id or comic.id
+    if self.covers[request_key] then return end
+    if public_bookstore then
+        if not self:_bookstoreMember(comic.id, feed_identity) then return end
+    elseif self.account.authentication_invalidated or (self.account.session and not self.account.session_valid) then return end
+    local source = CoverSource.resolve(comic.cover_url)
+    if not source then return end
+    if public_bookstore and not self:_bookstoreCoverAllowed(comic.id, source.url, feed_identity) then return end
+    local cache_identity = tostring(comic.id) .. ":" .. source.identity
+    local failure_identity = public_bookstore and "bookstore:" .. cache_identity or cache_identity
+    if (self.cover_failures[failure_identity] or 0) > self.clock() then return end
+    if comic.cover_path and Files.exists(comic.cover_path)
+        and (comic.extra or {}).cached_cover_identity == source.identity then return end
+    local account, original_url = self.account, comic.cover_url
     local root = account.root .. "/covers"
     Files.mkdir(root)
     local temporary = root .. "/" .. Util.id("cover") .. ".part"
-    self.covers[comic.id] = true
-    self:_submit({ kind = "download_cover", url = url, temporary_path = temporary, max_bytes = 4 * 1024 * 1024,
-        minimum_free_bytes = self.settings:get("minimum_free_bytes") },
+    self.covers[request_key] = cache_identity
+    self:_submit({ kind = "download_cover", url = source.url, temporary_path = temporary, max_bytes = 4 * 1024 * 1024,
+        minimum_free_bytes = self.settings:get("minimum_free_bytes"),
+        public_bookstore = public_bookstore == true, comic_id = public_bookstore and comic.id or nil,
+        feed_identity = public_bookstore and feed_identity or nil },
         { priority = 60, resource = "image" }, function(result)
-            self.covers[comic.id] = nil
-            if not result then os.remove(temporary); self.cover_failures[comic.id] = os.time() + 300; return end
-            self.cover_failures[comic.id] = nil
+            self.covers[request_key] = nil
+            if public_bookstore and not self:_bookstoreMember(comic.id, feed_identity) then os.remove(temporary); return end
             local current = account.store:getComic(comic.id)
-            if not current or current.cover_url ~= url then
-                os.remove(result.temporary_path)
-                if current then self:_cacheCover(current) end
+            if not current or current.cover_url ~= original_url then
+                os.remove(temporary)
+                if current then self:_cacheCover(current, public_bookstore, feed_identity) end
                 return
             end
-            local format = result.format
-            if format ~= "jpeg" and format ~= "jpg" and format ~= "png" and format ~= "webp" then os.remove(result.temporary_path); return end
-            local path = root .. "/" .. Util.hash(comic.id .. ":" .. url) .. "." .. format
-            Files.assertRegular(result.temporary_path, root)
+            if public_bookstore and not self:_bookstoreCoverAllowed(comic.id, source.url, feed_identity) then
+                os.remove(temporary); return
+            end
+            local format = result and result.format
+            if not result or result.temporary_path ~= temporary
+                or (format ~= "jpeg" and format ~= "jpg" and format ~= "png" and format ~= "webp") then
+                os.remove(temporary)
+                self.cover_failures[failure_identity] = self.clock() + 300
+                return
+            end
+            self.cover_failures[failure_identity] = nil
+            local path = root .. "/" .. Util.hash(cache_identity) .. "." .. format
+            Files.assertRegular(temporary, root)
             Files.assertContained(path, root)
-            Files.syncFile(result.temporary_path)
-            assert(os.rename(result.temporary_path, path))
+            Files.syncFile(temporary)
+            assert(os.rename(temporary, path))
             Files.syncDirectory(root)
             current.cover_path = path
-            current.extra = current.extra or {}; current.extra.cached_cover_url = url
+            current.extra = current.extra or {}
+            current.extra.cached_cover_url = source.url
+            current.extra.cached_cover_identity = source.identity
             account.store:upsertComic(current)
             self:_notify()
         end)
@@ -418,6 +485,357 @@ end
 function Controller:requestCover(comic_id)
     if self.closed or not self.account then return end
     self:_cacheCover(self.account.store:getComic(tostring(comic_id)))
+end
+
+function Controller:_bookstoreSnapshot()
+    if self.closed or not self.account then return nil end
+    local ok, value = pcall(self.account.store.getSetting, self.account.store, Bookstore.key)
+    return ok and Bookstore.cache(value, self.account.key) or nil
+end
+
+function Controller:_bookstoreMetadata()
+    if self.closed or not self.account then return nil end
+    local ok, value = pcall(self.account.store.getSetting, self.account.store, Categories.metadata_key)
+    return ok and Categories.metadataCache(value, self.account.key) or nil
+end
+
+function Controller:_bookstoreCategorySnapshot(query)
+    if self.closed or not self.account then return nil end
+    local ok, value = pcall(self.account.store.getSetting, self.account.store, Categories.cacheKey(query))
+    return ok and Categories.cache(value, self.account.key, query) or nil
+end
+
+function Controller:_bookstoreIdentity(query, snapshot)
+    if not snapshot then
+        if query then snapshot = self:_bookstoreCategorySnapshot(query)
+        else snapshot = self:_bookstoreSnapshot() end
+    end
+    if not snapshot or not self.account then return nil end
+    return { account_key = self.account.key, query_key = query and Categories.queryKey(query) or "homepage",
+        revision = snapshot.revision or "legacy:" .. Util.hash(snapshot) }
+end
+
+function Controller:_bookstoreScopedSnapshot(identity)
+    if identity == nil then return self:_bookstoreSnapshot() end
+    if self.closed or not self.account or type(identity) ~= "table" or identity.account_key ~= self.account.key
+        or type(identity.query_key) ~= "string" or type(identity.revision) ~= "string" then return nil end
+    local query
+    if identity.query_key ~= "homepage" then
+        query = Categories.queryFromKey(identity.query_key)
+        if not query then return nil end
+    end
+    local snapshot
+    if query then snapshot = self:_bookstoreCategorySnapshot(query)
+    else snapshot = self:_bookstoreSnapshot() end
+    local current = snapshot and self:_bookstoreIdentity(query, snapshot)
+    if current and current.revision == identity.revision then return snapshot, query end
+end
+
+function Controller:_bookstoreMember(comic_id, identity)
+    local snapshot, query = self:_bookstoreScopedSnapshot(identity)
+    if not snapshot then return false end
+    if query then
+        for _, entry in ipairs(Categories.entries(snapshot)) do
+            if entry.id == tostring(comic_id) then return true, entry end
+        end
+    else
+        for _, id in ipairs(snapshot.ids) do if id == tostring(comic_id) then return true end end
+    end
+    return false
+end
+
+function Controller:_bookstoreCoverAllowed(comic_id, url, identity)
+    local member, entry = self:_bookstoreMember(comic_id, identity)
+    if not member then return false end
+    local comic = self.account.store:getComic(tostring(comic_id))
+    local current = comic and CoverSource.resolve(comic.cover_url)
+    if not current or current.url ~= url then return false end
+    local expected = entry and CoverSource.resolve(entry.cover_url)
+    return not entry or (expected ~= nil and expected.url == url)
+end
+
+function Controller:_bookstoreRequestAllowed(request)
+    if request.kind == "client" then
+        if request.method == "recommendations" or request.method == "bookstoreCategories" then
+            return type(request.arguments) == "table" and next(request.arguments) == nil
+        elseif request.method == "bookstoreCategoryPage" then
+            local query = Categories.arguments(request.arguments)
+            return query ~= nil and Categories.available(self:_bookstoreMetadata(), query)
+        end
+        return false
+    end
+    if request.kind ~= "download_cover"
+        or type(request.temporary_path) ~= "string"
+        or not Files.within(request.temporary_path, self.account.root .. "/covers") then return false end
+    return self:_bookstoreCoverAllowed(request.comic_id, request.url, request.feed_identity)
+end
+
+function Controller:getBookstore(query)
+    if query ~= nil then return self:_getBookstoreCategory(query) end
+    local result = { items = {}, source = Bookstore.source, personalized = false, has_more = false, stale = true,
+        can_load_more = false, limit_reached = false, loaded_pages = 0 }
+    local snapshot = self:_bookstoreSnapshot()
+    if not snapshot then return result end
+    local now = self.clock()
+    result.identity, result.loaded_pages = self:_bookstoreIdentity(nil, snapshot), 1
+    result.updated_at = snapshot.fetched_at
+    result.stale = snapshot.schema_version ~= Bookstore.schema_version or self.account.bookstore_failed == true
+        or now < snapshot.fetched_at or now - snapshot.fetched_at >= Bookstore.ttl
+    for _, id in ipairs(snapshot.ids) do
+        local ok, comic = pcall(self.account.catalog.getComic, self.account.catalog, id)
+        if ok and comic and type(comic.title) == "string" and comic.title:find("%S") then
+            local extra = type(comic.extra) == "table" and comic.extra or {}
+            local editorial = Bookstore.editorial(extra)
+            extra.recommendation, extra.evaluate, extra.tags = editorial.recommendation, editorial.evaluate, editorial.tags
+            extra.recommendation_section = editorial.recommendation_section
+            comic.extra = extra
+            result.items[#result.items + 1] = comic
+            if not CoverSource.resolve(comic.cover_url) then result.stale = true end
+        else result.stale = true end
+    end
+    return result
+end
+
+function Controller:refreshBookstore(query, callback)
+    if type(query) == "function" then callback, query = query, nil end
+    if query ~= nil then return self:_requestBookstoreCategory(query, false, callback) end
+    if self.closed or not self.account then self:_later(callback, nil, errorValue("closed", "The plugin is closed.")); return end
+    local account, generation = self.account, self.generation
+    if account.bookstore_refresh then
+        if callback then account.bookstore_refresh.waiters[#account.bookstore_refresh.waiters + 1] = callback end
+        return account.bookstore_refresh.task_id
+    end
+    if self.suspended or not self:_connected() then
+        account.bookstore_failed = true
+        self:_later(callback, nil, errorValue("network", "Connect before refreshing the public bookstore.", { transmitted = false }))
+        return
+    end
+    local pending = { waiters = callback and { callback } or {} }
+    account.bookstore_refresh = pending
+    local function finish(value, err)
+        if self.account ~= account or self.generation ~= generation or account.bookstore_refresh ~= pending then return end
+        account.bookstore_refresh, account.bookstore_failed = nil, not value
+        for _, waiter in ipairs(pending.waiters) do
+            if self.account ~= account or self.generation ~= generation then break end
+            Util.callback(waiter, value, err)
+        end
+        self:_notify()
+    end
+    local ok, task = pcall(self._submit, self,
+        { kind = "client", method = "recommendations", arguments = {}, public_bookstore = true },
+        { priority = 10 }, function(feed, err)
+            if not feed then finish(nil, err or errorValue("protocol", "The public recommendation feed is unavailable.")); return end
+            local items, failure = Bookstore.normalize(feed)
+            if not items then finish(nil, failure); return end
+            local saved = pcall(function()
+                account.store:transaction(function()
+                    -- Editorial arrays and absent descriptions replace the previous response as one snapshot.
+                    -- Clear them before Catalog's recursive merge, retaining its normal public-data sanitizer.
+                    for _, item in ipairs(items) do
+                        local current = account.store:getComic(item.id)
+                        if current then
+                            local extra = type(current.extra) == "table" and current.extra or {}
+                            extra.recommendation, extra.evaluate, extra.tags = nil, nil, nil
+                            extra.recommendation_section = nil
+                            account.store:upsertComic{ id = item.id, extra = extra }
+                        end
+                    end
+                    account.catalog:ingestSearch(items)
+                    account.store:putSetting(Bookstore.key, Bookstore.snapshot(items, account.key, self.clock()))
+                end)
+            end)
+            if not saved then finish(nil, errorValue("storage", "The public recommendation feed could not be cached.")); return end
+            account.bookstore_failed = false
+            finish(self:getBookstore())
+        end)
+    if not ok then finish(nil, errorValue("storage", "The public recommendation request could not start.")); return nil
+    else pending.task_id = task end
+    return task
+end
+
+function Controller:getBookstoreCategories()
+    local metadata = self:_bookstoreMetadata()
+    if not metadata then return { source = Categories.metadata_source, items = {}, orders = {}, stale = true } end
+    local now = self.clock()
+    metadata.stale = self.account.bookstore_categories_failed == true or now < metadata.updated_at
+        or now - metadata.updated_at >= Categories.metadata_ttl
+    return metadata
+end
+
+function Controller:refreshBookstoreCategories(callback)
+    if self.closed or not self.account then self:_later(callback, nil, errorValue("closed", "The plugin is closed.")); return end
+    local account, generation = self.account, self.generation
+    if account.bookstore_categories_refresh then
+        if callback then table.insert(account.bookstore_categories_refresh.waiters, callback) end
+        return account.bookstore_categories_refresh.task_id
+    end
+    if self.suspended or not self:_connected() then
+        account.bookstore_categories_failed = true
+        self:_later(callback, nil, errorValue("network", "Connect before refreshing comic categories.", { transmitted = false })); return
+    end
+    local pending = { waiters = callback and { callback } or {} }
+    account.bookstore_categories_refresh = pending
+    local function finish(value, err)
+        if self.account ~= account or self.generation ~= generation or account.bookstore_categories_refresh ~= pending then return end
+        account.bookstore_categories_refresh, account.bookstore_categories_failed = nil, not value
+        for _, waiter in ipairs(pending.waiters) do
+            if self.account ~= account or self.generation ~= generation then break end
+            Util.callback(waiter, value, err)
+        end
+        self:_notify()
+    end
+    local ok, task = pcall(self._submit, self,
+        { kind = "client", method = "bookstoreCategories", arguments = {}, public_bookstore = true },
+        { priority = 10 }, function(value, err)
+            if not value then finish(nil, err or errorValue("protocol", "The official categories are unavailable.")); return end
+            local metadata, failure = Categories.metadata(value)
+            if not metadata then finish(nil, failure); return end
+            local saved = pcall(account.store.putSetting, account.store, Categories.metadata_key,
+                Categories.metadataSnapshot(metadata, account.key, self.clock()))
+            if not saved then finish(nil, errorValue("storage", "The official categories could not be cached.")); return end
+            account.bookstore_categories_failed = false
+            finish(self:getBookstoreCategories())
+        end)
+    if not ok then finish(nil, errorValue("storage", "The category request could not start.")); return nil end
+    pending.task_id = task
+    return task
+end
+
+function Controller:_getBookstoreCategory(value)
+    local result = { source = Categories.source, items = {}, personalized = false, stale = true,
+        loaded_pages = 0, has_more = false, can_load_more = false, limit_reached = false }
+    local query = Categories.query(value)
+    if not query then return result end
+    result.query, result.query_key = query, Categories.queryKey(query)
+    local snapshot = self:_bookstoreCategorySnapshot(query)
+    if not snapshot then return result end
+    local state, now = self.account.bookstore_category_state, self.clock()
+    result.stale = state ~= nil and state.failures[result.query_key] == true
+    result.identity = self:_bookstoreIdentity(query, snapshot)
+    result.updated_at, result.loaded_pages = snapshot.pages[1].updated_at, #snapshot.pages
+    result.has_more = snapshot.pages[#snapshot.pages].has_more
+    result.limit_reached = result.has_more and result.loaded_pages >= Categories.max_pages
+    result.can_load_more = result.has_more and not result.limit_reached
+    if result.has_more then result.next_page = result.loaded_pages + 1 end
+    for _, page in ipairs(snapshot.pages) do
+        if now < page.updated_at or now - page.updated_at >= Categories.ttl then result.stale = true end
+    end
+    for _, entry in ipairs(Categories.entries(snapshot)) do
+        local ok, comic = pcall(self.account.catalog.getComic, self.account.catalog, entry.id)
+        if ok and comic then
+            local expected = not entry.cover_url:find("?", 1, true) and CoverSource.resolve(entry.cover_url)
+            local extra = type(comic.extra) == "table" and comic.extra or {}
+            local editorial = Bookstore.editorial(entry.editorial)
+            -- The feed owns editorial presentation; shared catalog state owns favorites and native progress.
+            extra.recommendation, extra.evaluate, extra.tags = editorial.recommendation, editorial.evaluate, editorial.tags
+            extra.recommendation_section, extra.category_id = nil, query.category_id
+            if not expected or comic.cover_url ~= entry.cover_url then result.stale = true end
+            if not expected or extra.cached_cover_identity ~= expected.identity then
+                comic.cover_path, extra.cover_path = nil, nil
+            end
+            comic.title, comic.cover_url, comic.extra = entry.title, entry.cover_url, extra
+            result.items[#result.items + 1] = comic
+        else result.stale = true end
+    end
+    return result
+end
+
+function Controller:_requestBookstoreCategory(value, append, callback)
+    if self.closed or not self.account then self:_later(callback, nil, errorValue("closed", "The plugin is closed.")); return end
+    local query, invalid = Categories.query(value)
+    if not query then self:_later(callback, nil, invalid); return end
+    local account, generation, key = self.account, self.generation, Categories.queryKey(query)
+    account.bookstore_category_state = account.bookstore_category_state or { generations = {}, failures = {}, tasks = {}, refreshes = {} }
+    local state = account.bookstore_category_state
+    if not Categories.available(self:_bookstoreMetadata(), query) then
+        state.failures[key] = true
+        self:_later(callback, nil, errorValue("invalid_category", "Refresh the official categories and select an available category.")); return
+    end
+    if not append and state.refreshes[key] then
+        if callback then table.insert(state.refreshes[key].waiters, callback) end
+        return state.refreshes[key].task_id
+    end
+    if append and state.refreshes[key] then
+        self:_later(callback, nil, errorValue("busy", "The first category page is refreshing.")); return
+    end
+    if self.suspended or not self:_connected() then
+        state.failures[key] = true
+        self:_later(callback, nil, errorValue("network", "Connect before loading this comic category.", { transmitted = false })); return
+    end
+    local base, page = self:_bookstoreCategorySnapshot(query), 1
+    if append then
+        if not base or not base.pages[#base.pages].has_more or #base.pages >= Categories.max_pages then
+            self:_later(callback, nil, errorValue("no_more_pages", "No further category page can be loaded.")); return
+        end
+        page = #base.pages + 1
+    else
+        state.generations[key] = (state.generations[key] or 0) + 1
+    end
+    local operation_generation = state.generations[key] or 0
+    local task_key = key .. ":page:" .. page .. ":generation:" .. operation_generation
+    if state.tasks[task_key] then
+        if callback then table.insert(state.tasks[task_key].waiters, callback) end
+        return state.tasks[task_key].task_id
+    end
+    local pending = { waiters = callback and { callback } or {}, generation = operation_generation }
+    state.tasks[task_key] = pending
+    if not append then state.refreshes[key] = pending end
+    local function current()
+        if self.closed or self.account ~= account or self.generation ~= generation
+            or (state.generations[key] or 0) ~= operation_generation then return false end
+        if append then
+            local snapshot = self:_bookstoreCategorySnapshot(query)
+            return snapshot ~= nil and snapshot.revision == base.revision
+        end
+        return true
+    end
+    local function finish(result, err)
+        if self.account ~= account or self.generation ~= generation or state.tasks[task_key] ~= pending then return end
+        state.tasks[task_key] = nil
+        if state.refreshes[key] == pending then state.refreshes[key] = nil end
+        if (state.generations[key] or 0) == operation_generation then state.failures[key] = not result end
+        for _, waiter in ipairs(pending.waiters) do
+            if self.account ~= account or self.generation ~= generation then break end
+            Util.callback(waiter, result, err)
+        end
+        self:_notify()
+    end
+    local stale_error = function() return errorValue("canceled", "This category page belongs to an older feed refresh.", { transmitted = false }) end
+    local ok, task = pcall(self._submit, self,
+        { kind = "client", method = "bookstoreCategoryPage", arguments = { query, page }, public_bookstore = true },
+        { priority = 10, before_start = function()
+            if not current() then return nil, stale_error() end
+            return true
+        end }, function(response, err)
+            if not current() then finish(nil, stale_error()); return end
+            if not response then finish(nil, err or errorValue("protocol", "The official category page is unavailable.")); return end
+            local saved_page, neutral = Categories.page(response, query, page, self.clock())
+            if not saved_page then finish(nil, neutral); return end
+            local pages = append and Util.copy(base.pages) or {}
+            pages[#pages + 1] = saved_page
+            local snapshot = Categories.snapshot(query, account.key, pages, self.clock())
+            local saved = pcall(function()
+                account.store:transaction(function()
+                    account.catalog:ingestSearch(neutral)
+                    account.store:putSetting(Categories.cacheKey(query), snapshot)
+                end)
+            end)
+            if not saved then finish(nil, errorValue("storage", "The category page could not be cached.")); return end
+            state.failures[key] = false
+            finish(self:getBookstore(query))
+        end)
+    if not ok then finish(nil, errorValue("storage", "The category page request could not start.")); return nil end
+    pending.task_id = task
+    return task
+end
+
+function Controller:loadMoreBookstore(query, callback)
+    return self:_requestBookstoreCategory(query, true, callback)
+end
+
+function Controller:requestBookstoreCover(comic_id, identity)
+    if self.closed or not self.account or not self:_bookstoreMember(comic_id, identity) then return end
+    self:_cacheCover(self.account.store:getComic(tostring(comic_id)), true, identity)
 end
 
 function Controller:refreshLibrary(kind, callback)
@@ -441,7 +859,6 @@ function Controller:refreshLibrary(kind, callback)
                 for comic_id, favorite in pairs(preserve) do account.store:upsertComic{ id = comic_id, favorite = favorite } end
             end)
             local result = account.catalog:getLibrary(kind)
-            for index, comic in ipairs(result) do if index <= 12 then self:_cacheCover(comic) end end
             self:_notify(); return result
         end)
     end)
@@ -538,7 +955,6 @@ function Controller:search(query, callback)
         if not comics then Util.callback(callback, nil, err); return end
         self:_protect(callback, function()
             local result = self.account.catalog:ingestSearch(comics)
-            for index, comic in ipairs(result) do if index <= 12 then self:_cacheCover(comic) end end
             self:_notify(); return result
         end)
     end, { priority = 10 })
@@ -766,11 +1182,20 @@ function Controller:prepareEpisode(comic_id, episode_id, callback)
     end })
 end
 
+-- Retire only the foreground reading intent. Shared preparation, downloads and purchases may finish normally.
+function Controller:cancelPendingRead()
+    self.read_generation = (self.read_generation or 0) + 1
+    if self.opening and self.opening.read_generation ~= nil then self:_releaseOpening() end
+end
+
 function Controller:readEpisode(comic_id, episode_id, callback)
     if self.opening then self:_later(callback, nil, errorValue("busy", "Another chapter is opening.")); return end
+    self:cancelPendingRead()
+    if self.closed or not self.account then self:_later(callback, nil, errorValue("closed", "The plugin is closed.")); return end
     local account, generation = self.account, self.generation
+    local read_generation = self.read_generation
     self:prepareEpisode(comic_id, episode_id, function(prepared, err)
-        if self.account ~= account or generation ~= self.generation then return end
+        if not currentRead(self, account, generation, read_generation) then return end
         if not prepared then Util.callback(callback, nil, err); return end
         self:_guardAsync(callback, function()
             local episode = account.store:getEpisode(episode_id)
@@ -781,13 +1206,14 @@ function Controller:readEpisode(comic_id, episode_id, callback)
                 end
                 -- A complete cache is not proof of offline permission. Reconfirm temporary online access.
                 self:refreshComic(comic_id, function(detail, failure)
+                    if not currentRead(self, account, generation, read_generation) then return end
                     if not detail then Util.callback(callback, nil, failure); return end
                     if not DownloadService.isReadable(account.store:getEpisode(episode_id), false) then
                         Util.callback(callback, nil, errorValue("locked", "The temporary reading permission is no longer available.")); return
                     end
                     local current = account.store:getEpisode(episode_id)
                     account.online_read_grants[tostring(episode_id)] = tonumber(current.expires_at) or os.time()
-                    self:_openPrepared(prepared, callback, account, generation)
+                    self:_openPrepared(prepared, callback, account, generation, read_generation)
                 end)
                 return
             end
@@ -801,13 +1227,13 @@ function Controller:readEpisode(comic_id, episode_id, callback)
                     Util.callback(callback, nil, errorValue("authentication", "This chapter has no cached images. Import a valid session to fetch them.")); return
                 end
             end
-            self:_openPrepared(prepared, callback, account, generation)
+            self:_openPrepared(prepared, callback, account, generation, read_generation)
         end)
     end)
 end
 
-function Controller:_openPrepared(prepared, callback, account, generation)
-    if self.account ~= account or self.generation ~= generation then return end
+function Controller:_openPrepared(prepared, callback, account, generation, read_generation)
+    if not currentRead(self, account, generation, read_generation) then return end
     self:_guardAsync(callback, function()
         if self.opening then Util.callback(callback, nil, errorValue("busy", "Another chapter is opening.")); return end
         for integration in pairs(self.integrations) do
@@ -818,7 +1244,8 @@ function Controller:_openPrepared(prepared, callback, account, generation)
         end
         local allowed, access_error = self:authorizeDescriptor(prepared.descriptor, account)
         if not allowed then Util.callback(callback, nil, access_error); return end
-        local opening = { descriptor = prepared.descriptor, path = prepared.path, account = account, callback = callback }
+        local opening = { descriptor = prepared.descriptor, path = prepared.path, account = account, callback = callback,
+            read_generation = read_generation }
         local active_key = opening.descriptor.episode_id .. "/" .. opening.descriptor.revision
         local before_active = account.pages.active[active_key] or 0
         local acquired = pcall(account.pages.setActiveEpisode, account.pages, opening.descriptor.episode_id, opening.descriptor.revision, true)
@@ -833,7 +1260,7 @@ function Controller:_openPrepared(prepared, callback, account, generation)
         end
         self.ui_manager:scheduleIn(30, opening.timeout)
         local after_open = function(reader)
-            if self.account == account and generation == self.generation and self.opening == opening then self:attachReader(reader, opening)
+            if currentRead(self, account, generation, read_generation) and self.opening == opening then self:attachReader(reader, opening)
             elseif reader and reader.onClose then reader:onClose() end
         end
         local ok = pcall(function()

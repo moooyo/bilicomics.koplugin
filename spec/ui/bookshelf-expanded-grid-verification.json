@@ -1,0 +1,85 @@
+{
+  "scope": "Synthetic native bookshelf UI only; no real account; isolated network namespace",
+  "cases": [
+    {
+      "width": 480,
+      "height": 640,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 92,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 98,
+      "failures": []
+    }
+  ],
+  "sources": {
+    "main.lua": "efb88912f6d0da2b096cff675fe4f4e3fa900ad1affa187dd17e6f848f07d6b9",
+    "bilicomics/ui/screens.lua": "55eb41012f160e869ff5c3a9c6665687881dbd479a59008967eb5b97ba289cb5",
+    "bilicomics/ui/widgets.lua": "7b2a548c084a561944415f40d6f6cd54e4f2d218e60357fd83d9f3cac65fc492",
+    "bilicomics/ui/model.lua": "a246514a8ccfe72fe9fd0c43d28877a0f2236bb49ce8b46a88e0020f28019df6",
+    "l10n/bilicomics_zh_CN.lua": "807ca2b18d4e018b34f8eb2bf42b1d3f8fa8b8fd1f75c9b439c770b8b4055256"
+  },
+  "passed": true
+}

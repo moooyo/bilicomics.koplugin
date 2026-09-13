@@ -1,0 +1,26 @@
+{
+  "scope": "Synthetic native QR UI only; no real session or HTTP",
+  "language": "zh_CN",
+  "cases": [
+    {
+      "width": 480,
+      "height": 640,
+      "returncode": 0,
+      "passed": true,
+      "assertions": 50
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "returncode": 0,
+      "passed": true,
+      "assertions": 50
+    }
+  ],
+  "sources": {
+    "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+    "bilicomics/ui/screens.lua": "ee699dd55a23ca68e81dc2d5f611e24ef97f08e0942416f2e6792e6cfa86b03a",
+    "l10n/bilicomics_zh_CN.lua": "c5f2c221c7ee99682c94138f5f2b0afc6f0d86a8c7bec6a8859d57cc7539b5b2"
+  },
+  "passed": true
+}

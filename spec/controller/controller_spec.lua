@@ -199,6 +199,7 @@ local session = controller.account.session
 controller.account.session, controller.account.session_valid = nil, false
 local worker_count, opened = #controller.runner.order, nil
 controller:readEpisode("1", "10", function(value, err) assert(value, err and err.kind); opened = value end)
+ui:drain()
 local duplicate_open_error
 controller:readEpisode("1", "10", function(_value, err) duplicate_open_error = err end)
 ui:drain()

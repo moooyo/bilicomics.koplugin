@@ -30,6 +30,17 @@ local quote_paths = {
     ["/twirp/comic.v1.Comic/GetComicFreeGoldCard"] = true,
 }
 local resource_headers = keys("accept,referer,user-agent,accept-encoding")
+local recommendations_url = "https://manga.bilibili.com/index.pageContext.json"
+local category_query = "?device=pc&platform=web&nov=27&a=810"
+local category_labels_path = "/twirp/comic.v1.Comic/AllLabel"
+local category_page_path = "/twirp/comic.v1.Comic/ClassPage"
+local category_buvid_path = "/ductape/buvid"
+local category_headers = keys("accept,referer,user-agent,origin,content-type")
+local category_buvid_headers = keys("accept,referer,user-agent")
+local category_page_headers = keys("accept,referer,user-agent,origin,content-type,cookie,x-bili-data-sn")
+local category_body_keys = keys("style_id,area_id,is_finish,is_free,special_tag,order,page_num,page_size,m2")
+local category_m2_prefix = "error:BiliComics local reader has no browser fingerprint environment_"
+local category_data_sn = "1E74C20E5720FBF3BB351965D7A9DFC1"
 local auth_headers = keys("accept,referer,user-agent,origin,cookie,content-type")
 local auth_methods = keys("generateQR,pollQR,cookieInfo,refreshSession,confirmRefresh")
 local function fields(text, expected)
@@ -104,6 +115,63 @@ local function integer(value, minimum, maximum)
     return type(value) == "number" and value == value and value % 1 == 0 and value >= minimum and value <= maximum
 end
 local function identifier(value) return integer(value, 1, 999999999999999) end
+local function categoryHeaders(request, permitted, signed)
+    if request.headers ~= nil and type(request.headers) ~= "table" then return false end
+    local headers = {}
+    for key, value in pairs(request.headers or {}) do
+        if type(key) ~= "string" then return false end
+        key = key:lower()
+        if not permitted[key] or headers[key] ~= nil or type(value) ~= "string" or #value == 0 or #value > 32768
+            or value:find("[%c]") then return false end
+        headers[key] = value
+    end
+    if headers.referer ~= "https://manga.bilibili.com/" then return false end
+    if permitted.origin and (headers.origin ~= "https://manga.bilibili.com"
+        or headers["content-type"] ~= "application/json;charset=UTF-8") then return false end
+    if signed then
+        if headers["x-bili-data-sn"] ~= category_data_sn or type(headers.cookie) ~= "string"
+            or #headers.cookie > 263 or not headers.cookie:match("^buvid3=[%w_-]+$") then return false end
+    end
+    return true
+end
+local function categoryBody(text, JSON)
+    if type(text) ~= "string" or #text > 40960 then return false end
+    local members = text:match("^%s*{(.*)}%s*$")
+    if not members or members:match("^%s*,") or members:match(",%s*$") or members:match(",%s*,") then return false end
+    -- These production bodies are flat scalars. Inspect the wire keys before JSON
+    -- decoding can discard duplicate keys; escaped keys and nested values are not admitted.
+    local seen = {}
+    for member in members:gmatch("[^,]+") do
+        local key, value = member:match('^%s*"([%w_]+)"%s*:%s*(.-)%s*$')
+        if not key or not category_body_keys[key] or seen[key] then return false end
+        seen[key] = true
+        if key == "m2" then
+            if #value > 32770 or not value:match('^"' .. category_m2_prefix .. '%d+"$') then return false end
+        elseif not value:match("^-?%d+$") then return false end
+    end
+    for key in pairs(category_body_keys) do if not seen[key] then return false end end
+    local body = JSON.decode(text)
+    return type(body) == "table" and identifier(body.style_id) and body.area_id == -1 and body.is_finish == -1
+        and body.is_free == -1 and body.special_tag == 0 and (body.order == 0 or body.order == 1 or body.order == 3)
+        and integer(body.page_num, 1, 5) and body.page_size == 18 and type(body.m2) == "string"
+        and #body.m2 <= 32768 and body.m2:match("^" .. category_m2_prefix .. "%d+$") ~= nil
+end
+local function categoryRequest(request, path, query, JSON)
+    if request.output_path ~= nil or request.max_bytes ~= nil and not integer(request.max_bytes, 1, 8388608) then return false end
+    if path == category_buvid_path then
+        return request.method == "GET" and query == "" and request.body == nil
+            and categoryHeaders(request, category_buvid_headers, false)
+    elseif path == category_labels_path then
+        return request.method == "POST" and query == category_query and request.body == "{}"
+            and categoryHeaders(request, category_headers, false)
+    elseif path == category_page_path then
+        local prefix = category_query .. "&ultra_sign="
+        if request.method ~= "POST" or query:sub(1, #prefix) ~= prefix then return false end
+        local signature = fields(query:sub(#category_query + 2), keys("ultra_sign"))
+        return signature ~= nil and categoryHeaders(request, category_page_headers, true) and categoryBody(request.body, JSON)
+    end
+    return false
+end
 local function buyType(value) return value == 1 or value == 2 or value == 3 end
 local function order(value) return value == 1 or value == 2 end
 local function originalValues(values)
@@ -170,7 +238,7 @@ function Guard.install(profile)
         return value, err
     end
     local original_submit = Runner.submit
-    local client_reads = keys("validateSession,listFavorites,listHistory,search,comicDetail,imageIndex,imageTokens,wallet,purchaseInfo,discountList,discountPrice,freeGoldCardInfo")
+    local client_reads = keys("validateSession,listFavorites,listHistory,recommendations,bookstoreCategories,bookstoreCategoryPage,search,comicDetail,imageIndex,imageTokens,wallet,purchaseInfo,discountList,discountPrice,freeGoldCardInfo")
     function Runner:submit(request, options, callback)
         local allowed = type(request) == "table" and ((request.kind == "client" and client_reads[request.method])
             or request.kind == "library" or request.kind == "download_page" or request.kind == "download_cover"
@@ -194,6 +262,19 @@ function Guard.install(profile)
             if not authRequest(request, host, path, query) then return nil, denied() end
         elseif host == "api.bilibili.com" and path == "/x/web-interface/nav" then
             if request.method ~= "GET" or request.body or query ~= "" then return nil, denied() end
+        elseif request.url == recommendations_url then
+            if request.method ~= "GET" or request.body ~= nil or request.output_path ~= nil
+                or request.max_bytes ~= nil and not integer(request.max_bytes, 1, 4194304)
+                or request.headers ~= nil and type(request.headers) ~= "table" then return nil, denied() end
+            local seen = {}
+            for key, value in pairs(request.headers or {}) do
+                key = tostring(key):lower()
+                if not resource_headers[key] or seen[key] or type(value) ~= "string" or #value > 32768
+                    or value:find("[%c]") then return nil, denied() end
+                seen[key] = true
+            end
+        elseif host == "manga.bilibili.com" and (path == category_labels_path or path == category_buvid_path or path == category_page_path) then
+            if not categoryRequest(request, path, query, JSON) then return nil, denied() end
         elseif host == "manga.bilibili.com" and routes[path] then
             if request.method ~= "POST" or type(request.body) ~= "string" or #request.body > 262144 then return nil, denied() end
             local seen, discounts = {}, false

@@ -67,7 +67,7 @@ function BiliComics:addToMainMenu(menu_items)
 end
 
 function BiliComics:onShowBiliComics()
-    self:_open(function(_, screens) screens:showLibrary("continue") end)
+    self:_open(function(_, screens) screens:showLibrary() end)
     return true
 end
 

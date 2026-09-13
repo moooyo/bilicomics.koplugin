@@ -2,6 +2,12 @@
 
 This is an interactive visual prototype for the [implementation plan](../docs/implementation-plan.md), not the KOReader plugin. It uses fictional comics, balances, prices and download state. It does not call Bilibili or make purchases.
 
+The current production navigation supersedes this original prototype: Bookshelf
+is the default first tab, followed by Bookstore, Search and Downloads. The user
+removed the independent History page in favor of official recommendations; see
+[the Bookstore implementation](../docs/bookstore.md). Reading progress remains
+on bookshelf cards.
+
 ## Design direction
 
 The interface is designed for a portrait e-ink screen, with 600 by 800 as the base layout and a larger-screen preview. Black and white are structural: a solid fill marks a primary action, an active navigation item or new content. Muted gray is reserved for secondary metadata and surfaces, never the only indication of state.
@@ -32,7 +38,12 @@ One prominent resume card combines cover, chapter, source-image position and a p
 
 ### Following
 
-A paginated list shows the latest chapter independently of local reading progress. All, Updated and Completed filters narrow the collection. Selecting a cover/title opens comic details; the reading action resumes directly.
+The 2026-09-13 approved revision replaces this screen with the default Bookshelf
+tab and a native cover grid. Cards show portrait covers, titles, precise known
+reading positions and independent update labels. Tap reads/resumes; hold opens
+chapters. History is the second tab. See [the implemented bookshelf design](../docs/bookshelf-grid.md)
+for filter semantics and remote native acceptance. The original browser prototype
+below retains its historical list layout and is not the current production UI.
 
 ### Comic details and chapters
 

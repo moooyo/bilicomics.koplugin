@@ -2,6 +2,18 @@
 
 Status: implementation baseline. Date: 2026-09-12.
 
+Current execution status: the subsequent [categorized Bookstore](bookstore-categories.md)
+replaces the independent History destination with official recommendations.
+The [bookshelf grid](bookshelf-grid.md) remains the default first tab and retains
+reading progress. This user-directed scope update supersedes the older separate
+history-page requirement while preserving its underlying reading data.
+The earlier architecture stabilization and revised local KOReader acceptance
+were completed and merged at `e86f894`. Use the
+[progress recovery record](progress-recovery.md) and
+[completed acceptance matrix](architecture-stabilization.md) to resume work.
+The release milestones below remain the product baseline; deferred payment,
+credential-rotation and physical-device acceptance are not completed claims.
+
 This document is the authoritative implementation plan. It incorporates the [product/protocol research](product-and-protocol-research.md) and the [native-reader investigation and remote prototype](native-reader-integration-research.md). Research scripts remain evidence, not production modules.
 
 ## 1. Product and architecture decisions
@@ -19,7 +31,7 @@ Initial compatibility baseline: the official KOReader `v2026.07.1` used in the r
 | Area | Required behavior |
 | --- | --- |
 | Account | Import and validate an existing Bilibili web session; retain a stable local account identity; show session expiry and allow replacement |
-| Library | Following, reading history, continue reading, search, and comic details |
+| Library | Default Bookshelf with reading progress and resume, public recommendation Bookstore, Search, and comic details; no independent History page |
 | Chapters | Complete ordered catalog, special-episode ordering, reading state, access state, storage state, and selection |
 | Online reading | Open a prepared chapter descriptor before the whole chapter downloads; requested images take priority |
 | Prefetch | Fetch upcoming images to disk and warm the beginning of the next already-readable chapter |

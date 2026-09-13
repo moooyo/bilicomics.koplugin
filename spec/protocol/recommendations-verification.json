@@ -1,0 +1,440 @@
+{
+  "environment": "ssh test-env",
+  "runtime": "/var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "production_source_sha256": {
+    "bilicomics/protocol/recommendations.lua": "66464dac8a29352dd70887da9fcd69d8ec997ec1ade4873c98d5edbce94c45c8",
+    "bilicomics/protocol/client.lua": "2c0ecceac9d8e8e82fcb2505fc84d9290051838111dff27b67cde340f48b529a",
+    "bilicomics/jobs/worker.lua": "57409e0154379c9992ccea22429915cb3fa37d91075134e9b7c59d39e183de37"
+  },
+  "recommendations": {
+    "passed": true,
+    "fake_transport_calls": 9,
+    "real_transport_attempts": 0,
+    "live_fixture_checked": true,
+    "cases": [
+      {
+        "name": "The official route remains anonymous even when Client has a session",
+        "passed": true
+      },
+      {
+        "name": "Recommendations preserve official order and public display metadata",
+        "passed": true
+      },
+      {
+        "name": "Invalid items cannot introduce malformed identifiers titles or cover sources",
+        "passed": true
+      },
+      {
+        "name": "Missing malformed and redirected page contexts do not become empty success",
+        "passed": true
+      },
+      {
+        "name": "Optional descriptions and tags are bounded and sanitized independently",
+        "passed": true
+      },
+      {
+        "name": "Transport HTTP and malformed JSON errors remain actionable",
+        "passed": true
+      },
+      {
+        "name": "The anonymously captured official response matches the implemented contract",
+        "passed": true
+      }
+    ],
+    "assertions": 89
+  },
+  "worker": {
+    "environment": "test-env",
+    "passed": 87,
+    "network": "injected protocol client; no live account or purchase",
+    "assertions": [
+      {
+        "name": "A non-table request is rejected before constructing a client",
+        "passed": true
+      },
+      {
+        "name": "Unknown operations return invalid_request without a protocol call",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject buyEpisode",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject addHistory",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject setFavorite",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject downloadImage",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject imageTokens",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject new",
+        "passed": true
+      },
+      {
+        "name": "Read workers reject missing",
+        "passed": true
+      },
+      {
+        "name": "listFavorites preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "listFavorites returns its read result",
+        "passed": true
+      },
+      {
+        "name": "listFavorites constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "listHistory preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "listHistory returns its read result",
+        "passed": true
+      },
+      {
+        "name": "listHistory constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "recommendations preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "recommendations returns its read result",
+        "passed": true
+      },
+      {
+        "name": "recommendations constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "search preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "search returns its read result",
+        "passed": true
+      },
+      {
+        "name": "search constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "comicDetail preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "comicDetail returns its read result",
+        "passed": true
+      },
+      {
+        "name": "comicDetail constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "imageIndex preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "imageIndex returns its read result",
+        "passed": true
+      },
+      {
+        "name": "imageIndex constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "wallet preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "wallet returns its read result",
+        "passed": true
+      },
+      {
+        "name": "wallet constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "purchaseInfo preserves the request arguments",
+        "passed": true
+      },
+      {
+        "name": "purchaseInfo returns its read result",
+        "passed": true
+      },
+      {
+        "name": "purchaseInfo constructs an isolated client with the expected configuration",
+        "passed": true
+      },
+      {
+        "name": "Validated sessions return both identity and the updated serialized session",
+        "passed": true
+      },
+      {
+        "name": "Validation failure does not serialize a missing session",
+        "passed": true
+      },
+      {
+        "name": "Read failures retain structured protocol evidence",
+        "passed": true
+      },
+      {
+        "name": "Favorites request page 1 has a bounded page size",
+        "passed": true
+      },
+      {
+        "name": "Favorites request page 2 has a bounded page size",
+        "passed": true
+      },
+      {
+        "name": "Favorites stop after a partial page",
+        "passed": true
+      },
+      {
+        "name": "Library duplicates and absent identifiers are removed in first-seen order",
+        "passed": true
+      },
+      {
+        "name": "History page numbering is sequential",
+        "passed": true
+      },
+      {
+        "name": "History page numbering is sequential",
+        "passed": true
+      },
+      {
+        "name": "A repeated full library page terminates without duplicates",
+        "passed": true
+      },
+      {
+        "name": "An empty library succeeds after one request",
+        "passed": true
+      },
+      {
+        "name": "A later page failure never publishes a partial library",
+        "passed": true
+      },
+      {
+        "name": "Unbounded library responses stop at 200 pages with an explicit error",
+        "passed": true
+      },
+      {
+        "name": "Invalid library selection favorite cannot silently read history",
+        "passed": true
+      },
+      {
+        "name": "Invalid library selection unexpected cannot silently read history",
+        "passed": true
+      },
+      {
+        "name": "Invalid library selection false cannot silently read history",
+        "passed": true
+      },
+      {
+        "name": "Missing library selection is rejected",
+        "passed": true
+      },
+      {
+        "name": "Quote first retrieves the basic episode offer without a range",
+        "passed": true
+      },
+      {
+        "name": "Quote retrieves the requested comic detail",
+        "passed": true
+      },
+      {
+        "name": "Quote retrieves the selected range through its normalized wire scope",
+        "passed": true
+      },
+      {
+        "name": "Quote joins both source responses without a purchase call",
+        "passed": true
+      },
+      {
+        "name": "Quote keeps basic and range observations associated with the copied selection",
+        "passed": true
+      },
+      {
+        "name": "A single quote cannot smuggle batch fields into the read collector",
+        "passed": true
+      },
+      {
+        "name": "Quote failure skips comic detail and retains its error",
+        "passed": true
+      },
+      {
+        "name": "Comic detail failure does not publish an incomplete quote",
+        "passed": true
+      },
+      {
+        "name": "Malformed purchase intent 1 cannot transmit",
+        "passed": true
+      },
+      {
+        "name": "Malformed purchase intent 2 cannot transmit",
+        "passed": true
+      },
+      {
+        "name": "Malformed purchase intent 3 cannot transmit",
+        "passed": true
+      },
+      {
+        "name": "Malformed purchase intent 4 cannot transmit",
+        "passed": true
+      },
+      {
+        "name": "Malformed purchase intent 5 cannot transmit",
+        "passed": true
+      },
+      {
+        "name": "Confirmed purchase payload is forwarded exactly once",
+        "passed": true
+      },
+      {
+        "name": "A valid intent returns the purchase response",
+        "passed": true
+      },
+      {
+        "name": "An uncertain purchase response is propagated without retry",
+        "passed": true
+      },
+      {
+        "name": "Wallet failure preserves independently observed episode rights",
+        "passed": true
+      },
+      {
+        "name": "Rights lookup failure skips wallet and preserves purchase uncertainty",
+        "passed": true
+      },
+      {
+        "name": "Page acquisition asks for only the source image path",
+        "passed": true
+      },
+      {
+        "name": "Page download uses its token, temporary path, index and byte limit",
+        "passed": true
+      },
+      {
+        "name": "Successful page acquisition keeps the file for atomic storage commit",
+        "passed": true
+      },
+      {
+        "name": "Worker derives geometry from the actual PNG header",
+        "passed": true
+      },
+      {
+        "name": "Page acquisition orders token retrieval before downloading",
+        "passed": true
+      },
+      {
+        "name": "Cover acquisition constructs a plain URL token",
+        "passed": true
+      },
+      {
+        "name": "Image acquisition defaults to a bounded 32 MiB transfer",
+        "passed": true
+      },
+      {
+        "name": "Covers bypass the chapter token operation and retain parsed geometry",
+        "passed": true
+      },
+      {
+        "name": "EXIF rotation swaps display axes without losing source dimensions",
+        "passed": true
+      },
+      {
+        "name": "Token failure stops before file download",
+        "passed": true
+      },
+      {
+        "name": "An empty token response produces a protocol error without downloading",
+        "passed": true
+      },
+      {
+        "name": "The worker rejects and removes unsupported image data",
+        "passed": true
+      },
+      {
+        "name": "The worker rejects and removes truncated image data",
+        "passed": true
+      },
+      {
+        "name": "Image acquisition failure preserves its structured error without retry",
+        "passed": true
+      },
+      {
+        "name": "A failed acquisition cannot leave an uncommitted temporary image",
+        "passed": true
+      },
+      {
+        "name": "The mismatched-result scenario receives the assigned output path",
+        "passed": true
+      },
+      {
+        "name": "An image result for another path returns worker_protocol without geometry",
+        "passed": true
+      },
+      {
+        "name": "A mismatched image result removes only its assigned partial output",
+        "passed": true
+      },
+      {
+        "name": "A mismatched foreign image is never opened for header inspection",
+        "passed": true
+      }
+    ],
+    "failed": 0
+  },
+  "anonymous_live": {
+    "source": "official_homepage",
+    "passed": true,
+    "item_count": 7,
+    "ordered_ids": [
+      "27658",
+      "29583",
+      "28427",
+      "26009",
+      "29226",
+      "26731",
+      "27791"
+    ],
+    "anonymous": true
+  },
+  "client_regression": {
+    "runtime": "/var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader",
+    "returncode": 0,
+    "result": {
+      "cases": [
+        "cookie imports reject header injection and isolate supported names",
+        "stable account identity is server-validated before persistence",
+        "plain wrappers retain real endpoint and empty-object request shape",
+        "protected catalog never silently falls back to unsigned legacy requests",
+        "signed body and protected plain response preserve fractional chapter order",
+        "access normalization does not mistake unlock flags or unparsed expiry for ownership",
+        "encrypted success and plain errors use separate response branches",
+        "purchase rejects automatic settings and accepts explicit coupon payload without currency amount",
+        "purchase unknown results and transport loss cannot become definitive rejection or retry",
+        "image headers are inspected independently of URL extension",
+        "ordinary snapshots redact acquisition credentials",
+        "TLS names support exact and single-label wildcard matches only"
+      ],
+      "passed": 12
+    },
+    "session_mode": "0o600"
+  }
+}

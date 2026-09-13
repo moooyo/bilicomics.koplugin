@@ -4,7 +4,8 @@ local ImagePolicy = require("bilicomics/image_policy")
 local Util = require("bilicomics/util")
 local Budget = require("bilicomics/jobs/storage_budget")
 local Worker = {}
-local reads = { listFavorites = true, listHistory = true, search = true, comicDetail = true,
+local reads = { listFavorites = true, listHistory = true, recommendations = true, search = true, comicDetail = true,
+    bookstoreCategories = true, bookstoreCategoryPage = true,
     imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true }
 local unpack = unpack or table.unpack
 
@@ -163,7 +164,10 @@ local function execute(request, context)
         local enough_space, err = Budget.check(directory, request.minimum_free_bytes, request.max_bytes or Budget.default_image_limit)
         if not enough_space then return nil, err end
     end
-    local client = Client.new{ session = request.session, asset_root = request.asset_root,
+    local session = request.session
+    if request.kind == "client" and (request.method == "recommendations" or request.method == "bookstoreCategories"
+        or request.method == "bookstoreCategoryPage") then session = nil end
+    local client = Client.new{ session = session, asset_root = request.asset_root,
         transport_options = request.transport_options }
     context.client = client
     if request.kind == "client" then

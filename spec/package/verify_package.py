@@ -84,6 +84,16 @@ def main() -> None:
             if "bilicomics/session_manager" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
                 required.update({"bilicomics/session_manager.lua", "bilicomics/jobs/session_runner.lua",
                                  "bilicomics/protocol/auth.lua", "bilicomics/protocol/auth_crypto.lua", "bilicomics/ui/qr_login.lua"})
+            if "bilicomics/cover_source" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
+                required.add("bilicomics/cover_source.lua")
+            if "bilicomics/bookstore" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
+                required.add("bilicomics/bookstore.lua")
+            if "bilicomics/bookstore_categories" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
+                required.add("bilicomics/bookstore_categories.lua")
+            if "bilicomics/protocol/recommendations" in archive.read(prefix + "bilicomics/protocol/client.lua").decode("utf-8"):
+                required.add("bilicomics/protocol/recommendations.lua")
+            if "bilicomics/protocol/categories" in archive.read(prefix + "bilicomics/protocol/client.lua").decode("utf-8"):
+                required.add("bilicomics/protocol/categories.lua")
             collector = prefix + "bilicomics/purchase/quote_fetch.lua"
             if collector in names and "bilicomics/purchase/range" in archive.read(collector).decode("utf-8"):
                 required.add("bilicomics/purchase/range.lua")
