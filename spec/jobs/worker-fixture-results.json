@@ -1,0 +1,407 @@
+{
+  "host": "test-env",
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "scope": "Real POSIX subprocesses, pipes, SQLite and synthetic image files; injected download runner and protocol client; no account or real purchase",
+  "source_sha256": {
+    "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+    "bilicomics/jobs/download_service.lua": "5c1a99cf6c144d10f252242632799b87bd04744567a41587c515414f0b48ed58",
+    "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+    "bilicomics/controller.lua": "5e8eda4ca2e3d0742c737c6ffe90839d3c4a26c5a09a730b1df78e73327ee1e0",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+  },
+  "test_source_sha256": {
+    "spec/jobs/cancel_race.lua": "18c70589bf9eba82cc9ceea86d1c3ec98fb131fe8ce753a3bece1b97095648f0",
+    "spec/jobs/cover_policy_spec.lua": "90151a0bc1bcda89a45a35a8f0d135fba09bbf6b97cfc8aa84f57801bfc01b1d",
+    "spec/jobs/download_connectivity_runner_spec.lua": "a33d6d682a2bd91849af396faa53070799cf1927d6f620a8adf12841855703c0",
+    "spec/jobs/download_connectivity_spec.lua": "d490f9de1d73900cbdd5d2c0ea53c166b9bf83ff22579bda48c4dc3de486edbd",
+    "spec/jobs/download_service_spec.lua": "4a53fe261051507b78efacfa82398f975a1b110610dedfdcb05e428862758b28",
+    "spec/jobs/parent_exit_fixture.lua": "780ae6a03177aa2d20509ad3822898d352112f9530b8d14b2cb537e71de63219",
+    "spec/jobs/parent_exit_spec.py": "f687b15fb24cf101a6f2eaab1949a5da9a0db42c2424391f95789a13b8466dc1",
+    "spec/jobs/run_download_connectivity.py": "d7a8c395ded0e3059d98db71a2cd05893666b2418c910d5f98314eb97b5fe403",
+    "spec/jobs/run_remote.py": "8d8f0326dd72d4146d5c2bec0f9e6af9f592b38c69b3c487ae81a8d684d9817a",
+    "spec/jobs/runner_spec.lua": "17e2b8f86997eec16f8a4421e307428a126bcec1d4c101dbd105881dfa03c2b7",
+    "spec/jobs/source_epoch_spec.lua": "4a746b5ebffe6f027ef6da9a4ae1fe1028d0253cb654cd971aad31adec8cd2fb",
+    "spec/jobs/source_verification_spec.lua": "5cad7d757f35552ab9b29b57562319407a8c8cc96f73438f8728bda02529f043",
+    "spec/jobs/storage_budget_spec.lua": "4625dfa58fe4068bb28b431b9f6325bba462584ff7e4dcd89c21a70da8b2deb1",
+    "spec/jobs/worker_extensions_spec.lua": "85d85ac73fe4c06a844d8df1624942227851e8cbe0b45edbb181c36436487310",
+    "spec/jobs/worker_spec.lua": "7184dcd84f767c2904f39ba4d09dda4dcc0d7b48032bcfa763e8d3617f7fa69d"
+  },
+  "image_fixtures": [
+    {
+      "name": "cover-6mp.png",
+      "width": 3000,
+      "height": 2000,
+      "pixels": 6000000,
+      "encoded_bytes": 5908,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    },
+    {
+      "name": "cover-4mp.png",
+      "width": 2000,
+      "height": 2000,
+      "pixels": 4000000,
+      "encoded_bytes": 3958,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    }
+  ],
+  "suites": [
+    {
+      "suite": "worker",
+      "returncode": 0,
+      "result": {
+        "assertions": [
+          {
+            "passed": true,
+            "name": "A non-table request is rejected before constructing a client"
+          },
+          {
+            "passed": true,
+            "name": "Unknown operations return invalid_request without a protocol call"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject buyEpisode"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject addHistory"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject setFavorite"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject downloadImage"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject imageTokens"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject new"
+          },
+          {
+            "passed": true,
+            "name": "Read workers reject missing"
+          },
+          {
+            "passed": true,
+            "name": "listFavorites preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "listFavorites returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "listFavorites constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "listHistory preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "listHistory returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "listHistory constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "search preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "search returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "search constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "comicDetail preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "comicDetail returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "comicDetail constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "imageIndex preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "imageIndex returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "imageIndex constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "wallet preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "wallet returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "wallet constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "purchaseInfo preserves the request arguments"
+          },
+          {
+            "passed": true,
+            "name": "purchaseInfo returns its read result"
+          },
+          {
+            "passed": true,
+            "name": "purchaseInfo constructs an isolated client with supplied configuration"
+          },
+          {
+            "passed": true,
+            "name": "Validated sessions return both identity and the updated serialized session"
+          },
+          {
+            "passed": true,
+            "name": "Validation failure does not serialize a missing session"
+          },
+          {
+            "passed": true,
+            "name": "Read failures retain structured protocol evidence"
+          },
+          {
+            "passed": true,
+            "name": "Favorites request page 1 has a bounded page size"
+          },
+          {
+            "passed": true,
+            "name": "Favorites request page 2 has a bounded page size"
+          },
+          {
+            "passed": true,
+            "name": "Favorites stop after a partial page"
+          },
+          {
+            "passed": true,
+            "name": "Library duplicates and absent identifiers are removed in first-seen order"
+          },
+          {
+            "passed": true,
+            "name": "History page numbering is sequential"
+          },
+          {
+            "passed": true,
+            "name": "History page numbering is sequential"
+          },
+          {
+            "passed": true,
+            "name": "A repeated full library page terminates without duplicates"
+          },
+          {
+            "passed": true,
+            "name": "An empty library succeeds after one request"
+          },
+          {
+            "passed": true,
+            "name": "A later page failure never publishes a partial library"
+          },
+          {
+            "passed": true,
+            "name": "Unbounded library responses stop at 200 pages with an explicit error"
+          },
+          {
+            "passed": true,
+            "name": "Invalid library selection favorite cannot silently read history"
+          },
+          {
+            "passed": true,
+            "name": "Invalid library selection unexpected cannot silently read history"
+          },
+          {
+            "passed": true,
+            "name": "Invalid library selection false cannot silently read history"
+          },
+          {
+            "passed": true,
+            "name": "Missing library selection is rejected"
+          },
+          {
+            "passed": true,
+            "name": "Quote first retrieves the basic episode offer without a range"
+          },
+          {
+            "passed": true,
+            "name": "Quote retrieves the requested comic detail"
+          },
+          {
+            "passed": true,
+            "name": "Quote retrieves the selected range through its normalized wire scope"
+          },
+          {
+            "passed": true,
+            "name": "Quote joins both source responses without a purchase call"
+          },
+          {
+            "passed": true,
+            "name": "Quote keeps basic and range observations associated with the copied selection"
+          },
+          {
+            "passed": true,
+            "name": "A single quote cannot smuggle batch fields into the read collector"
+          },
+          {
+            "passed": true,
+            "name": "Quote failure skips comic detail and retains its error"
+          },
+          {
+            "passed": true,
+            "name": "Comic detail failure does not publish an incomplete quote"
+          },
+          {
+            "passed": true,
+            "name": "Malformed purchase intent 1 cannot transmit"
+          },
+          {
+            "passed": true,
+            "name": "Malformed purchase intent 2 cannot transmit"
+          },
+          {
+            "passed": true,
+            "name": "Malformed purchase intent 3 cannot transmit"
+          },
+          {
+            "passed": true,
+            "name": "Malformed purchase intent 4 cannot transmit"
+          },
+          {
+            "passed": true,
+            "name": "Malformed purchase intent 5 cannot transmit"
+          },
+          {
+            "passed": true,
+            "name": "Confirmed purchase payload is forwarded exactly once"
+          },
+          {
+            "passed": true,
+            "name": "A valid intent returns the purchase response"
+          },
+          {
+            "passed": true,
+            "name": "An uncertain purchase response is propagated without retry"
+          },
+          {
+            "passed": true,
+            "name": "Wallet failure preserves independently observed episode rights"
+          },
+          {
+            "passed": true,
+            "name": "Rights lookup failure skips wallet and preserves purchase uncertainty"
+          },
+          {
+            "passed": true,
+            "name": "Page acquisition asks for only the source image path"
+          },
+          {
+            "passed": true,
+            "name": "Page download uses its token, temporary path, index and byte limit"
+          },
+          {
+            "passed": true,
+            "name": "Successful page acquisition keeps the file for atomic storage commit"
+          },
+          {
+            "passed": true,
+            "name": "Worker derives geometry from the actual PNG header"
+          },
+          {
+            "passed": true,
+            "name": "Page acquisition orders token retrieval before downloading"
+          },
+          {
+            "passed": true,
+            "name": "Cover acquisition constructs a plain URL token"
+          },
+          {
+            "passed": true,
+            "name": "Image acquisition defaults to a bounded 32 MiB transfer"
+          },
+          {
+            "passed": true,
+            "name": "Covers bypass the chapter token operation and retain parsed geometry"
+          },
+          {
+            "passed": true,
+            "name": "EXIF rotation swaps display axes without losing source dimensions"
+          },
+          {
+            "passed": true,
+            "name": "Token failure stops before file download"
+          },
+          {
+            "passed": true,
+            "name": "An empty token response produces a protocol error without downloading"
+          },
+          {
+            "passed": true,
+            "name": "The worker rejects and removes unsupported image data"
+          },
+          {
+            "passed": true,
+            "name": "The worker rejects and removes truncated image data"
+          },
+          {
+            "passed": true,
+            "name": "Image acquisition failure preserves its structured error without retry"
+          },
+          {
+            "passed": true,
+            "name": "A failed acquisition cannot leave an uncommitted temporary image"
+          },
+          {
+            "passed": true,
+            "name": "The mismatched-result scenario receives the assigned output path"
+          },
+          {
+            "passed": true,
+            "name": "An image result for another path returns worker_protocol without geometry"
+          },
+          {
+            "passed": true,
+            "name": "A mismatched image result removes only its assigned partial output"
+          },
+          {
+            "passed": true,
+            "name": "A mismatched foreign image is never opened for header inspection"
+          }
+        ],
+        "environment": "test-env",
+        "passed": 84,
+        "network": "injected protocol client; no live account or purchase",
+        "failed": 0
+      }
+    }
+  ],
+  "passed": true
+}

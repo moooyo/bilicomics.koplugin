@@ -1,0 +1,369 @@
+{
+  "checks": {
+    "all_index_paths_match_approved_order": true,
+    "all_network_requests_pass_readonly_guard": true,
+    "all_pages_within_existing_reader_limits": true,
+    "application_data_is_private_to_this_run": true,
+    "controller_callbacks_succeed": true,
+    "descriptor_bytes_unchanged": true,
+    "descriptor_path_and_bytes_unchanged": true,
+    "entire_chapter_complete": true,
+    "entire_chapter_pinned": true,
+    "exactly_one_chapter_descriptor": true,
+    "fresh_process_has_no_session": true,
+    "no_out_of_scope_workers": true,
+    "no_reader_errors": true,
+    "no_rejected_live_index": true,
+    "offline_dispatches_zero_workers": true,
+    "offline_has_no_network_routes": true,
+    "offline_native_anchor_restored": true,
+    "offline_network_namespace_isolated": true,
+    "offline_real_native_pixels_rendered": true,
+    "offline_same_descriptor": true,
+    "one_bounded_complete_chapter_selected": true,
+    "phase_within_deadline": true,
+    "production_controller_and_screens_available": true,
+    "production_main_initializes": true,
+    "reader_budget_unchanged": true,
+    "same_descriptor_as_online": true,
+    "server_index_is_the_complete_approved_chapter": true,
+    "test_session_copy_removed": true,
+    "worker_lifetimes_closed": true,
+    "workflow_finished": true
+  },
+  "counts": {
+    "completed_pages": 45,
+    "heartbeat_count": 3,
+    "image_bytes": 92022101,
+    "transport_requests": 0,
+    "worker_starts": 0,
+    "worker_submissions": 0
+  },
+  "dimensions": [
+    {
+      "height": 2900,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2001
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 3000,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 1975
+    }
+  ],
+  "launcher": {
+    "children_cleaned": true,
+    "forced_cleanup": false,
+    "pid_records_valid": true,
+    "process_completed": true,
+    "processes_observed": 3,
+    "within_deadline": true
+  },
+  "passed": true,
+  "report_schema_valid": true
+}

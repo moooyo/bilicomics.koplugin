@@ -1,0 +1,421 @@
+{
+  "checks": {
+    "all_acquisition_runs_in_real_children": true,
+    "all_downloaded_pages_have_real_token_approval": true,
+    "all_index_paths_match_approved_order": true,
+    "all_network_requests_pass_readonly_guard": true,
+    "all_pages_within_existing_reader_limits": true,
+    "application_data_is_private_to_this_run": true,
+    "controller_callbacks_succeed": true,
+    "descriptor_bytes_unchanged": true,
+    "descriptor_path_and_bytes_unchanged": true,
+    "entire_chapter_complete": true,
+    "entire_chapter_pinned": true,
+    "exactly_one_chapter_descriptor": true,
+    "explicit_download_not_failed_or_paused": true,
+    "first_actual_image_replaces_placeholder": true,
+    "fresh_account_storage": true,
+    "guard_accepts_this_complete_live_index": true,
+    "live_index_episode_matches_selection": true,
+    "live_index_keeps_complete_page_count": true,
+    "live_index_observation_accepted": true,
+    "live_index_paths_are_ordered_and_unique": true,
+    "new_image_workers_start_after_close": true,
+    "no_out_of_scope_workers": true,
+    "no_reader_errors": true,
+    "no_rejected_live_index": true,
+    "one_bounded_complete_chapter_selected": true,
+    "one_explicit_chapter_download": true,
+    "opening_has_forward_progress": true,
+    "phase_within_deadline": true,
+    "production_connectivity_available": true,
+    "production_controller_and_screens_available": true,
+    "production_main_initializes": true,
+    "reader_budget_unchanged": true,
+    "reader_close_keeps_explicit_download": true,
+    "reader_opens_before_first_image": true,
+    "reading_starts_before_chapter_completion": true,
+    "real_image_child_waits_before_transport": true,
+    "real_main_attached_to_native_reader": true,
+    "real_native_scroll_anchor_saved": true,
+    "real_next_image_prefetch_without_navigation": true,
+    "real_session_import_validated": true,
+    "real_token_results_were_guard_approved": true,
+    "remaining_pages_complete_after_reader_close": true,
+    "selected_chapter_is_really_free": true,
+    "server_index_is_the_complete_approved_chapter": true,
+    "session_copy_is_test_private": true,
+    "session_copy_removed_before_restart": true,
+    "test_session_copy_removed": true,
+    "transport_request_count_is_bounded": true,
+    "ui_remains_responsive_before_image": true,
+    "worker_lifetimes_closed": true,
+    "workflow_finished": true
+  },
+  "counts": {
+    "approved_image_tokens": 45,
+    "completed_pages": 45,
+    "gate_heartbeats": 14,
+    "heartbeat_count": 651,
+    "image_bytes": 92022101,
+    "image_workers_started_after_close": 42,
+    "live_index_observations": 1,
+    "pages_completed_after_reader_close": 43,
+    "token_approval_batches": 45,
+    "transport_requests": 95,
+    "worker_starts": 49,
+    "worker_submissions": 50
+  },
+  "dimensions": [
+    {
+      "height": 2900,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2001
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 2850,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 2000
+    },
+    {
+      "height": 3000,
+      "jpeg": true,
+      "png": false,
+      "webp": false,
+      "width": 1975
+    }
+  ],
+  "launcher": {
+    "children_cleaned": true,
+    "forced_cleanup": false,
+    "pid_records_valid": true,
+    "process_completed": true,
+    "processes_observed": 52,
+    "within_deadline": true
+  },
+  "opening_observation": {
+    "account_available": true,
+    "active_integration_current": false,
+    "active_integration_exists": false,
+    "connected": true,
+    "controller_closed": false,
+    "controller_suspended": false,
+    "document_is_open": false,
+    "download_failures": 0,
+    "download_requests": 0,
+    "download_requests_without_task": 0,
+    "first_image_gate_exists": false,
+    "first_page_missing": false,
+    "first_page_ready": false,
+    "image_submission_attempts": 0,
+    "integration_exists": false,
+    "opened_generation_matches": false,
+    "pending_tasks": 2,
+    "queued_tasks": 0,
+    "reader_instance_exists": false,
+    "rejected_worker_attempts": 0,
+    "response_received": false,
+    "runner_suspended": false,
+    "session_valid": true
+  },
+  "passed": true,
+  "report_schema_valid": true
+}

@@ -201,21 +201,40 @@ run("Invalid library selection", function()
 end)
 
 run("Quote composition", function()
-    local info, detail, scope = { amount = 25 }, { episodes = {} }, { batch_limit = 10 }
+    local info = { ep_id = "10", comic_id = "1", ep_original_gold = 25, original_gold = 100, batch_buy = {} }
+    local range = { ep_id = "10", comic_id = "1", amount = 25 }
+    local detail = { comic = { id = "1" }, episodes = { { id = "10", comic_id = "1", order = 1, access = "locked" } } }
+    local scope = { kind = "single", order = 2 }
     client({ purchaseInfo = function(episode_id, received_scope)
-        check("Quote scope is forwarded without reinterpreting its price", episode_id == "10" and received_scope == scope)
-        return info
+        if #scenario.calls == 1 then
+            check("Quote first retrieves the basic episode offer without a range", episode_id == "10" and received_scope == nil)
+            return info
+        end
+        check("Quote retrieves the selected range through its normalized wire scope", episode_id == "10"
+            and received_scope.kind == "single" and received_scope.buy_type == 1
+            and received_scope.order == 2 and received_scope.batch_limit == nil)
+        return range
     end, comicDetail = function(comic_id)
         check("Quote retrieves the requested comic detail", comic_id == "1")
         return detail
     end })
     local result, err = Worker.execute({ kind = "quote", episode_id = "10", comic_id = "1", scope = scope })
     check("Quote joins both source responses without a purchase call", result and result.info == info
-        and result.detail == detail and err == nil and #scenario.calls == 2
-        and scenario.calls[1].method == "purchaseInfo" and scenario.calls[2].method == "comicDetail")
+        and result.detail == detail and err == nil and #scenario.calls == 3
+        and scenario.calls[1].method == "purchaseInfo" and scenario.calls[2].method == "comicDetail"
+        and scenario.calls[3].method == "purchaseInfo")
+    check("Quote keeps basic and range observations associated with the copied selection", result
+        and result.context.range_info == range and result.context.selection.scope ~= scope
+        and result.context.selection.scope.kind == "single" and result.context.selection.scope.order == 2
+        and result.context.episode_id == "10" and result.context.comic_id == "1")
 end)
 
 run("Quote failure boundaries", function()
+    client({})
+    local rejected, selection_error = Worker.execute({ kind = "quote", episode_id = "10", comic_id = "1",
+        scope = { batch_limit = 10 } })
+    check("A single quote cannot smuggle batch fields into the read collector", rejected == nil
+        and selection_error.kind == "invalid_scope" and #scenario.calls == 0)
     local expected_error = errorValue("http")
     client({ purchaseInfo = function() return nil, expected_error end })
     local result, err = Worker.execute({ kind = "quote", episode_id = "10", comic_id = "1" })
@@ -288,7 +307,8 @@ end)
 run("Cover acquisition", function()
     local path, url = temporary("cover"), "https://i0.hdslb.com/cover.png"
     client({ downloadImage = function(token, received_path, options)
-        check("Cover acquisition constructs a plain URL token", token.url == url and token.complete_url == url and token.hit_encrpyt == false)
+        check("Cover acquisition constructs a plain URL token", token.url == url and token.complete_url == nil
+            and token.token == nil and token.hit_encrpyt == false)
         check("Image acquisition defaults to a bounded 32 MiB transfer", options.max_bytes == 32 * 1024 * 1024 and received_path == path)
         Files.write(path, Files.read(output .. "/fixtures/page-a.png"))
         return { temporary_path = path }
