@@ -1,0 +1,214 @@
+{
+  "passed": true,
+  "host": "test-env",
+  "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+  "source_sha256": {
+    "bilicomics/controller.lua": "0b33a1092996f6300438a3205969b42e7f9bcef26d5a6d63e31bf532a3471e64",
+    "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+    "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+    "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+    "bilicomics/session_manager.lua": "a5fb493670d4418842f8a5d3556b67486e885437c61384133f8da37275c4a8d6",
+    "bilicomics/jobs/session_runner.lua": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0",
+    "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+    "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+    "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+    "spec/controller/run_session_authentication.py": "e658e47931bd021f86bc975072084e7743e98f53076a77429bd5c4c2128db44d",
+    "spec/protocol/session_refresh_spec.lua": "6b2e4e7ae76659d0411f0f2cd1b166cdac39c8e91e6c0f493323cb4d7c5df312",
+    "spec/controller/qr_authentication_spec.lua": "ad94bb6cb5894d5802695b19aaf1345da602c4071ed6bcb95ce921dfec9a9810"
+  },
+  "synthetic_credentials_only": true,
+  "real_network_requests": 0,
+  "results": [
+    {
+      "suite": "spec/protocol/session_refresh_spec.lua",
+      "returncode": 0,
+      "result": {
+        "injected_transport_requests": 12,
+        "groups": 18,
+        "scope": "Production Session, Codec and Client with injected transport; private files; production Worker/Runner POSIX pipe with a synthetic Client",
+        "tests": [
+          {
+            "name": "Schema 1 credentials load and upgrade without inventing renewal capability",
+            "passed": true,
+            "assertions": 3
+          },
+          {
+            "name": "Schema 2 private persistence retains renewal state and mode 0600",
+            "passed": true,
+            "assertions": 5
+          },
+          {
+            "name": "Uncertain confirmation survives restart and independently disables renewal capability",
+            "passed": true,
+            "assertions": 4
+          },
+          {
+            "name": "Browser exports retain actual expiry while raw Cookie imports remain metadata-free",
+            "passed": true,
+            "assertions": 4
+          },
+          {
+            "name": "Invalid refresh metadata is discarded without changing valid session identity",
+            "passed": true,
+            "assertions": 3
+          },
+          {
+            "name": "Repeated Set-Cookie headers merge without splitting an Expires date comma",
+            "passed": true,
+            "assertions": 4
+          },
+          {
+            "name": "LuaSocket comma-joined cookies honor later values and Max-Age precedence",
+            "passed": true,
+            "assertions": 2
+          },
+          {
+            "name": "Cookie response origins and domain scopes cannot cross unrelated hosts",
+            "passed": true,
+            "assertions": 5
+          },
+          {
+            "name": "Deletion cookies remove credentials and stale expiry metadata",
+            "passed": true,
+            "assertions": 4
+          },
+          {
+            "name": "Invalid cookie batches reject atomically without partial rotation",
+            "passed": true,
+            "assertions": 6
+          },
+          {
+            "name": "Unsupported cookie names and nonroot paths do not poison account cookies",
+            "passed": true,
+            "assertions": 1
+          },
+          {
+            "name": "Renewal secrets never enter account summaries or ordinary Codec records",
+            "passed": true,
+            "assertions": 12
+          },
+          {
+            "name": "Credential comparison ignores auxiliary cookie rotation but detects authentication changes",
+            "passed": true,
+            "assertions": 5
+          },
+          {
+            "name": "Malformed optional Set-Cookie cannot erase successful purchase or favorite receipts",
+            "passed": true,
+            "assertions": 18
+          },
+          {
+            "name": "Business and authentication errors retain precedence over malformed response cookies",
+            "passed": true,
+            "assertions": 12
+          },
+          {
+            "name": "Production Worker and real POSIX Runner carry updated cookies only in the private third result",
+            "passed": true,
+            "assertions": 5
+          },
+          {
+            "name": "Only a boolean changed marker permits a private worker update",
+            "passed": true,
+            "assertions": 2
+          },
+          {
+            "name": "A retryable failure with a private cookie update is returned before any raw retry",
+            "passed": true,
+            "assertions": 2
+          }
+        ],
+        "synthetic_credentials_only": true,
+        "real_worker_pipe": true,
+        "real_network_requests": 0,
+        "real_purchase_requests": 0,
+        "passed": true,
+        "assertions": 97
+      },
+      "error": null
+    },
+    {
+      "suite": "spec/controller/qr_authentication_spec.lua",
+      "returncode": 0,
+      "result": {
+        "passed": true,
+        "assertions": 50,
+        "groups": 13,
+        "scope": "Real Controller, Session, SessionStorage, SQLite and PageStore with controlled QR worker results",
+        "real_network_requests": 0,
+        "synthetic_credentials_only": true,
+        "tests": [
+          {
+            "passed": true,
+            "name": "Anonymous and invalidated accounts can begin an isolated QR sign-in",
+            "assertions": 8
+          },
+          {
+            "passed": true,
+            "name": "Waiting and scanned statuses preserve the account until verified confirmation",
+            "assertions": 11
+          },
+          {
+            "passed": true,
+            "name": "Confirmed QR replacement clears a previous invalid-session marker",
+            "assertions": 2
+          },
+          {
+            "passed": true,
+            "name": "Wrong keys and duplicate polls cannot create overlapping QR requests",
+            "assertions": 3
+          },
+          {
+            "passed": true,
+            "name": "Expired QR codes retire their key without replacing the current account",
+            "assertions": 2
+          },
+          {
+            "passed": true,
+            "name": "Canceled and superseded generation callbacks cannot resurrect stale QR state",
+            "assertions": 2
+          },
+          {
+            "passed": true,
+            "name": "Cancel suspend and close reject late confirmed credentials",
+            "assertions": 6
+          },
+          {
+            "passed": true,
+            "name": "Connectivity failures stop new and queued QR generation",
+            "assertions": 3
+          },
+          {
+            "passed": true,
+            "name": "Poll failures allow an explicit retry without altering the existing account",
+            "assertions": 2
+          },
+          {
+            "passed": true,
+            "name": "A private save failure preserves the previous selected account and saved file",
+            "assertions": 3
+          },
+          {
+            "passed": true,
+            "name": "Explicit import cancels QR polling and late QR success cannot replace the imported account",
+            "assertions": 2
+          },
+          {
+            "passed": true,
+            "name": "Starting QR sign-in retires an older pending import without canceling the new QR",
+            "assertions": 4
+          },
+          {
+            "passed": true,
+            "name": "Synchronous authentication workers do not leave phantom in-flight QR requests",
+            "assertions": 2
+          }
+        ],
+        "purchase_requests": 0
+      },
+      "error": null
+    }
+  ]
+}

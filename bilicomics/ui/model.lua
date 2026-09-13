@@ -113,6 +113,11 @@ function Model.error(error)
         return _("Comic ID is invalid"), _("Enter a positive ID of up to 15 digits. The optional mc prefix is accepted.")
     elseif kind == "no_next_chapter" then
         return _("No more chapters"), _("Refresh the comic details to check for new chapters.")
+    elseif kind == "session_changed" then
+        return _("Session changed"), _("Your sign-in was renewed. Refresh the operation result before trying again."), "account"
+    elseif kind == "session_refresh" or kind == "refresh_unknown" or kind == "refresh_rejected" or kind == "confirmation_unknown"
+        or kind == "refresh_pending" or kind == "refresh_unavailable" or kind == "request_authentication" then
+        return _("Session renewal needs attention"), _("Check your connection and try again. If renewal remains unavailable, sign in with a QR code from Account."), "account"
     elseif kind == "auth" or kind == "authentication" or kind == "login_required" or kind == "unauthorized" or kind == "session" then
         return _("Sign in required"), _("Import a valid Bilibili web session from Account, then refresh."), "account"
     elseif kind == "invalid_session" or kind == "account_mismatch" then

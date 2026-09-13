@@ -4,6 +4,7 @@ local Device = require("device")
 local InputDialog = require("ui/widget/inputdialog")
 local FileChooser = require("ui/widget/filechooser")
 local SessionInput = require("bilicomics/ui/session_input")
+local QRLogin = require("bilicomics/ui/qr_login")
 local TextViewer = require("ui/widget/textviewer")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
@@ -51,7 +52,7 @@ function Screens:refresh() if self.route then self:_render() end end
 
 function Screens:close()
     self.epoch = self.epoch + 1
-    self.session_input = nil
+    self:_closeDialog()
     if self.scope_dialog then UIManager:close(self.scope_dialog); self.scope_dialog = nil end
     if self.dialog then UIManager:close(self.dialog); self.dialog = nil end
     if self.widget then UIManager:close(self.widget); self.widget = nil end
@@ -61,6 +62,7 @@ end
 function Screens:_closeDialog(keep_purchase)
     if not keep_purchase then self.purchase_visible = false end
     self.session_input = nil
+    if self.qr_login then self.qr_login:close(); self.qr_login = nil end
     if self.dialog then UIManager:close(self.dialog); self.dialog = nil end
 end
 
@@ -150,6 +152,7 @@ end
 
 function Screens:_render()
     if not self.route then return end
+    if self.qr_login then self.qr_login:_current() end
     self.focus = {}
     self.width = Device.screen:getWidth() - W.scale(32)
     self.height = Device.screen:getHeight()
@@ -852,26 +855,60 @@ function Screens:_importSessionFile()
     self.dialog = chooser; UIManager:show(chooser)
 end
 
+function Screens:_signInWithQR()
+    self:_closeDialog()
+    local state = { epoch = self.epoch, account_key = accountKey(self.controller), generation = self.controller.generation }
+    local login
+    login = QRLogin.new{ controller = self.controller,
+        is_current = function(confirmed)
+            return self.qr_login == login and self.route ~= nil and self.epoch == state.epoch
+                and (confirmed or (accountKey(self.controller) == state.account_key and self.controller.generation == state.generation))
+        end,
+        on_dialog = function(dialog) self.dialog = dialog end,
+        on_close = function(dialog)
+            if self.dialog == dialog then self.dialog = nil end
+            if self.qr_login == login then self.qr_login = nil end
+        end,
+        on_confirmed = function()
+            self.loaded = {}
+            self:showAccount()
+        end,
+    }
+    self.qr_login = login
+    login:start()
+end
+
 function Screens:_account()
     local account, wallet = self.controller:getAccount() or {}, self.controller:getWallet() or {}
     local signed_in = account.session_valid == true or (account.session_valid ~= false and account.id ~= nil)
     local prefetch = self.controller:getSetting("prefetch_pages", 3)
     local cache_limit = self.controller:getSetting("cache_limit_mb", 512)
     local storage = self.controller:getStorageSummary() or {}
+    local renewing = account.auth_state == "checking" or account.auth_state == "refreshing"
+        or account.auth_state == "pending_confirmation"
     local rows = {
         W.text(signed_in and (account.name or _("Signed in")) or _("Not signed in"), self.width, 27, { display = true, bold = true }),
-        W.space(8), W.text(string.format(_("Coins: %s · Coupons: %s"), tostring(wallet.remain_gold or "—"),
+        W.space(6), W.text(string.format(_("Coins: %s · Coupons: %s"), tostring(wallet.remain_gold or "—"),
             tostring(wallet.remain_coupon or "—")), self.width, 19), W.space(6),
+        W.text(account.auth_state == "reauth_required" and _("Sign in again to restore your account.")
+            or renewing and _("Checking or renewing your sign-in…")
+            or account.auth_state == "error" and _("Renewal is temporarily unavailable. Retry or sign in with QR code.")
+            or account.renewable and _("Automatic sign-in renewal is enabled.")
+            or signed_in and _("This imported session cannot renew itself. Sign in with QR code.")
+            or _("Scan a code to sign in and enable automatic renewal."),
+            self.width, 16, { muted = true, height = W.scale(38) }), W.space(6),
         W.text(wallet.stale and _("Balance may be outdated. Refresh before reviewing a purchase.") or _("Purchases use your existing balance and eligible coupons."),
-            self.width, 16, { muted = true, height = W.scale(38) }), W.space(10),
+            self.width, 16, { muted = true, height = W.scale(38) }), W.space(6),
         self:_buttons{
+            { text = _("Sign in with QR code"), primary = true, callback = function() self:_signInWithQR() end },
             { text = signed_in and _("Replace session") or _("Import session"), callback = function() self:_importSession() end },
+        }, W.space(6), self:_buttons{
             { text = _("Import from file"), callback = function() self:_importSessionFile() end },
             { text = _("Refresh balance"), callback = function() self:_invoke("refreshWallet", {}, function(_value, error)
                 if error then self:_error(error) end
             end) end },
-        }, W.space(18), W.rule(self.width, true), W.space(12),
-        W.text(_("Reading and cache"), self.width, 21, { bold = true }), W.space(8),
+        }, W.space(10), W.rule(self.width, true), W.space(8),
+        W.text(_("Reading and cache"), self.width, 21, { bold = true }), W.space(6),
         self:_buttons{
             { text = _("Reader defaults"), callback = function() self:_readerDefaults() end },
             { text = _("Local diagnostics"), callback = function() self:_diagnostics() end },

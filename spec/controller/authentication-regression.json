@@ -1,0 +1,1388 @@
+{
+  "passed": true,
+  "source_unchanged": true,
+  "host": "test-env",
+  "runtime_version": "v2026.07.1",
+  "completed_at": "2026-09-13T01:20:30.815932+00:00",
+  "network_namespace_isolated": true,
+  "synthetic_credentials_only": true,
+  "real_account_login_verified": false,
+  "real_refresh_verified": false,
+  "source_sha256": {
+    "bilicomics/bootstrap.lua": "d6b5aa43b7b9d4cc7b07ca3b60cd2058cff7993a1fa73eab42af8544d07c3a5d",
+    "bilicomics/catalog/comic_id.lua": "c74b3177a0a5659f1becf644aa60ce733da9b2580033a66140811eae727b62cf",
+    "bilicomics/catalog/init.lua": "26846882a4d9bd1b84a3668d4f719d6eb3710db9f0d44ffd5c70183d5f5936c1",
+    "bilicomics/controller.lua": "0b33a1092996f6300438a3205969b42e7f9bcef26d5a6d63e31bf532a3471e64",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+    "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+    "bilicomics/jobs/session_runner.lua": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0",
+    "bilicomics/jobs/source_refresh.lua": "7fac16d903f70ba7a2d72a565ed062a6cdbbdecf5ddb6ebe0f10db04f390a62c",
+    "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+    "bilicomics/jobs/version_replacement.lua": "d678c5f10acffb35497650577a4d6e9adb11012375e25290bb77c384f901c6b6",
+    "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+    "bilicomics/protocol/assets.lua": "9b4c275902946c984aa39b15905478ae74138e323579ab1745ca60d135d9ccab",
+    "bilicomics/protocol/auth.lua": "9257e2efc00448e651c6cb4feef2e525b23606bea6241945b31f6ecd53f9ad7a",
+    "bilicomics/protocol/auth_crypto.lua": "d09cca5a7660f94863a7aec42c62369525167ff58ef8a9dd41bfa5b7fc9180bf",
+    "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+    "bilicomics/protocol/crypto.lua": "e30d6ffc1322a40c3ee462ed78f280d9c2f90db76affb466f30c0d25c8db7f61",
+    "bilicomics/protocol/ecdh.lua": "de08681939b06b5c5fde6d9bc2437e03f99ea28040701cb8d2823e571701aa29",
+    "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/protocol/image_crypto.lua": "b722286b3c48cacf9f9151c68417a02d4b6122189129425ae9be9223d1359d1d",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "bilicomics/protocol/native_backend.lua": "c7bcc3af639af2866e5a96b04f6bb817b186d9d222d314c49848d7bbb60ecfb7",
+    "bilicomics/protocol/native_library.lua": "91f39552b34b546d4b1605d69186d2f28eaa7539797f7fee51b6b1606008190f",
+    "bilicomics/protocol/normalize.lua": "1358072c2095922872509faab3bd4823bc5c7e28d390234671eb50bbe1464087",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/portable_crypto.lua": "eeb92172670ee95185a75297920ec6feb67ac9fc3863442b4133bbdc126a88da",
+    "bilicomics/protocol/response_crypto.lua": "144be62d0dfafc23edad626da9c4abb80b13fccad0aea9b643539d65b32dab4d",
+    "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+    "bilicomics/protocol/transport.lua": "349ff6b09d1395b818e6556ba8d5fae97abaa2c7722865564ff63b40ddd2a0bb",
+    "bilicomics/purchase/candidate.lua": "12be1d75fab239cf153be0095277d37d008744bfdca00f140a1f7e3aa26e62da",
+    "bilicomics/purchase/quote.lua": "aa3fcb46e407ba2aeafc4a65ab7fd6ec2c09e93c784a4e88179427ba8c501ffc",
+    "bilicomics/purchase/quote_fetch.lua": "ca01b376371d48a51a496687613a8b5814a4abca77117b103947efd55fc19750",
+    "bilicomics/purchase/range.lua": "dd185e9bd4a15a40cae0ebc60567d6d19b2bebf1680bf42f819a75c0b5a5516c",
+    "bilicomics/purchase/selection.lua": "681bf8b7c540645b1c71c184938c1f6df9ef8d3198eb00bf5396470953e1ac1a",
+    "bilicomics/purchase/service.lua": "051ec6d5f55be7c6c9013560a43117646ba44df908f89382db204eacaa1ff841",
+    "bilicomics/purchase/value.lua": "45dd2999e0c7354bd40d0c50a24964d2c5378d8496477ad1463f65109af16a37",
+    "bilicomics/reader/anchors.lua": "e506aa65f041dfc8bf36aa3bc809bc16c536acd43fe3378a45d3f92e377757ff",
+    "bilicomics/reader/compatibility.lua": "c6b91988e4dae698fd67d6503713df0da3fdf0cba01e10ffb52a5963d4a1c587",
+    "bilicomics/reader/defaults.lua": "ffa7a3720532a5d3088591ea257c636366e0bd36ab8273e24f1dda89ce188a24",
+    "bilicomics/reader/document.lua": "c9ae3202c1c3a9d6f6951a749b723cc06af8ff2b48e1e6ad306f784973db426c",
+    "bilicomics/reader/geometry.lua": "00dd789440de52a3b134ea3806d85cc51ce02f3740e3057c8835da5fba1e27bc",
+    "bilicomics/reader/image_backend.lua": "9dace9dd0e4c0a6630ba396c5a1b79d786a6e775a170195713e6128287f78a66",
+    "bilicomics/reader/integration.lua": "9f2d8d10ba6ccc16a7e7c8e66114a938391791c0edbb4426f12432e2756af8ce",
+    "bilicomics/runtime.lua": "15bd0dcd8e27cac34a8d4adaff785c9369af5c29d500d08e022600079a3ef5f6",
+    "bilicomics/services.lua": "04e3af69442d9aeadd89991bbdb414d6fa9cbd7285308c41e163924dfc1d551a",
+    "bilicomics/session_manager.lua": "a5fb493670d4418842f8a5d3556b67486e885437c61384133f8da37275c4a8d6",
+    "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+    "bilicomics/settings.lua": "d497ee43ca582306f2b25fa4f811fe37a345046adc386c6790f42bd47d0df87f",
+    "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+    "bilicomics/storage/files.lua": "fb80732ce9c1210d3c97b545f26465916c40b1598f8eb065ccffe36572db8812",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "bilicomics/storage/migrations.lua": "8825570089f6cff75e6ab697d370f9f77f27cf11a54c9f59cdd171d92349336c",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/storage/source_refresh.lua": "9d6189d07492bf28647940a9de327aba11de00e6aca7f31edaa82d449725d3d7",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/version_replacement.lua": "9b954a750f890d5f1a4a284601a600e59eb7754e1905803a411d65be50f19d6b",
+    "bilicomics/ui/i18n.lua": "44c01de44251642f02d2eaa6262d59e1e66440a68a22b286d04b5de56fe4fbe9",
+    "bilicomics/ui/model.lua": "965abaa32c74bf3defde60c7cb9e48bb36be7bef4a18ac355d963f1d04de9261",
+    "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+    "bilicomics/ui/screens.lua": "676a23cb530555a15867f26141914cf9b9826f1864566a6f54f5aee01390d977",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "32ce8347e53a4601dbb2622d7f231b962bad8dd981c0d98b9ca70837c3f0173c",
+    "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+    "l10n/bilicomics_zh_CN.lua": "2d8427b559508dcbb3bf42d3e8a23ded1aaacef926d4c0cd6192014a2288b9d2",
+    "main.lua": "503afa4127abd1d45acd1eabc9e917abac705c6ce9b7b2900b0c54e24f4ce817",
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+  },
+  "suites": [
+    {
+      "suite": "auth-protocol",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "passed": 33,
+        "cases": [
+          "QR generation stays anonymous and uses the official scan host",
+          "QR generation rejects an unexpected credential destination",
+          "QR polling maps every official pending and expiry status",
+          "QR polling rejects malformed identifiers before transmission",
+          "a confirmed QR login must receive cookies and validate its identity",
+          "confirmed QR results do not silently reuse the previous account cookies",
+          "confirmed QR results reject missing renewal credentials",
+          "QR identity mismatch never activates the candidate session",
+          "identity validation retains refreshed cookies from nav",
+          "identity validation refuses cookies removed by nav",
+          "renewal status persists its check time without exposing token in a URL",
+          "renewal status rejects ambiguous boolean and timestamp fields",
+          "renewal status validates and returns cookies rotated by the read response",
+          "renewal status cannot activate a rotated cookie for another account",
+          "request authentication rejection does not assert that the account expired",
+          "an imported cookie without renewal credentials cannot claim automatic renewal",
+          "an already pending renewal must be confirmed before another refresh",
+          "no-renewal status validates the existing identity and never sends a refresh POST",
+          "a rejected unchanged-session check cannot replace the active identity",
+          "successful checks and renewals clear only their completed crash marker",
+          "renewal returns a verified candidate with the old token pending durable confirmation",
+          "a previous status result can avoid a duplicate status request",
+          "invalid correspondence HTML cannot trigger a refresh POST",
+          "a refresh response without required Set-Cookie headers remains uncertain",
+          "a reused refresh token cannot be confirmed as a fresh credential",
+          "lost refresh responses are never replayed by the protocol module",
+          "a refresh connection failure before transmission is distinguishable from uncertainty",
+          "explicit business rejection is distinguishable from an unknown refresh outcome",
+          "renewal rejects account replacement even when its new cookies match nav",
+          "loss of the candidate identity check preserves refresh uncertainty",
+          "confirmation uses the newly saved cookie and the previous renewal token",
+          "confirmation refuses a missing durable transaction and retains failed pending state",
+          "authentication requests cannot send credentials to CDN or unapproved domains"
+        ]
+      },
+      "error": null
+    },
+    {
+      "suite": "auth-crypto",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "mgf1_digest": "SHA256",
+        "cpu_seconds": 0.14327399999999998,
+        "cases": [
+          "refresh encryption matches the official fixed-seed WASM vector",
+          "independent OAEP vectors cover carry chains and timestamp bounds",
+          "ciphertext retains its leading zero byte",
+          "numeric timestamps use canonical decimal text",
+          "invalid timestamps fail before accessing randomness",
+          "injected random failures never fall back to another source",
+          "default randomness fails closed if urandom cannot be opened",
+          "urandom read errors and short reads close the file and fail",
+          "missing hash or XOR support returns a typed capability error",
+          "unexpected hash failure is contained without exposing diagnostics",
+          "the operating system random source produces independent valid ciphertexts"
+        ],
+        "passed": 11,
+        "official_ciphertext_bytes": 128,
+        "public_exponent": 65537,
+        "oaep_digest": "SHA256"
+      },
+      "error": null
+    },
+    {
+      "suite": "session-manager",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "assertions": [
+          {
+            "name": "startup_maintenance_is_single_flight",
+            "passed": true
+          },
+          {
+            "name": "no_refresh_does_not_mark_credentials_blocked",
+            "passed": true
+          },
+          {
+            "name": "successful_check_releases_all_waiters",
+            "passed": true
+          },
+          {
+            "name": "business_results_reach_original_callbacks",
+            "passed": true
+          },
+          {
+            "name": "checks_are_throttled_for_six_hours",
+            "passed": true
+          },
+          {
+            "name": "check_runs_again_after_interval",
+            "passed": true
+          },
+          {
+            "name": "refresh_marker_is_durable_before_rotation",
+            "passed": true
+          },
+          {
+            "name": "fresh_credentials_are_saved_before_confirm",
+            "passed": true
+          },
+          {
+            "name": "confirmation_is_cleared_durably_before_business_dispatch",
+            "passed": true
+          },
+          {
+            "name": "save_failure_never_confirms_or_uses_old_credentials",
+            "passed": true
+          },
+          {
+            "name": "failed_fresh_save_retries_without_rotating_again",
+            "passed": true
+          },
+          {
+            "name": "recovered_storage_unblocks_waiters",
+            "passed": true
+          },
+          {
+            "name": "marker_save_failure_prevents_refresh_post",
+            "passed": true
+          },
+          {
+            "name": "ambiguous_refresh_keeps_durable_block_marker",
+            "passed": true
+          },
+          {
+            "name": "blocked_refresh_token_is_not_automatically_reused",
+            "passed": true
+          },
+          {
+            "name": "definite_pre_post_failure_clears_marker",
+            "passed": true
+          },
+          {
+            "name": "authentication_failure_forces_maintenance",
+            "passed": true
+          },
+          {
+            "name": "read_replays_with_new_credentials",
+            "passed": true
+          },
+          {
+            "name": "authentication_replay_is_bounded",
+            "passed": true
+          },
+          {
+            "name": "purchase_submit_never_replays_after_renewal",
+            "passed": true
+          },
+          {
+            "name": "set_favorite_never_replays_after_renewal",
+            "passed": true
+          },
+          {
+            "name": "old_mutation_authentication_cannot_invalidate_new_session",
+            "passed": true
+          },
+          {
+            "name": "canceling_one_waiter_preserves_shared_maintenance",
+            "passed": true
+          },
+          {
+            "name": "canceling_last_waiter_prevents_late_mutation",
+            "passed": true
+          },
+          {
+            "name": "suspend_cancels_maintenance_and_ignores_late_credentials",
+            "passed": true
+          },
+          {
+            "name": "close_reaps_the_underlying_runner",
+            "passed": true
+          },
+          {
+            "name": "business_before_start_guard_is_preserved",
+            "passed": true
+          },
+          {
+            "name": "queued_requests_use_session_at_actual_start",
+            "passed": true
+          },
+          {
+            "name": "cookie_storage_failure_preserves_accepted_mutation",
+            "passed": true
+          },
+          {
+            "name": "static_cookie_import_preserves_authentication_failure_behavior",
+            "passed": true
+          },
+          {
+            "name": "pre_dispatch_auth_post_never_counts_as_purchase_transmission",
+            "passed": true
+          },
+          {
+            "name": "cancel_during_maintenance_preserves_observed_purchase_evidence",
+            "passed": true
+          },
+          {
+            "name": "auxiliary_cookie_update_does_not_skip_forced_renewal",
+            "passed": true
+          },
+          {
+            "name": "restart_confirms_durable_pending_session_before_new_check",
+            "passed": true
+          },
+          {
+            "name": "restart_clears_pending_before_business",
+            "passed": true
+          },
+          {
+            "name": "requests_join_rotation_after_block_marker_is_saved",
+            "passed": true
+          },
+          {
+            "name": "confirmation_cleanup_save_failure_blocks_business",
+            "passed": true
+          },
+          {
+            "name": "confirmation_cleanup_retries_storage_without_reconfirming",
+            "passed": true
+          },
+          {
+            "name": "stale_read_replays_without_a_second_rotation",
+            "passed": true
+          },
+          {
+            "name": "renewal_consumes_cookies_updated_by_cookie_info",
+            "passed": true
+          },
+          {
+            "name": "download_page_queued_start_waits_for_in_progress_maintenance",
+            "passed": true
+          },
+          {
+            "name": "download_page_queued_wait_dispatches_once_after_maintenance",
+            "passed": true
+          },
+          {
+            "name": "download_page_queued_wait_completes_callback_once",
+            "passed": true
+          },
+          {
+            "name": "purchase_submit_queued_start_waits_for_in_progress_maintenance",
+            "passed": true
+          },
+          {
+            "name": "purchase_submit_queued_wait_dispatches_once_after_maintenance",
+            "passed": true
+          },
+          {
+            "name": "purchase_submit_queued_wait_completes_callback_once",
+            "passed": true
+          },
+          {
+            "name": "set_favorite_queued_start_waits_for_in_progress_maintenance",
+            "passed": true
+          },
+          {
+            "name": "set_favorite_queued_wait_dispatches_once_after_maintenance",
+            "passed": true
+          },
+          {
+            "name": "set_favorite_queued_wait_completes_callback_once",
+            "passed": true
+          },
+          {
+            "name": "parallel_authentication_joins_rotation_despite_durable_block_marker",
+            "passed": true
+          },
+          {
+            "name": "parallel_authentication_releases_reads_with_one_rotation",
+            "passed": true
+          },
+          {
+            "name": "confirmation_attempt_marker_is_saved_before_post",
+            "passed": true
+          },
+          {
+            "name": "restart_reports_uncertain_confirmation_without_claiming_success",
+            "passed": true
+          },
+          {
+            "name": "lost_confirmation_response_survives_restart_without_repeating_post",
+            "passed": true
+          },
+          {
+            "name": "uncertain_confirmation_auth_failure_requests_new_login_without_rotation",
+            "passed": true
+          },
+          {
+            "name": "network_confirmation_failure_preserves_saved_cookie_reading",
+            "passed": true
+          },
+          {
+            "name": "network_confirmation_failure_does_not_repeat_confirm_or_refresh",
+            "passed": true
+          },
+          {
+            "name": "business_confirmation_failure_preserves_saved_cookie_reading",
+            "passed": true
+          },
+          {
+            "name": "business_confirmation_failure_does_not_repeat_confirm_or_refresh",
+            "passed": true
+          },
+          {
+            "name": "authentication_confirmation_failure_preserves_saved_cookie_reading",
+            "passed": true
+          },
+          {
+            "name": "authentication_confirmation_failure_does_not_repeat_confirm_or_refresh",
+            "passed": true
+          },
+          {
+            "name": "uncertain_confirmation_cookie_update_failure_retains_retry_candidate",
+            "passed": true
+          },
+          {
+            "name": "uncertain_confirmation_candidate_save_retry_never_repeats_confirmation",
+            "passed": true
+          },
+          {
+            "name": "successful_confirmation_cleanup_failure_keeps_both_markers_durable",
+            "passed": true
+          },
+          {
+            "name": "successful_confirmation_cleanup_retries_only_storage",
+            "passed": true
+          },
+          {
+            "name": "auth_failure_waiting_for_uncertain_confirmation_requires_new_login",
+            "passed": true
+          },
+          {
+            "name": "confirmation_marker_save_failure_prevents_confirmation_post",
+            "passed": true
+          },
+          {
+            "name": "confirmation_marker_save_retry_does_not_rotate_again",
+            "passed": true
+          },
+          {
+            "name": "client_forced_candidate_save_preserves_confirmation_unknown",
+            "passed": true
+          },
+          {
+            "name": "purchase_submit_forced_candidate_save_preserves_confirmation_unknown",
+            "passed": true
+          }
+        ],
+        "real_network": false,
+        "count": 70,
+        "real_credentials": false
+      },
+      "error": null
+    },
+    {
+      "suite": "session-controller",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "passed": true,
+        "host": "test-env",
+        "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+        "source_sha256": {
+          "bilicomics/controller.lua": "0b33a1092996f6300438a3205969b42e7f9bcef26d5a6d63e31bf532a3471e64",
+          "bilicomics/protocol/session.lua": "3b314c701db3eef6d9ed1a687f26064089ad8825b9255df5c361b43bd01971d1",
+          "bilicomics/session_storage.lua": "0b5c65087b3860338fa1e3937ac924629851cac5f56234a4cd4823a965fc1395",
+          "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+          "bilicomics/protocol/errors.lua": "215d9176230fe6001bfe3f95cf80035f40e64e943252a7474fd39a62d435c9be",
+          "bilicomics/util.lua": "74f1c2139d1459046c35aa5dfbeb42f5f4a996dfe861678e3ec6722f42ba2f65",
+          "bilicomics/session_manager.lua": "a5fb493670d4418842f8a5d3556b67486e885437c61384133f8da37275c4a8d6",
+          "bilicomics/jobs/session_runner.lua": "52b064b88514ccf6b32e5a9ca7632208ecd9e05d7c3288c015df3bf677cae8f0",
+          "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+          "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+          "bilicomics/storage/codec.lua": "48850de595c7312aef76eb76618a23df871189b70fe46753f94176d5c68704ec",
+          "spec/controller/run_session_authentication.py": "e658e47931bd021f86bc975072084e7743e98f53076a77429bd5c4c2128db44d",
+          "spec/protocol/session_refresh_spec.lua": "6b2e4e7ae76659d0411f0f2cd1b166cdac39c8e91e6c0f493323cb4d7c5df312",
+          "spec/controller/qr_authentication_spec.lua": "ad94bb6cb5894d5802695b19aaf1345da602c4071ed6bcb95ce921dfec9a9810"
+        },
+        "synthetic_credentials_only": true,
+        "real_network_requests": 0,
+        "results": [
+          {
+            "suite": "spec/protocol/session_refresh_spec.lua",
+            "returncode": 0,
+            "result": {
+              "injected_transport_requests": 12,
+              "groups": 18,
+              "scope": "Production Session, Codec and Client with injected transport; private files; production Worker/Runner POSIX pipe with a synthetic Client",
+              "tests": [
+                {
+                  "name": "Schema 1 credentials load and upgrade without inventing renewal capability",
+                  "passed": true,
+                  "assertions": 3
+                },
+                {
+                  "name": "Schema 2 private persistence retains renewal state and mode 0600",
+                  "passed": true,
+                  "assertions": 5
+                },
+                {
+                  "name": "Uncertain confirmation survives restart and independently disables renewal capability",
+                  "passed": true,
+                  "assertions": 4
+                },
+                {
+                  "name": "Browser exports retain actual expiry while raw Cookie imports remain metadata-free",
+                  "passed": true,
+                  "assertions": 4
+                },
+                {
+                  "name": "Invalid refresh metadata is discarded without changing valid session identity",
+                  "passed": true,
+                  "assertions": 3
+                },
+                {
+                  "name": "Repeated Set-Cookie headers merge without splitting an Expires date comma",
+                  "passed": true,
+                  "assertions": 4
+                },
+                {
+                  "name": "LuaSocket comma-joined cookies honor later values and Max-Age precedence",
+                  "passed": true,
+                  "assertions": 2
+                },
+                {
+                  "name": "Cookie response origins and domain scopes cannot cross unrelated hosts",
+                  "passed": true,
+                  "assertions": 5
+                },
+                {
+                  "name": "Deletion cookies remove credentials and stale expiry metadata",
+                  "passed": true,
+                  "assertions": 4
+                },
+                {
+                  "name": "Invalid cookie batches reject atomically without partial rotation",
+                  "passed": true,
+                  "assertions": 6
+                },
+                {
+                  "name": "Unsupported cookie names and nonroot paths do not poison account cookies",
+                  "passed": true,
+                  "assertions": 1
+                },
+                {
+                  "name": "Renewal secrets never enter account summaries or ordinary Codec records",
+                  "passed": true,
+                  "assertions": 12
+                },
+                {
+                  "name": "Credential comparison ignores auxiliary cookie rotation but detects authentication changes",
+                  "passed": true,
+                  "assertions": 5
+                },
+                {
+                  "name": "Malformed optional Set-Cookie cannot erase successful purchase or favorite receipts",
+                  "passed": true,
+                  "assertions": 18
+                },
+                {
+                  "name": "Business and authentication errors retain precedence over malformed response cookies",
+                  "passed": true,
+                  "assertions": 12
+                },
+                {
+                  "name": "Production Worker and real POSIX Runner carry updated cookies only in the private third result",
+                  "passed": true,
+                  "assertions": 5
+                },
+                {
+                  "name": "Only a boolean changed marker permits a private worker update",
+                  "passed": true,
+                  "assertions": 2
+                },
+                {
+                  "name": "A retryable failure with a private cookie update is returned before any raw retry",
+                  "passed": true,
+                  "assertions": 2
+                }
+              ],
+              "synthetic_credentials_only": true,
+              "real_worker_pipe": true,
+              "real_network_requests": 0,
+              "real_purchase_requests": 0,
+              "passed": true,
+              "assertions": 97
+            },
+            "error": null
+          },
+          {
+            "suite": "spec/controller/qr_authentication_spec.lua",
+            "returncode": 0,
+            "result": {
+              "passed": true,
+              "assertions": 50,
+              "groups": 13,
+              "scope": "Real Controller, Session, SessionStorage, SQLite and PageStore with controlled QR worker results",
+              "real_network_requests": 0,
+              "synthetic_credentials_only": true,
+              "tests": [
+                {
+                  "passed": true,
+                  "name": "Anonymous and invalidated accounts can begin an isolated QR sign-in",
+                  "assertions": 8
+                },
+                {
+                  "passed": true,
+                  "name": "Waiting and scanned statuses preserve the account until verified confirmation",
+                  "assertions": 11
+                },
+                {
+                  "passed": true,
+                  "name": "Confirmed QR replacement clears a previous invalid-session marker",
+                  "assertions": 2
+                },
+                {
+                  "passed": true,
+                  "name": "Wrong keys and duplicate polls cannot create overlapping QR requests",
+                  "assertions": 3
+                },
+                {
+                  "passed": true,
+                  "name": "Expired QR codes retire their key without replacing the current account",
+                  "assertions": 2
+                },
+                {
+                  "passed": true,
+                  "name": "Canceled and superseded generation callbacks cannot resurrect stale QR state",
+                  "assertions": 2
+                },
+                {
+                  "passed": true,
+                  "name": "Cancel suspend and close reject late confirmed credentials",
+                  "assertions": 6
+                },
+                {
+                  "passed": true,
+                  "name": "Connectivity failures stop new and queued QR generation",
+                  "assertions": 3
+                },
+                {
+                  "passed": true,
+                  "name": "Poll failures allow an explicit retry without altering the existing account",
+                  "assertions": 2
+                },
+                {
+                  "passed": true,
+                  "name": "A private save failure preserves the previous selected account and saved file",
+                  "assertions": 3
+                },
+                {
+                  "passed": true,
+                  "name": "Explicit import cancels QR polling and late QR success cannot replace the imported account",
+                  "assertions": 2
+                },
+                {
+                  "passed": true,
+                  "name": "Starting QR sign-in retires an older pending import without canceling the new QR",
+                  "assertions": 4
+                },
+                {
+                  "passed": true,
+                  "name": "Synchronous authentication workers do not leave phantom in-flight QR requests",
+                  "assertions": 2
+                }
+              ],
+              "purchase_requests": 0
+            },
+            "error": null
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "suite": "session-storage",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "private_uid": 0,
+        "process_uid": 0,
+        "scope": "Synthetic sessions only; real Controller, SQLite, PageStore and credential filesystem operations",
+        "native_android": false,
+        "count": 28,
+        "assertions": [
+          {
+            "name": "android_session_path_is_under_context_files_dir",
+            "passed": true
+          },
+          {
+            "name": "first_read_does_not_adopt_legacy_shared_session",
+            "passed": true
+          },
+          {
+            "name": "first_read_does_not_create_or_remove_credential_files",
+            "passed": true
+          },
+          {
+            "name": "cached_account_database_stays_in_data_storage",
+            "passed": true
+          },
+          {
+            "name": "cached_owned_content_remains_readable_without_import",
+            "passed": true
+          },
+          {
+            "name": "readonly_startup_does_not_send_network_requests",
+            "passed": true
+          },
+          {
+            "name": "import_waits_for_explicit_worker_validation_verified",
+            "passed": true
+          },
+          {
+            "name": "validated_import_enables_private_session",
+            "passed": true
+          },
+          {
+            "name": "legacy_cleanup_occurs_only_for_selected_account",
+            "passed": true
+          },
+          {
+            "name": "saved_private_file_is_owned_regular_0600_single_link",
+            "passed": true
+          },
+          {
+            "name": "private_directory_0700_uid_1",
+            "passed": true
+          },
+          {
+            "name": "private_directory_0700_uid_2",
+            "passed": true
+          },
+          {
+            "name": "private_directory_0700_uid_3",
+            "passed": true
+          },
+          {
+            "name": "private_session_can_be_loaded_after_verification",
+            "passed": true
+          },
+          {
+            "name": "private_filesystem_enforces_permission_changes",
+            "passed": true
+          },
+          {
+            "name": "unsafe_private_mode_is_rejected_without_legacy_fallback",
+            "passed": true
+          },
+          {
+            "name": "session_file_symlink_is_not_loaded",
+            "passed": true
+          },
+          {
+            "name": "session_file_symlink_is_not_followed_on_save",
+            "passed": true
+          },
+          {
+            "name": "account_directory_symlink_is_rejected",
+            "passed": true
+          },
+          {
+            "name": "unverified_and_path_like_account_keys_are_rejected",
+            "passed": true
+          },
+          {
+            "name": "linux_session_path_is_unchanged",
+            "passed": true
+          },
+          {
+            "name": "linux_existing_session_still_loads",
+            "passed": true
+          },
+          {
+            "name": "import_waits_for_explicit_worker_validation_save-failure",
+            "passed": true
+          },
+          {
+            "name": "failed_private_save_preserves_legacy_and_selected_account",
+            "passed": true
+          },
+          {
+            "name": "import_waits_for_explicit_worker_validation_account-rollback",
+            "passed": true
+          },
+          {
+            "name": "account_open_rollback_retains_legacy_after_private_save",
+            "passed": true
+          },
+          {
+            "name": "controller_reopen_loads_verified_private_session_without_network",
+            "passed": true
+          },
+          {
+            "name": "controller_reopen_keeps_database_and_cached_images_outside_credentials_root",
+            "passed": true
+          }
+        ],
+        "private_session_path": "/tmp/bilicomics-auth-root-20260913/integrated-final-2/session-storage/app-private/bilicomics/accounts/bili_9876501789262428/session.dat",
+        "private_permissions": "rw-------"
+      },
+      "error": null
+    },
+    {
+      "suite": "session-import",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "assertions": [
+          {
+            "name": "supported_format_session.txt",
+            "passed": true
+          },
+          {
+            "name": "supported_format_session-bom.TXT",
+            "passed": true
+          },
+          {
+            "name": "supported_format_session.json",
+            "passed": true
+          },
+          {
+            "name": "supported_format_session.cookies",
+            "passed": true
+          },
+          {
+            "name": "exactly_128_kib_can_be_read",
+            "passed": true
+          },
+          {
+            "name": "rejects_missing.txt",
+            "passed": true
+          },
+          {
+            "name": "rejects_empty.txt",
+            "passed": true
+          },
+          {
+            "name": "rejects_binary.txt",
+            "passed": true
+          },
+          {
+            "name": "rejects_too-large.txt",
+            "passed": true
+          },
+          {
+            "name": "rejects_directory.txt",
+            "passed": true
+          },
+          {
+            "name": "rejects_unsupported.log",
+            "passed": true
+          },
+          {
+            "name": "rejects_linked.txt",
+            "passed": true
+          },
+          {
+            "name": "rejects_pipe.txt",
+            "passed": true
+          },
+          {
+            "name": "path_with_nul_is_rejected",
+            "passed": true
+          },
+          {
+            "name": "paste_input_remains_masked",
+            "passed": true
+          },
+          {
+            "name": "file_entry_opens_native_file_chooser",
+            "passed": true
+          },
+          {
+            "name": "file_types_ignore_book_status_filters",
+            "passed": true
+          },
+          {
+            "name": "session-file-picker_fits_screen",
+            "passed": true
+          },
+          {
+            "name": "cancel_and_obsolete_picker_never_start_validation",
+            "passed": true
+          },
+          {
+            "name": "selecting_directory_only_navigates",
+            "passed": true
+          },
+          {
+            "name": "direct_native_close_retires_picker",
+            "passed": true
+          },
+          {
+            "name": "closing_before_deferred_read_cancels_import",
+            "passed": true
+          },
+          {
+            "name": "file_selection_dispatches_validation_1",
+            "passed": true
+          },
+          {
+            "name": "session-file-validating_fits_screen",
+            "passed": true
+          },
+          {
+            "name": "file_import_saves_verified_account_1",
+            "passed": true
+          },
+          {
+            "name": "file_selection_dispatches_validation_2",
+            "passed": true
+          },
+          {
+            "name": "file_import_saves_verified_account_2",
+            "passed": true
+          },
+          {
+            "name": "file_selection_dispatches_validation_3",
+            "passed": true
+          },
+          {
+            "name": "file_import_saves_verified_account_3",
+            "passed": true
+          },
+          {
+            "name": "file_selection_dispatches_validation_4",
+            "passed": true
+          },
+          {
+            "name": "file_import_saves_verified_account_4",
+            "passed": true
+          },
+          {
+            "name": "session-file-imported_fits_screen",
+            "passed": true
+          },
+          {
+            "name": "success_feedback_stays_above_controller_refresh",
+            "passed": true
+          },
+          {
+            "name": "success_feedback_contains_no_secret_or_input_path",
+            "passed": true
+          },
+          {
+            "name": "oversize_selection_never_reaches_controller",
+            "passed": true
+          },
+          {
+            "name": "session-file-error_fits_screen",
+            "passed": true
+          },
+          {
+            "name": "validation_error_does_not_echo_cookie_or_path",
+            "passed": true
+          },
+          {
+            "name": "failure_feedback_stays_above_controller_refresh",
+            "passed": true
+          },
+          {
+            "name": "closed_status_does_not_reopen_success_feedback",
+            "passed": true
+          },
+          {
+            "name": "account_change_cancels_a_deferred_selected_file",
+            "passed": true
+          },
+          {
+            "name": "old_validation_callback_cannot_replace_new_account",
+            "passed": true
+          },
+          {
+            "name": "only_session_validation_was_dispatched",
+            "passed": true
+          }
+        ],
+        "screens": [
+          "session-file-picker.png",
+          "session-file-validating.png",
+          "session-file-imported.png",
+          "session-file-error.png"
+        ],
+        "scope": "Synthetic files; native widgets; real Controller/Session/SQLite; controlled validation only",
+        "count": 42,
+        "validation_requests": 9
+      },
+      "error": null
+    },
+    {
+      "suite": "qr-ui-zh",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "scope": "Synthetic native QR UI only; no real session or HTTP",
+        "language": "zh_CN",
+        "cases": [
+          {
+            "width": 480,
+            "height": 640,
+            "returncode": 0,
+            "passed": true,
+            "assertions": 50
+          },
+          {
+            "width": 600,
+            "height": 800,
+            "returncode": 0,
+            "passed": true,
+            "assertions": 50
+          }
+        ],
+        "sources": {
+          "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+          "bilicomics/ui/screens.lua": "676a23cb530555a15867f26141914cf9b9826f1864566a6f54f5aee01390d977",
+          "l10n/bilicomics_zh_CN.lua": "2d8427b559508dcbb3bf42d3e8a23ded1aaacef926d4c0cd6192014a2288b9d2"
+        },
+        "passed": true
+      },
+      "error": null
+    },
+    {
+      "suite": "qr-ui-en",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "scope": "Synthetic native QR UI only; no real session or HTTP",
+        "language": "C",
+        "cases": [
+          {
+            "width": 480,
+            "height": 640,
+            "returncode": 0,
+            "passed": true,
+            "assertions": 50
+          },
+          {
+            "width": 600,
+            "height": 800,
+            "returncode": 0,
+            "passed": true,
+            "assertions": 50
+          }
+        ],
+        "sources": {
+          "bilicomics/ui/qr_login.lua": "09c4b4d5d87bfdabb30f83c58af3132e5a87bb28b588214b11fa0940171d4fa6",
+          "bilicomics/ui/screens.lua": "676a23cb530555a15867f26141914cf9b9826f1864566a6f54f5aee01390d977",
+          "l10n/bilicomics_zh_CN.lua": "2d8427b559508dcbb3bf42d3e8a23ded1aaacef926d4c0cd6192014a2288b9d2"
+        },
+        "passed": true
+      },
+      "error": null
+    },
+    {
+      "suite": "client",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+        "returncode": 0,
+        "result": {
+          "passed": 12,
+          "cases": [
+            "cookie imports reject header injection and isolate supported names",
+            "stable account identity is server-validated before persistence",
+            "plain wrappers retain real endpoint and empty-object request shape",
+            "protected catalog never silently falls back to unsigned legacy requests",
+            "signed body and protected plain response preserve fractional chapter order",
+            "access normalization does not mistake unlock flags or unparsed expiry for ownership",
+            "encrypted success and plain errors use separate response branches",
+            "purchase rejects automatic settings and accepts explicit coupon payload without currency amount",
+            "purchase unknown results and transport loss cannot become definitive rejection or retry",
+            "image headers are inspected independently of URL extension",
+            "ordinary snapshots redact acquisition credentials",
+            "TLS names support exact and single-label wildcard matches only"
+          ]
+        },
+        "session_mode": "0o600"
+      },
+      "error": null
+    },
+    {
+      "suite": "workers",
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "result": {
+        "host": "test-env",
+        "runtime": "/tmp/bilicomics-native-_duimwe7/lib/koreader",
+        "runtime_version": "v2026.07.1",
+        "scope": "Real POSIX subprocesses, pipes, SQLite and synthetic image files; injected download runner and protocol client; no account or real purchase",
+        "source_sha256": {
+          "bilicomics/jobs/runner.lua": "4bba11cb84e18ed74abbded7f3106ad83713dd4a551056e0f4cb44924a39b782",
+          "bilicomics/jobs/download_service.lua": "6938702d60ae15ec44ce980833375e56f5ae5b6202fc94d1b6d1a38d06e20f0a",
+          "bilicomics/jobs/worker.lua": "49a3ed495cd9a2c74c0b3effbfb630379850c5bd61ce135a680362d435bc6081",
+          "bilicomics/jobs/storage_budget.lua": "723ea7ca9b9b0a63ce58dd2088420326a4730a6d33def0ccdaeb29012d1e69f4",
+          "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+          "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+          "bilicomics/protocol/client.lua": "fe7eb333b2892fd21faf0d46c592ff882175dab008e84c211279f0906eaf191f",
+          "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+          "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+          "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+          "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+          "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+        },
+        "test_source_sha256": {
+          "spec/jobs/cancel_race.lua": "18c70589bf9eba82cc9ceea86d1c3ec98fb131fe8ce753a3bece1b97095648f0",
+          "spec/jobs/cover_policy_spec.lua": "90151a0bc1bcda89a45a35a8f0d135fba09bbf6b97cfc8aa84f57801bfc01b1d",
+          "spec/jobs/download_connectivity_runner_spec.lua": "a33d6d682a2bd91849af396faa53070799cf1927d6f620a8adf12841855703c0",
+          "spec/jobs/download_connectivity_spec.lua": "d490f9de1d73900cbdd5d2c0ea53c166b9bf83ff22579bda48c4dc3de486edbd",
+          "spec/jobs/download_service_spec.lua": "00bc136750c99ae830b4f9801fa794d1cbee2706fc31b0a0b81e1b8466101650",
+          "spec/jobs/parent_exit_fixture.lua": "780ae6a03177aa2d20509ad3822898d352112f9530b8d14b2cb537e71de63219",
+          "spec/jobs/parent_exit_spec.py": "f687b15fb24cf101a6f2eaab1949a5da9a0db42c2424391f95789a13b8466dc1",
+          "spec/jobs/run_download_connectivity.py": "d7a8c395ded0e3059d98db71a2cd05893666b2418c910d5f98314eb97b5fe403",
+          "spec/jobs/run_remote.py": "fa68390184be8184d84741f05dd9d2e8e1f139e7a9af26ed4c1c93e255e9a94d",
+          "spec/jobs/runner_spec.lua": "17e2b8f86997eec16f8a4421e307428a126bcec1d4c101dbd105881dfa03c2b7",
+          "spec/jobs/source_epoch_spec.lua": "4a746b5ebffe6f027ef6da9a4ae1fe1028d0253cb654cd971aad31adec8cd2fb",
+          "spec/jobs/source_verification_spec.lua": "5cad7d757f35552ab9b29b57562319407a8c8cc96f73438f8728bda02529f043",
+          "spec/jobs/storage_budget_spec.lua": "4625dfa58fe4068bb28b431b9f6325bba462584ff7e4dcd89c21a70da8b2deb1",
+          "spec/jobs/worker_extensions_spec.lua": "85d85ac73fe4c06a844d8df1624942227851e8cbe0b45edbb181c36436487310",
+          "spec/jobs/worker_spec.lua": "f4b523a21f573a8dd4fa4b6801fe0404793c2460afab45da7ebf5a7fe598b0bc"
+        },
+        "image_fixtures": [
+          {
+            "name": "cover-6mp.png",
+            "width": 3000,
+            "height": 2000,
+            "pixels": 6000000,
+            "encoded_bytes": 5908,
+            "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+          },
+          {
+            "name": "cover-4mp.png",
+            "width": 2000,
+            "height": 2000,
+            "pixels": 4000000,
+            "encoded_bytes": 3958,
+            "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+          }
+        ],
+        "suites": [
+          {
+            "suite": "runner",
+            "returncode": 0,
+            "result": {
+              "tests": [
+                {
+                  "passed": true,
+                  "name": "Responses larger than kernel pipe capacity are drained without deadlock"
+                },
+                {
+                  "passed": true,
+                  "name": "Active cancellation reaps the child and invokes its callback exactly once"
+                },
+                {
+                  "passed": true,
+                  "name": "Canceling queued work never forks or reports transmission"
+                },
+                {
+                  "passed": true,
+                  "name": "Timeouts kill and reap real workers with balanced standby ownership"
+                },
+                {
+                  "passed": true,
+                  "name": "Visible image preempts and later restarts prefetch without a spurious callback"
+                },
+                {
+                  "passed": true,
+                  "name": "Noncancelable purchase work is never preempted by a visible request"
+                },
+                {
+                  "passed": true,
+                  "name": "Resource limits allow metadata beside one image and queue a second image"
+                },
+                {
+                  "passed": true,
+                  "name": "Suspension requeues prefetch and stops polling until resume"
+                },
+                {
+                  "passed": true,
+                  "name": "Oversized responses fail explicitly and worker crashes leave no child or pipe"
+                },
+                {
+                  "passed": true,
+                  "name": "Immediate close terminates a child before its process group exists"
+                },
+                {
+                  "passed": true,
+                  "name": "Read network retries back off without polling and deliver one final successful response"
+                },
+                {
+                  "passed": true,
+                  "name": "Permanent transient failure stops after three executions even when a caller requests more"
+                },
+                {
+                  "passed": true,
+                  "name": "HTTP 429 and image 5xx errors retry while authentication and forbidden errors do not"
+                },
+                {
+                  "passed": true,
+                  "name": "Expired page tokens retry only page acquisition and native timeouts can recover"
+                },
+                {
+                  "passed": true,
+                  "name": "A retryable purchase response still executes its submission exactly once"
+                },
+                {
+                  "passed": true,
+                  "name": "Purchase submissions cannot be preempted or restarted by suspend even with default options"
+                },
+                {
+                  "passed": true,
+                  "name": "Favorite mutations retain their original child across suspension and urgent reads"
+                },
+                {
+                  "passed": true,
+                  "name": "Favorite mutation timeouts and retryable transport errors never cause automatic resubmission"
+                },
+                {
+                  "passed": true,
+                  "name": "Canceling or closing during retry backoff settles once without spawning another child"
+                },
+                {
+                  "passed": true,
+                  "name": "Suspending retry backoff preserves the request without a worker or recurring polling"
+                },
+                {
+                  "passed": true,
+                  "name": "New urgent work wakes the runner before an existing retry deadline"
+                },
+                {
+                  "passed": true,
+                  "name": "A future high-priority retry cannot preempt currently useful lower-priority work"
+                }
+              ],
+              "passed": true
+            }
+          },
+          {
+            "suite": "budget",
+            "returncode": 0,
+            "result": {
+              "tests": [
+                {
+                  "name": "Available storage uses real filesystem bytes",
+                  "passed": true
+                },
+                {
+                  "name": "A failed statvfs call never reuses a previous successful capacity",
+                  "passed": true
+                },
+                {
+                  "name": "A regular file cannot be used as a parent directory for storage inspection",
+                  "passed": true
+                },
+                {
+                  "name": "Zero requested reserve allows an existing readable filesystem",
+                  "passed": true
+                },
+                {
+                  "name": "A reserve larger than filesystem capacity fails without allocating data",
+                  "passed": true
+                },
+                {
+                  "name": "Expected image output is included in the storage reserve",
+                  "passed": true
+                },
+                {
+                  "name": "Storage query errors propagate through the budget check",
+                  "passed": true
+                },
+                {
+                  "name": "download_page is rejected before any protocol work when the reserve exceeds available bytes",
+                  "passed": true
+                },
+                {
+                  "name": "download_cover is rejected before any protocol work when the reserve exceeds available bytes",
+                  "passed": true
+                },
+                {
+                  "name": "Worker rejects an unavailable output directory before protocol work",
+                  "passed": true
+                }
+              ],
+              "evidence": {
+                "raw_available_bytes": 1425739776,
+                "budget_available_bytes": 1425739776,
+                "ffi_os": "Linux",
+                "ffi_arch": "x64",
+                "filesystem_capacity_bytes": 6263463936,
+                "filesystem_fragment_bytes": 4096
+              },
+              "scope": "Real statvfs on an isolated existing directory; impossible numeric reserves; no image downloads or account access",
+              "passed": true
+            }
+          },
+          {
+            "suite": "extensions",
+            "returncode": 0,
+            "result": {
+              "scope": "Production Worker and Client with injected transports; local capability and runtime metadata inspection; no live network or account access",
+              "tests": [
+                {
+                  "name": "Favorite worker forwards true and returns only its confirmed state",
+                  "passed": true
+                },
+                {
+                  "name": "Favorite worker forwards false and returns only its confirmed state",
+                  "passed": true
+                },
+                {
+                  "name": "Favorite worker accepts the client's explicit boolean success",
+                  "passed": true
+                },
+                {
+                  "name": "A nil favorite result without an error cannot become a confirmation",
+                  "passed": true
+                },
+                {
+                  "name": "A false favorite result preserves the client failure",
+                  "passed": true
+                },
+                {
+                  "name": "An uncertain favorite timeout is propagated without retry or confirmation",
+                  "passed": true
+                },
+                {
+                  "name": "Read-only client operations reject the favorite mutation method",
+                  "passed": true
+                },
+                {
+                  "name": "Production client uses the AddFavorite wire contract",
+                  "passed": true
+                },
+                {
+                  "name": "Production client uses the DeleteFavorite wire contract",
+                  "passed": true
+                },
+                {
+                  "name": "Production client business rejection never becomes a favorite confirmation",
+                  "passed": true
+                },
+                {
+                  "name": "Production client validates identifiers and boolean favorite state before transport",
+                  "passed": true
+                },
+                {
+                  "name": "Diagnostic capability inspection has an anonymous offline transport and a strict public shape",
+                  "passed": true
+                },
+                {
+                  "name": "Capability exceptions report only boolean failure without exception text",
+                  "passed": true
+                },
+                {
+                  "name": "Malformed capability results are unavailable without exposing their contents",
+                  "passed": true
+                },
+                {
+                  "name": "A real diagnostic Client stays anonymous and its actual request path remains offline",
+                  "passed": true
+                },
+                {
+                  "name": "Diagnostic versions come from the actual KOReader runtime and complete plugin source",
+                  "passed": true
+                }
+              ],
+              "evidence": {
+                "versions": {
+                  "koreader": "v2026.07.1",
+                  "plugin": "0.1.0-dev",
+                  "target": "linux-x86_64"
+                },
+                "real_diagnostic_client": {
+                  "session_absent": true,
+                  "request_error": "diagnostics_offline"
+                }
+              },
+              "passed": true
+            }
+          }
+        ],
+        "passed": true
+      },
+      "error": null
+    }
+  ]
+}

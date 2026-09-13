@@ -5,6 +5,7 @@ local private_fields = {
     cookie = true, cookies = true, authorization = true, auth = true, session = true, sessionid = true,
     sessdata = true, bilijct = true, token = true, accesstoken = true,
     refreshtoken = true, csrftoken = true, privatekey = true, secret = true,
+    pendingrefreshtoken = true, refreshcsrf = true, qrcodekey = true, longtoken = true,
     signedurl = true, completeurl = true, ultrasign = true, bytesdata = true,
     m1 = true, m2 = true, credentials = true, password = true, apikey = true,
     accesskey = true, secretkey = true, sign = true, signature = true, csrf = true, xsrf = true,

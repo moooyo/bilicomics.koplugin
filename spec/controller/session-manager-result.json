@@ -1,0 +1,287 @@
+{
+    "assertions": [
+        {
+            "name": "startup_maintenance_is_single_flight",
+            "passed": true
+        },
+        {
+            "name": "no_refresh_does_not_mark_credentials_blocked",
+            "passed": true
+        },
+        {
+            "name": "successful_check_releases_all_waiters",
+            "passed": true
+        },
+        {
+            "name": "business_results_reach_original_callbacks",
+            "passed": true
+        },
+        {
+            "name": "checks_are_throttled_for_six_hours",
+            "passed": true
+        },
+        {
+            "name": "check_runs_again_after_interval",
+            "passed": true
+        },
+        {
+            "name": "refresh_marker_is_durable_before_rotation",
+            "passed": true
+        },
+        {
+            "name": "fresh_credentials_are_saved_before_confirm",
+            "passed": true
+        },
+        {
+            "name": "confirmation_is_cleared_durably_before_business_dispatch",
+            "passed": true
+        },
+        {
+            "name": "save_failure_never_confirms_or_uses_old_credentials",
+            "passed": true
+        },
+        {
+            "name": "failed_fresh_save_retries_without_rotating_again",
+            "passed": true
+        },
+        {
+            "name": "recovered_storage_unblocks_waiters",
+            "passed": true
+        },
+        {
+            "name": "marker_save_failure_prevents_refresh_post",
+            "passed": true
+        },
+        {
+            "name": "ambiguous_refresh_keeps_durable_block_marker",
+            "passed": true
+        },
+        {
+            "name": "blocked_refresh_token_is_not_automatically_reused",
+            "passed": true
+        },
+        {
+            "name": "definite_pre_post_failure_clears_marker",
+            "passed": true
+        },
+        {
+            "name": "authentication_failure_forces_maintenance",
+            "passed": true
+        },
+        {
+            "name": "read_replays_with_new_credentials",
+            "passed": true
+        },
+        {
+            "name": "authentication_replay_is_bounded",
+            "passed": true
+        },
+        {
+            "name": "purchase_submit_never_replays_after_renewal",
+            "passed": true
+        },
+        {
+            "name": "set_favorite_never_replays_after_renewal",
+            "passed": true
+        },
+        {
+            "name": "old_mutation_authentication_cannot_invalidate_new_session",
+            "passed": true
+        },
+        {
+            "name": "canceling_one_waiter_preserves_shared_maintenance",
+            "passed": true
+        },
+        {
+            "name": "canceling_last_waiter_prevents_late_mutation",
+            "passed": true
+        },
+        {
+            "name": "suspend_cancels_maintenance_and_ignores_late_credentials",
+            "passed": true
+        },
+        {
+            "name": "close_reaps_the_underlying_runner",
+            "passed": true
+        },
+        {
+            "name": "business_before_start_guard_is_preserved",
+            "passed": true
+        },
+        {
+            "name": "queued_requests_use_session_at_actual_start",
+            "passed": true
+        },
+        {
+            "name": "cookie_storage_failure_preserves_accepted_mutation",
+            "passed": true
+        },
+        {
+            "name": "static_cookie_import_preserves_authentication_failure_behavior",
+            "passed": true
+        },
+        {
+            "name": "pre_dispatch_auth_post_never_counts_as_purchase_transmission",
+            "passed": true
+        },
+        {
+            "name": "cancel_during_maintenance_preserves_observed_purchase_evidence",
+            "passed": true
+        },
+        {
+            "name": "auxiliary_cookie_update_does_not_skip_forced_renewal",
+            "passed": true
+        },
+        {
+            "name": "restart_confirms_durable_pending_session_before_new_check",
+            "passed": true
+        },
+        {
+            "name": "restart_clears_pending_before_business",
+            "passed": true
+        },
+        {
+            "name": "requests_join_rotation_after_block_marker_is_saved",
+            "passed": true
+        },
+        {
+            "name": "confirmation_cleanup_save_failure_blocks_business",
+            "passed": true
+        },
+        {
+            "name": "confirmation_cleanup_retries_storage_without_reconfirming",
+            "passed": true
+        },
+        {
+            "name": "stale_read_replays_without_a_second_rotation",
+            "passed": true
+        },
+        {
+            "name": "renewal_consumes_cookies_updated_by_cookie_info",
+            "passed": true
+        },
+        {
+            "name": "download_page_queued_start_waits_for_in_progress_maintenance",
+            "passed": true
+        },
+        {
+            "name": "download_page_queued_wait_dispatches_once_after_maintenance",
+            "passed": true
+        },
+        {
+            "name": "download_page_queued_wait_completes_callback_once",
+            "passed": true
+        },
+        {
+            "name": "purchase_submit_queued_start_waits_for_in_progress_maintenance",
+            "passed": true
+        },
+        {
+            "name": "purchase_submit_queued_wait_dispatches_once_after_maintenance",
+            "passed": true
+        },
+        {
+            "name": "purchase_submit_queued_wait_completes_callback_once",
+            "passed": true
+        },
+        {
+            "name": "set_favorite_queued_start_waits_for_in_progress_maintenance",
+            "passed": true
+        },
+        {
+            "name": "set_favorite_queued_wait_dispatches_once_after_maintenance",
+            "passed": true
+        },
+        {
+            "name": "set_favorite_queued_wait_completes_callback_once",
+            "passed": true
+        },
+        {
+            "name": "parallel_authentication_joins_rotation_despite_durable_block_marker",
+            "passed": true
+        },
+        {
+            "name": "parallel_authentication_releases_reads_with_one_rotation",
+            "passed": true
+        },
+        {
+            "name": "confirmation_attempt_marker_is_saved_before_post",
+            "passed": true
+        },
+        {
+            "name": "restart_reports_uncertain_confirmation_without_claiming_success",
+            "passed": true
+        },
+        {
+            "name": "lost_confirmation_response_survives_restart_without_repeating_post",
+            "passed": true
+        },
+        {
+            "name": "uncertain_confirmation_auth_failure_requests_new_login_without_rotation",
+            "passed": true
+        },
+        {
+            "name": "network_confirmation_failure_preserves_saved_cookie_reading",
+            "passed": true
+        },
+        {
+            "name": "network_confirmation_failure_does_not_repeat_confirm_or_refresh",
+            "passed": true
+        },
+        {
+            "name": "business_confirmation_failure_preserves_saved_cookie_reading",
+            "passed": true
+        },
+        {
+            "name": "business_confirmation_failure_does_not_repeat_confirm_or_refresh",
+            "passed": true
+        },
+        {
+            "name": "authentication_confirmation_failure_preserves_saved_cookie_reading",
+            "passed": true
+        },
+        {
+            "name": "authentication_confirmation_failure_does_not_repeat_confirm_or_refresh",
+            "passed": true
+        },
+        {
+            "name": "uncertain_confirmation_cookie_update_failure_retains_retry_candidate",
+            "passed": true
+        },
+        {
+            "name": "uncertain_confirmation_candidate_save_retry_never_repeats_confirmation",
+            "passed": true
+        },
+        {
+            "name": "successful_confirmation_cleanup_failure_keeps_both_markers_durable",
+            "passed": true
+        },
+        {
+            "name": "successful_confirmation_cleanup_retries_only_storage",
+            "passed": true
+        },
+        {
+            "name": "auth_failure_waiting_for_uncertain_confirmation_requires_new_login",
+            "passed": true
+        },
+        {
+            "name": "confirmation_marker_save_failure_prevents_confirmation_post",
+            "passed": true
+        },
+        {
+            "name": "confirmation_marker_save_retry_does_not_rotate_again",
+            "passed": true
+        },
+        {
+            "name": "client_forced_candidate_save_preserves_confirmation_unknown",
+            "passed": true
+        },
+        {
+            "name": "purchase_submit_forced_candidate_save_preserves_confirmation_unknown",
+            "passed": true
+        }
+    ],
+    "real_network": false,
+    "count": 70,
+    "real_credentials": false
+}

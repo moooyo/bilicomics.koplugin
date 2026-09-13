@@ -12,6 +12,8 @@ The integrated [quote-selection adapter](docs/quote-selection-implementation.md)
 
 The target first release includes online reading with prefetch, complete offline downloads, and explicit purchases using existing account assets. Recharge and automatic purchasing are excluded. No WeRead implementation is reused.
 
+QR sign-in and session renewal are now implemented in the development source. A dedicated account session manager serializes renewal, saves replacement credentials before confirmation, and preserves business receipts independently of cookie persistence. See [the authentication implementation and verification boundaries](docs/session-renewal.md). Real mobile-app sign-in and authenticated renewal still require acceptance; synthetic checks do not establish an unlimited login lifetime.
+
 ## Installation target
 
 The initial verified runtime baseline is KOReader v2026.07.1 on the remote Linux emulator. A production package must pass its declared device/platform matrix before other platforms are advertised as supported.
@@ -20,7 +22,7 @@ The user-requested local Windows acceptance environment is now available through
 
 The declared target is first-generation Kindle Scribe on firmware 5.19.3. [Official koxtoolchain guidance](https://github.com/koreader/koxtoolchain/blob/2026.08/README.md) selects `kindlehf` for firmware >= 5.16.3. An [ARM compatibility correction](docs/kindle-native-compatibility-fix.md) now keeps native relocation tables adjacent for older glibc while retaining BIND_NOW and GNU RELRO. The rebuilt libraries passed nine QEMU primitive checks each with Debian glibc 2.41 and toolchain glibc 2.20 using a separately corrected diagnostic loader. No loader is packaged, and physical Scribe compatibility remains untested.
 
-Copy the packaged `bilicomics.koplugin` folder into KOReader's `plugins` directory. The entry appears under the Tools menu. Import an existing browser web session through Account and settings. For Scribe, copy `bilibili.txt` by USB into an accessible Kindle folder you choose, then use **Import from file** and browse to it with KOReader's native file picker. Masked paste remains available; supported text/JSON/cookie files are limited to 128 KiB. See [session import instructions](docs/session-import.md). The focused importer passed 42 checks at each of 600x800, 480x640 and 1860x2480; the last size is emulated layout evidence.
+Copy the packaged `bilicomics.koplugin` folder into KOReader's `plugins` directory. The entry appears under the Tools menu. In the authentication development build, open Account and settings and choose **Sign in with QR code**, then scan and confirm with the Bilibili mobile app. Existing browser-session import remains available. For Scribe, copy `bilibili.txt` by USB into an accessible Kindle folder you choose, then use **Import from file** and browse to it with KOReader's native file picker. Masked paste remains available; supported text/JSON/cookie files are limited to 128 KiB. See [session import instructions](docs/session-import.md). The original focused importer passed 42 checks at each of 600x800, 480x640 and 1860x2480; the last size is emulated layout evidence.
 
 Session files are account-scoped; Android uses the app's private files directory for sessions and verified native libraries. Downloaded content remains in KOReader's account-specific data directory.
 

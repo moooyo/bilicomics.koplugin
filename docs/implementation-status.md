@@ -2,6 +2,8 @@
 
 Date: 2026-09-13. Version: `0.1.0-dev`.
 
+The subsequent [QR sign-in and renewable-session change](session-renewal.md) is implemented in the current source and an authentication development candidate. It adds private refresh credentials, serialized maintenance, crash markers, and native QR UI. Its own remote synthetic evidence is separate from the older integrated package and reading evidence below. Real QR confirmation, authenticated refresh/confirmation, long-duration retention, and physical Scribe execution remain unverified.
+
 This is a development implementation, not a completed release. A complete real free chapter passes the production plugin's native online reading, prefetch, retained download and new-process offline reopening workflow: 45 pages and 92,022,101 image bytes, with 51 online and 30 offline checks. The independent comic UI, reader integration, storage, workers and explicit-purchase state workflow are implemented. Standard coin batches now support the strict ordinal range primitive, including positive and remaining ranges; extra discount/card choices remain advisory. The user has authorized operations other than actual purchases. Read-only live quotation and isolated synthetic transaction regressions have run, while actual charging and physical target-device acceptance remain unverified.
 
 The primary device is Kindle Scribe, first generation, running Kindle firmware 5.19.3. The user described the installed KOReader as the latest; the exact installed build remains unverified. The official release used by the recorded runtime checks is [v2026.07.1](https://github.com/koreader/koreader/releases/tag/v2026.07.1). No plugin execution on the physical Scribe has been established by the Linux, Android or ARM emulation evidence.

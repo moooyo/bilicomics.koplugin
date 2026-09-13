@@ -5,6 +5,7 @@ local private_keys = {
     cookie = true, cookies = true, authorization = true, access_token = true,
     refresh_token = true, csrf_token = true, private_key = true, session = true,
     sessdata = true, bili_jct = true, signed_url = true,
+    pending_refresh_token = true, refresh_csrf = true, qrcode_key = true, longtoken = true,
 }
 
 function Codec.assertPublic(value, seen)

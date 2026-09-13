@@ -1,5 +1,7 @@
 # Browser session import
 
+The authentication development build also supports native **Sign in with QR code** from Account and settings. QR sign-in captures the independent renewal credential; copying only a browser Cookie header does not. See [renewable session behavior](session-renewal.md) for automatic maintenance and its verification boundaries. Existing imports remain supported as described below.
+
 The plugin accepts a plain UTF-8 text file containing a browser request's complete `Cookie` header value. The native file importer supports `.txt`, `.json` and `.cookies` extensions, including uppercase variants, and a maximum size of 128 KiB. It also accepts a leading UTF-8 BOM, supported browser JSON exports and Netscape cookie exports. A custom plugin session file does not need to be generated manually.
 
 ## Create the private input file
@@ -38,4 +40,4 @@ For separately authorized authenticated development checks, run `research/protoc
 
 The `metadata` mode first inspects fresh entitlement fields. The `images` mode permits image-index requests only for explicitly approved free or already-owned episodes with no temporary-access flags or contradictory locked state. Reports contain counts, field-presence flags and acquisition results, not account identity, titles, signed URLs or credentials. Any private response captures stay in the restricted remote workspace and do not enter the repository.
 
-An expired or rejected session pauses dependent acquisitions. Import a newly validated session to restore account networking; restarting or resuming the application is not evidence that the old session is valid. Locally retained chapters with valid offline rights remain available.
+An expired or rejected nonrenewable session pauses dependent acquisitions. Sign in with QR code or import a newly validated session to restore account networking. Renewable sessions receive bounded maintenance before an authentication failure becomes an account failure; uncertain credential rotation requires sign-in again. Restarting alone is not evidence that an invalid session is valid. Locally retained chapters with valid offline rights remain available.

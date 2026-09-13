@@ -81,6 +81,9 @@ def main() -> None:
                         "bilicomics/reader/document.lua", "l10n/bilicomics_zh_CN.lua", "patches/2-bilicomics-provider.lua"}
             if "bilicomics/purchase/selection" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
                 required.update({"bilicomics/purchase/selection.lua", "bilicomics/purchase/candidate.lua", "bilicomics/purchase/quote_fetch.lua"})
+            if "bilicomics/session_manager" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
+                required.update({"bilicomics/session_manager.lua", "bilicomics/jobs/session_runner.lua",
+                                 "bilicomics/protocol/auth.lua", "bilicomics/protocol/auth_crypto.lua", "bilicomics/ui/qr_login.lua"})
             collector = prefix + "bilicomics/purchase/quote_fetch.lua"
             if collector in names and "bilicomics/purchase/range" in archive.read(collector).decode("utf-8"):
                 required.add("bilicomics/purchase/range.lua")

@@ -30,7 +30,7 @@ Initial compatibility baseline: the official KOReader `v2026.07.1` used in the r
 | Existing temporary access | Display and honor access type and expiry; allow reading according to verified online/offline terms |
 | Settings | Reader defaults, prefetch, automatic cache limit, storage status, account/session and diagnostics |
 
-Session import is the first-release authentication path. QR login is a later convenience, not an unverified dependency of first-release reading or purchase.
+Session import remains a supported authentication path. The subsequent 2026-09-13 authentication work adds QR login and renewable sessions; see [the implementation and acceptance boundaries](session-renewal.md). Real QR confirmation and automatic renewal need their own acceptance evidence before a long-lived sign-in experience is claimed.
 
 The first release does not initiate new wait-free/rental/item/silver entitlements or support arbitrary noncontiguous chapters as one atomic purchase. Batch coupon payment is not promised without an explicit server contract; do not emulate an atomic batch with hidden repeated single-chapter charges. Existing temporary entitlements remain correctly represented.
 

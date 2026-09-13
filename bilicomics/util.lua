@@ -14,10 +14,10 @@ function Util.error(kind, message, fields)
     for key, value in pairs(fields or {}) do err[key] = value end
     return err
 end
-function Util.callback(callback, value, err)
+function Util.callback(callback, value, err, private_update)
     if callback then
-        local ok, failure = pcall(callback, value, err)
-        if not ok then require("logger").warn("BiliComics callback failed", tostring(failure):gsub("https?://%S+", "[URL]")) end
+        local ok, failure = pcall(callback, value, err, private_update)
+        if not ok then require("logger").warn("BiliComics callback failed", type(failure)) end
     end
 end
 function Util.guard(callback, fn)

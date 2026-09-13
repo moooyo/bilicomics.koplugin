@@ -11,6 +11,8 @@ local PurchaseSelection = require("bilicomics/purchase/selection")
 local Runner = require("bilicomics/jobs/runner")
 local Session = require("bilicomics/protocol/session")
 local SessionStorage = require("bilicomics/session_storage")
+local SessionManager = require("bilicomics/session_manager")
+local SessionRunner = require("bilicomics/jobs/session_runner")
 local Settings = require("bilicomics/settings")
 local Store = require("bilicomics/storage/store")
 local Util = require("bilicomics/util")
@@ -38,6 +40,7 @@ function Controller.new(options)
         ui_manager = options.ui_manager or require("ui/uimanager"), runner_factory = options.runner_factory,
         reader_opener = options.reader_opener, settings = options.settings or Settings.open(root),
         generation = 0, closed = false, preparing = {}, covers = {}, quotes = {}, purchase_inflight = {},
+        clock = options.clock or os.time,
         integrations = {}, preloaded = {}, errors_shown = {}, reader_dialogs = {},
         network = options.network or require("ui/network/manager") }, Controller)
     self.session_storage = options.session_storage or SessionStorage.new{ data_root = root }
@@ -91,7 +94,16 @@ function Controller:_openAccount(key, session, verified_import)
     account.purchases = PurchaseService.new{ store = account.store, account_key = key }
     account.catalog = Catalog.new{ store = account.store, pages = account.pages }
     self.account = account
-    self.runner = self.runner_factory and self.runner_factory({ ui = self.ui_manager }) or Runner.new{ ui = self.ui_manager }
+    local raw_runner = self.runner_factory and self.runner_factory({ ui = self.ui_manager }) or Runner.new{ ui = self.ui_manager }
+    account.raw_runner = raw_runner
+    local function current() return not self.closed and self.account == account and self.generation == account.generation end
+    account.session_manager = SessionManager.new{
+        runner = raw_runner, get_session = function() return account.session end,
+        save_session = function(candidate) return self:_saveRenewedSession(account, candidate) end,
+        clock = self.clock, is_current = current, on_state = function() if current() then self:_notify() end end,
+    }
+    self.runner = SessionRunner.new{ runner = raw_runner, manager = account.session_manager,
+        get_session = function() return account.session end, is_current = current }
     account.runner = self.runner
     account.purchases:recover()
     account.downloads = DownloadService.new{
@@ -142,6 +154,7 @@ end
 function Controller:_closeAccount()
     local account = self.account
     if not account then return end
+    self:cancelQRLogin()
     for dialog in pairs(self.reader_dialogs) do self.ui_manager:close(dialog) end
     self.reader_dialogs = {}
     if self.chapter_dialog then self.ui_manager:close(self.chapter_dialog); self.chapter_dialog = nil end
@@ -174,6 +187,7 @@ end
 
 function Controller:suspend()
     if self.closed or not self.account then return end
+    self:cancelQRLogin()
     for integration in pairs(self.integrations) do integration:saveAnchor() end
     if not self.suspended then
         self.suspended_jobs = {}
@@ -317,8 +331,13 @@ function Controller:getAccount()
     local account = self.account
     if not account then return { session_valid = false } end
     local identity = account.session and account.session.identity or self.settings:get("account_summary:" .. account.key, {})
+    local session = account.session
     return { id = identity.id, name = identity.name, account_key = account.key,
-        session_valid = account.session_valid, pending_purchases = self:getPendingPurchases() }
+        session_valid = account.session_valid, pending_purchases = self:getPendingPurchases(),
+        renewable = session ~= nil and session.refresh_token ~= nil and not session.refresh_blocked and not session.confirmation_blocked,
+        last_refreshed_at = session and session.last_refreshed_at,
+        auth_state = session and (session.refresh_blocked or session.confirmation_blocked) and "reauth_required"
+            or account.session_manager and account.session_manager.state }
 end
 function Controller:getComic(comic_id) return comic_id and self.account.catalog:getComic(tostring(comic_id)) end
 function Controller:getEpisodes(comic_id) return comic_id and self.account.catalog:getEpisodes(tostring(comic_id)) or {} end
@@ -555,7 +574,110 @@ function Controller:refreshWallet(callback)
     end, { priority = 10 })
 end
 
+function Controller:_saveRenewedSession(account, fields)
+    if self.closed or self.account ~= account or self.generation ~= account.generation then
+        return nil, errorValue("canceled", "The account changed before its session could be saved.")
+    end
+    local session = Session.new(fields)
+    if session.account_key ~= account.key or not session.identity or not session.validated_at
+        or not session.cookies.SESSDATA or tostring(session.identity.id) ~= tostring(account.session.identity.id)
+        or (session.cookies.DedeUserID and session.cookies.DedeUserID ~= tostring(session.identity.id)) then
+        return nil, errorValue("account_mismatch", "The renewed session does not match the active account.")
+    end
+    session.credential_generation = (account.session.credential_generation or 0)
+        + (account.session:sameCredentials(session) and 0 or 1)
+    local saved, err = self.session_storage:save(session)
+    if not saved then return nil, err end
+    account.session = session
+    self:_notify()
+    return true
+end
+
+function Controller:_adoptValidatedSession(fields)
+    local session = Session.new(assert(fields, "Validated session is missing"))
+    local key = session.account_key
+    assert(accountKey(key) == key and session.identity and session.validated_at, "Invalid validated account")
+    local saved, save_error = self.session_storage:save(session)
+    if not saved then return nil, save_error end
+    local previous_key, previous_session = self.account.key, self.account.session
+    self:_closeAccount()
+    local opened = pcall(self._openAccount, self, key, session, true)
+    if not opened then
+        if self.account and self.account.store then pcall(self.account.store.close, self.account.store) end
+        self.account = nil
+        self:_openAccount(previous_key, previous_session)
+        return nil, errorValue("storage", "The new account could not be opened. The previous account is still selected.")
+    end
+    self.settings:set("account_summary:" .. key, { id = session.identity.id, name = session.identity.name })
+    self.settings:set("active_account_key", key)
+    self.session_storage:removeLegacy(key)
+    self:_notify()
+    return self:getAccount()
+end
+
+function Controller:cancelQRLogin()
+    local state = self.qr_login
+    self.qr_login = nil
+    if state and state.task_id then state.runner:cancel(state.task_id) end
+end
+
+function Controller:_qrRequest(state, method, arguments, callback)
+    local completed = false
+    local identifier = state.runner:submit({ kind = "auth", method = method, arguments = arguments }, {
+        priority = 0, timeout = 60, retry_attempts = 1,
+        before_start = function()
+            if self.qr_login ~= state or self.closed or self.generation ~= state.generation then
+                return false, errorValue("canceled", "This sign-in code is no longer active.", { transmitted = false })
+            end
+            if not self:_connected() then return false, errorValue("network", "Connect to sign in.", { transmitted = false }) end
+            return true
+        end,
+    }, function(value, err)
+        completed = true
+        if self.qr_login ~= state or self.closed or self.generation ~= state.generation then return end
+        state.task_id = nil
+        callback(value, err)
+    end)
+    if not completed and self.qr_login == state then state.task_id = identifier end
+end
+
+function Controller:beginQRLogin(callback)
+    self:cancelQRLogin()
+    self.import_sequence = (self.import_sequence or 0) + 1
+    if self.closed or not self.account then return end
+    if not self:_connected() then self:_later(callback, nil, errorValue("network", "Connect to sign in.")); return end
+    local state = { generation = self.generation, runner = self.account.raw_runner }
+    self.qr_login = state
+    self:_qrRequest(state, "generateQR", {}, function(value, err)
+        if not value then self.qr_login = nil; Util.callback(callback, nil, err); return end
+        state.key = value.key
+        Util.callback(callback, { url = value.url, key = value.key, expires_at = value.expires_at })
+    end)
+end
+
+function Controller:pollQRLogin(key, callback)
+    local state = self.qr_login
+    if not state or not state.key or state.key ~= key or state.task_id then
+        self:_later(callback, nil, errorValue("canceled", "This sign-in code is no longer active.")); return
+    end
+    self:_qrRequest(state, "pollQR", { key }, function(value, err)
+        if not value then Util.callback(callback, nil, err); return end
+        if value.status == "confirmed" then
+            self.qr_login = nil
+            self:_protect(callback, function()
+                local account, save_error = self:_adoptValidatedSession(value.session)
+                if not account then return nil, save_error end
+                return { status = "confirmed" }
+            end)
+        else
+            if value.status == "expired" then self.qr_login = nil end
+            Util.callback(callback, { status = value.status })
+        end
+    end)
+end
+
 function Controller:importSession(text, callback)
+    self:cancelQRLogin()
     local parsed, err = Session.parse(text)
     if not parsed then self:_later(callback, nil, err); return end
     self.import_sequence = (self.import_sequence or 0) + 1
@@ -564,25 +686,7 @@ function Controller:importSession(text, callback)
         if sequence ~= self.import_sequence then return end
         if not result then Util.callback(callback, nil, failure); return end
         self:_protect(callback, function()
-            local session = Session.new(assert(result.session, "Validated session is missing"))
-            local key = session.account_key
-            assert(accountKey(key) == key and session.identity and session.validated_at, "Invalid validated account")
-            local saved, save_error = self.session_storage:save(session)
-            if not saved then return nil, save_error end
-            local previous_key, previous_session = self.account.key, self.account.session
-            self:_closeAccount()
-            local opened = pcall(self._openAccount, self, key, session, true)
-            if not opened then
-                if self.account and self.account.store then pcall(self.account.store.close, self.account.store) end
-                self.account = nil
-                self:_openAccount(previous_key, previous_session)
-                return nil, errorValue("storage", "The new account could not be opened. The previous account is still selected.")
-            end
-            self.settings:set("account_summary:" .. key, { id = session.identity.id, name = session.identity.name })
-            self.settings:set("active_account_key", key)
-            -- Shared-storage credentials are removed only after a verified private save and successful account switch.
-            self.session_storage:removeLegacy(key)
-            self:_notify(); return self:getAccount()
+            return self:_adoptValidatedSession(result.session)
         end)
     end)
 end

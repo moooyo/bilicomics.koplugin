@@ -4,6 +4,7 @@ local private_fields = {
     cookie = true, cookies = true, sessdata = true, bili_jct = true, token = true,
     private_key = true, privatekey = true, complete_url = true, ultra_sign = true,
     bytesdata = true, m1 = true, m2 = true,
+    refresh_token = true, pending_refresh_token = true, refresh_csrf = true, qrcode_key = true, longtoken = true,
 }
 
 function Normalize.safeExtra(value, seen)

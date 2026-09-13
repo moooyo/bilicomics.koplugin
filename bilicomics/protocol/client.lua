@@ -86,6 +86,15 @@ function Client:_headers(host)
     return headers
 end
 
+function Client:_captureCookies(response, host)
+    if not self.session then return true end
+    local before = JSON.encode(self.session:serialize())
+    local ok, err = self.session:applySetCookie(response.headers, host, self.clock())
+    if not ok then return nil, err end
+    if JSON.encode(self.session:serialize()) ~= before then self._session_changed = true end
+    return true
+end
+
 function Client:_envelope(response, endpoint, context)
     if not response or type(response.status) ~= "number" then
         return nil, Errors.new("protocol", "The transport returned an invalid HTTP result.")
@@ -156,7 +165,13 @@ function Client:_post(service, endpoint, body, opts)
     local response
     response, err = self.transport:request({ url = context.url, method = "POST", headers = headers, body = encoded })
     if not response then return nil, err end
-    return self:_envelope(response, endpoint, context)
+    local value, business_error = self:_envelope(response, endpoint, context)
+    local captured, cookie_error = self:_captureCookies(response, "manga.bilibili.com")
+    -- A received mutation receipt remains authoritative even if its optional cookie headers are malformed.
+    if not captured and value and endpoint ~= "BuyEpisode" and endpoint ~= "AddFavorite" and endpoint ~= "DeleteFavorite" then
+        return nil, cookie_error
+    end
+    return value, business_error
 end
 
 function Client:validateSession()
@@ -167,6 +182,9 @@ function Client:validateSession()
         url = "https://api.bilibili.com/x/web-interface/nav", method = "GET", headers = self:_headers("api.bilibili.com"),
     })
     if not response then return nil, err end
+    local captured
+    captured, err = self:_captureCookies(response, "api.bilibili.com")
+    if not captured then return nil, err end
     local data
     data, err = self:_envelope(response, "Nav", {})
     if not data then return nil, err end

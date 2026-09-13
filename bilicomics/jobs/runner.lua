@@ -12,7 +12,7 @@ Runner.__index = Runner
 local read_methods = { listFavorites = true, listHistory = true, search = true, comicDetail = true,
     imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true }
 local read_kinds = { library = true, quote = true, reconcile_purchase = true, download_page = true, download_cover = true }
-local mutations = { purchase_submit = true, set_favorite = true }
+local mutations = { purchase_submit = true, set_favorite = true, auth = true }
 local function retryableRead(task, err)
     local request = task.request
     if not err or err.retryable ~= true then return false end
@@ -116,9 +116,10 @@ function Runner:_start(task)
             end
             if tonumber(ffi.C.getppid()) ~= parent_pid then ffi.C._exit(0) end
         end
-        local ok, value, err = pcall(worker, request)
+        local ok, value, err, session_update = pcall(worker, request)
         if not ok then value = nil; err = { kind = "worker", message = "The background operation failed.", retryable = false } end
-        writeFrame(child_fd, { id = id, attempt = attempt, value = value, error = err }, limit)
+        writeFrame(child_fd, { id = id, attempt = attempt, value = value, error = err,
+            session_update = ok and session_update or nil }, limit)
     end, true)
     if not pid then
         Util.callback(task.callback, nil, Util.error("worker", "A background process could not be started."))
@@ -233,12 +234,13 @@ function Runner:_finish(task, packet, err)
             err = err or (packet and packet.error)
                 or (not packet and Util.error("worker", "The background process exited without a complete response."))
         end
-        if not value and not self.stopped and task.retries < task.retry_limit and retryableRead(task, err) then
+        if not value and not (packet and packet.session_update) and not self.stopped
+            and task.retries < task.retry_limit and retryableRead(task, err) then
             task.retries = task.retries + 1
             task.not_before = self.clock() + math.min(8, self.retry_delay * 2 ^ (task.retries - 1))
             task.buffer, task.pid, task.packet, task.read_error, task.cancel_kind = nil, nil, nil, nil, nil
             self.queue[#self.queue + 1] = task
-        else Util.callback(task.callback, value, err) end
+        else Util.callback(task.callback, value, err, not task.cancel_kind and packet and packet.session_update or nil) end
     end
 end
 function Runner:_tick()

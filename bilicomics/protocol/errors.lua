@@ -15,8 +15,11 @@ end
 
 function Errors.business(code, endpoint)
     code = tonumber(code) or code
-    if code == -101 or code == -111 or code == 401 then
+    if code == -101 or code == 401 then
         return Errors.new("authentication", "The imported session is missing, expired, or rejected.", { code = code })
+    end
+    if code == -111 then
+        return Errors.new("request_authentication", "The service rejected this request's authentication fields.", { code = code })
     end
     if endpoint == "GetImageIndex" then
         if code == 1 then return Errors.new("locked", "This episode requires confirmed access.", { code = code }) end

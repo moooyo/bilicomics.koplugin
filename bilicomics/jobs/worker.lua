@@ -148,7 +148,7 @@ local function localDiagnostics()
         capabilities = capabilities, capability_check_ok = checked == true, network_checked = false,
     }
 end
-function Worker.execute(request)
+local function execute(request, context)
     assert(type(request) == "table", "Invalid worker request")
     if request.kind == "diagnostics" then return localDiagnostics() end
     local verification
@@ -165,6 +165,7 @@ function Worker.execute(request)
     end
     local client = Client.new{ session = request.session, asset_root = request.asset_root,
         transport_options = request.transport_options }
+    context.client = client
     if request.kind == "client" then
         if not reads[request.method] then return nil, Util.error("invalid_request", "This operation is not a read-only worker operation.") end
         local result, err = client[request.method](client, unpack(request.arguments or {}))
@@ -293,5 +294,23 @@ function Worker.execute(request)
         return result
     end
     return nil, Util.error("invalid_request", "The background operation is not supported.")
+end
+
+function Worker.execute(request)
+    assert(type(request) == "table", "Invalid worker request")
+    if request.kind == "diagnostics" then return localDiagnostics() end
+    if request.kind == "auth" then
+        local methods = { generateQR = true, pollQR = true, cookieInfo = true, refreshSession = true, confirmRefresh = true }
+        if not methods[request.method] then return nil, Util.error("invalid_request", "The sign-in operation is not supported.") end
+        local auth = require("bilicomics/protocol/auth").new{ session = request.session,
+            transport_options = request.transport_options }
+        return auth[request.method](auth, unpack(request.arguments or {}))
+    end
+    local context = {}
+    local value, err = execute(request, context)
+    local client = context.client
+    -- This third result travels only over the private worker pipe, outside ordinary business records.
+    return value, err, client and client._session_changed == true and type(client.session) == "table"
+        and client.session:serialize() or nil
 end
 return Worker
