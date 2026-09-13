@@ -899,6 +899,7 @@ end
 function Controller:getDownloads()
     local result, retained = {}, {}
     for _index, job in ipairs(self.account.store:listJobs()) do
+        if self.account.downloads then job = self.account.downloads:projectJob(job) end
         if job.kind == "episode_download" and not (job.payload or {}).removed then
             local key = job.episode_id .. "/" .. tostring(job.revision)
             if not (job.payload or {}).replaced_by or not retained[key] then result[#result + 1] = job end
@@ -1210,14 +1211,23 @@ function Controller:purchase(quote, purpose, callback)
         end
         self:_notify()
         self:_submit({ kind = "purchase_submit", intent_id = intent.id, payload = payload },
-            { priority = -10, resource = "purchase", cancelable = false, timeout = 120 }, function(response, submission_error)
+            { priority = -10, resource = "purchase", cancelable = false, timeout = 120,
+                before_start = function() return account.purchases:authorizeSubmission(intent.id) end }, function(response, submission_error)
                 local completed, completion_error = account.purchases:completeSubmission(intent.id, response, submission_error)
                 if not completed or completed.persistence_pending then
-                    local visible = completed or account.store:getPurchase(intent.id) or Util.copy(intent)
+                    local visible = completed
+                    if not visible then
+                        local loaded, saved = pcall(account.store.getPurchase, account.store, intent.id)
+                        visible = (loaded and saved) or Util.copy(intent)
+                    end
                     visible.persistence_pending = true
                     if visible.state == "submitting" then
                         visible.state = response and response.accepted and "accepted"
-                            or (submission_error and submission_error.definitive and "rejected") or "outcome_unknown"
+                            or (submission_error and (submission_error.definitive or submission_error.transmitted == false)
+                                and "rejected") or "outcome_unknown"
+                        if submission_error and submission_error.transmitted == false then
+                            visible.transaction_evidence = "not_transmitted"
+                        end
                     end
                     account.pending_submission_results[intent.id] = { response = response, error = submission_error, visible = visible }
                     done(visible, completion_error or errorValue("outcome_unknown", "The purchase result is pending durable confirmation.")); return

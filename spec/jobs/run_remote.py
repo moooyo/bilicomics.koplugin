@@ -59,6 +59,7 @@ def main():
                       compressed_png(fixtures / "cover-4mp.png", 2000, 2000)]
     env = os.environ.copy()
     env["KO_MULTIUSER"] = "1"
+    env.update({"SDL_AUDIODRIVER": "dummy", "EMULATE_READER_W": "600", "EMULATE_READER_H": "800"})
     for kind in ("DATA", "CONFIG", "CACHE"):
         path = args.output / f"xdg-{kind.lower()}"
         path.mkdir()
@@ -67,7 +68,7 @@ def main():
                "runtime_version": (args.runtime / "git-rev").read_text().strip(),
                "scope": "Real POSIX subprocesses, pipes, SQLite and synthetic image files; injected download runner and protocol client; no account or real purchase",
                "source_sha256": {}, "test_source_sha256": {}, "image_fixtures": image_fixtures, "suites": [], "passed": True}
-    for relative in ("bilicomics/jobs/runner.lua", "bilicomics/jobs/download_service.lua", "bilicomics/jobs/worker.lua",
+    for relative in ("bilicomics/jobs/runner.lua", "bilicomics/jobs/download_service.lua", "bilicomics/jobs/worker.lua", "bilicomics/controller.lua",
                      "bilicomics/jobs/storage_budget.lua", "bilicomics/storage/store.lua", "bilicomics/storage/page_store.lua",
                      "bilicomics/protocol/client.lua", "bilicomics/protocol/platform.lua", "bilicomics/protocol/image.lua",
                      "bilicomics/image_policy.lua", "bilicomics/storage/image_header.lua", "_meta.lua"):
@@ -89,8 +90,10 @@ def main():
             if returncode:
                 print(json.dumps(result, indent=2), flush=True)
             continue
-        completed = subprocess.run([str(args.runtime / "luajit"), str(args.source / "spec/jobs" / filenames[suite]),
-                                    str(args.source), str(args.output)], cwd=args.runtime, env=env,
+        command = [str(args.runtime / "luajit"), str(args.source / "spec/jobs" / filenames[suite]), str(args.source), str(args.output)]
+        if suite == "download":
+            command = ["xvfb-run", "-a", *command]
+        completed = subprocess.run(command, cwd=args.runtime, env=env,
                                    text=True, capture_output=True, timeout=35)
         log = completed.stdout + completed.stderr
         (args.output / f"{suite}.log").write_text(log)

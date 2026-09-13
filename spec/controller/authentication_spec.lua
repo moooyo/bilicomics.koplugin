@@ -105,12 +105,13 @@ for _, episode in ipairs({ "10", "11", "15" }) do
     end
 end
 local function quoteData()
-    return { info = { ep_id = "12", comic_id = "1", pay_gold = 20, remain_gold = 100, allow_coupon = false },
+    return { info = { ep_id = "12", comic_id = "1", ep_original_gold = 20, pay_gold = 20, remain_gold = 100, allow_coupon = false },
         detail = { comic = { id = "1", title = "Synthetic auth recovery comic" }, episodes = Util.copy(episodes) } }
 end
 local quote, purchase_result, purchase_error
 controller:quotePurchase("12", nil, nil, function(value) quote = assert(value) end)
 runner:finish(runner:find("quote"), quoteData())
+check("authentication_scenario_uses_a_submittable_current_quote", quote.submittable == true and quote.amount == 20)
 controller:purchase(quote, function(value, err) purchase_result, purchase_error = value, err end)
 runner:finish(runner:find("quote"), quoteData())
 local purchase_task = runner:find("purchase_submit")
@@ -183,9 +184,13 @@ check("late_old_account_authentication_cannot_invalidate_new_account", account.s
 controller:requestCover("1")
 local replacement_cover = runner:find("download_cover")
 Files.write(replacement_cover.request.temporary_path, "synthetic live replacement")
-Files.write(cover_task.request.temporary_path, "synthetic stale cover")
+-- The canceled worker has already delivered its terminal callback and cleaned its file.
+check("canceled_cover_is_cleaned_before_replacement", old_account.raw_runner.closed
+    and replacement_cover.request.temporary_path ~= cover_task.request.temporary_path
+    and not Files.exists(cover_task.request.temporary_path))
 old_cover_callback(nil, { kind = "canceled" }); ui:drain()
-check("stale_cover_cleanup_uses_only_its_assigned_path", not Files.exists(cover_task.request.temporary_path) and Files.exists(replacement_cover.request.temporary_path))
+check("duplicate_old_cover_callback_preserves_replacement_path", not Files.exists(cover_task.request.temporary_path)
+    and Files.read(replacement_cover.request.temporary_path) == "synthetic live replacement")
 runner:finish(replacement_cover, nil, { kind = "network" })
 check("failed_current_cover_cleans_its_assigned_path", not Files.exists(replacement_cover.request.temporary_path))
 local enough_space = account.downloads._ensureSpace

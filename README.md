@@ -4,6 +4,12 @@ A Bilibili Comics plugin with its own comic library UI and KOReader's native rea
 
 ## Development status
 
+The current [architecture stabilization work](docs/architecture-stabilization.md)
+addresses purchase dispatch expiry, download completion during persistent
+storage failures, current Controller fixtures, and a unified remote acceptance
+entry point. That record identifies outstanding live-account and device gates.
+Historical results below retain their original source snapshots.
+
 The plugin is a development implementation, not a completed release. A complete real free chapter passes [native online reading, prefetch, retained download and new-process offline reopening](docs/reading-only-test-report.md): 45 pages, 92,022,101 image bytes, 51 online checks and 30 offline checks. Downloading continued after reader closure; offline reopening restored the source anchor with no session, no network routes and zero worker activity.
 
 On 2026-09-13 the user authorized all operations other than actual purchasing. Authenticated quote and wallet reads and isolated synthetic purchase checks have now run. No actual purchase, coupon consumption, rental, recharge or account write was performed. See [the non-purchase integration report](docs/nonpurchase-integration-report.md) and [implementation status](docs/implementation-status.md) for exact evidence scopes.
@@ -43,7 +49,7 @@ Runtime checks must run through `ssh test-env` unless local verification is expl
 
 The packaging script is `tools/package.py`. Execute it on the remote environment after integration checks; it writes a deterministic ZIP and file-hash manifest. Native protocol binaries and their platform compatibility remain explicit package dependencies.
 
-The development archive is `dist/bilicomics-0.1.0-dev.zip`; its adjacent manifest records the exact file count, bytes and SHA-256. [The source binding](spec/package/source-evidence.json) and [package checks](spec/package/remote-results.json) identify the current artifacts and applicable focused evidence. The earlier live reading, version-replacement and ARM results keep their original scopes. No session, acquired comic content or diagnostic loader is included.
+The historical integrated archive is `dist/bilicomics-0.1.0-dev.zip`; its adjacent manifest records its exact file count, bytes and SHA-256. Its [source binding](spec/package/source-evidence.json) and [package checks](spec/package/remote-results.json) apply to that earlier 96-file build. The later [authentication candidate](docs/session-renewal.md) is `dist/bilicomics-0.1.0-dev-auth.zip` and contains 101 files. See the [stabilization record](docs/architecture-stabilization.md) for the replacement candidate and its acceptance state. No session, acquired comic content or diagnostic loader is included in these packages.
 
 The archive retains the session file importer, reader prefetch policy and previously live-tested image protocol fixes. Same-snapshot recovery verifies historical image bytes before updating mutable addresses. Unknown or changed content requires the separate [new-version confirmation](docs/partial-download-recovery.md): both versions remain pinned and independently removable, the new version starts from the beginning, and the old version reads cached pages only. The current [ordinal range contract](docs/ordinal-range-contract.md) has focused construction, UI and transaction-recovery evidence. The complete live reading workflow was not repeated for this revision, and synthetic purchase outcomes do not establish real charging behavior.
 

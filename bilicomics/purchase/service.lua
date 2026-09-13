@@ -208,6 +208,28 @@ function Service:_getIntent(id)
     return intent
 end
 
+-- Recheck the committed confirmation immediately before the worker can transmit.
+function Service:authorizeSubmission(intent_id)
+    local allowed, err = protected(function()
+        self:_requireDurableBoundary()
+        if self.unpersisted_results[intent_id] then
+            fail("persistence_pending", "The observed purchase result must be saved before any further action.")
+        end
+        local intent = self.store:getPurchase(intent_id)
+        if not intent then fail("not_found", "The purchase intent was not found.") end
+        if intent.account_key ~= self.account_key then fail("account_mismatch", "The purchase belongs to another account.") end
+        if intent.state ~= "submitting" then
+            fail("duplicate_submission", "This confirmation already has a purchase result.")
+        end
+        self:_validateQuote(intent.quote)
+        return true
+    end)
+    if allowed then return true end
+    err = Value.copy(err)
+    err.transmitted, err.definitive = false, true
+    return nil, err
+end
+
 function Service:completeSubmission(intent_id, response, err)
     local observed
     local result, result_error = protected(function()
@@ -216,14 +238,17 @@ function Service:completeSubmission(intent_id, response, err)
         self.store:transaction(function()
             local intent = self:_getIntent(intent_id)
             local access_was_confirmed = intent.state == "access_confirmed"
-            if intent.state ~= "submitting" and intent.state ~= "outcome_unknown"
-                and not (access_was_confirmed and intent.range_outcome_pending) then
+            -- Refusing a new dispatch is not evidence against an earlier transmitted attempt.
+            local refused_dispatch = err and err.transmitted == false
+            if intent.state ~= "submitting" and (refused_dispatch or (intent.state ~= "outcome_unknown"
+                and not (access_was_confirmed and intent.range_outcome_pending))) then
                 if intent.persistence_pending then
                     intent.persistence_pending = nil
                     observed = Value.copy(intent)
                     self:_putIntent(intent)
                 end
                 result = intent
+                if refused_dispatch then result_error = Value.publicError(err, "purchase_rejected") end
                 return
             end
             if response ~= nil and response ~= false and not err then
@@ -347,7 +372,9 @@ function Service:submit(quote, options)
     if not refreshed then return nil, refresh_error end
     local intent, payload = self:prepareSubmission(quote, options, refreshed)
     if not intent then return nil, payload end
-    local response, err = network(self.client, "buyEpisode", payload)
+    local allowed, err = self:authorizeSubmission(intent.id)
+    local response
+    if allowed then response, err = network(self.client, "buyEpisode", payload) end
     local completed, completion_error = self:completeSubmission(intent.id, response, err)
     if not completed then
         return intent, Value.error("outcome_unknown", "The response could not be persisted. Do not resubmit this purchase.", {cause = completion_error and completion_error.kind})

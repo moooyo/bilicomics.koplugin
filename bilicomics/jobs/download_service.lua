@@ -24,16 +24,38 @@ function DownloadService.new(options)
         authentication_valid = options.authentication_valid, network_available = options.network_available,
         on_authentication_error = options.on_authentication_error or function() end,
         page_ready = options.page_ready or function() end, ui = options.ui or require("ui/uimanager"),
-        settings = options.settings, requests = {}, failures = {}, generation = 1, closed = false }, DownloadService)
+        settings = options.settings, requests = {}, failures = {}, pending_job_states = {}, generation = 1, closed = false }, DownloadService)
 end
 function DownloadService:_defer(fn)
     local generation = self.generation
     self.ui:nextTick(function() if not self.closed and generation == self.generation then fn() end end)
 end
-function DownloadService:_update(job)
+function DownloadService:_update(job, settled)
     job.updated_at = os.time()
-    self.store:putJob(job)
-    self.notify()
+    local saved = pcall(self.store.putJob, self.store, job)
+    if not saved then
+        local err = Util.error("storage", "The download state could not be saved. Restore writable storage and resume.")
+        local readable, previous = pcall(self.store.getJob, self.store, job.id)
+        if settled and readable and previous then
+            local visible = Util.copy(job)
+            visible.state, visible.error, visible.persistence_pending = "paused", err, true
+            self.pending_job_states[job.id] = { base_hash = Util.hash(previous), value = visible }
+        end
+        Util.callback(self.notify)
+        error(err, 0)
+    end
+    self.pending_job_states[job.id] = nil
+    Util.callback(self.notify)
+end
+function DownloadService:projectJob(job)
+    -- Only settled acquisitions may override a stale durable running state.
+    -- A newer durable record or successful retry supersedes this local observation.
+    local pending = self.pending_job_states[job.id]
+    if pending then
+        if pending.base_hash == Util.hash(job) then return Util.copy(pending.value) end
+        self.pending_job_states[job.id] = nil
+    end
+    return job
 end
 function DownloadService:_authenticationAllowed()
     if self.authentication_error then return false end
@@ -213,9 +235,11 @@ function DownloadService:requestPage(descriptor, index, options, callback)
                 if self:_networkAllowed() then return true end
                 return nil, self:_networkError()
             end }, function(result, err)
+            if request.finished then return end
+            request.finished = true
             if self.requests[key] == request then self.requests[key] = nil end
             if self.closed or generation ~= self.generation or request.retired then
-                self:_cleanupTemporary(request)
+                pcall(self._cleanupTemporary, self, request)
                 if request.retired and not self.closed then
                     for _, done in ipairs(request.callbacks) do
                         Util.callback(done, nil, request.retire_error or Util.error("canceled", "The operation was canceled."))
@@ -223,41 +247,51 @@ function DownloadService:requestPage(descriptor, index, options, callback)
                 end
                 return
             end
-            local current = self.store:getPage(key)
-            if not current or current.id ~= context.id or current.content_generation ~= context.expected_content_generation
-                or sourceGeneration(current) ~= context.expected_source_generation then
-                result, err = nil, Util.error("canceled", "The page source changed while its image was being acquired.")
-            end
-            if err and err.kind == "authentication" then self:invalidateAuthentication() end
-            local committed
-            if result then
-                if context.expected_checksum and result.checksum ~= context.expected_checksum then
-                    err = Util.error("content_changed", "The refreshed image no longer matches its verified content.")
-                else
-                    request.commit_attempted = true
-                    local ok, value = pcall(self.pages.commitPage, self.pages, context, result)
-                    if ok then committed = value else err = Util.error("storage", "The completed image could not be committed safely.") end
-                end
-            end
-            if not committed and err and err.kind ~= "canceled" then
+            local committed, failure_recorded
+            local processed = pcall(function()
                 local current = self.store:getPage(key)
-                if current and current.content_generation == context.expected_content_generation
-                    and sourceGeneration(current) == context.expected_source_generation then
-                    self.failures[key] = err
-                    current.state, current.error = "failed", err.message
-                    self.store:putPage(current)
+                if not current or current.id ~= context.id or current.content_generation ~= context.expected_content_generation
+                    or sourceGeneration(current) ~= context.expected_source_generation then
+                    result, err = nil, Util.error("canceled", "The page source changed while its image was being acquired.")
                 end
+                if err and err.kind == "authentication" then self:invalidateAuthentication() end
+                if result then
+                    if context.expected_checksum and result.checksum ~= context.expected_checksum then
+                        err = Util.error("content_changed", "The refreshed image no longer matches its verified content.")
+                    else
+                        request.commit_attempted = true
+                        local ok, value = pcall(self.pages.commitPage, self.pages, context, result)
+                        if ok then committed = value else err = Util.error("storage", "The completed image could not be committed safely.") end
+                    end
+                end
+                if not committed and err and err.kind ~= "canceled" then
+                    local current = self.store:getPage(key)
+                    if current and current.content_generation == context.expected_content_generation
+                        and sourceGeneration(current) == context.expected_source_generation then
+                        self.failures[key] = err
+                        failure_recorded = true
+                        current.state, current.error = "failed", err.message
+                        self.store:putPage(current)
+                    end
+                end
+            end)
+            if not processed then
+                err = Util.error("storage", "The image completion state could not be saved safely.")
+                if failure_recorded then self.failures[key] = err end
             end
+            -- Settlement must survive storage failure, including the failed-state write.
+            -- Cleanup still consults the journal before removing an attempted commit.
             if committed then
                 self:_pageReady(committed, descriptor)
                 if self.settings then
                     -- Cleanup failure cannot undo a committed image or suppress its completion.
-                    pcall(self.pages.evictToLimit, self.pages, self.settings:get("cache_limit_bytes"))
+                    pcall(function() self.pages:evictToLimit(self.settings:get("cache_limit_bytes")) end)
                 end
+            else
+                pcall(self._cleanupTemporary, self, request)
             end
-            if not committed then self:_cleanupTemporary(request) end
             for _, done in ipairs(request.callbacks) do Util.callback(done, committed, err) end
-            self.notify()
+            Util.callback(self.notify)
         end)
     return request.task_id
 end
@@ -336,7 +370,7 @@ function DownloadService:_run(job)
                 if page and page.state == "ready" then job.completed = job.completed + 1
                 elseif not next_index then next_index = index end
             end
-            if not next_index then job.state = "complete"; self:_update(job); return end
+            if not next_index then job.state = "complete"; self:_update(job, true); return end
             self:_update(job)
             self:requestPage(descriptor, next_index, { owner = "job:" .. job.id, priority = 40, retry = true }, function(_, page_error)
                 if self.closed or service_generation ~= self.generation then return end
@@ -344,7 +378,7 @@ function DownloadService:_run(job)
                 if not job or job.state ~= "running" or job.run_generation ~= run_generation then return end
                 if page_error then
                     job.state = interruptedState(page_error)
-                    job.error = page_error; self:_update(job)
+                    job.error = page_error; self:_update(job, true)
                 else self:_defer(advance) end
             end)
         end

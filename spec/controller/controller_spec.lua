@@ -145,19 +145,37 @@ controller.account.pages:commitPage({ episode_id = "10", revision = "revision-1"
     { temporary_path = temporary, width = 20, height = 40, format = "png", checksum = Files.digest(temporary) })
 check("prepared_image_commits_through_real_page_store", controller.account.pages:isComplete("10", "revision-1"))
 local stored_page = controller.account.store:getPage("10/revision-1/1")
-stored_page.state, stored_page.path, stored_page.extra = "missing", nil, {}
+stored_page.state, stored_page.path = "missing", nil
+stored_page.extra.source_path = nil
 controller.account.store:putPage(stored_page)
-local recovered_index
-controller:prepareEpisode("1", "10", function(value) recovered_index = value end)
-check("incomplete_descriptor_without_source_requests_recovery", controller.runner:next("client").request.method == "imageIndex")
-controller.runner:finish("client", { episode_id = "10", revision = "revision-1",
-    images = { { id = "source-1", index = 1, path = "/synthetic/image.png", width = 20, height = 40 } } })
-check("recovered_index_restores_source_metadata", recovered_index and controller.account.store:getPage("10/revision-1/1").extra.source_path ~= nil)
-temporary = controller.account.pages.temporary_root .. "/restored.part"
-Files.write(temporary, Files.read(fixture))
-controller.account.pages:commitPage({ episode_id = "10", revision = "revision-1", index = 1,
-    expected_content_generation = stored_page.content_generation },
-    { temporary_path = temporary, width = 20, height = 40, format = "png", checksum = Files.digest(temporary) })
+local recovered_index, recovery_error
+local before_recovery_requests = #controller.runner.order
+controller:prepareEpisode("1", "10", function(value, err) recovered_index, recovery_error = value, err end); ui:drain()
+check("incomplete_descriptor_without_source_requires_explicit_recovery", recovered_index == nil
+    and recovery_error.kind == "source_unavailable" and #controller.runner.order == before_recovery_requests)
+local recovery_jobs
+controller:downloadEpisodes("1", { "10" }, function(value) recovery_jobs = assert(value) end); ui:drain()
+controller:refreshDownloadSources(recovery_jobs[1].id, function(value, err)
+    assert(value, err and err.kind); recovered_index = value
+end)
+check("explicit_recovery_requests_fresh_index_and_access", controller.runner:next("source_index").request.episode_id == "10")
+controller.runner:finish("source_index", { detail = detail(), index = { episode_id = "10", revision = "revision-1",
+    images = { { id = "source-1", index = 1, path = "/synthetic/refreshed-image.png", width = 20, height = 40 } } } })
+local source_proof = controller.runner:next("verify_source_page")
+check("recovery_requires_historical_content_proof", source_proof.request.expected_checksum == stored_page.extra.last_committed_checksum
+    and controller.account.store:getPage("10/revision-1/1").extra.source_path == nil)
+Files.write(source_proof.request.temporary_path, Files.read(fixture))
+controller.runner:finish("verify_source_page", { temporary_path = source_proof.request.temporary_path,
+    checksum = Files.digest(source_proof.request.temporary_path) })
+check("verified_recovery_restores_source_without_replacing_descriptor", recovered_index and recovered_index.revision == "revision-1"
+    and controller.account.store:getPage("10/revision-1/1").extra.source_path == "/synthetic/refreshed-image.png"
+    and Util.hash(controller.account.pages:readDescriptor(prepared.path)) == Util.hash(prepared.descriptor))
+local recovery_download = controller.runner:next("download_page")
+Files.write(recovery_download.request.temporary_path, Files.read(fixture))
+controller.runner:finish("download_page", { temporary_path = recovery_download.request.temporary_path,
+    width = 20, height = 40, format = "png", checksum = Files.digest(recovery_download.request.temporary_path) })
+check("explicit_recovery_resumes_and_completes_retained_download", controller.account.pages:isComplete("10", "revision-1")
+    and controller.account.store:getJob(recovery_jobs[1].id).state == "complete")
 
 local restored_integration = package.loaded["bilicomics/reader/integration"]
 package.loaded["bilicomics/reader/integration"] = { attach = function(reader)
@@ -274,13 +292,14 @@ network.connected = true
 check("network_connected_resumes_the_runner", controller:resume() == true and not controller.runner.suspended)
 
 local function quote_result(episode_id)
-    return { info = { ep_id = episode_id, comic_id = "1", pay_gold = 20, remain_gold = 100, remain_coupon = 0,
+    return { info = { ep_id = episode_id, comic_id = "1", ep_original_gold = 20, pay_gold = 20, remain_gold = 100, remain_coupon = 0,
         allow_coupon = false }, detail = detail() }
 end
 local quote
 controller:quotePurchase("11", nil, nil, function(value, err) assert(value, err and err.kind); quote = value end)
 controller.runner:finish("quote", quote_result("11"))
-check("quote_build_is_local_after_worker_read", quote.amount == 20 and #controller.account.store:listPurchases() == 0)
+check("quote_build_is_local_after_worker_read", quote.submittable == true and quote.amount == 20
+    and #controller.account.store:listPurchases() == 0)
 local invalid_purposes_rejected, before_invalid_purpose = true, #controller.runner.order
 for _index, purpose in ipairs({ "prefetch", "", false, {}, 42 }) do
     local rejected

@@ -41,7 +41,16 @@ On Android, account credentials use the app-private `android.dir` returned by th
 
 ## Purchase (`bilicomics/purchase/`)
 
-Service receives `{store,account_key,client?,clock?,id_factory?}`. Its synchronous `quote`, `submit`, and `reconcile` conveniences must not run with a real network client on the UI thread. The application uses main-process `buildQuote`, `prepareSubmission`, `completeSubmission`, and `completeReconciliation`, with request data acquired by separate workers. `recover()` runs only after any previous workers have stopped; `listPending()` is local.
+Service receives `{store,account_key,client?,clock?,id_factory?}`. Its synchronous `quote`, `submit`, and `reconcile` conveniences must not run with a real network client on the UI thread. The application uses main-process `buildQuote`, `prepareSubmission`, `authorizeSubmission`, `completeSubmission`, and `completeReconciliation`, with request data acquired by separate workers. `recover()` runs only after any previous workers have stopped; `listPending()` is local.
+
+`authorizeSubmission(intent_id)` reads the durable intent and rechecks its account,
+submitting state, quote integrity, and expiry immediately before a purchase worker
+starts. Queueing, suspension, and session maintenance do not extend confirmation
+validity. A refused dispatch has `transmitted=false`; it can reject the current
+unsent intent but cannot disprove an earlier unknown or accepted attempt. Once an
+intent has left `submitting`, a new not-transmitted error preserves its existing
+transaction evidence and range hold. A new quote requires a new explicit user
+confirmation.
 
 Confirmable quotes carry the single chapter or original server-supported range, intended episode IDs, method/assets, amount, fingerprint and before/expected access. Durable states distinguish `submitting`, `accepted`, `outcome_unknown`, `access_confirmed`, `rejected`. Store before transmission, never automatically resubmit, and do not regress an accepted transaction on later refresh errors. Standard-currency batch quotes require the typed [ordinal range proof](ordinal-range-contract.md), independently reconstructed by Quote from the original catalog and both quote responses. Its `server_confirmed_ids=false` marks intended members rather than a server reservation. Fresh confirmation must reproduce the same fingerprint.
 
@@ -58,6 +67,15 @@ Only allowlisted read operations can retry classified network/timeouts or HTTP 4
 `set_favorite` takes `{comic_id, favorite}` and returns `{accepted=true,comic_id,favorite}` only after the protocol confirms success. It is not reachable through the generic read-only `client` method allowlist. `diagnostics` constructs a separate client without a session and with a transport that rejects every network request. Its result contains only typed local versions, platform and boolean capability fields, and explicitly says that networking was not checked. The controller uses a separate local runner so this operation does not resume or wait on a suspended network queue.
 
 `DownloadService` deduplicates page requests by episode/revision/index and tracks reader/job owners separately. It captures content, source and service generations before starting work. Both successful and failed completions, including authentication errors, must match their captured page epochs. Complete downloads are pinned; complete automatic cache alone is not a retained-download badge. Closing a reader removes its ownership while explicit downloads remain process-scoped.
+
+Each image completion settles at most once. Failure-state writes, cleanup, or one
+owner callback failing must not suppress the other owner callbacks. An attempted
+commit retains its journal-owned file even when storage cannot be read. If a
+settled download's job state cannot be persisted, `projectJob(job)` exposes a
+process-local paused storage error with `persistence_pending=true`, bound to the
+unchanged durable job. Successful persistence or a changed durable record clears
+that projection. A failed pause/cancel request does not claim that a still-running
+worker has stopped.
 
 `refreshSources(job_id,fetch_index,callback,check_positions)` explicitly pauses a retained partial download, captures its basis and serially verifies historical pages before atomic adoption. `isRefreshingSources(job_id)` and `cancelSourceRefresh(job_id)` expose lifecycle state. The Controller checks stored native reading positions, fetches fresh entitlement/index data, and pins the retained download before resuming after successful adoption. No generic HTTP 400/403 automatically invokes refresh. Cancel, suspend and account changes retire in-flight proofs; startup clears an interrupted marker without replaying it. Terminal storage or resume errors still deliver one callback and never claim unperformed resumption.
 

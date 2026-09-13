@@ -1,5 +1,8 @@
 -- Exercise real SQLite and PageStore with an explicitly asynchronous runner double.
 require("setupkoenv")
+G_defaults = require("luadefaults"):open()
+G_reader_settings = require("luasettings"):open(require("datastorage"):getDataDir() .. "/settings.reader.lua")
+require("document/canvascontext"):init(require("device"))
 local source, output = assert(arg[1]), assert(arg[2])
 package.path = source .. "/?.lua;" .. package.path
 local Service = require("bilicomics/jobs/download_service")
@@ -243,6 +246,141 @@ test("Storage-owned commit journals retain their image for recovery after a comm
     local recovered = c.pages:reconcile()
     check(recovered.recovered == 1 and c.pages:isComplete("episode", "r1"),
         "Recovery must finish the previously verified image without fetching it again")
+end)
+
+test("Persistent page-state write failures settle every owner and retire the running download", function()
+    local c, callbacks = fixture(1), {}
+    local job = c.service:enqueue("comic", "episode")
+    c.ui:flush()
+    c.service:requestPage(c.descriptor, 1, { reader_generation = 91 }, function(_, err)
+        callbacks[#callbacks + 1] = err
+        error("Synthetic consumer failure must not suppress other owners")
+    end)
+    c.service:requestPage(c.descriptor, 1, { reader_generation = 92 }, function(_, err) callbacks[#callbacks + 1] = err end)
+    local task = c.runner.submitted[1]
+    Files.write(task.request.temporary_path, "synthetic failed acquisition")
+    local put_page = c.store.putPage
+    c.store.putPage = function() error("Synthetic persistent page-state write failure") end
+    local settled = pcall(c.runner.complete, c.runner, task, nil, Util.error("network", "Synthetic network failure"))
+    c.store.putPage = put_page
+    check(settled and #callbacks == 2 and callbacks[1].kind == "storage" and callbacks[2].kind == "storage",
+        "A failed failure-state write must still settle every owner with a typed storage error")
+    check(c.store:getJob(job.id).state == "failed" and c.store:getJob(job.id).error.kind == "storage",
+        "The download cannot retain a running state after its acquisition has settled")
+    check(not next(c.service.requests) and not Files.exists(task.request.temporary_path),
+        "Failed completion must retire its request and clean unowned temporary content")
+    local notifications = c.notifications
+    task.callback(nil, Util.error("network", "Duplicate worker completion"))
+    check(#callbacks == 2 and c.notifications == notifications,
+        "Duplicate completions cannot repeat callbacks, cleanup, or notification")
+end)
+
+test("A read-only database exposes an unsaved paused state and resumes after storage recovery", function()
+    local Controller = require("bilicomics/controller")
+    local c, callbacks = fixture(1), {}
+    local job = c.service:enqueue("comic", "episode")
+    c.ui:flush()
+    c.service:requestPage(c.descriptor, 1, { reader_generation = 93 }, function(_, err) callbacks[#callbacks + 1] = err end)
+    local task = c.runner.submitted[1]
+    Files.write(task.request.temporary_path, "synthetic partial content before the database becomes read-only")
+    c.store.connection:exec("PRAGMA query_only=ON")
+    local settled = pcall(c.runner.complete, c.runner, task, nil, Util.error("network", "Synthetic worker failure"))
+    local controller = setmetatable({ account = { store = c.store, downloads = c.service } }, Controller)
+    local visible = controller:getDownloads()[1]
+    c.store.connection:exec("PRAGMA query_only=OFF")
+    check(settled and #callbacks == 1 and callbacks[1].kind == "storage",
+        "Real SQLite write rejection must not swallow the acquisition callback")
+    check(c.store:getJob(job.id).state == "running" and visible.state == "paused"
+        and visible.persistence_pending and visible.error.kind == "storage",
+        "The UI must distinguish the unsaved local terminal state from the unchanged durable job")
+    check(not next(c.service.requests) and not Files.exists(task.request.temporary_path),
+        "Read-only metadata cannot prevent cleanup of an unowned partial file")
+    local newer = c.store:getJob(job.id)
+    newer.state, newer.run_generation = "paused", newer.run_generation + 1
+    c.store:putJob(newer)
+    check(not controller:getDownloads()[1].persistence_pending,
+        "A newer durable job state supersedes an obsolete process-local failure projection")
+    check(c.service:resume(job.id), "Restored writable storage must allow an explicit retry")
+    c.ui:flush()
+    check(#c.runner.submitted == 2 and not controller:getDownloads()[1].persistence_pending,
+        "A successfully persisted retry clears the process-local projection")
+    finish(c, c.runner.submitted[2])
+    check(controller:getDownloads()[1].state == "complete", "The retried download must complete normally")
+end)
+
+test("A failed pause write cannot project an active acquisition as already paused", function()
+    local c = fixture(1)
+    local job = c.service:enqueue("comic", "episode")
+    c.ui:flush()
+    c.store.connection:exec("PRAGMA query_only=ON")
+    local paused = pcall(c.service.pause, c.service, job.id)
+    c.store.connection:exec("PRAGMA query_only=OFF")
+    local visible = c.service:projectJob(c.store:getJob(job.id))
+    check(not paused and visible.state == "running" and not visible.persistence_pending,
+        "An unsuccessful pause cannot claim that its still-owned worker has settled")
+    check(#c.runner.canceled == 0 and next(c.service.requests) ~= nil,
+        "The projection must describe actual task ownership when pause itself was rejected")
+    finish(c, c.runner.submitted[1])
+    check(c.store:getJob(job.id).state == "complete", "The unchanged running operation must still settle normally")
+end)
+
+test("Read-only failure after journal creation preserves the image and recovers without another worker", function()
+    local c, callbacks = fixture(1), {}
+    local job = c.service:enqueue("comic", "episode")
+    c.ui:flush()
+    c.service:requestPage(c.descriptor, 1, { reader_generation = 94 }, function(_, err) callbacks[#callbacks + 1] = err end)
+    local task = c.runner.submitted[1]
+    c.pages.fault_hook = function(stage)
+        if stage == "after_journal" then
+            c.store.connection:exec("PRAGMA query_only=ON")
+            error("Synthetic read-only transition after the image journal is durable")
+        end
+    end
+    local settled = pcall(c.runner.complete, c.runner, task, taskImage(c, task))
+    c.store.connection:exec("PRAGMA query_only=OFF")
+    c.pages.fault_hook = nil
+    local pending = c.service:projectJob(c.store:getJob(job.id))
+    check(settled and #callbacks == 1 and callbacks[1].kind == "storage" and pending.persistence_pending,
+        "Both image and job write failures must settle the same acquisition exactly once")
+    check(#c.store:listCommits() == 1 and Files.exists(task.request.temporary_path) and c.ready == 0,
+        "Failure cleanup must preserve the journal's only verified image")
+    check(c.service:resume(job.id), "Explicit retry must recover the durable journal")
+    c.ui:flush()
+    check(#c.runner.submitted == 1 and #c.store:listCommits() == 0 and c.ready == 1
+        and c.store:getJob(job.id).state == "complete" and c.pages:isComplete("episode", "r1"),
+        "Recovery must publish one ready notification and complete without reacquiring the image")
+    check(not c.service:projectJob(c.store:getJob(job.id)).persistence_pending and #callbacks == 1,
+        "Durable recovery must clear the unsaved projection without replaying old callbacks")
+end)
+
+test("Successful image callbacks survive cache-setting and notification failures", function()
+    local c, callbacks = fixture(1), {}
+    c.service.settings = { get = function(_, key)
+        if key == "cache_limit_bytes" then error("Synthetic cache-setting read failure") end
+        return Budget.default_minimum
+    end }
+    c.service.notify = function() error("Synthetic notification failure") end
+    c.service:requestPage(c.descriptor, 1, {}, function(page, err) callbacks[#callbacks + 1] = { page = page, error = err } end)
+    local task = c.runner.submitted[1]
+    local settled = pcall(c.runner.complete, c.runner, task, taskImage(c, task))
+    check(settled and #callbacks == 1 and callbacks[1].page.state == "ready" and not callbacks[1].error and c.ready == 1,
+        "An already committed image remains successful when subsequent maintenance or notification fails")
+    check(not next(c.service.requests) and #c.store:listCommits() == 0,
+        "Success cleanup must not leave a live request or a completed journal")
+end)
+
+test("Retired acquisitions still settle once when temporary-file cleanup throws", function()
+    local c, callbacks = fixture(1), {}
+    c.service:requestPage(c.descriptor, 1, { reader_generation = 95 }, function(_, err) callbacks[#callbacks + 1] = err end)
+    local task = c.runner.submitted[1]
+    c.service:releaseReader(95)
+    local cleanup = c.service._cleanupTemporary
+    c.service._cleanupTemporary = function() error("Synthetic temporary-file cleanup failure") end
+    local settled = pcall(c.runner.complete, c.runner, task, nil, Util.error("canceled", "Synthetic canceled worker"))
+    c.service._cleanupTemporary = cleanup
+    task.callback(nil, Util.error("canceled", "Duplicate canceled completion"))
+    check(settled and #callbacks == 1 and callbacks[1].kind == "canceled" and not next(c.service.requests),
+        "Cleanup failure must neither replace cancellation nor suppress or repeat its callback")
 end)
 
 test("Reader retry recovers an interrupted commit and notifies the active reader without downloading again", function()
