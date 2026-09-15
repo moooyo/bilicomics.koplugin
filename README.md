@@ -8,9 +8,11 @@ The latest approved UI is implemented in the native plugin, including the compac
 bookshelf and QR recharge flow. The payment-code view uses one action row with
 Check credit on the left and Close on the right. Manual recharge input must match
 an amount from the current official configuration. The installable candidate is
-[the approved UI package](dist/bilicomics-ui-recharge-20260915.zip), with its
-[file manifest](dist/bilicomics-ui-recharge-20260915.manifest.json) and
-[package checks](spec/package/ui-recharge-results.json). See the
+generated as `dist/bilicomics-ui-recharge-20260915.zip`, with an adjacent
+`.manifest.json` file. These local build artifacts are excluded from Git; use
+the remote packaging workflow below to reproduce them. The
+[package checks](spec/package/ui-recharge-results.json) record the delivered
+archive. See the
 [native previews](design/recharge-preview/index.html) and
 [recharge implementation evidence](docs/recharge-api-investigation.md).
 Remote synthetic checks cover both 600 by 800 and 480 by 640 layouts; real
