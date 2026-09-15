@@ -22,6 +22,7 @@ package.loaded[protocol_key] = original_client
 local method_names = {
     "listFavorites", "listHistory", "recommendations", "search", "comicDetail", "imageIndex", "wallet",
     "purchaseInfo", "validateSession", "buyEpisode", "imageTokens", "downloadImage", "addHistory",
+    "getRechargeConfig", "rechargeHistory", "createRechargeOrder",
 }
 
 local function check(name, condition)
@@ -98,12 +99,13 @@ run("Invalid worker requests", function()
 end)
 
 run("Read-only operation whitelist", function()
-    for _, method in ipairs({ "buyEpisode", "addHistory", "setFavorite", "downloadImage", "imageTokens", "new", "missing" }) do
+    for _, method in ipairs({ "buyEpisode", "addHistory", "setFavorite", "downloadImage", "imageTokens", "createRechargeOrder", "new", "missing" }) do
         client({})
         local result, err = Worker.execute({ kind = "client", method = method, arguments = { "10" } })
         check("Read workers reject " .. method, result == nil and err.kind == "invalid_request" and #scenario.calls == 0)
     end
-    for _, method in ipairs({ "listFavorites", "listHistory", "recommendations", "search", "comicDetail", "imageIndex", "wallet", "purchaseInfo" }) do
+    for _, method in ipairs({ "listFavorites", "listHistory", "recommendations", "search", "comicDetail", "imageIndex", "wallet", "purchaseInfo",
+        "getRechargeConfig", "rechargeHistory" }) do
         local expected, first, second = { marker = method }, { page_num = 7 }, "second-argument"
         client({ [method] = function(a, b)
             check(method .. " preserves the request arguments", a == first and b == second)
@@ -273,6 +275,59 @@ run("Purchase intent boundary", function()
     check("An uncertain purchase response is propagated without retry", result == nil and err == uncertain and #scenario.calls == 1)
 end)
 
+run("Recharge intent boundary", function()
+    local fingerprint = string.rep("a", 64)
+    local requests = {
+        { kind = "recharge", amount_cents = 500, option_fingerprint = fingerprint },
+        { kind = "recharge", local_id = 1, amount_cents = 500, option_fingerprint = fingerprint },
+        { kind = "recharge", local_id = "", amount_cents = 500, option_fingerprint = fingerprint },
+        { kind = "recharge", local_id = "recharge-1", amount_cents = 500 },
+        { kind = "recharge", local_id = "recharge-1", amount_cents = 500, option_fingerprint = 123 },
+        { kind = "recharge", local_id = "recharge-1", amount_cents = 500, option_fingerprint = "" },
+        { kind = "recharge", local_id = "recharge-1", amount_cents = 500, option_fingerprint = string.rep("a", 63) },
+        { kind = "recharge", local_id = "recharge-1", amount_cents = 500, option_fingerprint = string.rep("a", 65) },
+    }
+    for index, request in ipairs(requests) do
+        client({})
+        local result, err = Worker.execute(request)
+        check("Malformed recharge intent " .. index .. " cannot call order creation", result == nil and err
+            and err.kind == "confirmation_required" and err.transmitted == false and err.definitive == true
+            and #scenario.calls == 0)
+    end
+
+    local order_id = "900719925474099312345678901234567890"
+    local expected = { order_id = order_id, code_url = "weixin://synthetic-only/recharge", qr_validated = true, amount_cents = 500 }
+    client({ createRechargeOrder = function(cents, received_fingerprint, extra)
+        check("Recharge forwards the confirmed cents and fingerprint without a local journal identifier",
+            cents == 500 and received_fingerprint == fingerprint and extra == nil)
+        return expected
+    end })
+    local result, err = Worker.execute({ kind = "recharge", local_id = "recharge-1", amount_cents = 500,
+        option_fingerprint = fingerprint })
+    check("A committed recharge intent invokes only one order creation", result == expected and err == nil
+        and #scenario.calls == 1 and scenario.calls[1].method == "createRechargeOrder")
+    check("Recharge returns the exact large order identity without numeric conversion", result
+        and type(result.order_id) == "string" and result.order_id == order_id)
+
+    local uncertain = errorValue("recharge_unknown")
+    uncertain.order_id = order_id
+    client({ createRechargeOrder = function() return nil, uncertain end })
+    result, err = Worker.execute({ kind = "recharge", local_id = "recharge-2", amount_cents = 500,
+        option_fingerprint = fingerprint })
+    check("An unknown recharge result is propagated once without retry or substitute reads", result == nil
+        and err == uncertain and err.order_id == order_id and #scenario.calls == 1
+        and scenario.calls[1].method == "createRechargeOrder")
+end)
+
+run("Recharge cannot bypass the read-only worker kind", function()
+    local fingerprint = string.rep("b", 64)
+    client({})
+    local result, err = Worker.execute({ kind = "client", method = "createRechargeOrder", arguments = { 500, fingerprint },
+        local_id = "recharge-authorized-looking", amount_cents = 500, option_fingerprint = fingerprint })
+    check("Even a complete recharge intent cannot authorize creation through a read worker", result == nil
+        and err and err.kind == "invalid_request" and #scenario.calls == 0)
+end)
+
 run("Purchase reconciliation", function()
     local detail, unavailable = { episodes = { { id = "10", access = "owned" } } }, errorValue("http")
     client({ comicDetail = function() return detail end, wallet = function() return nil, unavailable end })
@@ -403,6 +458,6 @@ for _, assertion in ipairs(assertions) do
     if not assertion.passed then failed = failed + 1 end
 end
 Files.write(output .. "/worker-result.json", json.encode({ assertions = assertions, passed = #assertions - failed,
-    failed = failed, environment = "test-env", network = "injected protocol client; no live account or purchase" }, { pretty = true }))
+    failed = failed, environment = "test-env", network = "injected protocol client; no live account, purchase or recharge" }, { pretty = true }))
 print(json.encode({ suite = "worker", passed = #assertions - failed, failed = failed, result_path = output .. "/worker-result.json" }))
 if failed > 0 then os.exit(1) end

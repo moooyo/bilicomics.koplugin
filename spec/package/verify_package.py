@@ -92,6 +92,15 @@ def main() -> None:
                 required.add("bilicomics/bookstore_categories.lua")
             if "bilicomics/bookshelf_state" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
                 required.add("bilicomics/bookshelf_state.lua")
+            if "bilicomics/recharge/controller" in archive.read(prefix + "bilicomics/controller.lua").decode("utf-8"):
+                required.update({"bilicomics/recharge/controller.lua", "bilicomics/recharge/service.lua",
+                                 "bilicomics/protocol/recharge.lua", "bilicomics/ui/recharge_screens.lua",
+                                 "l10n/bilicomics_recharge_zh_CN.lua"})
+            screens = archive.read(prefix + "bilicomics/ui/screens.lua").decode("utf-8")
+            for name in ("catalog", "downloads", "account", "purchase"):
+                if "bilicomics/ui/" + name + "_screens" in screens:
+                    required.update({"bilicomics/ui/" + name + "_screens.lua",
+                                     "bilicomics/ui/screen_helpers.lua", "l10n/bilicomics_" + name + "_zh_CN.lua"})
             if "bilicomics/protocol/recommendations" in archive.read(prefix + "bilicomics/protocol/client.lua").decode("utf-8"):
                 required.add("bilicomics/protocol/recommendations.lua")
             if "bilicomics/protocol/categories" in archive.read(prefix + "bilicomics/protocol/client.lua").decode("utf-8"):

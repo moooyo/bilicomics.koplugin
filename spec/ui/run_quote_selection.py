@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+from run_ui_sources import ui_source_names
 
 
 SOURCES = ("bilicomics/ui/model.lua", "bilicomics/ui/screens.lua", "l10n/bilicomics_zh_CN.lua")
@@ -13,7 +14,8 @@ SIZES = ((600, 800), (480, 640))
 
 
 def hashes(plugin):
-    return {name: hashlib.sha256((plugin / name).read_bytes()).hexdigest() for name in SOURCES}
+    return {name: hashlib.sha256((plugin / name).read_bytes()).hexdigest()
+        for name in sorted(set(SOURCES).union(ui_source_names(plugin)))}
 
 
 def run_size(runtime, plugin, output, size):
@@ -70,7 +72,7 @@ def main():
         "synthetic_only": True, "actual_purchase_executed": False, "source_sha256": hashes(plugin),
         "source_unchanged": False, "runs": [], "passed": False}
     report["test_sha256"] = {name: hashlib.sha256((plugin / "spec/ui" / name).read_bytes()).hexdigest()
-        for name in ("quote_selection_spec.lua", "run_quote_selection.py")}
+        for name in ("quote_selection_spec.lua", "run_quote_selection.py", "run_ui_sources.py")}
     try:
         for size in SIZES:
             report["runs"].append(run_size(runtime, plugin, output / f"{size[0]}x{size[1]}", size))

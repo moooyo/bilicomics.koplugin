@@ -60,10 +60,16 @@ app:setScreens(screens)
 screens:showLibrary(); flush()
 check("session_import_default_destination_is_bookshelf", screens.route == "favorites")
 local function dialogButton(message)
-    for _index, row in ipairs(screens.dialog.buttons) do
+    local dialog = assert(screens.dialog, "Expected an import dialog")
+    for _index, row in ipairs(dialog.buttons or {}) do
         for _index, button in ipairs(row) do if button.text == _(message) then return button end end
     end
-    error("Expected import control was not found")
+    error("Expected import control was not found: " .. message)
+end
+local function dialogPress(message)
+    local button = dialogButton(message)
+    assert(button.enabled ~= false and button.callback, "Expected an enabled import control: " .. message)
+    button.callback()
 end
 local function capture(name)
     UIManager:forceRePaint()
@@ -97,9 +103,11 @@ for name, code in pairs({ ["too-large.txt"] = "size", ["directory.txt"] = "regul
     check("rejects_" .. name, content == nil and err.code == code and err.message == nil and err.path == nil)
 end
 check("path_with_nul_is_rejected", SessionInput.read(fixtures .. "/session.txt\0") == nil)
-screens:_importSession()
+screens:_otherSignInMethods()
+check("other_sign_in_methods_expose_both_import_sources", dialogButton("Paste web session") and dialogButton("Import from file"))
+dialogPress("Paste web session")
 check("paste_input_remains_masked", screens.dialog.text_type == "password")
-dialogButton("Import from file").callback()
+dialogPress("Import from file")
 local picker = screens.dialog
 check("file_entry_opens_native_file_chooser", picker.onMenuSelect == FileChooser.onMenuSelect and picker.path == fixtures)
 local original_filter = FileChooser.show_filter.status
@@ -146,9 +154,19 @@ check("validation_error_does_not_echo_cookie_or_path", not screens.dialog.title:
 check("failure_feedback_stays_above_controller_refresh", UIManager:getTopmostVisibleWidget() == screens.dialog)
 selectFile("session.txt")
 local closed_task = requests[#requests]
-dialogButton("Close").callback()
+local background_import = screens.session_import
+dialogPress("Continue in background")
+check("background_validation_keeps_its_pending_state", screens.dialog == nil and screens.session_import == background_import
+    and background_import.status == "validating")
 validated(closed_task)
-check("closed_status_does_not_reopen_success_feedback", screens.dialog == nil and screens.route == "favorites")
+check("background_completion_does_not_reopen_a_modal_or_change_route", screens.dialog == nil and screens.route == "favorites"
+    and screens.session_import == background_import and background_import.status == "complete")
+screens:_sessionImportResult(background_import)
+check("background_result_can_be_reviewed_explicitly", screens.dialog.title:find(_("Session imported"), 1, true)
+    and dialogButton("Open bookshelf") and not screens.dialog.title:find("synthetic-session-file", 1, true)
+    and not screens.dialog.title:find(fixtures, 1, true))
+dialogPress("Close")
+check("closing_reviewed_result_retires_its_state", screens.dialog == nil and screens.session_import == nil)
 
 screens:_importSessionFile(); picker = screens.dialog
 picker:onMenuSelect({ path = fixtures .. "/session.txt", is_file = true })

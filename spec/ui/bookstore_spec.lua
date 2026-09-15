@@ -9,10 +9,15 @@ local plugin, output = assert(arg[1]), assert(arg[2])
 package.path = plugin .. "/?.lua;" .. plugin .. "/?/init.lua;" .. package.path
 require("gettext").current_lang = arg[3] or "zh_CN"
 local UIManager = require("ui/uimanager")
+local Font = require("ui/font")
 local Screens = require("bilicomics/ui/screens")
+local W = require("bilicomics/ui/widgets")
 local json = require("rapidjson")
 local _ = require("bilicomics/ui/i18n")
 local width, height = Device.screen:getWidth(), Device.screen:getHeight()
+local expected_columns = width >= 900 and 4 or width >= 600 and 3 or 2
+local expected_rows = width > height and 1 or 2
+local expected_capacity = expected_columns * expected_rows
 local result = { assertions = {}, screenshots = {}, language = arg[3], width = width, height = height,
     scope = "Native bookstore widgets; original synthetic illustrations; anonymous injected data; no HTTP, account, purchase or reader" }
 local function check(name, value, detail)
@@ -25,12 +30,26 @@ local function contains(widget, message)
     end
     return false
 end
+local function textWidget(widget, text)
+    if widget.text == text and widget.face then return widget end
+    for _index, child in ipairs(widget) do
+        if type(child) == "table" then
+            local found = textWidget(child, text)
+            if found then return found end
+        end
+    end
+end
 local ids = { "71", "4", "303", "18", "99", "5", "42" }
 local titles = { "Moonlit Observatory", "The Last Paper Crane", "A Lighthouse Beyond the Clouds",
     "The Garden of Quiet Stars", "Across the Silver Mountain", "A Quiet Harbor", "The First Morning" }
+local revision = 0
+local function feedIdentity()
+    revision = revision + 1
+    return { account_key = "anonymous", query_key = "homepage", revision = revision }
+end
 local function recommendations(stale)
     local value = { items = {}, updated_at = 1234567890, stale = stale or false,
-        source = "official_homepage", personalized = false, has_more = false }
+        source = "official_homepage", personalized = false, has_more = false, identity = feedIdentity() }
     for index, id in ipairs(ids) do
         value.items[index] = { id = id, title = titles[index], authors = { "Synthetic example author" },
             cover_path = output .. "/fixtures/synthetic-cover-" .. ((index - 1) % 5 + 1) .. ".png",
@@ -40,10 +59,11 @@ local function recommendations(stale)
     return value
 end
 local function emptySnapshot()
-    return { items = {}, stale = true, source = "official_homepage", personalized = false, has_more = false }
+    return { items = {}, stale = true, source = "official_homepage", personalized = false, has_more = false,
+        identity = feedIdentity() }
 end
 local controller = { snapshot = emptySnapshot(), calls = {}, waiting = {}, covers = {}, forbidden = {}, catalog_covers = {} }
-function controller:getAccount() return {} end
+function controller:getAccount() return { account_key = "anonymous" } end
 function controller:getLibrary() return {} end
 function controller:getBookstore() return self.snapshot end
 function controller:getSetting(_key, default) return default end
@@ -115,7 +135,9 @@ local function cardIDs()
 end
 local function checkGrid(name)
     UIManager:forceRePaint()
-    check(name .. "_has_native_cover_cards", #screens.cards > 0 and screens.grid_columns == (width >= 720 and 3 or 2))
+    check(name .. "_has_native_cover_cards", #screens.cards > 0 and screens.grid_columns == expected_columns)
+    check(name .. "_uses_the_orientation_capacity", #screens.cards == math.min(#ids, expected_capacity)
+        and screens.grid_rows == expected_rows)
     local index, rows = 0, {}
     for _index, row in ipairs(screens.focus) do if row[1] and row[1].comic then rows[#rows + 1] = row end end
     for row_index, row in ipairs(rows) do
@@ -124,6 +146,10 @@ local function checkGrid(name)
             check(name .. "_card_bounds_" .. index, card.dimen.x >= 0 and card.dimen.y >= 0
                 and card.dimen.x + card.dimen.w <= width and card.dimen.y + card.dimen.h <= height)
             check(name .. "_focus_matches_visual_order_" .. index, screens.cards[index] == card)
+            local title, metadata = textWidget(card, card.text), textWidget(card, card.update)
+            check(name .. "_readable_card_fonts_" .. index, title and metadata
+                and title.face.size >= Font:getFace("cfont", 16).size
+                and metadata.face.size >= Font:getFace("cfont", 14).size)
             if column > 1 then
                 local previous = row[column - 1].dimen
                 check(name .. "_aligned_card_" .. index, card.dimen.y == previous.y and card.dimen.x >= previous.x + previous.w)
@@ -134,6 +160,18 @@ local function checkGrid(name)
         end
     end
     check(name .. "_every_card_is_focusable", index == #screens.cards)
+    local pagination, focusable = screens.pagination, false
+    if screens.pages > 1 then
+        assert(pagination, "Expected pagination for the visible recommendation pages")
+        for _index, row in ipairs(screens.focus) do
+            if row[1] == pagination.previous and row[2] == pagination.counter and row[3] == pagination.next then focusable = true end
+        end
+        check(name .. "_page_counter_is_a_readable_focusable_action", focusable
+            and type(pagination.counter.callback) == "function" and pagination.counter.enabled ~= false
+            and pagination.counter.text_font_size >= W.font.meta)
+    else
+        check(name .. "_single_page_has_no_redundant_pagination", pagination == nil)
+    end
 end
 local function noFalseControls(name)
     local absent = true
@@ -159,8 +197,10 @@ capture("synthetic-bookstore-loading")
 finish(recommendations())
 check("recommendations_load_without_a_session", screens.route == "bookstore" and #screens.cards > 0
     and controller.snapshot.personalized == false and controller.snapshot.source == "official_homepage")
-check("the_store_identifies_official_recommendations_and_catalog_activation", contains(screens.widget.content, "Official recommendations")
-    and contains(screens.widget.content, "Tap to view chapters"))
+check("the_store_identifies_recommendations_count_and_catalog_activation",
+    contains(screens.widget.content, _("All recommendations") .. " ▾")
+    and contains(screens.widget.content, string.format(_("%d comics"), #ids))
+    and contains(screens.widget.content, "Tap: chapters · Hold: synopsis"))
 capture("synthetic-bookstore-recommendations")
 checkGrid("loaded")
 noFalseControls("loaded")
@@ -183,11 +223,13 @@ check("the_last_local_page_does_not_fetch_another_feed", requestCount("refreshBo
 screens:showLibrary()
 local refresh_count = requestCount("refreshBookstore")
 screens:showBookstore()
-check("fresh_cached_recommendations_open_without_a_new_request", requestCount("refreshBookstore") == refresh_count and #screens.cards > 0)
+check("fresh_cached_recommendations_restore_the_previous_page_without_a_new_request",
+    requestCount("refreshBookstore") == refresh_count and #screens.cards > 0 and screens.page == page_count)
 local selected = screens.cards[1]
+local selected_id = tostring(selected.comic.id)
 selected:onTapSelect()
-check("recommendation_tap_opens_the_chapter_catalog_only", screens.route == "comic" and screens.comic_id == ids[1]
-    and #controller.waiting == 1 and controller.waiting[1].method == "refreshComic" and controller.waiting[1].args[1] == ids[1])
+check("recommendation_tap_opens_the_chapter_catalog_only", screens.route == "comic" and screens.comic_id == selected_id
+    and #controller.waiting == 1 and controller.waiting[1].method == "refreshComic" and controller.waiting[1].args[1] == selected_id)
 finish(true)
 capture("synthetic-bookstore-chapters")
 check("opening_recommendations_never_reads_or_buys", #controller.forbidden == 0)

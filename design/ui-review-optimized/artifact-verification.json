@@ -1,0 +1,35 @@
+{
+  "overview": 7,
+  "scenes600": 233,
+  "scenes480": 234,
+  "export": true,
+  "persisted": true,
+  "comparisonScenes": 27,
+  "pair600": [
+    [
+      600,
+      800
+    ],
+    [
+      600,
+      800
+    ]
+  ],
+  "pair480": [
+    [
+      480,
+      640
+    ],
+    [
+      480,
+      640
+    ]
+  ],
+  "afterOnly": true,
+  "zoom": true,
+  "navigation": true,
+  "mobileComparison": true,
+  "mobileGallery": true,
+  "errors": [],
+  "passed": true
+}

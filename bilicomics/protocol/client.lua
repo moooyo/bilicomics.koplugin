@@ -5,6 +5,7 @@ local Image = require("bilicomics/protocol/image")
 local JSON = require("bilicomics/protocol/json")
 local Normalize = require("bilicomics/protocol/normalize")
 local Recommendations = require("bilicomics/protocol/recommendations")
+local Recharge = require("bilicomics/protocol/recharge")
 local Session = require("bilicomics/protocol/session")
 local Transport = require("bilicomics/protocol/transport")
 
@@ -59,7 +60,7 @@ function Client:capabilities()
     local crypto = self.crypto:capabilities()
     return {
         session = true, library = true, search = true, recommendations = true, wallet = true, quoting = true,
-        purchase = true, plain_images = true,
+        purchase = true, recharge = true, plain_images = true,
         protected_catalog = crypto.request_signing and crypto.response_decoding,
         image_index = crypto.request_signing and crypto.response_decoding and (crypto.index_challenge or crypto.index_error_reporting),
         image_tokens = crypto.request_signing and crypto.response_decoding and crypto.image_key_exchange,
@@ -108,7 +109,10 @@ function Client:_envelope(response, endpoint, context)
             transmitted = response.transmitted,
         })
     end
-    local envelope, err = JSON.decode(response.body)
+    local envelope, err
+    if endpoint == "GetPayOrders" then
+        envelope, err = Recharge.decodeEnvelope(response.body)
+    else envelope, err = JSON.decode(response.body) end
     if not envelope then
         err.transmitted = response.transmitted
         return nil, err
@@ -170,7 +174,7 @@ function Client:_post(service, endpoint, body, opts)
     local value, business_error = self:_envelope(response, endpoint, context)
     local captured, cookie_error = self:_captureCookies(response, "manga.bilibili.com")
     -- A received mutation receipt remains authoritative even if its optional cookie headers are malformed.
-    if not captured and value and endpoint ~= "BuyEpisode" and endpoint ~= "AddFavorite" and endpoint ~= "DeleteFavorite" then
+    if not captured and value and endpoint ~= "BuyEpisode" and endpoint ~= "AddFavorite" and endpoint ~= "DeleteFavorite" and endpoint ~= "CreateOrder" then
         return nil, cookie_error
     end
     return value, business_error
@@ -363,6 +367,12 @@ function Client:wallet()
     if not data then return nil, err end
     return Normalize.safeExtra(data)
 end
+
+function Client:getRechargeConfig() return Recharge.getConfig(self) end
+function Client:createRechargeOrder(amount_cents, expected_option_fingerprint)
+    return Recharge.createOrder(self, amount_cents, expected_option_fingerprint)
+end
+function Client:rechargeHistory(opts) return Recharge.history(self, opts) end
 
 function Client:purchaseInfo(episode_id, scope)
     if not id(episode_id) then return invalid("An episode identifier is required for a quote.") end

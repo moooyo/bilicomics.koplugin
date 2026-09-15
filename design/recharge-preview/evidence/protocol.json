@@ -1,0 +1,77 @@
+{
+  "environment": "ssh test-env, unshare --net",
+  "returncode": 0,
+  "timed_out": false,
+  "source_sha256": {
+    "bilicomics/protocol/recharge.lua": "b0c0b4098974f5393f84bd0c871315b444136ded8c41e49784347a4d77054e61",
+    "bilicomics/protocol/client.lua": "83059ef595c6fe3cb63c66a778073efc4d5c7a2181bcbbf0538d3056dd84e5e2",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "spec/protocol/recharge_spec.lua": "c963d2964f8ad312ba5a37551cbd6bb497b64984da46e6dc1674a0a0ebd6e8c6"
+  },
+  "source_sha256_after": {
+    "bilicomics/protocol/recharge.lua": "b0c0b4098974f5393f84bd0c871315b444136ded8c41e49784347a4d77054e61",
+    "bilicomics/protocol/client.lua": "83059ef595c6fe3cb63c66a778073efc4d5c7a2181bcbbf0538d3056dd84e5e2",
+    "bilicomics/protocol/json.lua": "2eb2256f3b368e2450e4e4026a241117b80016b8823d069e255faa2d3f02121e",
+    "spec/protocol/recharge_spec.lua": "c963d2964f8ad312ba5a37551cbd6bb497b64984da46e6dc1674a0a0ebd6e8c6"
+  },
+  "source_unchanged": true,
+  "result": {
+    "actual_order_created": false,
+    "actual_payment_executed": false,
+    "passed": true,
+    "scope": "Synthetic recharge protocol; no real account, order, or payment",
+    "count": 12,
+    "assertions": [
+      {
+        "passed": true,
+        "name": "official configuration preserves currency units and benefit semantics"
+      },
+      {
+        "passed": true,
+        "name": "manual yuan input is exact and limited to authoritative options"
+      },
+      {
+        "passed": true,
+        "name": "malformed and ambiguous configuration is rejected"
+      },
+      {
+        "passed": true,
+        "name": "option fingerprints bind benefits and text without binding retrieval time"
+      },
+      {
+        "passed": true,
+        "name": "raw decimal identifiers survive JSON without touching strings or amounts"
+      },
+      {
+        "passed": true,
+        "name": "both payment apps use one official QR order with an exact large identifier"
+      },
+      {
+        "passed": true,
+        "name": "changed terms or removed amounts stop before creating an order"
+      },
+      {
+        "passed": true,
+        "name": "order creation never retries uncertain transport results"
+      },
+      {
+        "passed": true,
+        "name": "untrusted QR URLs retain the order ID but do not expose a payment code"
+      },
+      {
+        "passed": true,
+        "name": "a received QR receipt survives optional cookie persistence errors"
+      },
+      {
+        "passed": true,
+        "name": "history preserves exact IDs and does not invent currency units or status"
+      },
+      {
+        "passed": true,
+        "name": "malformed history identifiers and list wrappers are rejected"
+      }
+    ],
+    "synthetic_only": true
+  },
+  "passed": true
+}

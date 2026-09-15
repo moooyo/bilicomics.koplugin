@@ -9,12 +9,15 @@ local plugin, output = assert(arg[1]), assert(arg[2])
 package.path = plugin .. "/?.lua;" .. plugin .. "/?/init.lua;" .. package.path
 require("gettext").current_lang = arg[3] or "zh_CN"
 local UIManager = require("ui/uimanager")
+local Font = require("ui/font")
 local Screens = require("bilicomics/ui/screens")
+local W = require("bilicomics/ui/widgets")
 local json = require("rapidjson")
 local _ = require("bilicomics/ui/i18n")
 local width, height = Device.screen:getWidth(), Device.screen:getHeight()
 local expected_columns = width >= 900 and 4 or width >= 600 and 3 or 2
-local expected_capacity = expected_columns * 2
+local expected_rows = width > height and 1 or 2
+local expected_capacity = expected_columns * expected_rows
 local result = { assertions = {}, screenshots = {}, language = arg[3], width = width, height = height,
     scope = "Native bookstore widgets; original synthetic illustrations; anonymous injected data; no HTTP, account, purchase or reader" }
 local function check(name, value, detail)
@@ -27,6 +30,15 @@ local function contains(widget, message)
     end
     return false
 end
+local function textWidget(widget, text)
+    if widget.text == text and widget.face then return widget end
+    for _index, child in ipairs(widget) do
+        if type(child) == "table" then
+            local found = textWidget(child, text)
+            if found then return found end
+        end
+    end
+end
 local ids = { "71", "4", "303", "18", "99", "5", "42", "207", "12", "68", "444", "56", "17", "802", "35", "11", "206", "97", "23" }
 local titles = { "Moonlit Observatory", "The Last Paper Crane", "A Lighthouse Beyond the Clouds",
     "The Garden of Quiet Stars", "Across the Silver Mountain", "A Quiet Harbor", "The First Morning" }
@@ -34,9 +46,14 @@ local sections = { "recommendation", "hot_seller", "internet_hot", "completed" }
 local synopsis = "This original synthetic story follows a traveler across an imagined landscape. "
     .. "The complete synopsis belongs in a detail viewer, leaving the discovery grid compact. "
     .. string.rep("The journey continues through quiet valleys and unfamiliar skies. ", 6)
+local revision = 0
+local function feedIdentity()
+    revision = revision + 1
+    return { account_key = "anonymous", query_key = "homepage", revision = revision }
+end
 local function recommendations(stale)
     local value = { items = {}, updated_at = 1234567890, stale = stale or false,
-        source = "official_homepage", personalized = false, has_more = false }
+        source = "official_homepage", personalized = false, has_more = false, identity = feedIdentity() }
     for index, id in ipairs(ids) do
         value.items[index] = { id = id, title = titles[(index - 1) % #titles + 1] .. (index > #titles and " " .. index or ""),
             authors = { "Synthetic example author" },
@@ -48,10 +65,11 @@ local function recommendations(stale)
     return value
 end
 local function emptySnapshot()
-    return { items = {}, stale = true, source = "official_homepage", personalized = false, has_more = false }
+    return { items = {}, stale = true, source = "official_homepage", personalized = false, has_more = false,
+        identity = feedIdentity() }
 end
 local controller = { snapshot = emptySnapshot(), calls = {}, waiting = {}, covers = {}, forbidden = {}, catalog_covers = {} }
-function controller:getAccount() return {} end
+function controller:getAccount() return { account_key = "anonymous" } end
 function controller:getLibrary() return {} end
 function controller:getBookstore() return self.snapshot end
 function controller:getSetting(_key, default) return default end
@@ -102,6 +120,12 @@ local function press(message)
     assert(control.enabled ~= false, "Expected enabled bookstore control: " .. message)
     control.callback()
 end
+local function dialogButton(message)
+    for _index, row in ipairs(assert(screens.dialog).buttons) do for _index, control in ipairs(row) do
+        if control.text == _(message) and control.callback then return control end
+    end end
+    error("Expected page dialog control: " .. message)
+end
 local function refreshControl()
     return assert(button("Refresh"), "Expected recommendation refresh control")
 end
@@ -133,7 +157,7 @@ end
 local function checkGrid(name)
     UIManager:forceRePaint()
     check(name .. "_has_native_cover_cards", #screens.cards > 0 and screens.grid_columns == expected_columns)
-    check(name .. "_has_two_full_rows", #screens.cards == expected_capacity and screens.grid_rows == 2)
+    check(name .. "_uses_the_orientation_capacity", #screens.cards == expected_capacity and screens.grid_rows == expected_rows)
     local index, rows = 0, {}
     for _index, row in ipairs(screens.focus) do if row[1] and row[1].comic then rows[#rows + 1] = row end end
     for row_index, row in ipairs(rows) do
@@ -142,6 +166,10 @@ local function checkGrid(name)
             check(name .. "_card_bounds_" .. index, card.dimen.x >= 0 and card.dimen.y >= 0
                 and card.dimen.x + card.dimen.w <= width and card.dimen.y + card.dimen.h <= height)
             check(name .. "_focus_matches_visual_order_" .. index, screens.cards[index] == card)
+            local title, metadata = textWidget(card, card.text), textWidget(card, card.update)
+            check(name .. "_readable_card_fonts_" .. index, title and metadata
+                and title.face.size >= Font:getFace("cfont", 16).size
+                and metadata.face.size >= Font:getFace("cfont", 14).size)
             local image = coverImage(card, card.comic.cover_path)
             local image_size = image and image:getSize()
             check(name .. "_portrait_cover_ratio_" .. index, image_size and image_size.h > image_size.w
@@ -162,6 +190,13 @@ local function checkGrid(name)
         end
     end
     check(name .. "_every_card_is_focusable", index == #screens.cards)
+    local pagination, focusable = screens.pagination, false
+    for _index, row in ipairs(screens.focus) do
+        if row[1] == pagination.previous and row[2] == pagination.counter and row[3] == pagination.next then focusable = true end
+    end
+    check(name .. "_page_counter_is_a_readable_focusable_action", focusable
+        and type(pagination.counter.callback) == "function" and pagination.counter.enabled ~= false
+        and pagination.counter.text_font_size >= W.font.meta)
     local bottom, controls = 0, {}
     for _index, card in ipairs(screens.cards) do bottom = math.max(bottom, card.dimen.y + card.dimen.h) end
     for _row_index, row in ipairs(screens.focus) do for _button_index, control in ipairs(row) do
@@ -169,6 +204,10 @@ local function checkGrid(name)
     end end
     check(name .. "_has_only_the_bottom_navigation_row", #controls == 4 and controls[1] == _("Bookshelf")
         and controls[2] == _("Bookstore") and controls[3] == _("Search") and controls[4] == _("Downloads"))
+    for index, tab in ipairs(screens.focus[#screens.focus]) do
+        check(name .. "_quiet_navigation_state_" .. index, tab.selected == (index == 2)
+            and tab.bordersize == 0 and tab.text_font_bold == (index == 2) and tab[1].invert ~= true)
+    end
 end
 local function noFalseControls(name)
     local absent = true
@@ -194,8 +233,9 @@ capture("synthetic-bookstore-expanded-loading")
 finish(recommendations())
 check("recommendations_load_without_a_session", screens.route == "bookstore" and #screens.cards > 0
     and controller.snapshot.personalized == false and controller.snapshot.source == "official_homepage")
-check("the_store_identifies_official_recommendations_and_catalog_activation",
-    contains(screens.widget.content, string.format(_("Official recommendations · %d comics"), #ids))
+check("the_store_identifies_recommendations_count_and_catalog_activation",
+    contains(screens.widget.content, _("All recommendations") .. " ▾")
+    and contains(screens.widget.content, string.format(_("%d comics"), #ids))
     and contains(screens.widget.content, "Tap: chapters · Hold: synopsis"))
 capture("synthetic-bookstore-expanded-recommendations")
 checkGrid("loaded")
@@ -206,6 +246,31 @@ screens:refresh()
 local only_visible = #controller.covers == #visible
 for index, id in ipairs(controller.covers) do if id ~= visible[index] then only_visible = false end end
 check("cover_acquisition_is_limited_to_visible_recommendations", only_visible)
+local calls_before_jump, page_before_jump = #controller.calls, screens.page
+assert(screens.pagination.counter.callback, "Expected a directly accessible page picker")()
+local jump_dialog = assert(screens.dialog)
+local jump = dialogButton("Go")
+check("page_counter_opens_the_page_picker", jump_dialog.title == _("Go to page"))
+for _index, input in ipairs({ "0", "1.5", tostring(screens.pages + 1) }) do
+    jump_dialog.getInputText = function() return input end
+    jump.callback()
+    check("page_picker_rejects_invalid_page_" .. input, screens.dialog == jump_dialog and screens.page == page_before_jump
+        and #controller.calls == calls_before_jump)
+end
+jump_dialog.getInputText = function() return "2" end
+jump.callback()
+check("page_picker_jumps_to_the_requested_cached_page", screens.dialog == nil and screens.page == 2
+    and cardIDs()[1] == ids[expected_capacity + 1] and #controller.calls == calls_before_jump)
+local jumped_widget = screens.widget
+jump.callback()
+check("a_closed_page_picker_cannot_navigate_again", screens.widget == jumped_widget and screens.page == 2
+    and #controller.calls == calls_before_jump)
+screens.pagination.counter.callback()
+local return_dialog = assert(screens.dialog)
+return_dialog.getInputText = function() return "1" end
+dialogButton("Go").callback()
+check("page_picker_can_return_to_the_first_cached_page", screens.dialog == nil and screens.page == 1
+    and cardIDs()[1] == ids[1] and #controller.calls == calls_before_jump)
 local ordered, page_count = {}, screens.pages
 local seen, duplicated = {}, false
 for _page = 1, page_count do
@@ -225,7 +290,8 @@ check("the_last_local_page_does_not_fetch_another_feed", requestCount("refreshBo
 screens:showLibrary()
 local refresh_count = requestCount("refreshBookstore")
 screens:showBookstore()
-check("fresh_cached_recommendations_open_without_a_new_request", requestCount("refreshBookstore") == refresh_count and #screens.cards > 0)
+check("fresh_cached_recommendations_restore_the_previous_page_without_a_new_request",
+    requestCount("refreshBookstore") == refresh_count and #screens.cards > 0 and screens.page == page_count)
 local synopsis_card = screens.cards[1]
 local calls_before_synopsis = #controller.calls
 synopsis_card:onHoldSelect()
@@ -249,9 +315,10 @@ check("navigation_retires_an_obsolete_synopsis_close_callback", screens.route ==
     and screens.dialog == nil and UIManager:getTopmostVisibleWidget() == search_widget)
 screens:showBookstore()
 local selected = screens.cards[1]
+local selected_id = tostring(selected.comic.id)
 selected:onTapSelect()
-check("recommendation_tap_opens_the_chapter_catalog_only", screens.route == "comic" and screens.comic_id == ids[1]
-    and #controller.waiting == 1 and controller.waiting[1].method == "refreshComic" and controller.waiting[1].args[1] == ids[1])
+check("recommendation_tap_opens_the_chapter_catalog_only", screens.route == "comic" and screens.comic_id == selected_id
+    and #controller.waiting == 1 and controller.waiting[1].method == "refreshComic" and controller.waiting[1].args[1] == selected_id)
 finish(true)
 capture("synthetic-bookstore-expanded-chapters")
 check("opening_recommendations_never_reads_or_buys", #controller.forbidden == 0)
@@ -267,7 +334,7 @@ check("navigation_retires_old_recommendation_callbacks", #controller.calls == ca
 controller.snapshot = recommendations(true)
 screens:showBookstore()
 check("stale_saved_recommendations_remain_visible_during_refresh", #screens.cards > 0 and #controller.waiting == 1)
-check("refreshing_keeps_the_same_two_row_capacity", #screens.cards == expected_capacity and screens.grid_rows == 2)
+check("refreshing_keeps_the_same_orientation_capacity", #screens.cards == expected_capacity and screens.grid_rows == expected_rows)
 checkGrid("refreshing")
 finish(nil, { kind = "network" })
 check("offline_refresh_retains_the_saved_recommendations", screens.route == "bookstore" and #screens.cards > 0

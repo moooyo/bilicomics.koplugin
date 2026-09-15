@@ -1,0 +1,98 @@
+{
+  "scope": "Synthetic native bookshelf UI only; no real account; isolated network namespace",
+  "cases": [
+    {
+      "width": 480,
+      "height": 640,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 191,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 215,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 215,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "zh_CN",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 239,
+      "failures": []
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 191,
+      "failures": []
+    },
+    {
+      "width": 600,
+      "height": 800,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 215,
+      "failures": []
+    },
+    {
+      "width": 720,
+      "height": 960,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 215,
+      "failures": []
+    },
+    {
+      "width": 960,
+      "height": 720,
+      "language": "C",
+      "returncode": 0,
+      "passed": true,
+      "assertions": 239,
+      "failures": []
+    }
+  ],
+  "sources": {
+    "bilicomics/ui/account_screens.lua": "030d4079f1cb2185ff51dbac28d187d1d86dce9078e4b4e8fa0b0a2361e1e406",
+    "bilicomics/ui/catalog_screens.lua": "95ca34c53957fe72d48a21a945d4e48229ea1f518f280a0a13fd20497fce66ec",
+    "bilicomics/ui/downloads_screens.lua": "591790b49778d98b3d0125f5f8d01bca41007a25171fabaf912b441d52a3aa99",
+    "bilicomics/ui/i18n.lua": "4c8ff8d081e70a27bfcc2af12ee1084d844e8894464cd4710c2d7bbac28a4be7",
+    "bilicomics/ui/model.lua": "5c9d2aea6503e90818606ff36bc2dbc13f86af4d7a137ebc6ddd60c5cc826816",
+    "bilicomics/ui/purchase_screens.lua": "01dd8a551994c0455bafd8a5e96c28e9dfb6dc51471746875a50f49a1a6e2d6c",
+    "bilicomics/ui/qr_login.lua": "e7a38c493a5af960b2cd334885bfb1e36040bdb111d93f68305b448ed8dc5299",
+    "bilicomics/ui/screen_helpers.lua": "3afc473ceb03f3efcede686189a1158b01b30a15a1dcb8f4c2af9dd9432f455c",
+    "bilicomics/ui/screens.lua": "612820235c682e34246e2b76178a94d6329d27af92d226e77bf4540e6d94a7b8",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "a0a0b93377238cbbd945a8cdee7bbc365637fee7f72f581e74542149fc3b17ed",
+    "l10n/bilicomics_account_zh_CN.lua": "896db4fb7e8ea5b9531cd60b16d27a11c9a2004ee33540c9ec676977bdc00012",
+    "l10n/bilicomics_catalog_zh_CN.lua": "66d87b6aeea2c374511abf152b52c35e99a1599e70d5e0f471664f523547bc47",
+    "l10n/bilicomics_downloads_zh_CN.lua": "15ca86bf5e55f56699701bffc1f70750a5b5c8982626a7b9d3dae7a33436fce8",
+    "l10n/bilicomics_navigation_zh_CN.lua": "a1f6795b2ad0b9b8fa14625ca3fe7b78e7ae05f65b6c7615c4b0b52a408d3b2e",
+    "l10n/bilicomics_purchase_zh_CN.lua": "65d9bb1393cfd7a801cdc0112be66a6923121a37c7cbdcebd3b78d27385cd5f0",
+    "l10n/bilicomics_zh_CN.lua": "ef8aa4d91a18fdf64db90f629ec08aba0b9cf4e309725c412ea9ccde02b9ed56",
+    "main.lua": "da1f7c0a8e7609081ea67ed4a7a06d51674415dbf2437a766186c4696ecca33a"
+  },
+  "passed": true
+}

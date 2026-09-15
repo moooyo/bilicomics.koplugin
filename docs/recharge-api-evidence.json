@@ -1,0 +1,269 @@
+{
+  "research_date": "2026-09-15",
+  "scope": "Static public-source evidence, one anonymous GetPayConfig probe, and isolated remote synthetic verification. No third-party bundle execution, credential or private account-data access, real order creation, or payment.",
+  "implementation": {
+    "status": "implemented",
+    "components": ["protocol", "service", "controller", "ui"],
+    "verification_provenance": "Isolated synthetic execution through ssh test-env. Artifact paths are relative to this document; each report records its source scope.",
+    "protocol": {
+      "verification": "passed",
+      "tests": 12,
+      "artifact": "../design/recharge-preview/evidence/protocol.json",
+      "covered_case": "Definitive TLS failure reports transmitted=false."
+    },
+    "service": {
+      "verification": "passed",
+      "scenarios": 42,
+      "assertions": 196,
+      "artifact": "../design/recharge-preview/evidence/service.json"
+    },
+    "controller": {
+      "verification": "passed",
+      "scenarios": 13,
+      "assertions": 84,
+      "artifact": "../design/recharge-preview/evidence/controller.json"
+    },
+    "runner": {
+      "verification": "passed",
+      "tests": 28,
+      "recharge_test_groups": 6,
+      "artifact": "../design/recharge-preview/evidence/runner.json",
+      "covered_cases": ["Default recharge mutation cannot be preempted or replayed", "Timeout and transport failure do not retry creation", "Close preserves a previously read receipt", "Close drains an unread complete receipt after stopping the child", "A read receipt survives timeout", "Mismatched task, attempt, and oversized frames remain rejected"]
+    },
+    "existing_regressions": {
+      "verification": "passed",
+      "groups": 42,
+      "assertions": 219,
+      "artifact": "../design/recharge-preview/evidence/existing-regressions.json"
+    },
+    "ui": {
+      "verification": "passed",
+      "sizes": ["600x800", "480x640"],
+      "assertions_per_size": 190,
+      "captures_per_size": 30,
+      "artifact": "../design/recharge-preview/evidence/ui.json",
+      "qr_pixels": [222, 148],
+      "covered_cases": ["Four-module white quiet zones", "Oversized payment URLs are retained without truncated QR encoding", "Definite pre-submission rejection is distinguished from uncertain creation"]
+    },
+    "worker": {
+      "verification": "passed",
+      "assertions": 107,
+      "recharge_assertions": 20,
+      "artifact": "../design/recharge-preview/evidence/worker.json"
+    },
+    "controller_verification": "passed",
+    "ui_verification": "passed",
+    "runner_verification": "passed",
+    "real_order_creation": "not_tested",
+    "real_payment": "not_tested"
+  },
+  "source": "account-info.js",
+  "decoded": "account-info.strings-decoded.js",
+  "decoding_receipt": "account-info.decode-evidence.json",
+  "research_directory": "/var/tmp/bilicomics-recharge-research-20260915",
+  "entry_url": "https://manga.bilibili.com/account-center/?show_recharge=true",
+  "public_sources": [
+    {
+      "asset": "account-center.3fb118319d.js",
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/static/js/account-center.3fb118319d.js",
+      "saved_utf8_text_sha256": "7773e748bc38edfbeb142831a02dda55e3a470c9af24b18c56f3c2156acd6589"
+    },
+    {
+      "asset": "742.e8579b79c1.js",
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/static/js/742.e8579b79c1.js",
+      "saved_utf8_text_sha256": "c5543a4ade0aa11fea348ae9332eff893c573911a1e6a1bb350720a8fc4d2df3"
+    },
+    {
+      "asset": "bili.9409128c39.js",
+      "url": "https://s1.hdslb.com/bfs/manga-static/manga-pc/static/js/bili.9409128c39.js",
+      "saved_utf8_text_sha256": "8202851c77a8e8a58dab2fc2529542c09b6b6c296e26fe78390ee1206aae6908"
+    }
+  ],
+  "get_config": {
+    "method": "POST",
+    "path": "/twirp/pay.v1.Pay/GetPayConfig",
+    "explicit_business_body": null,
+    "body_note": "The facade supplies url and response model type only; no data field is set in this method.",
+    "anonymous_probe": {
+      "transport": "ssh test-env",
+      "request_body": {},
+      "credentials_supplied": false,
+      "http_status": 401,
+      "established": "Anonymous access was rejected; no authenticated configuration or live accepted amount was established."
+    },
+    "model": "DRno._N",
+    "raw_fields": {
+      "pay_amount_ranges": "Array of recharge-option objects, mapped to amountConfig",
+      "bonus_reason": "String, mapped to activityBonusReason",
+      "act_send_type": "Number, mapped to activityBonusType",
+      "first_pay_send_type": "Number, mapped to firstBonusType",
+      "show_text": "String, mapped to showText"
+    },
+    "option_raw_fields": {
+      "pay_amount": "Number in yuan, mapped to payAmount",
+      "gold_amount": "Number, mapped to goldAmount",
+      "first_bonus_amount": "Number, mapped to firstRechargeGoldAmount",
+      "first_coupon_amount": "Number, mapped to firstRechargeCouponAmount",
+      "bonus_coupon_amount": "Number, mapped to activityCouponBonusAmount",
+      "bonus_gold_amount": "Number, mapped to activityGoldBonusAmount",
+      "break_ice_coupon_amount": "Number, mapped to breakIceCouponAmount",
+      "first_txt": "String, mapped to firstTxt",
+      "activity_txt": "String, mapped to activityTxt",
+      "gold_set_amount": "Number, mapped to goldSetAmount",
+      "free_gold_set_amount": "Number, mapped to freeGoldSetAmount"
+    },
+    "bonus_type_enum": {
+      "0": "Unknown",
+      "1": "FullCoupon",
+      "2": "Gold"
+    },
+    "custom_amount_policy": {
+      "explicit_config_policy": "Not present in the observed model",
+      "source_observation": "freeChargeRMB names and a watcher exist, but no currently rendered custom input or min/max/step contract was established.",
+      "plugin_policy": "A manually entered amount is accepted only when it matches an official preset from fresh configuration."
+    },
+    "fragment": "api-get-recharge-config.txt",
+    "decoded_offset": 1398918,
+    "model_fragment": "model-drno.txt",
+    "ui_fragments": [
+      "ui-config-amount-units.txt",
+      "ui-config-recharge-load.txt",
+      "ui-config-award-label.txt"
+    ]
+  },
+  "create_order": {
+    "method": "POST",
+    "path": "/twirp/pay.v1.Pay/CreateOrder",
+    "body": {
+      "pay_type": "qr",
+      "pay_amount": "100 * selectedOption.totalPayAmount"
+    },
+    "pay_amount_unit": "integer cents",
+    "ui_arguments": [
+      "totalPayAmount",
+      "totalGoldAmount"
+    ],
+    "raw_response_model": "/QaS.p",
+    "raw_response_mapping": {
+      "pay_params": "String, mapped to payParams"
+    },
+    "response_note": "Static model tracing confirms raw pay_params maps to typed data.payParams. The JSON string contains codeUrl and orderId; the wrapper extracts the decimal order ID as text to preserve exact precision. No authenticated wire response was captured.",
+    "code_url_expression": "JSON.parse(data.payParams).codeUrl",
+    "order_id_expression": "data.payParams.match(/\"orderId\":(\\d+)/)[1]",
+    "display_model": "DRno.eS contains codeUrl and orderId",
+    "separate_generic_model": "DRno.Ql maps raw pay_params:String and order_id:String; the QR wrapper instead selects /QaS.p.",
+    "fragment": "api-create-recharge-order.txt",
+    "decoded_offset": 1399097,
+    "model_fragments": ["model-raw-pay-response.txt", "model-drno.txt"]
+  },
+  "qr_display": {
+    "flow": "Save response.orderId, set process to recharging, call qrPanelVM.createQrCode(response.codeUrl), then start polling.",
+    "renderer": "The web QR component passes codeUrl unchanged to a lazily loaded qrcode module toCanvas(canvas, codeUrl, errorCallback); the plugin uses QRWidget.",
+    "advertised_scanners": ["WeChat", "Alipay"],
+    "channel_note": "One QR supports both advertised scanning applications in the observed web flow; live channel availability was not tested.",
+    "plugin_url_boundary": "https://pay.bilibili.com/",
+    "fragments": [
+      "ui-do-recharge.txt",
+      "ui-create-qr-code.txt"
+    ]
+  },
+  "history": {
+    "method": "POST",
+    "path": "/twirp/user.v1.User/GetPayOrders",
+    "body_fields": [
+      "page_num",
+      "page_size",
+      "order_year",
+      "order_month"
+    ],
+    "facade_defaults": {
+      "page_num": 1,
+      "page_size": 10,
+      "order_year": 2019,
+      "order_month": 0
+    },
+    "poll_body": {
+      "page_num": 1,
+      "page_size": 2,
+      "order_year": "new Date().getFullYear()",
+      "order_month": 0
+    },
+    "response_shape": "The response body's data is the order array itself, without an orders or list container.",
+    "item_model": "DRno.K4",
+    "raw_fields": {
+      "id": "String, preserved exactly",
+      "pay_amount": "Number; unit unknown",
+      "product_amount": "Number",
+      "ctime": "String, mapped to createTime",
+      "pay_channel": "String, mapped to payChannel",
+      "pay_channel_name": "String, mapped to payChannelName",
+      "extra_product_amount": "Number, mapped to extraProductAmount",
+      "activity": "String",
+      "free_gold": "Number, mapped to freeGold; the UI labels this as a manga-coin deduction-card bonus"
+    },
+    "status_note": "The history model has no order-status field. The HTTP wrapper's status is an HTTP status and must not be treated as payment status.",
+    "channel_enum": ["wechat", "iap", "bp", "qpay", "alipay", "unknown", "qr"],
+    "fragment": "api-get-recharge-history.txt",
+    "decoded_offset": 1403676,
+    "model_fragments": ["model-drno.txt", "http-response-list-model-map.txt"]
+  },
+  "poll": {
+    "interval_ms": 2000,
+    "nonoverlap_guard": "isOrderInQuery",
+    "match": "history.data.filter(item => item.id === this.orderId).length > 0",
+    "match_note": "The observed web flow matches exact IDs without a separate order-status filter.",
+    "on_match": [
+      "stopIntervalChecking",
+      "process = success",
+      "emit success",
+      "refreshWalletData"
+    ],
+    "fragments": [
+      "ui-start-interval-check.txt",
+      "ui-check-recharge-status.txt",
+      "history-order-success-filter.txt"
+    ]
+  },
+  "model_fragments": [
+    {
+      "file": "model-drno.txt",
+      "source": "account.js",
+      "character_offset": 52698
+    },
+    {
+      "file": "model-raw-pay-response.txt",
+      "source": "account.js",
+      "character_offset": 2399
+    },
+    {
+      "file": "history-order-success-filter.txt",
+      "source": "account-info.strings-decoded.js"
+    },
+    {
+      "file": "http-response-list-model-map.txt",
+      "source": "account.js"
+    }
+  ],
+  "implementation_safeguards": [
+    "Preserve exact decimal order IDs as strings.",
+    "Accept QR destinations only under the strict https://pay.bilibili.com/ URL boundary.",
+    "Check the selected option fingerprint against freshly loaded official configuration before creation.",
+    "Accept a manually entered amount only when it matches a current official preset.",
+    "Require an explicit user action for order creation and never automatically retry CreateOrder.",
+    "Preserve complete validated recharge worker receipts across timeout or teardown, with a bounded pipe drain and unchanged task/attempt checks.",
+    "Keep creation separate from polling, and do not infer success from a balance change or the unknown history pay_amount unit.",
+    "Do not infer expiry from elapsed time, a missing history match, or the separate payment SDK.",
+    "Closing a QR view does not cancel an outstanding order."
+  ],
+  "reachability": "The RechargeOption order-create event is bound to doRecharge when TabKey is empty. The same panel displays the QR view while process is recharging.",
+  "limits": [
+    "The protocol, service, controller, worker, runner, and UI passed remote synthetic verification.",
+    "Remote synthetic verification does not establish a successful real account order or payment.",
+    "The anonymous GetPayConfig POST {} returned HTTP 401 without credentials; authenticated session behavior and live configuration remain unverified.",
+    "Accepted live amounts, server expiry, channel availability, and settlement behavior remain unverified.",
+    "The investigation did not establish a currently rendered arbitrary-amount input or an explicit custom-amount policy.",
+    "History pay_amount units remain unknown.",
+    "The separate Bilibili pay SDK cashier flow and its expiry are not asserted to be required by the manga QR CreateOrder path.",
+    "Source-confirmed model mappings are not authenticated wire-response captures or an externally supported API contract."
+  ]
+}

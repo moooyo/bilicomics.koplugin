@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+from run_ui_sources import ui_source_names
 
 
 REQUIRED_SIZES = ((600, 800), (480, 640))
@@ -20,7 +21,8 @@ VERIFICATION_NAME = "entitlement-display-verification.json"
 
 
 def hash_sources(plugin):
-    return {name: hashlib.sha256((plugin / name).read_bytes()).hexdigest() for name in SOURCE_FILES}
+    return {name: hashlib.sha256((plugin / name).read_bytes()).hexdigest()
+        for name in sorted(set(SOURCE_FILES).union(ui_source_names(plugin)))}
 
 
 def screen_size(value):

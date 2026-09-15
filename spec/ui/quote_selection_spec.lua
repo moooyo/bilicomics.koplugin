@@ -106,6 +106,7 @@ end
 function controller:getComic() record("getComic"); return copy(self.comic) end
 function controller:getEpisodes() record("getEpisodes"); return copy(self.episodes) end
 function controller:getPendingPurchases() record("getPendingPurchases"); return {} end
+function controller:cancelPendingRead() end
 function controller:quotePurchase(episode_id, scope, payment, callback)
     enqueue("quotePurchase", { episode_id, scope, payment }, callback)
 end
@@ -163,6 +164,7 @@ local function fixture(request, candidate, overrides)
 end
 
 local screens = Screens.new{ controller = controller }
+screens:_ensureRouteViews()
 local function nativeButtons(widget, result, seen)
     result, seen = result or {}, seen or {}
     if type(widget) ~= "table" or seen[widget] then return result end
@@ -197,6 +199,7 @@ local function shownText(widget, result, seen)
     seen[widget] = true
     if type(widget.text) == "string" then result[#result + 1] = widget.text end
     if type(widget.title) == "string" then result[#result + 1] = widget.title end
+    if type(widget.purchase_text) == "string" then result[#result + 1] = widget.purchase_text end
     for _child_index, child in ipairs(widget) do shownText(child, result, seen) end
     return table.concat(result, "\n")
 end
@@ -241,7 +244,7 @@ end
 local function optionButtons()
     local result = {}
     for _button_index, button in ipairs(nativeButtons(screens.dialog)) do
-        if button.text:match("^%[[x ]%] ") then result[#result + 1] = button end
+        if button.text:sub(1, 4) == "● " or button.text:sub(1, 4) == "○ " then result[#result + 1] = button end
     end
     return result
 end
@@ -262,7 +265,7 @@ local function walkChoices(which, prefix, expected_entries)
         check(prefix .. "_page_" .. pages .. "_contains_at_most_two_options", #buttons >= 1 and #buttons <= 2, #buttons)
         for _button_index, button in ipairs(buttons) do
             labels[button.text:sub(5)] = true
-            if button.text:sub(1, 4) == "[x] " then selected = selected + 1 end
+            if button.text:sub(1, 4) == "● " then selected = selected + 1 end
             if button.enabled == false then
                 disabled = disabled + 1
                 local before = callCount("quotePurchase")
@@ -282,12 +285,15 @@ local function walkChoices(which, prefix, expected_entries)
     pressDialog("Back to quote")
     return labels
 end
-local function choose(which, label)
+local function choose(which, label, detail)
     pressDialog(which == "scope" and "Choose range" or "Choose payment")
     firstChoicePage()
     while true do
         for _button_index, button in ipairs(optionButtons()) do
-            if button.text:sub(5) == label then pressButton(button); return pending("quotePurchase") end
+            local heading = button.text:sub(5):match("^[^\n]+")
+            if heading == label and (not detail or contains(button.text, detail)) then
+                pressButton(button); return pending("quotePurchase")
+            end
         end
         local next_button = assert(findButton(screens.dialog, _("Next")))
         assert(next_button.enabled ~= false, "The requested synthetic option is absent")
@@ -295,6 +301,13 @@ local function choose(which, label)
     end
 end
 local function chooseOrder(message)
+    pressDialog("Choose payment")
+    local priority_prefix = assert(_("Offer priority: %s"):match("^(.-)%%"))
+    local priority
+    for _button_index, button in ipairs(nativeButtons(screens.dialog)) do
+        if button.text:sub(1, #priority_prefix) == priority_prefix then priority = button end
+    end
+    pressButton(assert(priority, "Payment options must expose their offer priority"))
     for _button_index, button in ipairs(optionButtons()) do
         if button.text:sub(5) == _(message) then pressButton(button); return pending("quotePurchase") end
     end
@@ -306,13 +319,13 @@ local function checkCandidate(name, quote)
     local text = shownText(screens.dialog)
     check(name .. "_does_not_claim_exact_scope_or_ownership", not contains(text, _("Permanent ownership"))
         and not contains(text, _("Chapter reading access")) and not contains(text, "90901"))
-    check(name .. "_labels_only_the_display_reference", contains(text, string.format(_("Platform display reference: %s"), "101.25"))
-        and not contains(text, "202.5") and contains(text, _("Final charge is not confirmed. This offer cannot be submitted.")))
+    check(name .. "_keeps_unverified_amounts_in_details", not contains(text, "101.25") and not contains(text, "202.5")
+        and contains(text, _("The final charge or chapter access is not verified. This offer cannot be submitted.")))
     check(name .. "_main_dialog_does_not_expand_option_lists", #nativeButtons(screens.dialog) <= 8
         and not contains(text, string.format(_("Batch offer %d"), 7))
         and not contains(text, string.format(_("Coin discount option %d"), 7)))
     capture(name)
-    pressDialog("Review candidate details")
+    pressDialog("Offer details")
     local details = assert(screens.scope_dialog).text
     check(name .. "_keeps_amount_observations_separate", contains(details, string.format(_("Platform original price: %s"), "303.75"))
         and contains(details, string.format(_("Platform display reference: %s"), "101.25"))
@@ -334,36 +347,36 @@ local function run()
     checkCandidate("single-candidate", quote)
     walkChoices("scope", "range-options", 8)
     walkChoices("payment", "payment-options", 9)
-    local request = choose("scope", string.format(_("Batch offer %d"), 6))
+    local request = choose("scope", string.format(_("Requested batch: %s chapters"), tostring(offers[6].scope.batch_limit)))
     check("scope_choice_preserves_full_payment_and_selector", equal(request.args[2], offers[6].scope) and equal(request.args[3], coin))
     check("scope_selection_does_not_include_server_amounts", request.args[2].amount == nil and request.args[2].display_amount == nil
         and request.args[2].original_amount == nil and request.args[2].available == nil)
     quote = finish(request, fixture(request, true))
     checkCandidate("batch-candidate", quote)
-    request = choose("payment", string.format(_("Coin discount option %d"), 7))
+    request = choose("payment", string.format(_("Coins · %s"), _("Discount coupon")), string.format(_("Asset: %s"), "card-007"))
     check("payment_choice_preserves_full_scope_and_discount_identity", equal(request.args[2], offers[6].scope)
         and equal(request.args[3], discounts[7].payment) and request.args[3].display_amount == nil and request.args[3].available == nil)
     finish(request, fixture(request, true))
     local batch_scope, selected_payment = copy(screens.purchase_state.scope), copy(screens.purchase_state.payment)
-    request = chooseOrder("By expiry")
+    request = chooseOrder("Expiry first")
     batch_scope.order = 2
     check("batch_expiry_order_requotes_the_same_selection", equal(request.args[2], batch_scope) and equal(request.args[3], selected_payment))
     finish(request, fixture(request, true))
-    request = chooseOrder("By discount"); batch_scope.order = 1
+    request = chooseOrder("Discount first"); batch_scope.order = 1
     check("batch_discount_order_requotes_the_same_selection", equal(request.args[2], batch_scope) and equal(request.args[3], selected_payment))
     finish(request, fixture(request, true))
     request = choose("scope", _("Single chapter"))
     check("returning_to_single_keeps_discount_selection", equal(request.args[2], single) and equal(request.args[3], selected_payment))
     finish(request, fixture(request, true))
-    request = chooseOrder("By expiry")
+    request = chooseOrder("Expiry first")
     check("single_expiry_order_requotes_without_losing_payment", equal(request.args[2], { kind = "single", order = 2 })
         and equal(request.args[3], selected_payment))
     finish(request, fixture(request, true))
-    request = chooseOrder("By discount")
+    request = chooseOrder("Discount first")
     check("single_discount_order_requotes_without_losing_payment", equal(request.args[2], single) and equal(request.args[3], selected_payment))
     finish(request, fixture(request, true))
 
-    request = choose("payment", _("coupons"))
+    request = choose("payment", _("Reading coupons"))
     quote = finish(request, fixture(request, false))
     check("coupon_choice_preserves_the_scope", equal(request.args[2], single) and equal(request.args[3], coupon))
     local snapshot_ids = copy(quote.payment.coupon_ids)
@@ -387,7 +400,7 @@ local function run()
     local quote_count = callCount("quotePurchase")
     pressDialog("Back to quote"); stale_option.callback()
     check("closed_selection_dialog_cannot_requote", callCount("quotePurchase") == quote_count)
-    request = choose("scope", string.format(_("Batch offer %d"), 2))
+    request = choose("scope", string.format(_("Requested batch: %s chapters"), tostring(offers[2].scope.batch_limit)))
     stale_confirm.callback()
     check("old_confirmation_is_inert_during_requote", callCount("purchase") == 0)
     finish(request, fixture(request, true)); stale_confirm.callback()
@@ -404,7 +417,7 @@ local function run()
         and screens.purchase_state.episode.id == "21" and #confirmButtons() == 0)
 
     quote = openQuote(false)
-    request = choose("scope", string.format(_("Batch offer %d"), 6))
+    request = choose("scope", string.format(_("Requested batch: %s chapters"), tostring(offers[6].scope.batch_limit)))
     quote = finish(request, fixture(request, false, { can_afford = false, balance = 1 }))
     local before_scope, before_payment = copy(screens.purchase_state.scope), copy(screens.purchase_state.payment)
     check("insufficient_balance_retains_the_complete_selection", contains(screens.dialog.title, _("Insufficient balance"))
@@ -417,7 +430,7 @@ local function run()
     finish(request, fixture(request, false, { can_afford = false, balance = 1 }))
     pressDialog("Refresh balance")
     local old_balance = pending("refreshWallet")
-    request = choose("payment", string.format(_("Coin discount option %d"), 5))
+    request = choose("payment", string.format(_("Coins · %s"), _("Discount coupon")), string.format(_("Asset: %s"), "card-005"))
     local replacement_quote = finish(request, fixture(request, true))
     quote_count = callCount("quotePurchase")
     finish(old_balance, { remain_gold = 100 })
@@ -440,7 +453,7 @@ local function run()
 
     local legacy_scope = { kind = "batch", batch_limit = 3, start_ord = 1.5, order = 1 }
     quote = openQuote(false, { batch_offers = {}, discount_options = {}, scopes = { copy(single), legacy_scope } })
-    request = choose("scope", string.format(_("Supported batch %s"), "3"))
+    request = choose("scope", string.format(_("Requested batch: %s chapters"), "3"))
     check("legacy_supported_scope_remains_selectable", equal(request.args[2], legacy_scope) and equal(request.args[3], coin))
     finish(request, fixture(request, true))
 

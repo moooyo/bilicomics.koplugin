@@ -1,6 +1,7 @@
 """Exercise synthetic native bookstore categories only on the remote Linux test host."""
 import argparse
 import hashlib
+from run_ui_sources import ui_source_names
 import json
 import os
 from pathlib import Path
@@ -22,7 +23,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     summary = {"scope": "Native bookstore official category picker, query isolation and append navigation; synthetic original covers and anonymous data; no HTTP or account", "cases": []}
     summary["sources"] = {name: hashlib.sha256((args.plugin / name).read_bytes()).hexdigest()
-                          for name in ("main.lua", "bilicomics/ui/screens.lua", "bilicomics/ui/widgets.lua",
+                          for name in ui_source_names(args.plugin) + ("main.lua", "bilicomics/ui/screens.lua", "bilicomics/ui/widgets.lua",
                                        "bilicomics/ui/model.lua", "l10n/bilicomics_zh_CN.lua",
                                        "spec/ui/bookstore_categories_spec.lua", "spec/ui/run_bookstore_categories.py")}
     for language in ("zh_CN", "C"):

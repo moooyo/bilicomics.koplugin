@@ -14,12 +14,14 @@ local ImageHeader = require("bilicomics/storage/image_header")
 local ImagePolicy = require("bilicomics/image_policy")
 local InputContainer = require("ui/widget/container/inputcontainer")
 local TextBoxWidget = require("ui/widget/textboxwidget")
+local TextWidget = require("ui/widget/textwidget")
 local UIManager = require("ui/uimanager")
 local VerticalGroup = require("ui/widget/verticalgroup")
 local VerticalSpan = require("ui/widget/verticalspan")
 local _ = require("bilicomics/ui/i18n")
 local Screen = Device.screen
-local W = { ink = BB.COLOR_BLACK, paper = BB.COLOR_WHITE, muted = BB.COLOR_DARK_GRAY }
+local W = { ink = BB.COLOR_BLACK, paper = BB.COLOR_WHITE, muted = BB.Color8(0x55) }
+W.font = { page = 24, title = 21, item = 18, body = 18, status = 15, meta = 14, micro = 13, card = 16 }
 
 function W.scale(value) return Screen:scaleBySize(value) end
 function W.space(height) return VerticalSpan:new{ width = W.scale(height) } end
@@ -54,7 +56,7 @@ function W.button(text, width, callback, options)
         align = options.align or "center", callback = callback, enabled = options.enabled ~= false,
         avoid_text_truncation = true,
     }
-    if options.primary then button[1].invert = true end
+    if options.primary and options.enabled ~= false then button[1].invert = true end
     return button
 end
 
@@ -93,9 +95,11 @@ function W.cover(comic, width, height)
         end
     end
     if not image then
+        local compact = width < W.scale(80)
         image = CenterContainer:new{ dimen = Geom:new{ w = width, h = height },
-            W.column{ W.text(_("COMIC"), width - W.scale(10), 12, { align = "center", bold = true }), W.space(8),
-                W.text(comic.title or _("Untitled comic"), width - W.scale(10), 18,
+            compact and W.text(_("COMIC"), width - W.scale(8), W.font.micro, { align = "center", bold = true })
+            or W.column{ W.text(_("COMIC"), width - W.scale(10), W.font.micro, { align = "center", bold = true }), W.space(8),
+                W.text(comic.title or _("Untitled comic"), width - W.scale(10), W.font.item,
                     { display = true, align = "center", height = height - W.scale(40) }) } }
     end
     return FrameContainer:new{ padding = 0, bordersize = W.scale(1), margin = 0, image }
@@ -108,21 +112,23 @@ function CoverCard:init()
     local inner = self.width - 2 * (border + padding)
     local image_border = W.scale(1)
     local cover_width = math.min(inner, math.floor(self.cover_height / 1.34))
+    self.card_cover_width, self.card_cover_inset = cover_width, border + padding
     local content = {
         CenterContainer:new{ dimen = Geom:new{ w = inner, h = self.cover_height },
             W.cover(self.comic, cover_width - 2 * image_border, self.cover_height - 2 * image_border) },
     }
     if self.compact then
         content[#content + 1] = W.space(5)
-        content[#content + 1] = W.text(self.text, inner, 16, { bold = true, height = W.scale(40), fixed_height = true })
+        content[#content + 1] = W.text(self.text, inner, W.font.card, { bold = true, height = W.scale(40), fixed_height = true })
         content[#content + 1] = W.space(2)
-        content[#content + 1] = W.text(self.update or "", inner, 12,
+        content[#content + 1] = W.text(self.update or "", inner, W.font.meta,
             { muted = true, height = W.scale(18), fixed_height = true })
     elseif self.bookshelf then
-        content[#content + 1] = W.space(7)
-        content[#content + 1] = W.text(self.text, inner, 18, { bold = true, height = W.scale(42), fixed_height = true })
-        content[#content + 1] = W.space(3)
-        content[#content + 1] = W.text(self.progress, inner, 14, { height = W.scale(20), fixed_height = true })
+        content[#content + 1] = W.space(5)
+        content[#content + 1] = W.text(self.text, inner, W.font.card, { bold = true, height = W.scale(40), fixed_height = true })
+        content[#content + 1] = W.space(2)
+        content[#content + 1] = W.text(self.progress_label or self.progress, inner, W.font.meta,
+            { height = W.scale(20), fixed_height = true })
     else
         content[#content + 1] = W.space(7)
         content[#content + 1] = W.text(self.text, inner, 18, { bold = true, height = W.scale(44), fixed_height = true })
@@ -135,11 +141,34 @@ function CoverCard:init()
     self.frame = FrameContainer:new{ padding = padding, margin = 0, bordersize = border,
         color = W.paper, background = W.paper, W.column(content) }
     self[1] = self.frame
+    if self.bookshelf and self.updated then
+        self.update_badge = FrameContainer:new{ padding = W.scale(3), margin = 0, bordersize = W.scale(1),
+            radius = 0, background = W.paper, color = W.ink,
+            TextWidget:new{ text = _("Updated"), face = Font:getFace("cfont", W.font.micro),
+                bold = true, fgcolor = W.ink, padding = 0 } }
+        self[2] = self.update_badge
+    end
     self.dimen = Geom:new{ x = 0, y = 0, w = self.width, h = self.frame:getSize().h }
     self.ges_events = {
         TapSelect = { GestureRange:new{ ges = "tap", range = self.dimen } },
         HoldSelect = { GestureRange:new{ ges = "hold", range = self.dimen } },
     }
+end
+
+function CoverCard:getSize()
+    return Geom:new{ w = self.width, h = self.frame:getSize().h }
+end
+
+function CoverCard:paintTo(bb, x, y)
+    local size = self:getSize()
+    self.dimen.x, self.dimen.y, self.dimen.w, self.dimen.h = x, y, size.w, size.h
+    self.frame:paintTo(bb, x, y)
+    if self.update_badge then
+        local badge = self.update_badge:getSize()
+        local inset = W.scale(3)
+        self.update_badge:paintTo(bb, x + math.floor((self.width + self.card_cover_width) / 2) - badge.w - inset,
+            y + self.card_cover_inset + inset)
+    end
 end
 
 function CoverCard:onFocus()
@@ -158,6 +187,51 @@ function CoverCard:onHoldSelect()
     return true
 end
 W.CoverCard = CoverCard
+
+-- Keep the apparent row and its touch/key target identical without adding height.
+local ActionRow = InputContainer:extend{ enabled = true }
+
+function ActionRow:init()
+    self[1] = assert(self.content)
+    self.dimen = Geom:new{ x = 0, y = 0, w = self.width, h = self.content:getSize().h }
+    self.ges_events = {
+        TapSelect = { GestureRange:new{ ges = "tap", range = self.dimen } },
+        HoldSelect = { GestureRange:new{ ges = "hold", range = self.dimen } },
+    }
+end
+
+function ActionRow:getSize()
+    return Geom:new{ w = self.width, h = self.content:getSize().h }
+end
+
+function ActionRow:paintTo(bb, x, y)
+    self.dimen.x, self.dimen.y = x, y
+    self.dimen.w, self.dimen.h = self.width, self.content:getSize().h
+    self.content:paintTo(bb, x, y)
+    if self.focused then
+        local stroke, size = math.max(1, W.scale(1)), self:getSize()
+        bb:paintRect(x, y, size.w, stroke, W.ink)
+        bb:paintRect(x, y + size.h - stroke, size.w, stroke, W.ink)
+        bb:paintRect(x, y, stroke, size.h, W.ink)
+        bb:paintRect(x + size.w - stroke, y, stroke, size.h, W.ink)
+    end
+end
+
+function ActionRow:onFocus()
+    self.focused = true
+    if self.focus_callback then self.focus_callback() end
+    return true
+end
+function ActionRow:onUnfocus() self.focused = false; return true end
+function ActionRow:onTapSelect()
+    if self.enabled and self.callback then self.callback() end
+    return true
+end
+function ActionRow:onHoldSelect()
+    if self.enabled and self.hold_callback then self.hold_callback() end
+    return true
+end
+W.ActionRow = ActionRow
 
 local Panel = FocusManager:extend{ name = "bilicomics", covers_fullscreen = true }
 

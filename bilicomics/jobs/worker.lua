@@ -6,7 +6,8 @@ local Budget = require("bilicomics/jobs/storage_budget")
 local Worker = {}
 local reads = { listFavorites = true, listHistory = true, recommendations = true, search = true, comicDetail = true,
     bookstoreCategories = true, bookstoreCategoryPage = true,
-    imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true }
+    imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true,
+    getRechargeConfig = true, rechargeHistory = true }
 local unpack = unpack or table.unpack
 
 local function referenceChanged()
@@ -237,6 +238,13 @@ local function execute(request, context)
         local accepted, err = client:setFavorite(request.comic_id, request.favorite)
         if not accepted then return nil, err end
         return { accepted = true, comic_id = tostring(request.comic_id), favorite = request.favorite }
+    elseif request.kind == "recharge" then
+        if type(request.local_id) ~= "string" or request.local_id == ""
+            or type(request.option_fingerprint) ~= "string" or #request.option_fingerprint ~= 64 then
+            return nil, Util.error("confirmation_required", "A persisted recharge intent and confirmed option are required.",
+                { transmitted = false, definitive = true })
+        end
+        return client:createRechargeOrder(request.amount_cents, request.option_fingerprint)
     elseif request.kind == "purchase_submit" then
         if type(request.intent_id) ~= "string" or request.intent_id == "" or type(request.payload) ~= "table" then
             return nil, Util.error("confirmation_required", "A persisted purchase intent is required.", { transmitted = false })

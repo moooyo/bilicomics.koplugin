@@ -89,6 +89,7 @@ function controller:getAccount() record("getAccount"); return { id = "ordinal_fi
 function controller:getComic() record("getComic"); return copy(self.comic) end
 function controller:getEpisodes() record("getEpisodes"); return copy(self.episodes) end
 function controller:getPendingPurchases() record("getPendingPurchases"); return copy(self.pending_intents) end
+function controller:cancelPendingRead() end
 function controller:quotePurchase(episode_id, scope, payment, callback)
     enqueue("quotePurchase", { episode_id, scope, payment }, callback)
 end
@@ -132,6 +133,7 @@ local function makeQuote(request, amount, proof)
 end
 
 local screens = Screens.new{ controller = controller }
+screens:_ensureRouteViews()
 local function buttons(widget, result, seen)
     result, seen = result or {}, seen or {}
     if type(widget) ~= "table" or seen[widget] then return result end
@@ -157,6 +159,7 @@ local function allText(widget, result, seen)
     seen[widget] = true
     if type(widget.text) == "string" then result[#result + 1] = widget.text end
     if type(widget.title) == "string" then result[#result + 1] = widget.title end
+    if type(widget.purchase_text) == "string" then result[#result + 1] = widget.purchase_text end
     for _child_index, child in ipairs(widget) do allText(child, result, seen) end
     return table.concat(result, "\n")
 end
@@ -189,15 +192,16 @@ end
 local function chooseRange(scope)
     pressDialog("Choose range")
     while true do
-        local previous = assert(findButton(screens.dialog, _("Previous")))
-        if previous.enabled == false then break end
+        local previous = findButton(screens.dialog, _("Previous"))
+        if not previous or previous.enabled == false then break end
         pressButton(previous)
     end
     local label = scope.kind == "single" and _("Single chapter") or scope.batch_limit == 0
-        and _("Remaining from this chapter") or string.format(_("Batch offer %d"), 1)
+        and _("Remaining from this chapter") or string.format(_("Requested batch: %s chapters"), tostring(scope.batch_limit))
     while true do
         for _button_index, button in ipairs(buttons(screens.dialog)) do
-            if button.text:match("^%[[x ]%] ") and button.text:sub(5) == label then
+            if (button.text:sub(1, 4) == "● " or button.text:sub(1, 4) == "○ ")
+                and button.text:sub(5):match("^[^\n]+") == label then
                 if scope.batch_limit == 0 then
                     check("remaining_option_never_claims_zero_chapters", not contains(allText(screens.dialog),
                         string.format(_("Reported chapters: %s"), "0")))
@@ -218,18 +222,19 @@ local function confirmation(amount)
     return findButton(screens.dialog, string.format(_("Confirm purchase · %s %s"), tostring(amount), _("coins")))
 end
 local caveat = "Catalog updates or purchases elsewhere may change the actual chapters. Details show the current expected list."
+local summary_caveat = "Expected chapters may change with catalog updates or purchases elsewhere. Review the scope."
 local function checkBatch(name, quote, expected_rule)
     local main_text = allText(screens.dialog)
     check(name .. "_shows_range_rule_and_separate_total", contains(main_text, expected_rule)
         and contains(main_text, string.format(_("Total: %s %s"), tostring(quote.amount), _("coins"))))
-    check(name .. "_main_list_is_not_an_exact_membership_claim", contains(main_text, _(caveat))
+    check(name .. "_main_list_is_not_an_exact_membership_claim", contains(main_text, _(summary_caveat))
         and not contains(main_text, "Synthetic next expected chapter")
         and not contains(main_text, "Synthetic final expected chapter")
         and findButton(screens.dialog, _("Review exact chapters")) == nil)
     capture(name)
     pressDialog("Review expected chapters")
     local details = assert(screens.scope_dialog)
-    check(name .. "_uses_expected_list_wording", details.title == _("Expected purchase chapters")
+    check(name .. "_uses_expected_list_wording", details.title == _("Purchase scope")
         and contains(details.text, _("Current expected chapters:")) and contains(details.text, _(caveat)))
     check(name .. "_identifies_the_starting_chapter", contains(details.text,
         string.format(_("Starting chapter: %s"), "Synthetic anchor chapter")))
@@ -241,8 +246,8 @@ local function checkBatch(name, quote, expected_rule)
 end
 local function run()
     local quote = openSingle(19)
-    check("single_summary_and_exact_details_are_unchanged", contains(screens.dialog.title,
-        string.format(_("%d chapters · %s %s"), 1, "19", _("coins")))
+    check("single_summary_separates_scope_from_total", contains(allText(screens.dialog), _("Single chapter"))
+        and contains(allText(screens.dialog), string.format(_("Total: %s %s"), "19", _("coins")))
         and findButton(screens.dialog, _("Review exact chapters")) ~= nil
         and findButton(screens.dialog, _("Review expected chapters")) == nil)
     capture("single-unchanged")
@@ -257,13 +262,13 @@ local function run()
     request = chooseRange(remaining)
     quote = finish(request, makeQuote(request, 45, true))
     checkBatch("remaining-ordinal-range", quote, _("Remaining from this chapter"))
-    check("zero_limit_is_not_a_zero_chapter_purchase", not contains(screens.dialog.title,
+    check("zero_limit_is_not_a_zero_chapter_purchase", not contains(allText(screens.dialog),
         string.format(_("%d chapters · %s %s"), 0, "45", _("coins"))))
 
     request = chooseRange(positive)
     quote = finish(request, makeQuote(request, 37.5, false))
     checkBatch("legacy-batch-without-proof", quote, _("Batch selection"))
-    check("unproved_legacy_batch_does_not_claim_the_ordinal_contract", not contains(screens.dialog.title,
+    check("unproved_legacy_batch_does_not_claim_the_ordinal_contract", not contains(allText(screens.dialog),
         string.format(_("From this chapter: first %d locked chapters"), 2)))
 
     for _field_index, field in ipairs({ "contract", "provenance" }) do
@@ -272,7 +277,7 @@ local function run()
         mismatch.range_proof[field] = "SDK_INTERNAL_PROOF_MISMATCH"
         quote = finish(request, mismatch)
         check(field .. "_mismatch_keeps_expected_list_without_ordinal_claim", Model.ordinalRange(quote) == false
-            and contains(screens.dialog.title, _("Batch selection"))
+            and contains(allText(screens.dialog), _("Batch selection"))
             and findButton(screens.dialog, _("Review expected chapters")) ~= nil
             and findButton(screens.dialog, _("Review exact chapters")) == nil
             and noProofText(allText(screens.dialog)))
@@ -292,7 +297,7 @@ local function run()
     request = chooseRange(single)
     quote = finish(request, makeQuote(request, 19, false))
     check("returning_to_single_restores_exact_wording", findButton(screens.dialog, _("Review exact chapters")) ~= nil
-        and findButton(screens.dialog, _("Review expected chapters")) == nil and not contains(screens.dialog.title, _(caveat)))
+        and findButton(screens.dialog, _("Review expected chapters")) == nil and not contains(allText(screens.dialog), _(summary_caveat)))
 
     request = chooseRange(remaining)
     quote = finish(request, makeQuote(request, 45, true))
@@ -304,7 +309,7 @@ local function run()
     old_confirm.callback()
     check("changed_price_requires_a_new_explicit_confirmation", countCalls("purchase") == 0
         and confirmation(45) == nil and confirmation(64) ~= nil
-        and contains(screens.dialog.title, string.format(_("Total: %s %s"), "64", _("coins"))))
+        and contains(allText(screens.dialog), string.format(_("Total: %s %s"), "64", _("coins"))))
     capture("changed-price-needs-confirmation")
     local new_confirm = assert(confirmation(64))
     pressButton(new_confirm)
@@ -317,27 +322,32 @@ local function run()
     local unresolved = finish(submission, { id = "synthetic-ordinal-intent", state = "access_confirmed", purpose = "read", comic_id = "10",
         transaction_evidence = "server_accepted", range_outcome_pending = true,
         quote = copy(submission.args[1]), episode_ids = copy(submission.args[1].episode_ids) })
-    local pending_message = "Reading access is confirmed, but the range purchase result is still unknown. Further purchases for this comic are paused."
-    check("pending_range_outcome_takes_precedence_over_payment_evidence", contains(screens.dialog.title, _("Chapter access confirmed"))
-        and not contains(screens.dialog.title, _("Purchase confirmed")) and contains(screens.dialog.title, _(pending_message))
+    local pending_message = "Reading is available. The range result is pending; purchases for this comic remain paused."
+    check("pending_range_outcome_takes_precedence_over_payment_evidence", contains(allText(screens.dialog), _("Access ready · purchase pending"))
+        and not contains(allText(screens.dialog), _("Purchase confirmed")) and contains(allText(screens.dialog), _(pending_message))
         and findButton(screens.dialog, _("Read chapter")) ~= nil)
     capture("range-outcome-pending")
     controller.pending_intents = { copy(unresolved), { id = "synthetic-ordinary-intent", state = "outcome_unknown",
         purpose = "read", comic_id = "10", episode_ids = { "20" }, quote = copy(submission.args[1]) } }
     screens:_pendingList(controller:getPendingPurchases())
-    local review_label = string.format(_("Review purchase %s"), unresolved.id)
+    local review_label = _("Access ready · purchase pending")
     local review_button
     for _button_index, button in ipairs(buttons(screens.dialog)) do
         if contains(button.text, review_label) then review_button = button end
     end
-    check("pending_list_distinguishes_the_unresolved_range", review_button ~= nil
-        and contains(allText(screens.dialog), _("Range result pending; purchases paused"))
-        and findButton(screens.dialog, string.format(_("Refresh purchase %s"), "synthetic-ordinary-intent")) ~= nil)
+    local ordinary_button
+    for _button_index, button in ipairs(buttons(screens.dialog)) do
+        if contains(button.text, _("Purchase result pending")) and contains(button.text, "Synthetic anchor chapter") then
+            ordinary_button = button
+        end
+    end
+    check("pending_list_distinguishes_the_unresolved_range", review_button ~= nil and ordinary_button ~= nil
+        and review_button ~= ordinary_button and contains(review_button.text, "Synthetic anchor chapter"))
     capture("pending-purchase-list")
     local quote_calls = countCalls("quotePurchase")
     pressButton(review_button)
-    check("reopened_range_keeps_pending_outcome_and_read_continuation", contains(screens.dialog.title, _("Chapter access confirmed"))
-        and not contains(screens.dialog.title, _("Purchase confirmed")) and contains(screens.dialog.title, _(pending_message))
+    check("reopened_range_keeps_pending_outcome_and_read_continuation", contains(allText(screens.dialog), _("Access ready · purchase pending"))
+        and not contains(allText(screens.dialog), _("Purchase confirmed")) and contains(allText(screens.dialog), _(pending_message))
         and findButton(screens.dialog, _("Read chapter")) ~= nil and countCalls("quotePurchase") == quote_calls
         and countCalls("purchase") == 1)
     check("all_synthetic_callbacks_are_accounted_for", #controller.waiting == 0 and #controller.forbidden == 0)

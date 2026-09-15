@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BiliComics Recharge Preview</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="zh-CN.js" defer></script>
+  <script src="manifest.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#preview" data-copy="skip"></a>
+  <header class="masthead"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">b.</span><span>BiliComics<small data-copy="brandSub"></small></span></a><span class="fixture-label" data-copy="syntheticBadge"></span></header>
+  <div class="workspace">
+    <aside class="sidebar" aria-labelledby="navigation-title"><h2 class="eyebrow" id="navigation-title" data-copy="sceneNav"></h2><label class="visually-hidden" for="scene-search" data-copy="searchLabel"></label><input id="scene-search" type="search" autocomplete="off" data-placeholder="searchPlaceholder"><nav id="scene-nav" aria-labelledby="navigation-title"></nav><p id="scene-count" class="sidebar-foot"></p></aside>
+    <main id="preview" tabindex="-1">
+      <div class="page-heading"><div><p class="eyebrow" data-copy="eyebrow"></p><h1 data-copy="title"></h1></div><div class="scene-step"><button type="button" id="previous" class="icon-button" data-aria="previous">←</button><span id="scene-position"></span><button type="button" id="next" class="icon-button" data-aria="next">→</button></div></div>
+      <p class="intro" data-copy="intro"></p>
+      <div class="toolbar"><label for="resolution" data-copy="resolution"></label><select id="resolution"><option value="600x800">600 × 800</option><option value="480x640">480 × 640</option></select><span class="toolbar-spacer"></span><button id="open-zoom" type="button" class="button" data-copy="zoom" disabled></button><a id="original" class="button is-disabled" target="_blank" rel="noopener" aria-disabled="true" tabindex="-1" data-copy="openOriginal"></a></div>
+      <section class="scene-view" aria-labelledby="scene-title"><header class="scene-heading"><div><h2 id="scene-title"></h2><code id="scene-id"></code></div><span id="image-size" class="utility"></span></header><p id="scene-note" class="scene-note"></p><div class="image-stage"><div id="loading" class="loading" role="status" data-copy="loading"></div><div id="missing" class="missing" role="alert" hidden><span class="missing-mark" aria-hidden="true">×</span><h3 data-copy="missingTitle"></h3><p id="missing-message" data-copy="missingBody"></p><code id="missing-path"></code></div><a id="image-link" target="_blank" rel="noopener" hidden><img id="main-image" alt="" decoding="async"></a></div></section>
+      <div class="source-note"><span class="source-tag" data-copy="fixtureBadge"></span><p data-copy="generatedNote"></p></div>
+      <footer><p data-copy="footnote"></p><span data-copy="keyboardHint"></span></footer>
+      <noscript><p>JavaScript is required to browse the preview. Original PNG files are available in the screens directory.</p></noscript>
+    </main>
+  </div>
+  <dialog id="viewer" aria-labelledby="viewer-title"><header class="viewer-heading"><h2 id="viewer-title"></h2><div><button id="native-toggle" type="button" class="button" data-copy="nativePixels" aria-pressed="false"></button><button id="close-viewer" type="button" class="button" data-copy="close"></button></div></header><div id="viewer-stage" class="viewer-stage"><p id="viewer-loading" class="viewer-feedback" role="status" data-copy="loading"></p><p id="viewer-error" class="viewer-feedback" role="alert" data-copy="missingTitle" hidden></p><img id="viewer-image" alt="" hidden></div></dialog>
+</body>
+</html>

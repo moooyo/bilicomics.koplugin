@@ -1,0 +1,1060 @@
+{
+    "calls": {
+        "createRechargeOrder": 5,
+        "refreshRechargeOrder": 14,
+        "getRechargeConfig": 9
+    },
+    "passed": true,
+    "spec": "native-synthetic-recharge-ui",
+    "fake_order_request_count": 5,
+    "synthetic_only": true,
+    "actual_order_created": false,
+    "actual_payment_made": false,
+    "network_namespace_isolated": true,
+    "no_network_routes": true,
+    "width": 600,
+    "count": 190,
+    "height": 800,
+    "storage_scope": "In-memory controller snapshots only; no durable-storage claim",
+    "assertions": [
+        {
+            "passed": true,
+            "name": "recharge_entry_is_visible_for_supported_signed_in_account"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-account_screen_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-account_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-account_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "signed_out_account_disables_recharge"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-account-signed-out_screen_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-account-signed-out_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-account-signed-out_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "opening_recharge_loads_config_without_creating_order"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-config-loading_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 120,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-config-loading_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-config-loading_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-config-loading_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "config_failure_has_safe_explicit_recovery"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-config-error_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 167,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-config-error_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-config-error_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-config-error_text_is_safe"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-options_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 380,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-options_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-options_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-options_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "official_options_are_reachable_across_pages"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-options-next-page_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 286,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-options-next-page_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-options-next-page_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-options-next-page_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "manual_unadvertised_amount_is_preserved_and_rejected"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-manual-unavailable_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 218,
+                "width": 484
+            },
+            "passed": true,
+            "name": "recharge-manual-unavailable_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-manual-unavailable_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-manual-unavailable_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "manual_supported_amount_requires_explicit_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "review_describes_one_code_for_both_phone_payment_methods"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-manual-review_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 228,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-manual-review_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-manual-review_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-manual-review_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "explicit_confirmation_uses_exact_amount_string_and_config_token"
+        },
+        {
+            "passed": true,
+            "name": "creating_cannot_submit_the_confirmation_twice"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-creating_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 185,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-creating_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-creating_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-creating_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "pending_order_displays_one_real_verified_qr"
+        },
+        {
+            "passed": true,
+            "name": "one_qr_supports_wechat_and_alipay_without_two_code_claim"
+        },
+        {
+            "passed": true,
+            "name": "server_order_id_is_preserved_as_an_exact_long_string"
+        },
+        {
+            "passed": true,
+            "name": "missing_server_expiry_is_not_fabricated"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-pending-no-expiry_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 569,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-pending-no-expiry_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-pending-no-expiry_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-pending-no-expiry_text_is_safe"
+        },
+        {
+            "detail": {
+                "height": 222,
+                "width": 222,
+                "minimum": 180
+            },
+            "passed": true,
+            "name": "pending_qr_has_a_readable_native_image_size"
+        },
+        {
+            "passed": true,
+            "name": "pending_qr_uses_whole_native_modules"
+        },
+        {
+            "detail": {
+                "y": 360,
+                "quiet_pixels": 24,
+                "module_pixels": 6,
+                "x": 188
+            },
+            "passed": true,
+            "name": "pending_qr_quiet_zone_fits_the_screen"
+        },
+        {
+            "detail": {
+                "quiet_pixels": 24
+            },
+            "passed": true,
+            "name": "pending_qr_has_four_white_modules_on_every_side"
+        },
+        {
+            "passed": true,
+            "name": "timer_and_manual_checks_do_not_overlap"
+        },
+        {
+            "passed": true,
+            "name": "duplicate_poll_callback_cannot_claim_credit"
+        },
+        {
+            "passed": true,
+            "name": "unchanged_automatic_check_preserves_the_qr_dialog"
+        },
+        {
+            "passed": true,
+            "name": "wallet_increase_does_not_prove_credit"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-checking-credit_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 569,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-checking-credit_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-checking-credit_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-checking-credit_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "unknown_result_and_network_error_preserve_the_order"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-unknown-network_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 593,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-unknown-network_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unknown-network_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unknown-network_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "credit_requires_matching_official_order_and_stops_polling"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-credited_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 225,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-credited_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-credited_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-credited_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "new_recharge_first_requires_separate_order_notice"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-new-order-notice_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 145,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-new-order-notice_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-new-order-notice_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-new-order-notice_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "new_official_option_does_not_automatically_create"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-option-review_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 228,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-option-review_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-option-review_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-option-review_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "new_request_requires_fresh_token_and_explicit_amount_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "not_submitted_result_does_not_retry_or_show_payment_code"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-failed-not-submitted_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 225,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-failed-not-submitted_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-failed-not-submitted_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-failed-not-submitted_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "unverified_payment_url_never_becomes_a_native_qr"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-unverified-code_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 225,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-unverified-code_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unverified-code_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unverified-code_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "overlong_payment_url_is_preserved_without_encoding_a_truncated_code"
+        },
+        {
+            "passed": true,
+            "name": "overlong_payment_code_uses_recovery_without_creating_a_replacement"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-unrenderable-long-code_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 275,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-unrenderable-long-code_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unrenderable-long-code_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unrenderable-long-code_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "advertised_expiry_is_explicitly_a_server_value"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-pending-server-expiry_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 569,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-pending-server-expiry_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-pending-server-expiry_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-pending-server-expiry_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "expired_qr_stops_automatic_checks_without_recreating_order"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-expired-code_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 240,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-expired-code_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-expired-code_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-expired-code_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "expired_payment_can_check_the_same_saved_order"
+        },
+        {
+            "passed": true,
+            "name": "unsaved_result_does_not_display_a_completed_receipt"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-persistence-pending_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 225,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-persistence-pending_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-persistence-pending_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-persistence-pending_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "saved_credit_result_can_replace_the_storage_warning"
+        },
+        {
+            "passed": true,
+            "name": "closing_creation_keeps_the_controller_request_and_record"
+        },
+        {
+            "passed": true,
+            "name": "creating_history_disables_new_recharge"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-creating-history_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 264,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-creating-history_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-creating-history_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-creating-history_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "background_creation_is_saved_before_feedback_without_reopening_ui"
+        },
+        {
+            "passed": true,
+            "name": "saved_background_result_can_reopen_without_another_create"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-background-result-reopened_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 569,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-background-result-reopened_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-background-result-reopened_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-background-result-reopened_text_is_safe"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-orders-page-one_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 474,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-orders-page-one_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-orders-page-one_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-orders-page-one_text_is_safe"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-orders-page-two_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 333,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-orders-page-two_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-orders-page-two_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-orders-page-two_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "history_selects_the_exact_long_order_id"
+        },
+        {
+            "passed": true,
+            "name": "history_queries_the_exact_local_id"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-history-selected-order_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 569,
+                "width": 563
+            },
+            "passed": true,
+            "name": "recharge-history-selected-order_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-history-selected-order_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-history-selected-order_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "empty_history_explains_that_no_records_are_saved"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-orders-empty_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 192,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-orders-empty_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-orders-empty_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-orders-empty_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "closing_button_retires_scheduled_checks"
+        },
+        {
+            "passed": true,
+            "name": "closing_button_retires_inflight_feedback"
+        },
+        {
+            "passed": true,
+            "name": "closing_native_retires_scheduled_checks"
+        },
+        {
+            "passed": true,
+            "name": "closing_native_retires_inflight_feedback"
+        },
+        {
+            "passed": true,
+            "name": "closing_navigation_retires_scheduled_checks"
+        },
+        {
+            "passed": true,
+            "name": "closing_navigation_retires_inflight_feedback"
+        },
+        {
+            "passed": true,
+            "name": "closing_screen_retires_scheduled_checks"
+        },
+        {
+            "passed": true,
+            "name": "closing_screen_retires_inflight_feedback"
+        },
+        {
+            "passed": true,
+            "name": "closing_account_retires_scheduled_checks"
+        },
+        {
+            "passed": true,
+            "name": "closing_account_retires_inflight_feedback"
+        },
+        {
+            "passed": true,
+            "name": "closing_generation_retires_scheduled_checks"
+        },
+        {
+            "passed": true,
+            "name": "closing_generation_retires_inflight_feedback"
+        },
+        {
+            "passed": true,
+            "name": "late_config_cannot_replace_the_latest_confirmation_context"
+        },
+        {
+            "passed": true,
+            "name": "covered_or_closed_confirmation_does_not_create"
+        },
+        {
+            "passed": true,
+            "name": "definitive_pre_submission_rejection_is_not_an_unknown_order"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-definitive-not-submitted_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 167,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-definitive-not-submitted_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-definitive-not-submitted_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-definitive-not-submitted_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "definitive_rejection_retires_the_old_confirmation"
+        },
+        {
+            "passed": true,
+            "name": "definitive_rejection_reload_only_requests_fresh_config"
+        },
+        {
+            "passed": true,
+            "name": "reloaded_rejection_requires_a_new_amount_review"
+        },
+        {
+            "passed": true,
+            "name": "creation_without_result_never_automatically_retries"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-creation-unknown_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 232,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-creation-unknown_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-creation-unknown_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-creation-unknown_text_is_safe"
+        },
+        {
+            "passed": true,
+            "name": "unknown_creation_keeps_its_controller_owned_record"
+        },
+        {
+            "detail": {
+                "height": 784,
+                "width": 572
+            },
+            "passed": true,
+            "name": "recharge-unknown-history_screen_fits"
+        },
+        {
+            "detail": {
+                "height": 239,
+                "width": 564
+            },
+            "passed": true,
+            "name": "recharge-unknown-history_dialog_fits"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unknown-history_is_topmost"
+        },
+        {
+            "passed": true,
+            "name": "recharge-unknown-history_text_is_safe"
+        },
+        {
+            "detail": {},
+            "passed": true,
+            "name": "all_operations_remain_synthetic_and_accounted_for"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_1"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_2"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_3"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_4"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_5"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_6"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_7"
+        },
+        {
+            "passed": true,
+            "name": "business_module_stays_unloaded_8"
+        }
+    ],
+    "screens": [
+        "recharge-account.png",
+        "recharge-account-signed-out.png",
+        "recharge-config-loading.png",
+        "recharge-config-error.png",
+        "recharge-options.png",
+        "recharge-options-next-page.png",
+        "recharge-manual-unavailable.png",
+        "recharge-manual-review.png",
+        "recharge-creating.png",
+        "recharge-pending-no-expiry.png",
+        "recharge-checking-credit.png",
+        "recharge-unknown-network.png",
+        "recharge-credited.png",
+        "recharge-new-order-notice.png",
+        "recharge-option-review.png",
+        "recharge-failed-not-submitted.png",
+        "recharge-unverified-code.png",
+        "recharge-unrenderable-long-code.png",
+        "recharge-pending-server-expiry.png",
+        "recharge-expired-code.png",
+        "recharge-persistence-pending.png",
+        "recharge-creating-history.png",
+        "recharge-background-result-reopened.png",
+        "recharge-orders-page-one.png",
+        "recharge-orders-page-two.png",
+        "recharge-history-selected-order.png",
+        "recharge-orders-empty.png",
+        "recharge-definitive-not-submitted.png",
+        "recharge-creation-unknown.png",
+        "recharge-unknown-history.png"
+    ]
+}

@@ -63,6 +63,7 @@ function controller:getDownloads() record("getDownloads"); return self.jobs end
 function controller:getComic() record("getComic"); return self.comic end
 function controller:getEpisode() record("getEpisode"); return self.episode end
 function controller:getEpisodes() record("getEpisodes"); return { self.episode } end
+function controller:cancelPendingRead() end
 function controller:getAccount()
     record("getAccount")
     return { id = "ui_fixture", account_key = self.account_key, session_valid = true }
@@ -157,6 +158,14 @@ local function pressDialogText(text)
     button.callback()
 end
 local function pressDialog(message) pressDialogText(_(message)) end
+local function pressAction(message)
+    if screenButton(message) then press(message); return end
+    press("More actions")
+    check("more_actions_opens_a_visible_native_menu", dialogShown())
+    check("more_actions_distinguishes_stopping_from_removing", contains(screens.dialog.title,
+        _("Stopping keeps saved images. Removing deletes this copy's saved images.")))
+    pressDialog(message)
+end
 local function confirm()
     local dialog = assert(screens.dialog)
     assert(type(dialog.ok_callback) == "function", "Expected a native ConfirmBox")
@@ -177,8 +186,8 @@ local function visibleText(widget, result, seen)
     return table.concat(result, "\n")
 end
 local job_actions = {}
-for _action_index, message in ipairs({ "Resume", "Pause", "Cancel download", "Remove download", "Failure details",
-    "Refresh image sources", "Recovery options", "Cancel verification" }) do job_actions[_(message)] = true end
+for _action_index, message in ipairs({ "Resume", "Pause", "Stop download; keep saved images", "Remove download", "Review recovery",
+    "Open this copy", "Retry download", "Recovery options", "More actions", "Cancel verification" }) do job_actions[_(message)] = true end
 local function capture(name)
     local widget = assert(screens.widget)
     local size = widget.content:getSize()
@@ -189,9 +198,10 @@ local function capture(name)
         for _button_index, button in ipairs(row) do if job_actions[button.text] then job_row = true end end
         if job_row then
             rows = rows + 1
-            check(name .. "_job_row_" .. rows .. "_has_at_most_four_buttons", #row <= 4, #row)
+            check(name .. "_job_row_" .. rows .. "_has_at_most_two_buttons", #row <= 2, #row)
         end
     end
+    if screens.pages == 1 then check(name .. "_single_page_has_no_pager", screens.pagination == nil) end
     UIManager:forceRePaint()
     if dialogShown() then
         local dialog = screens.dialog
@@ -215,16 +225,36 @@ local function reset(state, err)
     screens:showDownloads()
     return job
 end
-local confirmation_message = "Refresh this chapter's image sources? Previously saved images will be downloaded again for verification, using network data. Existing cache and reading progress are retained. If all checks pass, the download resumes. No purchase is made."
-local function openRefreshConfirmation()
-    if screenButton("Refresh image sources") then press("Refresh image sources")
-    else
-        press(screenButton("Recovery options") and "Recovery options" or "Failure details")
-        check("failure_details_opens_download_recovery", contains(screens.dialog.title, _("Download recovery")))
-        pressDialog("Refresh image sources")
+local function checkTarget(name, text, job)
+    check(name .. "_identifies_the_comic", contains(text, job.payload.comic_title or controller.comic.title))
+    check(name .. "_identifies_the_chapter", contains(text, job.payload.title or controller.episode.title))
+    check(name .. "_identifies_the_exact_copy", contains(text, job.revision))
+    check(name .. "_identifies_the_copy_status", contains(text, _("Current copy")))
+end
+local refresh_disclosures = {
+    { "explicit_refresh_and_verification", "Refresh and verify this copy's image sources?" },
+    { "network_cost_preserved_reading_and_verified_source_commit", "Saved images may be downloaded again, using network data. Saved content and reading position are preserved; new sources are applied only after verification succeeds." },
+    { "closed_chapter_success_only_resume_and_no_purchase", "Close this chapter before proceeding. After verification succeeds, the download resumes. No purchase is made." },
+}
+local function checkRefreshConfirmation()
+    local text = assert(screens.dialog).text
+    check("refresh_confirmation_has_an_explicit_submit_action", screens.dialog.ok_text == _("Refresh image sources"))
+    checkTarget("refresh_confirmation", text, assert(controller.jobs[1]))
+    for _disclosure_index, disclosure in ipairs(refresh_disclosures) do
+        check("refresh_confirmation_" .. disclosure[1], contains(text, _(disclosure[2])))
     end
-    check("refresh_confirmation_explains_cost_preservation_and_scope", screens.dialog.text == _(confirmation_message))
-    check("refresh_confirmation_is_localized", hasChinese(screens.dialog.text) and safeText(screens.dialog.text))
+    check("refresh_confirmation_is_localized", hasChinese(text) and safeText(text))
+end
+local function openRecovery()
+    if screenButton("Review recovery") then press("Review recovery") else pressAction("Recovery options") end
+    check("recovery_opens_a_visible_native_dialog", dialogShown())
+    checkTarget("recovery", screens.dialog.title, assert(controller.jobs[1]))
+    check("opening_a_partial_current_copy_discloses_network_use", contains(screens.dialog.title,
+        _("Opening the current copy may fetch missing images using your sign-in and network connection.")))
+end
+local function openRefreshConfirmation()
+    openRecovery(); pressDialog("Refresh image sources")
+    checkRefreshConfirmation()
 end
 local function changeAccount(suffix)
     controller.generation = controller.generation + 1
@@ -239,12 +269,12 @@ local function run()
     screens:refresh(); screens:refresh()
     check("http_400_does_not_automatically_refresh_sources", callCount("refreshDownloadSources") == refresh_count)
     capture("failed-download")
-    press("Failure details")
+    openRecovery()
     check("recovery_has_explicit_refresh_action", findButton(screens.dialog, _("Refresh image sources")) ~= nil)
     capture("recovery-options")
     pressDialog("Refresh image sources")
     check("opening_confirmation_does_not_dispatch_refresh", callCount("refreshDownloadSources") == refresh_count)
-    check("confirmation_contains_the_full_explanation", screens.dialog.text == _(confirmation_message))
+    checkRefreshConfirmation()
     capture("refresh-confirmation")
     cancelConfirm()
     check("canceling_confirmation_has_no_side_effect", callCount("refreshDownloadSources") == refresh_count
@@ -262,8 +292,8 @@ local function run()
     capture("fetching-sources")
     job.payload.source_refresh = { stage = "verifying", checked = 1, total = 4 }
     screens:refresh()
-    check("verification_stage_displays_historical_counts", contains(visibleText(screens.widget),
-        string.format(_("Verifying historical images %d/%d"), 1, 4)))
+    check("verification_stage_displays_historical_counts", contains(visibleText(screens.widget), _("Verifying saved images"))
+        and contains(visibleText(screens.widget), string.format(_("Checked %d/%d images"), 1, 4)))
     capture("verifying-history")
     local cancel_count = callCount("cancelSourceRefresh")
     press("Cancel verification")
@@ -274,7 +304,7 @@ local function run()
     capture("verification-canceled")
 
     job = reset("paused")
-    check("paused_job_has_recovery_options", screenButton("Recovery options") ~= nil)
+    check("paused_job_has_a_primary_resume_and_more_menu", screenButton("Resume") ~= nil and screenButton("More actions") ~= nil)
     capture("paused-download")
     openRefreshConfirmation(); confirm()
     job.payload.source_refresh, job.state, job.error = nil, "running", nil
@@ -283,12 +313,14 @@ local function run()
     check("successful_verification_uses_controller_result", screens.route == "downloads"
         and callCount("resumeJob") == resume_count and screenButton("Pause") ~= nil)
     capture("verification-complete")
-    press("Pause"); press("Cancel download")
-    check("ordinary_pause_and_cancel_keep_existing_actions", job.state == "canceled"
+    press("Pause")
+    check("ordinary_pause_preserves_saved_images", job.state == "paused" and job.completed == 3)
+    press("Resume"); pressAction("Stop download; keep saved images")
+    check("ordinary_stop_keeps_saved_images", job.state == "canceled" and job.completed == 3
         and callCount("pauseJob") > 0 and callCount("cancelJob") > 0)
 
     job = reset("canceled")
-    check("canceled_job_has_recovery_options", screenButton("Recovery options") ~= nil)
+    check("canceled_job_has_a_primary_resume_and_more_menu", screenButton("Resume") ~= nil and screenButton("More actions") ~= nil)
     capture("canceled-download")
     openRefreshConfirmation(); cancelConfirm()
     check("canceled_job_confirmation_cancel_preserves_state", job.state == "canceled")
@@ -299,14 +331,18 @@ local function run()
     screens:refresh()
     cancel_count = callCount("cancelSourceRefresh")
     local remove_count = callCount("removeDownload")
-    press("Remove download")
-    check("removal_explains_canceling_verification", screens.dialog.text ==
-        _("Cancel source verification and remove this downloaded chapter? Reading position and access are preserved."))
+    pressAction("Remove download")
+    checkTarget("removal_confirmation", screens.dialog.text, job)
+    check("removal_reports_saved_image_count", contains(screens.dialog.text, string.format(_("Saved (recorded): %d/%d"), 3, 12)))
+    check("removal_explains_canceling_verification", contains(screens.dialog.text,
+        _("Stop verification and remove this copy's saved images?")))
+    check("removal_explains_exact_copy_scope_and_preserved_reading_and_access", contains(screens.dialog.text,
+        _("Tasks using this same copy will stop. Other versions, reading positions, and purchase access are preserved. Offline reading of this copy will no longer be available.")))
     capture("remove-during-verification")
     cancelConfirm()
     check("canceling_remove_keeps_verification", callCount("cancelSourceRefresh") == cancel_count
         and callCount("removeDownload") == remove_count and job.payload.source_refresh ~= nil)
-    press("Remove download"); confirm()
+    pressAction("Remove download"); confirm()
     check("confirmed_remove_cancels_then_dispatches_removal", callCount("cancelSourceRefresh") == cancel_count + 1
         and callCount("removeDownload") == remove_count + 1)
     controller.jobs = {}
@@ -315,13 +351,36 @@ local function run()
     check("late_verification_cannot_restore_removed_job", #controller.jobs == 0 and not dialogShown())
     capture("removed-download")
 
-    job = reset("failed", rawError("image_http", 400))
+    job = reset("paused")
     controller.resume_error = rawError("image_http", 400)
     refresh_count = callCount("refreshDownloadSources")
     resume_count = callCount("resumeJob")
     press("Resume")
     check("http_400_resume_does_not_turn_into_source_refresh", callCount("resumeJob") == resume_count + 1
         and callCount("refreshDownloadSources") == refresh_count and job.state == "failed")
+
+    job = reset("paused")
+    press("More actions")
+    local stale_menu_action = assert(findButton(screens.dialog, _("Recovery options")))
+    pressDialog("Close")
+    stale_menu_action.callback()
+    check("closed_more_menu_ignores_its_stale_action", not dialogShown() and callCount("refreshDownloadSources") == refresh_count)
+
+    openRefreshConfirmation()
+    local replacement_job = {}
+    for key, value in pairs(job) do replacement_job[key] = value end
+    replacement_job.revision = "replacement-revision"
+    controller.jobs = { replacement_job }
+    confirm()
+    check("source_confirmation_rechecks_exact_revision", callCount("refreshDownloadSources") == refresh_count
+        and not dialogShown() and contains(visibleText(screens.widget), replacement_job.revision))
+
+    job = reset("paused")
+    openRefreshConfirmation()
+    controller.generation = controller.generation + 1
+    confirm()
+    check("generation_change_alone_invalidates_source_confirmation", callCount("refreshDownloadSources") == refresh_count)
+    screens:_closeDialog()
 
     job = reset("paused")
     openRefreshConfirmation()
@@ -349,7 +408,7 @@ local function run()
     check("closed_screen_ignores_delayed_verification_feedback", screens.route == nil and screens.widget == nil and screens.dialog == nil)
 
     reset("failed")
-    check("failed_job_without_error_still_uses_recovery_options", screenButton("Failure details") ~= nil
+    check("failed_job_without_error_still_uses_recovery_options", screenButton("Review recovery") ~= nil
         and screenButton("Refresh image sources") == nil)
     openRefreshConfirmation(); cancelConfirm()
 
@@ -366,7 +425,7 @@ local function run()
             and (heading ~= generic_heading or message ~= generic_message))
         check(name .. "_is_safe_chinese", hasChinese(heading) and hasChinese(message) and safeText(heading .. "\n" .. message))
         reset("failed", err)
-        press("Failure details")
+        openRecovery()
         check(name .. "_recovery_exposes_the_typed_error", contains(screens.dialog.title, heading)
             and contains(screens.dialog.title, message))
         capture("error-" .. name)

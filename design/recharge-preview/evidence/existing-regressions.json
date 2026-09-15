@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "source_unchanged": true,
+  "files": 1532,
+  "purchase": {
+    "passed": true,
+    "tests": 11,
+    "assertions": 72
+  },
+  "session": [
+    {
+      "suite": "spec/protocol/session_refresh_spec.lua",
+      "passed": true,
+      "tests": 18,
+      "assertions": 97
+    },
+    {
+      "suite": "spec/controller/qr_authentication_spec.lua",
+      "passed": true,
+      "tests": 13,
+      "assertions": 50
+    }
+  ],
+  "real_network_requests": 0,
+  "source_sha256": {
+    "bilicomics/controller.lua": "456bc555d591b74054ebe142d769016f68e7f0b04aed9c93242e7fe7c1457e36",
+    "bilicomics/recharge/controller.lua": "8e36ae3a95db30bc7086f48bf63fb85872f17500c10ee163e6894614d6c03dd2",
+    "bilicomics/ui/screens.lua": "796a27586fe4d2b0d47f21f0f38a7133cc5213ac91b7752af17dd713bbcada5d",
+    "bilicomics/ui/i18n.lua": "bc38f8025169762fe64fd3e27175ac975899c47e4e398c049206e2dbcb459dce"
+  },
+  "purchase_report": "/tmp/bilicomics-recharge-regressions-20260915/purchase-dispatch/purchase-dispatch-report.json",
+  "session_report": "/tmp/bilicomics-recharge-regressions-20260915/session-authentication/session-authentication-summary.json"
+}

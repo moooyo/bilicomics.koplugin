@@ -1,0 +1,27 @@
+{
+  "scenes": 8,
+  "sizes": [
+    {
+      "size": "600x800",
+      "matched": true
+    },
+    {
+      "size": "480x640",
+      "matched": true
+    },
+    {
+      "size": "720x960",
+      "matched": true
+    },
+    {
+      "size": "960x720",
+      "matched": true
+    }
+  ],
+  "afterOnly": true,
+  "zoom": true,
+  "mobile": true,
+  "galleryScenes": 16,
+  "errors": [],
+  "passed": true
+}

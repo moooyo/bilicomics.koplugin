@@ -4,7 +4,19 @@ A Bilibili Comics plugin with its own comic library UI and KOReader's native rea
 
 ## Development status
 
-The current [finishing work](docs/finishing-plan.md) adds QR-session site
+The latest approved UI is implemented in the native plugin, including the compact
+bookshelf and QR recharge flow. The payment-code view uses one action row with
+Check credit on the left and Close on the right. Manual recharge input must match
+an amount from the current official configuration. The installable candidate is
+[the approved UI package](dist/bilicomics-ui-recharge-20260915.zip), with its
+[file manifest](dist/bilicomics-ui-recharge-20260915.manifest.json) and
+[package checks](spec/package/ui-recharge-results.json). See the
+[native previews](design/recharge-preview/index.html) and
+[recharge implementation evidence](docs/recharge-api-investigation.md).
+Remote synthetic checks cover both 600 by 800 and 480 by 640 layouts; real
+recharge creation and payment have not been exercised.
+
+The earlier [finishing work](docs/finishing-plan.md) adds QR-session site
 initialization, the quiet bookshelf with automatic synchronization and restored
 view state, and 1–4 concurrent image downloads (default 2). All 34 common
 synthetic suites pass; actual parallel workers and focused UI/controller checks
@@ -46,7 +58,7 @@ On 2026-09-13 the user authorized all operations other than actual purchasing. A
 
 The integrated [quote-selection adapter](docs/quote-selection-implementation.md) supports single chapters and strict standard-currency ordinal batches. Real captured responses successfully constructed both a positive batch offer and an explicit remaining-range offer. The UI distinguishes the server-supported range from its currently expected chapters; the server does not echo an atomically fixed member list. Additional discounts remain advisory. Actual charging and physical Scribe acceptance remain unverified.
 
-The target first release includes online reading with prefetch, complete offline downloads, and explicit purchases using existing account assets. Recharge and automatic purchasing are excluded. No WeRead implementation is reused.
+The target first release includes online reading with prefetch, complete offline downloads, and explicit purchases using existing account assets. The approved development UI additionally implements explicit QR recharge. Automatic purchasing remains excluded. No WeRead implementation is reused.
 
 QR sign-in and session renewal are implemented in the development source. A dedicated account session manager serializes renewal, saves replacement credentials before confirmation, and preserves business receipts independently of cookie persistence. See [the authentication implementation and verification boundaries](docs/session-renewal.md). Real mobile-app sign-in, private persistence, restart and the normal session check have passed. The service returned `refresh=false`; actual rotation and old-token confirmation remain deferred acceptance, and no unlimited login lifetime is promised.
 
@@ -79,7 +91,8 @@ Runtime checks must run through `ssh test-env` unless local verification is expl
 
 The packaging script is `tools/package.py`. Execute it on the remote environment after integration checks; it writes a deterministic ZIP and file-hash manifest. Native protocol binaries and their platform compatibility remain explicit package dependencies.
 
-The canonical candidate is `dist/bilicomics-0.1.0-dev.zip`, with its exact adjacent
+The latest approved UI candidate is `dist/bilicomics-ui-recharge-20260915.zip`.
+The preceding finishing candidate remains `dist/bilicomics-0.1.0-dev.zip`, with its exact adjacent
 manifest. The [finishing package/source record](spec/package/finishing-acceptance-binding.json)
 identifies this revision and its complete remote acceptance. No session, acquired
 comic content or diagnostic loader is included.

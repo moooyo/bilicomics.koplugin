@@ -1,0 +1,75 @@
+{
+  "spec": "native-ui-optimization",
+  "environment": "ssh test-env, unshare -n",
+  "synthetic_only": true,
+  "actual_purchase_executed": false,
+  "source_sha256": {
+    "bilicomics/ui/account_screens.lua": "33661c73846bbb9d0043302f06addf819e4c07036c31b3c9c1ab9f50800435db",
+    "bilicomics/ui/catalog_screens.lua": "95ca34c53957fe72d48a21a945d4e48229ea1f518f280a0a13fd20497fce66ec",
+    "bilicomics/ui/downloads_screens.lua": "591790b49778d98b3d0125f5f8d01bca41007a25171fabaf912b441d52a3aa99",
+    "bilicomics/ui/i18n.lua": "bc38f8025169762fe64fd3e27175ac975899c47e4e398c049206e2dbcb459dce",
+    "bilicomics/ui/model.lua": "5c9d2aea6503e90818606ff36bc2dbc13f86af4d7a137ebc6ddd60c5cc826816",
+    "bilicomics/ui/purchase_screens.lua": "01dd8a551994c0455bafd8a5e96c28e9dfb6dc51471746875a50f49a1a6e2d6c",
+    "bilicomics/ui/qr_login.lua": "e7a38c493a5af960b2cd334885bfb1e36040bdb111d93f68305b448ed8dc5299",
+    "bilicomics/ui/recharge_screens.lua": "b5550deeef987f07a0e6802d84b6e7e9d82f633553c68bb1567b1fffb55410a6",
+    "bilicomics/ui/screen_helpers.lua": "3afc473ceb03f3efcede686189a1158b01b30a15a1dcb8f4c2af9dd9432f455c",
+    "bilicomics/ui/screens.lua": "796a27586fe4d2b0d47f21f0f38a7133cc5213ac91b7752af17dd713bbcada5d",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "a0a0b93377238cbbd945a8cdee7bbc365637fee7f72f581e74542149fc3b17ed",
+    "l10n/bilicomics_account_zh_CN.lua": "896db4fb7e8ea5b9531cd60b16d27a11c9a2004ee33540c9ec676977bdc00012",
+    "l10n/bilicomics_catalog_zh_CN.lua": "66d87b6aeea2c374511abf152b52c35e99a1599e70d5e0f471664f523547bc47",
+    "l10n/bilicomics_downloads_zh_CN.lua": "15ca86bf5e55f56699701bffc1f70750a5b5c8982626a7b9d3dae7a33436fce8",
+    "l10n/bilicomics_navigation_zh_CN.lua": "a1f6795b2ad0b9b8fa14625ca3fe7b78e7ae05f65b6c7615c4b0b52a408d3b2e",
+    "l10n/bilicomics_purchase_zh_CN.lua": "65d9bb1393cfd7a801cdc0112be66a6923121a37c7cbdcebd3b78d27385cd5f0",
+    "l10n/bilicomics_recharge_zh_CN.lua": "b8e43ac02aaea747aa60112bf92c15376335912082a41397e2b5a52976e0a654",
+    "l10n/bilicomics_zh_CN.lua": "ef8aa4d91a18fdf64db90f629ec08aba0b9cf4e309725c412ea9ccde02b9ed56",
+    "main.lua": "da1f7c0a8e7609081ea67ed4a7a06d51674415dbf2437a766186c4696ecca33a"
+  },
+  "source_unchanged": true,
+  "runs": [
+    {
+      "width": 600,
+      "height": 800,
+      "returncode": 0,
+      "passed": true,
+      "count": 48,
+      "result_file": "600x800/optimization-result.json"
+    },
+    {
+      "width": 480,
+      "height": 640,
+      "returncode": 0,
+      "passed": true,
+      "count": 48,
+      "result_file": "480x640/optimization-result.json"
+    }
+  ],
+  "passed": true,
+  "test_sha256": {
+    "optimization_spec.lua": "de314b5160c3f2c4f1bcec46eb04c56a8ed95a0c532b5a9261cad8b8ccbeb831",
+    "run_optimization.py": "0ac25c3b4e998b490d297b75f62ee574d8f8d57149bc716f4422b05eeadaff47",
+    "run_ui_sources.py": "a9cbd6f3122f48301400e61e45b0edf30eb21a51fda9df275b714cf95687b0a8"
+  },
+  "source_sha256_after": {
+    "bilicomics/ui/account_screens.lua": "33661c73846bbb9d0043302f06addf819e4c07036c31b3c9c1ab9f50800435db",
+    "bilicomics/ui/catalog_screens.lua": "95ca34c53957fe72d48a21a945d4e48229ea1f518f280a0a13fd20497fce66ec",
+    "bilicomics/ui/downloads_screens.lua": "591790b49778d98b3d0125f5f8d01bca41007a25171fabaf912b441d52a3aa99",
+    "bilicomics/ui/i18n.lua": "bc38f8025169762fe64fd3e27175ac975899c47e4e398c049206e2dbcb459dce",
+    "bilicomics/ui/model.lua": "5c9d2aea6503e90818606ff36bc2dbc13f86af4d7a137ebc6ddd60c5cc826816",
+    "bilicomics/ui/purchase_screens.lua": "01dd8a551994c0455bafd8a5e96c28e9dfb6dc51471746875a50f49a1a6e2d6c",
+    "bilicomics/ui/qr_login.lua": "e7a38c493a5af960b2cd334885bfb1e36040bdb111d93f68305b448ed8dc5299",
+    "bilicomics/ui/recharge_screens.lua": "b5550deeef987f07a0e6802d84b6e7e9d82f633553c68bb1567b1fffb55410a6",
+    "bilicomics/ui/screen_helpers.lua": "3afc473ceb03f3efcede686189a1158b01b30a15a1dcb8f4c2af9dd9432f455c",
+    "bilicomics/ui/screens.lua": "796a27586fe4d2b0d47f21f0f38a7133cc5213ac91b7752af17dd713bbcada5d",
+    "bilicomics/ui/session_input.lua": "95e465036929080c458010e5b682a72e3edbc743eef7e881bebe168dfc176c7a",
+    "bilicomics/ui/widgets.lua": "a0a0b93377238cbbd945a8cdee7bbc365637fee7f72f581e74542149fc3b17ed",
+    "l10n/bilicomics_account_zh_CN.lua": "896db4fb7e8ea5b9531cd60b16d27a11c9a2004ee33540c9ec676977bdc00012",
+    "l10n/bilicomics_catalog_zh_CN.lua": "66d87b6aeea2c374511abf152b52c35e99a1599e70d5e0f471664f523547bc47",
+    "l10n/bilicomics_downloads_zh_CN.lua": "15ca86bf5e55f56699701bffc1f70750a5b5c8982626a7b9d3dae7a33436fce8",
+    "l10n/bilicomics_navigation_zh_CN.lua": "a1f6795b2ad0b9b8fa14625ca3fe7b78e7ae05f65b6c7615c4b0b52a408d3b2e",
+    "l10n/bilicomics_purchase_zh_CN.lua": "65d9bb1393cfd7a801cdc0112be66a6923121a37c7cbdcebd3b78d27385cd5f0",
+    "l10n/bilicomics_recharge_zh_CN.lua": "b8e43ac02aaea747aa60112bf92c15376335912082a41397e2b5a52976e0a654",
+    "l10n/bilicomics_zh_CN.lua": "ef8aa4d91a18fdf64db90f629ec08aba0b9cf4e309725c412ea9ccde02b9ed56",
+    "main.lua": "da1f7c0a8e7609081ea67ed4a7a06d51674415dbf2437a766186c4696ecca33a"
+  }
+}

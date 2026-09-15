@@ -6,10 +6,10 @@ import os
 from pathlib import Path
 import signal
 import subprocess
+from run_ui_sources import ui_source_names
 
 
-SOURCES = ("bilicomics/ui/model.lua", "bilicomics/ui/screens.lua", "l10n/bilicomics_zh_CN.lua")
-TESTS = ("ordinal_range_spec.lua", "run_ordinal_range.py")
+TESTS = ("ordinal_range_spec.lua", "run_ordinal_range.py", "run_ui_sources.py")
 SIZES = ((600, 800), (480, 640))
 RESULT_NAME = "ordinal-range-result.json"
 LOG_NAME = "ordinal-range.log"
@@ -124,7 +124,7 @@ def main():
     if not (plugin / "spec/ui/ordinal_range_spec.lua").is_file():
         parser.error("The plugin snapshot must contain spec/ui/ordinal_range_spec.lua.")
     try:
-        source_sha256 = hashes(plugin, SOURCES)
+        source_sha256 = hashes(plugin, ui_source_names(plugin))
         test_sha256 = hashes(plugin / "spec/ui", TESTS)
         output.mkdir(parents=True, exist_ok=False)
     except OSError as error:
@@ -150,7 +150,7 @@ def main():
         if interrupted:
             break
     try:
-        report["source_sha256_after"] = hashes(plugin, SOURCES)
+        report["source_sha256_after"] = hashes(plugin, ui_source_names(plugin))
         report["source_unchanged"] = report["source_sha256_after"] == source_sha256
     except OSError as error:
         report["source_hash_error"] = "The source files could not be hashed after the runs: " + str(error)

@@ -9,6 +9,7 @@ local plugin, output = assert(arg[1]), assert(arg[2])
 package.path = plugin .. "/?.lua;" .. plugin .. "/?/init.lua;" .. package.path
 require("gettext").current_lang = arg[3] or "zh_CN"
 local UIManager = require("ui/uimanager")
+local Font = require("ui/font")
 local Screens = require("bilicomics/ui/screens")
 local Model = require("bilicomics/ui/model")
 local W = require("bilicomics/ui/widgets")
@@ -20,13 +21,13 @@ local result = { assertions = {}, screenshots = {}, language = arg[3], width = w
 local function check(name, value, detail)
     result.assertions[#result.assertions + 1] = { name = name, passed = not not value, detail = detail }
 end
-local function contains(widget, message)
-    if widget.text == _(message) then return true end
+local function findText(widget, message)
     for _index, child in ipairs(widget) do
-        if type(child) == "table" and contains(child, message) then return true end
+        if type(child) == "table" then local found = findText(child, message); if found then return found end end
     end
-    return false
+    if widget.text == _(message) then return widget end
 end
+local function contains(widget, message) return findText(widget, message) ~= nil end
 local titles = { "Moonlit Observatory", "The Last Paper Crane", "A Lighthouse Beyond the Clouds",
     "The Garden of Quiet Stars", "Across the Silver Mountain" }
 local controller = { calls = {}, waiting = {}, covers = {}, comics = {}, history = {}, library_kinds = {}, canceled_reads = 0, account_key = "synthetic-a" }
@@ -84,7 +85,8 @@ local function press(message)
 end
 local function dialogPress(message)
     for _index, row in ipairs(assert(screens.dialog).buttons) do for _index, button in ipairs(row) do
-        if button.text == _(message) and button.callback and button.enabled ~= false then return button.callback() end
+        local label = type(button.text) == "string" and button.text:gsub("^%[x%] ", ""):gsub("^%[ %] ", "")
+        if label == _(message) and button.callback and button.enabled ~= false then return button.callback() end
     end end
     error("Expected dialog control: " .. message)
 end
@@ -106,8 +108,9 @@ local function capture(name)
 end
 local function gridGeometry(name)
     UIManager:forceRePaint()
-    local expected_columns = width >= 720 and 3 or 2
+    local expected_columns = width >= 900 and 4 or width >= 600 and 3 or 2
     check(name .. "_responsive_columns", screens.grid_columns == expected_columns)
+    check(name .. "_standard_screen_uses_two_bookshelf_rows", screens.grid_rows == 2)
     local card_rows, positions = {}, {}
     for _index, row in ipairs(screens.focus) do
         if row[1] and row[1].comic then card_rows[#card_rows + 1] = row end
@@ -122,18 +125,65 @@ local function gridGeometry(name)
             check(name .. "_focus_identity_" .. index, screens.cards[index] == card)
             check(name .. "_card_bounds_" .. index, dimen.x >= 0 and dimen.y >= 0
                 and dimen.x + dimen.w <= width and dimen.y + dimen.h <= height)
+            local title_widget, progress_widget = findText(card, card.comic.title), findText(card, card.progress_label)
+            check(name .. "_readable_title_and_position_" .. index, title_widget and progress_widget
+                and title_widget.height == W.scale(40) and progress_widget.height == W.scale(20)
+                and title_widget.face.size >= Font:getFace("cfont", W.font.card).size
+                and progress_widget.face.size >= Font:getFace("cfont", W.font.meta).size)
+            local updated = card.comic.has_update == true
+            check(name .. "_update_uses_an_explicit_compact_badge_" .. index, card.updated == updated
+                and (updated and card.update_badge and contains(card.update_badge, "Updated")
+                    or not updated and card.update_badge == nil)
+                and not contains(card, card.comic.latest_episode_title) and not contains(card, Model.comicUpdate(card.comic)))
+            check(name .. "_badge_does_not_change_card_height_" .. index, card:getSize().h == card.frame:getSize().h
+                and card.dimen.h == card.frame:getSize().h
+                and (not card.update_badge or card.update_badge:getSize().w <= card.card_cover_width
+                    and card.update_badge:getSize().h <= card.cover_height))
             if column > 1 then
                 local previous = row[column - 1].dimen
-                check(name .. "_horizontal_gap_" .. index, dimen.x >= previous.x + previous.w
-                    and dimen.y == previous.y)
+                check(name .. "_horizontal_gap_" .. index, dimen.x >= previous.x + previous.w + W.scale(8)
+                    and dimen.y == previous.y and dimen.h == previous.h)
             elseif row_index > 1 then
                 local previous = card_rows[row_index - 1][1].dimen
-                check(name .. "_row_alignment_" .. row_index, dimen.x == previous.x and dimen.y >= previous.y + previous.h)
+                check(name .. "_row_alignment_" .. row_index, dimen.x == previous.x and dimen.y >= previous.y + previous.h + W.scale(8))
             end
         end
     end
     check(name .. "_every_card_has_one_focus_slot", index == #screens.cards)
     result[name] = positions
+end
+local function toolbarGeometry(name)
+    UIManager:forceRePaint()
+    local controls = assert(screens.bookshelf_toolbar_buttons, "Bookshelf controls must share one toolbar")
+    local expected = { assert(screens.bookshelf_filter_button), assert(screens.bookshelf_sort_button) }
+    if screens.pagination then
+        expected[#expected + 1], expected[#expected + 2], expected[#expected + 3] =
+            screens.pagination.previous, screens.pagination.counter, screens.pagination.next
+    end
+    check(name .. "_one_toolbar_contains_only_filter_sort_and_pagination", #controls == #expected
+        and screens.bookshelf_toolbar:getSize().w <= screens.width)
+    local focus_rows = 0
+    for _row_index, row in ipairs(screens.focus) do
+        for _control_index, control in ipairs(controls) do
+            for _item_index, item in ipairs(row) do
+                if item == control then
+                    if _control_index == 1 then focus_rows = focus_rows + 1 end
+                    check(name .. "_toolbar_focus_is_not_split_" .. _control_index, row == controls)
+                end
+            end
+        end
+    end
+    check(name .. "_toolbar_has_one_native_focus_row", focus_rows == 1)
+    local center = controls[1].dimen.y + controls[1].dimen.h / 2
+    for index, control in ipairs(controls) do
+        check(name .. "_toolbar_order_and_geometry_" .. index, control == expected[index] and control.bordersize == 0
+            and math.abs(control.dimen.y + control.dimen.h / 2 - center) <= 1
+            and control.dimen.x >= 0 and control.dimen.x + control.dimen.w <= width
+            and (index == 1 or control.dimen.x >= controls[index - 1].dimen.x + controls[index - 1].dimen.w))
+    end
+    check(name .. "_toolbar_has_no_stacked_filter_or_refresh_row", not contains(screens.widget.content, "Refresh bookshelf")
+        and not contains(screens.widget.content, "Clear filter")
+        and not contains(screens.widget.content, string.format(_("Filter: %s"), _("Currently reading"))))
 end
 local function onlyNavigationBelowCards(name)
     UIManager:forceRePaint()
@@ -155,6 +205,14 @@ local function pagerGeometry(name)
     check(name .. "_pager_is_above_the_first_cover", previous.dimen.y + previous.dimen.h <= top
         and next_button.dimen.y + next_button.dimen.h <= top and counter.dimen.y + counter.dimen.h <= top)
     check(name .. "_compact_counter_shows_the_current_page", counter.text == string.format(_("%d / %d"), screens.page, screens.pages))
+    local counter_focused = false
+    for _index, row in ipairs(screens.focus) do
+        if row == screens.bookshelf_toolbar_buttons and row[3] == previous and row[4] == counter and row[5] == next_button then
+            counter_focused = true
+        end
+    end
+    check(name .. "_page_counter_is_an_actionable_focus_target", counter_focused and type(counter.callback) == "function"
+        and counter.enabled ~= false and counter.text_font_size >= W.font.meta)
     local counter_center = counter.dimen.y + counter.dimen.h / 2
     check(name .. "_page_counter_and_arrows_share_a_center_line",
         math.abs(counter_center - previous.dimen.y - previous.dimen.h / 2) <= 1
@@ -163,6 +221,7 @@ local function pagerGeometry(name)
     check(name .. "_pager_is_compact_and_borderless", previous.bordersize == 0 and next_button.bordersize == 0
         and previous.dimen.h < navigation.dimen.h and next_button.dimen.h < navigation.dimen.h)
     onlyNavigationBelowCards(name)
+    toolbarGeometry(name)
 end
 
 local Main = dofile(plugin .. "/main.lua")
@@ -172,15 +231,21 @@ local tabs = screens.focus[#screens.focus]
 check("bookshelf_is_the_first_tab", tabs[1].text == _("Bookshelf") and tabs[2].text == _("Bookstore")
     and tabs[3].text == _("Search") and tabs[4].text == _("Downloads"))
 check("navigation_has_no_separate_history_tab", not contains(screens.widget.content, "History"))
-check("default_bookshelf_is_selected", tabs[1][1].invert == true and tabs[2][1].invert ~= true)
+check("default_bookshelf_is_selected", tabs[1].selected == true and tabs[1].text_font_bold == true
+    and tabs[2].selected == false and tabs[2].text_font_bold == false
+    and tabs[1][1].invert ~= true and tabs[2][1].invert ~= true)
 capture("synthetic-bookshelf")
 gridGeometry("first_page")
 pagerGeometry("first_page")
+check("first_page_meets_the_compact_bookshelf_capacity", #screens.cards >= (width >= 900 and 8 or width >= 600 and 6 or 4), #screens.cards)
 check("first_page_disables_previous_but_keeps_next", screens.pagination.previous.enabled == false
     and screens.pagination.next.enabled ~= false)
 check("chapter_and_local_page_are_visible", screens.cards[1].progress == string.format(_("Read to: %s · %d/%d"), string.format(_("Chapter %s"), "2"), 7, 45))
+check("compact_position_keeps_chapter_and_verified_page_ratio", screens.cards[1].progress_label == string.format(_("Ch. %s"), "2") .. " · 7/45"
+    and contains(screens.cards[1], screens.cards[1].progress_label))
 check("latest_update_is_not_reading_progress", screens.cards[1].update == string.format(_("Latest: %s"), "Special festival")
-    and not screens.cards[1].progress:find("Special festival", 1, true))
+    and not screens.cards[1].progress:find("Special festival", 1, true)
+    and not contains(screens.cards[1], screens.cards[1].update) and screens.cards[1].update_badge ~= nil)
 local capacity = #screens.cards
 check("only_visible_covers_are_requested", #controller.covers == capacity)
 local selected_card = screens.cards[2]
@@ -218,10 +283,27 @@ screens.widget:onNextPage()
 check("page_key_clamps_at_last_page", screens.page == 3)
 screens.widget:onPreviousPage()
 check("page_key_moves_one_grid_page", screens.page == 2)
+screens.pagination.counter.callback()
+local jump_dialog = assert(screens.dialog, "Expected the page selection dialog")
+check("page_counter_opens_explicit_page_selection", jump_dialog.title == _("Go to page"))
+jump_dialog._input_widget:setText("0")
+dialogPress("Go")
+check("invalid_page_keeps_the_existing_grid_and_dialog", screens.page == 2 and screens.dialog == jump_dialog)
+jump_dialog._input_widget:setText("1")
+dialogPress("Go")
+check("valid_page_selection_opens_the_requested_grid_page", screens.page == 1 and screens.dialog == nil
+    and screens.cards[1].comic.id == "1")
+local resized_focus_id = tostring(capacity + 1)
+screens.bookshelf_focused_comic_id, screens.bookshelf_grid_capacity = resized_focus_id, 1
+screens:refresh()
+local resized_focus = screens.widget:getFocusItem()
+check("capacity_change_locates_the_remembered_comic_in_its_new_page", screens.page == 2
+    and screens.cards[1].comic.id == resized_focus_id and resized_focus and resized_focus.comic
+    and resized_focus.comic.id == resized_focus_id)
 
 screens:showLibrary()
 local old_filter_card = screens.cards[1]
-press("All"); capture("synthetic-bookshelf-filters")
+press(_("All") .. " ▾"); capture("synthetic-bookshelf-filters")
 canceled_reads = controller.canceled_reads
 dialogPress("No reading record")
 check("filter_change_cancels_pending_reader_handoff", controller.canceled_reads == canceled_reads + 1)
@@ -232,7 +314,8 @@ old_filter_card.callback()
 check("previous_filter_card_callback_is_retired", #controller.calls == before)
 controller.waiting = {}
 capture("synthetic-bookshelf-no-record")
-press("No reading record"); dialogPress("Currently reading")
+toolbarGeometry("active_filter")
+press(_("No reading record") .. " ▾"); dialogPress("Currently reading")
 check("reading_is_a_bookshelf_filter", screens.route == "favorites" and screens.filter == "reading"
     and Model.comicProgress(screens.cards[1].comic, controller:getEpisodes(screens.cards[1].comic.id)).state == "reading")
 
@@ -331,12 +414,13 @@ capture("synthetic-bookshelf-single-page")
 check("single_page_hides_compact_pagination", screens.pages == 1 and screens.pagination == nil)
 check("single_page_omits_the_redundant_page_count", not contains(screens.widget.content, string.format(_("%d / %d"), 1, 1)))
 onlyNavigationBelowCards("single_page")
+toolbarGeometry("single_page")
 controller.comics = full_bookshelf
 
 controller.history = { controller.comics[1] }
 screens:showLibrary("history")
-check("legacy_history_entry_opens_bookshelf", screens.route == "favorites" and contains(screens.widget.content, "Refresh bookshelf"))
-press("Refresh bookshelf")
+check("legacy_history_entry_opens_bookshelf", screens.route == "favorites" and #screens.cards > 0)
+press("More"); dialogPress("Refresh bookshelf")
 check("legacy_history_refresh_dispatches_the_bookshelf_collection", controller.waiting[1].method == "refreshLibrary"
     and controller.waiting[1].args[1] == "favorites")
 finish(true)
@@ -349,12 +433,13 @@ controller.comics = {}
 screens:showLibrary()
 capture("synthetic-empty-bookshelf")
 check("empty_bookshelf_has_its_own_message", #screens.cards == 0
-    and contains(screens.widget.content, "Your bookshelf is empty. Search for a comic to follow."))
+    and contains(screens.widget.content, "Your bookshelf is empty. Find a comic in Bookstore or Search."))
 check("empty_bookshelf_also_hides_pagination", screens.pagination == nil)
+toolbarGeometry("empty_bookshelf")
 controller.history = {}
 screens:showLibrary("history")
 check("empty_legacy_history_entry_uses_bookshelf_empty_state", screens.route == "favorites"
-    and contains(screens.widget.content, "Your bookshelf is empty. Search for a comic to follow."))
+    and contains(screens.widget.content, "Your bookshelf is empty. Find a comic in Bookstore or Search."))
 local library_only = true
 for _index, kind in ipairs(controller.library_kinds) do if kind ~= "favorites" then library_only = false end end
 check("library_ui_never_requests_a_history_collection", library_only)

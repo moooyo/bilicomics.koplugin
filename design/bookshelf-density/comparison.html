@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BiliComics · 优化前后对照</title>
+  <link rel="stylesheet" href="comparison.css">
+  <script src="comparison-data.js" defer></script>
+  <script src="comparison.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#comparison">跳到前后对照</a>
+  <header class="masthead">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">b.</span><span>BiliComics<small>KOReader / 原生界面审阅</small></span></a>
+    <a class="button" href="index.html">查看完整新版图集 ↗</a>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar" aria-labelledby="scene-list-title">
+      <h2 id="scene-list-title" class="eyebrow">选择对照页面</h2>
+      <label class="visually-hidden" for="scene-search">查找页面</label>
+      <input id="scene-search" type="search" placeholder="查找标题或编号…" autocomplete="off">
+      <nav id="scene-list" aria-labelledby="scene-list-title"></nav>
+      <p id="scene-count" class="sidebar-foot"></p>
+      <p class="sidebar-foot">原图已保存在此图集目录，可离线浏览。点击图片打开原图。</p>
+    </aside>
+    <main id="comparison" tabindex="-1">
+      <div class="heading"><div><p class="eyebrow">同一场景 · 相同语言与尺寸</p><h1 id="scene-title">优化前后对照</h1></div><div class="scene-step"><button id="previous-scene" class="icon-button" aria-label="上一页">←</button><span id="scene-position"></span><button id="next-scene" class="icon-button" aria-label="下一页">→</button></div></div>
+      <p class="intro">两侧均为 KOReader 原生界面的实际截图，使用合成漫画、账户和交易数据。页面按场景标识匹配；合成示例内容可能有所不同。</p>
+      <p id="scene-focus" class="review-focus"></p>
+      <div class="toolbar">
+        <div class="field"><label for="resolution">屏幕尺寸</label><select id="resolution"><option value="600x800">600 × 800</option><option value="480x640">480 × 640</option><option value="720x960">720 × 960</option><option value="960x720">960 × 720</option></select></div>
+        <div class="segmented" role="group" aria-label="显示方式"><button type="button" data-mode="split" aria-pressed="true">并排对照</button><button type="button" data-mode="before" aria-pressed="false">只看优化前</button><button type="button" data-mode="after" aria-pressed="false">只看优化后</button></div>
+        <a id="comparison-sheet" class="text-link" href="overview-comparison.png" target="_blank" rel="noopener">打开代表页面总览 ↗</a>
+      </div>
+      <div class="results-bar"><code id="scene-id"></code><span id="pair-size" role="status" aria-live="polite"></span></div>
+      <div id="pair" class="pair" data-mode="split">
+        <section id="before-panel" class="capture-panel" aria-labelledby="before-title"><header class="capture-heading"><div><span class="capture-tag before-tag" id="before-title">优化前</span><span id="before-meta" class="capture-meta"></span></div><button type="button" class="text-button" data-zoom="before">放大查看</button></header><a id="before-link" class="image-link" target="_blank" rel="noopener"><img id="before-image" alt="" decoding="async"></a></section>
+        <section id="after-panel" class="capture-panel" aria-labelledby="after-title"><header class="capture-heading"><div><span class="capture-tag after-tag" id="after-title">优化后</span><span id="after-meta" class="capture-meta"></span></div><button type="button" class="text-button" data-zoom="after">放大查看</button></header><a id="after-link" class="image-link" target="_blank" rel="noopener"><img id="after-image" alt="" decoding="async"></a></section>
+      </div>
+      <div id="unavailable" class="empty-state" hidden><h2>此尺寸没有完整的前后截图</h2><p>请选择其他尺寸，或切换到另一个场景。这里不会使用不同尺寸的图片替代。</p></div>
+      <details class="capture-details"><summary>截图来源与对照边界</summary><p>图片保留原始内容与尺寸。页面和总览只调整显示比例，不裁切原图；可点击任一图片检查原始像素。对照图反映 UI 布局和合成状态，不代表真实服务的交易或网络结果。</p><dl id="provenance"></dl><p>原始截图的路径、摘要和匹配记录保存在 <a href="comparison-manifest.json" target="_blank" rel="noopener">对照清单</a> 中。审阅新版完整状态及记录意见，请返回 <a href="index.html">完整图集</a>。</p></details>
+      <footer><span>← / → 切换场景 · 点击图片打开原图</span><span id="generated-date"></span></footer>
+      <noscript><p>请启用 JavaScript 浏览前后对照。优化前的原图位于 before 目录，优化后的原图位于 screens 目录。</p></noscript>
+    </main>
+  </div>
+  <dialog id="zoom-viewer" aria-labelledby="zoom-title"><header class="zoom-header"><h2 id="zoom-title"></h2><div><button id="toggle-native" class="button" type="button">原始像素</button><a id="zoom-original" class="button" target="_blank" rel="noopener">打开原图 ↗</a><button id="close-zoom" class="button" type="button">关闭 · Esc</button></div></header><div class="zoom-toolbar" role="group" aria-label="切换对照版本"><button type="button" data-zoom-side="before" aria-pressed="false">优化前</button><button type="button" data-zoom-side="after" aria-pressed="false">优化后</button></div><div id="zoom-stage" class="zoom-stage"><img id="zoom-image" alt=""></div></dialog>
+</body>
+</html>

@@ -9,6 +9,7 @@ local plugin, output = assert(arg[1]), assert(arg[2])
 package.path = plugin .. "/?.lua;" .. plugin .. "/?/init.lua;" .. package.path
 require("gettext").current_lang = arg[3] or "zh_CN"
 local UIManager = require("ui/uimanager")
+local Font = require("ui/font")
 local Screens = require("bilicomics/ui/screens")
 local Model = require("bilicomics/ui/model")
 local W = require("bilicomics/ui/widgets")
@@ -65,7 +66,7 @@ local function comicsFor(prefix, count)
             current_episode_id = known and "2" or nil, progress_source = known and "local" or nil,
             reading_position = known and { episode_id = "2", index = 7, revision = "synthetic-r1" } or nil,
             last_read_at = known and 1700000000 + index or nil,
-            latest_episode_title = "Latest chapter must stay outside the bookshelf", latest_order = 77,
+            latest_episode_title = "The latest published chapter", latest_order = 77,
             favorite = true, finished = index % 4 == 0, has_update = index % 2 == 1,
             extra = { recommendation = "An original synthetic synopsis for native UI checks.", tags = { "Adventure" } } }
     end
@@ -244,9 +245,50 @@ local function cardIDs()
     for _index, card in ipairs(screens.cards or {}) do found[#found + 1] = tostring(card.comic.id) end
     return found
 end
+local function checkToolbar(name)
+    if screens.route ~= "favorites" then return end
+    local controls, toolbar = assert(screens.bookshelf_toolbar_buttons), assert(screens.bookshelf_toolbar)
+    check(name .. "_pagination_matches_the_page_count", screens.pages > 1 and screens.pagination ~= nil
+        or screens.pages == 1 and screens.pagination == nil)
+    local expected = { screens.bookshelf_filter_button, screens.bookshelf_sort_button }
+    if screens.pagination then
+        expected[3], expected[4], expected[5] = screens.pagination.previous, screens.pagination.counter, screens.pagination.next
+    end
+    local focus_rows, occurrences = 0, {}
+    for _index, row in ipairs(screens.focus) do
+        if row == controls then focus_rows = focus_rows + 1 end
+        for _column, control in ipairs(row) do occurrences[control] = (occurrences[control] or 0) + 1 end
+    end
+    check(name .. "_one_toolbar_focus_row", focus_rows == 1 and #controls == #expected)
+    local center = controls[1].dimen.y + controls[1].dimen.h / 2
+    local first_cover = math.huge
+    for _index, card in ipairs(screens.cards or {}) do first_cover = math.min(first_cover, card.dimen.y) end
+    local members, maximum_height = {}, 0
+    for index, control in ipairs(controls) do
+        members[control] = true
+        maximum_height = math.max(maximum_height, control.dimen.h)
+        check(name .. "_toolbar_order_and_focus_" .. index, control == expected[index] and occurrences[control] == 1)
+        check(name .. "_toolbar_center_line_" .. index, math.abs(control.dimen.y + control.dimen.h / 2 - center) <= 1
+            and control.dimen.y + control.dimen.h <= first_cover)
+        check(name .. "_toolbar_readable_borderless_control_" .. index, control.bordersize == 0
+            and control.text_font_size >= 14 and type(control.callback) == "function")
+        if index > 1 then check(name .. "_toolbar_horizontal_order_" .. index,
+            control.dimen.x >= controls[index - 1].dimen.x + controls[index - 1].dimen.w) end
+    end
+    local stacked = false
+    if first_cover < math.huge then
+        for _index, row in ipairs(screens.focus) do for _column, control in ipairs(row) do
+            if not control.comic and not members[control] and control.dimen.y >= controls[1].dimen.y
+                and control.dimen.y < first_cover then stacked = true end
+        end end
+    end
+    check(name .. "_no_stacked_fixed_controls", not stacked and not button("Clear filter")
+        and not button("Refresh bookshelf") and toolbar:getSize().h <= maximum_height + 1)
+end
 local function capture(name)
     flush()
     UIManager:forceRePaint()
+    checkToolbar(name)
     local size = screens.widget.content:getSize()
     check(name .. "_screen_bounds", size.w <= width and size.h <= height, { w = size.w, h = size.h })
     if screens.dialog then
@@ -283,12 +325,29 @@ local function checkShelfCards(name)
     local previous
     for index, card in ipairs(screens.cards) do
         local title = findText(card, card.comic.title)
-        local progress = findText(card, card.progress)
+        local progress = findText(card, card.progress_label or card.progress)
+        local expected_progress = Model.comicProgress(card.comic, controller:getEpisodes(card.comic.id))
+        local updated = not not (card.comic.updated or card.comic.has_update or (card.comic.extra or {}).has_update)
+        local badge = card.update_badge
         check(name .. "_bookshelf_card_mode_" .. index, card.bookshelf == true and not card.compact)
         check(name .. "_fixed_title_and_single_position_" .. index, title and progress
-            and title.height == W.scale(42) and progress.height == W.scale(20))
-        check(name .. "_no_latest_chapter_metadata_" .. index,
-            not contains(card, string.format(_("Latest: %s"), "Latest chapter must stay outside the bookshelf")))
+            and title.height == W.scale(40) and progress.height == W.scale(20))
+        check(name .. "_readable_title_and_position_" .. index, title and progress and title.face and progress.face
+            and type(title.face.size) == "number" and type(progress.face.size) == "number"
+            and title.face.size >= Font:getFace("cfont", 16).size and progress.face.size >= Font:getFace("cfont", 14).size)
+        check(name .. "_compact_position_preserves_the_complete_model_record_" .. index,
+            card.progress == expected_progress.label and progress.text == card.progress_label)
+        check(name .. "_update_flag_controls_only_the_compact_badge_" .. index, card.updated == updated
+            and (updated and badge and card[2] == badge and badge[1].text == _("Updated")
+                or not updated and badge == nil and card[2] == nil))
+        check(name .. "_latest_title_does_not_add_a_caption_row_" .. index, not contains(card, card.update)
+            and not contains(card, card.comic.latest_episode_title) and card:getSize().h == card.frame:getSize().h)
+        if badge then
+            check(name .. "_badge_stays_inside_the_cover_" .. index, badge.dimen
+                and badge.dimen.x >= card.dimen.x and badge.dimen.x + badge.dimen.w <= card.dimen.x + card.dimen.w
+                and badge.dimen.y >= card.dimen.y
+                and badge.dimen.y + badge.dimen.h <= card.dimen.y + card.card_cover_inset + card.cover_height)
+        end
         check(name .. "_card_bounds_" .. index, card.dimen.x >= 0 and card.dimen.y >= 0
             and card.dimen.x + card.dimen.w <= width and card.dimen.y + card.dimen.h <= height)
         if previous and card.dimen.y == previous.dimen.y then
@@ -315,12 +374,30 @@ local Main = dofile(plugin .. "/main.lua")
 Main.onShowBiliComics({ _open = function(_self, callback) callback(controller, screens) end })
 flush()
 check("main_entry_opens_the_remembered_bookshelf", screens.route == "favorites" and screens.dialog == nil)
-check("default_bookshelf_has_a_quiet_header", button("Back") and button("More")
-    and not button("Refresh bookshelf") and not button("All") and not button("Clear filter")
+check("default_bookshelf_has_direct_filter_and_sort_controls", button("Back") and button("More")
+    and button(_("All") .. " ▾") and button(_("Bookshelf order") .. " ▾")
+    and not button("Refresh bookshelf") and not button("Clear filter")
     and not contains(screens.widget.content, "Tap to read · Hold for chapters"))
 checkShelfCards("default")
+check("default_bookshelf_uses_responsive_columns", screens.grid_columns == (width >= 900 and 4 or width >= 600 and 3 or 2))
+if width == 600 and height == 800 then check("default_600x800_shows_at_least_six_comics", #screens.cards >= 6) end
+if width == 480 and height == 640 then check("default_480x640_shows_at_least_four_comics", #screens.cards >= 4) end
 checkNavigation("default", 1)
 capture("synthetic-bookshelf-finishing-default")
+local migration_index = 17
+local migration_target = controller:active().comics[migration_index].id
+screens:showSearch()
+controller:active().view.page = math.ceil(migration_index / 24)
+controller:active().view.focused_comic_id = migration_target
+screens:showLibrary()
+local migrated_focus = screens.widget:getFocusItem()
+check("saved_focus_relocates_an_old_capacity_page", screens.page == math.ceil(migration_index / (screens.grid_columns * screens.grid_rows))
+    and screens.page ~= math.ceil(migration_index / 24) and migrated_focus and migrated_focus.comic
+    and migrated_focus.comic.id == migration_target)
+screens:showSearch()
+controller:active().view.page = 1
+controller:active().view.focused_comic_id = controller:active().comics[1].id
+screens:showLibrary()
 local initial_ids = table.concat(cardIDs(), ",")
 local ordered = controller:active().comics
 ordered[1], ordered[2] = ordered[2], ordered[1]
@@ -337,14 +414,17 @@ for _index, message in ipairs({ "Refresh bookshelf", "Filter bookshelf", "Sort b
 end
 capture("synthetic-bookshelf-finishing-more")
 dialogPress("Refresh bookshelf")
+capture("synthetic-bookshelf-finishing-refreshing-cache")
 finish(pending("syncBookshelf"), { items = ordered, last_synced_at = 1700000300 })
 check("manual_sync_explicitly_adopts_the_new_official_order", cardIDs()[1] == ordered[1].id)
-openMore(); dialogPress("Filter bookshelf"); dialogPress("Currently reading")
-check("active_filter_is_visible_with_a_direct_clear_action", screens.filter == "reading" and button("Clear filter")
-    and contains(screens.widget.content, string.format(_("Filter: %s"), _("Currently reading"))))
+press(_("All") .. " ▾"); dialogPress("Currently reading")
+check("active_filter_is_visible_in_the_single_toolbar", screens.filter == "reading"
+    and screens.bookshelf_filter_button.text == _("Currently reading") .. " ▾"
+    and not contains(screens.widget.content, string.format(_("Filter: %s"), _("Currently reading"))))
 capture("synthetic-bookshelf-finishing-filter")
-press("Clear filter")
-check("clearing_filter_returns_to_the_quiet_default", screens.filter == "all" and not button("Clear filter") and not button("Refresh bookshelf"))
+screens.bookshelf_filter_button.callback(); dialogPress("All")
+check("clearing_filter_restores_the_default_toolbar", screens.filter == "all" and button(_("All") .. " ▾")
+    and button(_("Bookshelf order") .. " ▾") and not button("Clear filter") and not button("Refresh bookshelf"))
 
 local selected = screens.cards[2]
 focusCard(selected)
@@ -359,8 +439,8 @@ check("more_opens_the_last_focused_comic_after_taking_focus", screens.route == "
 finish(catalog, true)
 screens:showLibrary()
 
-openMore(); dialogPress("Filter bookshelf"); dialogPress("Currently reading")
-openMore(); dialogPress("Sort bookshelf"); dialogPress("Title")
+press(_("All") .. " ▾"); dialogPress("Currently reading")
+press(_("Bookshelf order") .. " ▾"); dialogPress("Title")
 assert(screens.pagination and screens.pagination.next.enabled ~= false, "The synthetic reading shelf must contain multiple pages")
 screens.pagination.next.callback()
 local remembered = screens.cards[1]
@@ -488,11 +568,15 @@ controller:active().comics = comicsFor(5000, 6)
 for _index, comic in ipairs(controller:active().comics) do comic.finished = false end
 screens:refresh()
 openMore(); dialogPress("Filter bookshelf"); dialogPress("Completed series")
-check("empty_filter_keeps_a_clear_action_and_does_not_change_the_cache", #screens.cards == 0 and button("Clear filter")
+check("empty_filter_keeps_the_picker_and_does_not_change_the_cache", #screens.cards == 0
+    and screens.bookshelf_filter_button.text == _("Completed series") .. " ▾"
     and #controller:active().comics == 6 and controller:active().sync.has_cache
     and contains(screens.widget.content, "No comics match this filter.")
     and not contains(screens.widget.content, "Your bookshelf is empty. Find a comic in Bookstore or Search."))
 capture("synthetic-bookshelf-finishing-filter-empty")
+screens.bookshelf_filter_button.callback(); dialogPress("All")
+check("empty_filter_can_be_cleared_through_the_real_picker", screens.filter == "all" and #screens.cards > 0
+    and #controller:active().comics == 6)
 showAccount("anonymous")
 check("anonymous_empty_bookshelf_exposes_qr_sign_in", #screens.cards == 0 and button("Sign in with QR code")
     and contains(screens.widget.content, "Sign in to load your bookshelf."))
@@ -539,6 +623,7 @@ check("reconnecting_enables_the_existing_retry_without_requesting_login", button
 press("Retry sync")
 finish(pending("syncBookshelf"), { items = comicsFor(7000, 2) })
 check("reconnected_retry_publishes_cached_cards", #screens.cards == 2 and controller:active().sync.has_cache)
+capture("synthetic-bookshelf-finishing-reconnected-single-page")
 
 unavailable_requests = #controller.calls
 showAccount("synthetic-sync-unavailable")
@@ -560,8 +645,10 @@ closeDialog()
 showAccount("synthetic-b")
 screens:showBookstore()
 screens:_selectBookstoreCategory({ id = "101", name = "Adventure" })
-local store_columns = width >= 900 and 4 or width >= 600 and 3 or 2
-check("category_keeps_two_compact_rows_after_navigation_changes", #screens.cards == store_columns * 2 and screens.grid_rows == 2)
+local landscape = width > height
+local store_columns, store_rows = width >= 900 and 4 or width >= 600 and 3 or 2, landscape and 1 or 2
+check("category_keeps_its_orientation_capacity_after_navigation_changes", #screens.cards == store_columns * store_rows
+    and screens.grid_columns == store_columns and screens.grid_rows == store_rows)
 if width == 600 and height == 800 then check("category_still_shows_six_cards_at_600x800", #screens.cards == 6) end
 checkNavigation("category", 2)
 capture("synthetic-bookshelf-finishing-category")

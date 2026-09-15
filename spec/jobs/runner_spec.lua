@@ -79,6 +79,31 @@ local function backoff(runner, screen, id)
     screen:untilTrue(function() return not runner.tasks[id] and #runner.queue > 0 end)
     check(screen.held == 0, "Backoff must release worker standby ownership")
 end
+local function submitHeldReceipt(runner, request, options, done, marker, packet)
+    local native = ffiutil.runInSubProcess
+    ffiutil.runInSubProcess = function(operation, ...)
+        return native(function(pid, fd)
+            if packet then
+                local data = json.encode(packet)
+                local frame = string.format("%08x\n", #data) .. data
+                check(tonumber(ffi.C.write(fd, frame, #frame)) == #frame, "The small synthetic frame must be written completely")
+                ffi.C.close(fd)
+            else operation(pid, fd) end
+            Files.write(marker, "receipt-written")
+            -- Keep the real child alive after the real pipe frame is complete.
+            socket.sleep(0.8)
+        end, ...)
+    end
+    local ok, id = pcall(runner.submit, runner, request, options, done)
+    ffiutil.runInSubProcess = native
+    check(ok, tostring(id))
+    return id
+end
+local function waitWithoutTicks(marker)
+    local deadline = socket.gettime() + 2
+    while not Files.exists(marker) and socket.gettime() < deadline do socket.sleep(0.002) end
+    check(Files.exists(marker), "The child must finish its pipe write before teardown")
+end
 local function test(name, fn)
     local before = fdCount()
     local ok, failure = xpcall(fn, debug.traceback)
@@ -492,6 +517,110 @@ test("A future high-priority retry cannot preempt currently useful lower-priorit
     screen:untilTrue(function() return #calls == 2 end)
     check(calls[2].value == "retry", "The high-priority retry must remain queued until due")
     reapedAttempts(path)
+end)
+
+test("Recharge defaults prevent preemption and suspension from replaying creation", function()
+    local path = output .. "/recharge-no-preempt.json"
+    local runner, screen = make({ max_workers = 1, worker = function(request)
+        if request.kind == "recharge" then
+            attempt(path); socket.sleep(0.09)
+            return { order_id = "18446744073709551615", qr_validated = true }
+        end
+        return "visible"
+    end })
+    local calls, done = callbacks()
+    local id = runner:submit({ kind = "recharge" }, { priority = 40 }, done)
+    local original_pid = runner.tasks[id].pid
+    screen:untilTrue(function() return Files.exists(path) end)
+    runner:submit({ kind = "client", method = "comicDetail" }, { priority = 0 }, done)
+    runner:suspend(); screen:runFor(0.025)
+    check(runner.tasks[id] and runner.tasks[id].pid == original_pid and not runner.tasks[id].cancel_kind,
+        "Default recharge mutation ownership must prevent lifecycle preemption")
+    runner:resume(); screen:untilTrue(function() return #calls == 2 end)
+    check(attempts(path).count == 1 and calls[1].value.order_id == "18446744073709551615" and calls[2].value == "visible",
+        "The original recharge must finish once before the queued read")
+    reapedAttempts(path)
+end)
+
+test("Recharge transport failures and timeouts never retry order creation", function()
+    for _, mode in ipairs({ "timeout", "network" }) do
+        local path = output .. "/recharge-no-retry-" .. mode .. ".json"
+        local runner, screen = make({ retry_delay = 0.02, worker = function()
+            attempt(path)
+            if mode == "timeout" then socket.sleep(0.2); return { order_id = "12345" } end
+            return nil, { kind = "network", retryable = true, transmitted = true }
+        end })
+        local calls, done = callbacks()
+        runner:submit({ kind = "recharge" }, { timeout = 0.04, retry_attempts = 99 }, done)
+        screen:untilTrue(function() return #calls == 1 end); screen:runFor(0.08)
+        check(attempts(path).count == 1 and calls[1].value == nil and calls[1].error.transmitted == true,
+            "An uncertain recharge cannot be automatically recreated")
+        check(not next(runner.tasks) and #runner.queue == 0, "Recharge failure must release all execution ownership")
+        reapedAttempts(path)
+    end
+end)
+
+test("Close preserves a recharge receipt already read from its real pipe", function()
+    local marker = output .. "/recharge-read-close.ready"
+    local runner, screen = make({ worker = function() return { order_id = "18446744073709551615", qr_validated = true } end })
+    local calls, done = callbacks()
+    local id = submitHeldReceipt(runner, { kind = "recharge" }, {}, done, marker)
+    local pid = runner.tasks[id].pid
+    screen:untilTrue(function() return runner.tasks[id] and runner.tasks[id].packet ~= nil end)
+    check(#calls == 0, "The receipt must be read while the child still owns its process")
+    runner:close()
+    check(#calls == 1 and calls[1].value.order_id == "18446744073709551615" and not calls[1].error,
+        "Teardown cannot replace an observed receipt with unknown cancellation")
+    reaped(pid)
+end)
+
+test("Close drains a complete unread recharge receipt after stopping its child", function()
+    local marker = output .. "/recharge-unread-close.ready"
+    local runner = make({ worker = function() return { order_id = "18446744073709551615", qr_validated = true } end })
+    local calls, done = callbacks()
+    local id = submitHeldReceipt(runner, { kind = "recharge" }, {}, done, marker)
+    local task, pid = runner.tasks[id], runner.tasks[id].pid
+    waitWithoutTicks(marker)
+    check(task.packet == nil and #task.buffer == 0, "This scenario requires a wholly unread pipe frame")
+    runner:close()
+    check(#calls == 1 and calls[1].value.order_id == "18446744073709551615" and not calls[1].error,
+        "A complete buffered receipt must survive close even before the next UI tick")
+    check(#task.buffer <= runner.limit + 9, "Teardown draining must remain within one bounded frame")
+    reaped(pid)
+end)
+
+test("A recharge receipt read before timeout survives termination of its lingering child", function()
+    local marker = output .. "/recharge-timeout-receipt.ready"
+    local runner, screen = make({ worker = function() return { order_id = "18446744073709551615", qr_validated = true } end })
+    local calls, done = callbacks()
+    local id = submitHeldReceipt(runner, { kind = "recharge" }, { timeout = 0.04 }, done, marker)
+    local pid = runner.tasks[id].pid
+    screen:untilTrue(function() return runner.tasks[id] and runner.tasks[id].packet ~= nil end)
+    check(#calls == 0, "Receipt collection must precede timeout completion")
+    screen:untilTrue(function() return #calls == 1 end)
+    check(calls[1].value.order_id == "18446744073709551615" and not calls[1].error,
+        "A later timeout cannot erase the already validated recharge response")
+    check(screen.acquired == 1 and screen.released == 1, "A receipt must not cause another worker attempt")
+    reaped(pid)
+end)
+
+test("Teardown receipt recovery still rejects mismatched identity, attempt, and oversize", function()
+    for index, mode in ipairs({ "identity", "attempt", "oversize" }) do
+        local marker = output .. "/recharge-invalid-receipt-" .. mode .. ".ready"
+        local runner = make({ max_payload = 1024, worker = function() error("The controlled pipe supplies its own frame") end })
+        local calls, done = callbacks()
+        local id = "recharge-frame-" .. index
+        local packet = { id = mode == "identity" and "wrong-task" or id, attempt = mode == "attempt" and 2 or 1,
+            value = { order_id = "18446744073709551615", qr_validated = true,
+                payload = mode == "oversize" and string.rep("x", 2048) or nil } }
+        submitHeldReceipt(runner, { kind = "recharge" }, { id = id }, done, marker, packet)
+        local task, pid = runner.tasks[id], runner.tasks[id].pid
+        waitWithoutTicks(marker); runner:close()
+        check(#calls == 1 and calls[1].value == nil and calls[1].error.transmitted == true,
+            "An invalid " .. mode .. " frame cannot become a recharge receipt")
+        check(#task.buffer <= runner.limit + 9, "Invalid frames cannot expand teardown's read budget")
+        reaped(pid)
+    end
 end)
 
 local passed = true

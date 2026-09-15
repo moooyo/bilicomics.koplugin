@@ -1,6 +1,7 @@
 """Run synthetic native QR sign-in checks only on the remote Linux test host."""
 import argparse
 import hashlib
+from run_ui_sources import ui_source_names
 import json
 import os
 from pathlib import Path
@@ -22,7 +23,7 @@ def main():
     summary = {"scope": "Synthetic native QR UI only; no real session or HTTP", "language": args.language, "cases": []}
     summary["sources"] = {
         name: hashlib.sha256((args.plugin / name).read_bytes()).hexdigest()
-        for name in ("bilicomics/ui/qr_login.lua", "bilicomics/ui/screens.lua", "l10n/bilicomics_zh_CN.lua")
+        for name in ui_source_names(args.plugin)
     }
     for width, height in ((480, 640), (600, 800)):
         output = args.output / f"{width}x{height}"

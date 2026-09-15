@@ -199,6 +199,16 @@ function Model.error(error)
         return _("Purchase selection is unavailable"), _("Choose a supported range and payment option. No purchase was submitted for this selection.")
     elseif kind == "quote_unverified" then
         return _("Purchase quote is not verified"), _("The exact chapter set, final charge or payment asset is not confirmed. This selection cannot be submitted; choose another option or return to a single chapter.")
+    elseif kind == "quote_expired" then
+        return _("Purchase quote expired"), _("No new purchase was submitted. Refresh the quote, review the current price and payment option, then confirm again.")
+    elseif kind == "quote_changed" then
+        return _("Purchase quote changed"), _("No new purchase was submitted. The price, payment assets, chapter range or access changed. Request a new quote and confirm the updated terms.")
+    elseif kind == "quote_refresh_required" then
+        return _("Refresh the purchase quote"), _("No new purchase was submitted. Request a new quote and confirm it before purchasing.")
+    elseif kind == "invalid_quote" then
+        return _("Purchase quote is unavailable"), _("No new purchase was submitted. Return to the purchase page, request a new quote and confirm its details.")
+    elseif kind == "insufficient_balance" then
+        return _("Insufficient balance"), _("No new purchase was submitted. Check your coin or coupon balance, choose an available payment option, then request and confirm a new quote.")
     elseif kind == "version_replaced" then
         return _("Older version is retained"), _("Only already cached pages can be read in this older version. Open the chapter catalog or download the new version to continue.")
     elseif kind == "source_unavailable" then
@@ -229,21 +239,29 @@ function Model.error(error)
         or kind == "refresh_pending" or kind == "refresh_unavailable" or kind == "request_authentication" then
         return _("Session renewal needs attention"), _("Check your connection and try again. If renewal remains unavailable, sign in with a QR code from Account."), "account"
     elseif kind == "auth" or kind == "authentication" or kind == "login_required" or kind == "unauthorized" or kind == "session" then
-        return _("Sign in required"), _("Import a valid Bilibili web session from Account, then refresh."), "account"
-    elseif kind == "invalid_session" or kind == "account_mismatch" then
-        return _("Session could not be imported"), _("Use an unmodified Cookie header from the account you want to sign in with."), "account"
+        return _("Sign in required"), _("Open Account and sign in with a QR code, then refresh this page."), "account"
+    elseif kind == "invalid_session" then
+        return _("Sign-in could not be verified"), _("Open Account and sign in again with a QR code, then retry the operation."), "account"
+    elseif kind == "account_mismatch" then
+        return _("A different account is required"), _("Open Account and scan the QR code with the account that owns this content or purchase, then refresh."), "account"
     elseif kind == "capability" or kind == "unsupported" then
         return _("Service capability unavailable"), _("This operation is not supported by the current service connection. Update the plugin when support is available.")
     elseif kind == "locked" or kind == "access" then
         return _("Chapter is locked"), _("Review a purchase quote before reading or downloading this chapter.")
     elseif kind == "outcome_unknown" or kind == "purchase_unknown" then
         return _("Purchase result pending"), _("Refresh the purchase result. Do not submit another purchase while the result is unknown.")
+    elseif kind == "persistence_pending" then
+        return _("Purchase result is not saved"), _("Restore writable storage, then refresh the purchase result. Do not submit another purchase while the result is waiting to be saved.")
     elseif kind == "network" or kind == "connectivity" or kind == "timeout" or kind == "transport" then
         return _("Connection failed"), _("Check the connection and try again. Downloaded chapters are available offline.")
     elseif kind == "active_content" or kind == "in_use" then
         return _("Chapter is open"), _("Close the current chapter before removing its downloaded images.")
     elseif kind == "low_space" then
         return _("Storage is nearly full"), _("Remove downloaded chapters or clear automatic cache, then resume the download.")
+    elseif kind == "storage" then
+        return _("Storage operation failed"), _("Make sure storage is writable and has enough free space. Then refresh the page or resume the download. Refresh any pending purchase result before purchasing again.")
+    elseif kind == "image_decode" then
+        return _("Image could not be displayed"), _("Close this chapter, then open Downloads to review its recovery options.")
     elseif kind == "unsupported_image_size" then
         return _("Image is too large for this device"), _("This image needs a smaller or segmented source before it can be read safely.")
     end

@@ -9,12 +9,15 @@ local plugin, output = assert(arg[1]), assert(arg[2])
 package.path = plugin .. "/?.lua;" .. plugin .. "/?/init.lua;" .. package.path
 require("gettext").current_lang = arg[3] or "zh_CN"
 local UIManager = require("ui/uimanager")
+local Font = require("ui/font")
 local Screens = require("bilicomics/ui/screens")
+local W = require("bilicomics/ui/widgets")
 local json = require("rapidjson")
 local _ = require("bilicomics/ui/i18n")
 local width, height = Device.screen:getWidth(), Device.screen:getHeight()
 local expected_columns = width >= 900 and 4 or width >= 600 and 3 or 2
-local expected_capacity = expected_columns * 2
+local expected_rows = width > height and 1 or 2
+local expected_capacity = expected_columns * expected_rows
 local result = { assertions = {}, screenshots = {}, language = arg[3], width = width, height = height,
     scope = "Native category picker and bookstore widgets; original synthetic covers; query-isolated anonymous caches; no HTTP, account, purchase or reader" }
 local function check(name, value, detail)
@@ -26,6 +29,15 @@ local function contains(widget, message)
         if type(child) == "table" and contains(child, message) then return true end
     end
     return false
+end
+local function textWidget(widget, text)
+    if widget.text == text and widget.face then return widget end
+    for _index, child in ipairs(widget) do
+        if type(child) == "table" then
+            local found = textWidget(child, text)
+            if found then return found end
+        end
+    end
 end
 local category_names = { "Adventure", "Fantasy", "Science Fiction", "Mystery", "Drama", "Comedy", "Romance", "Action",
     "History Fiction", "Sports", "School", "Slice of Life", "Supernatural", "Martial Arts", "Suspense", "Graphic Essays" }
@@ -218,8 +230,8 @@ local function coverImage(widget, file)
 end
 local function checkGrid(name)
     UIManager:forceRePaint()
-    check(name .. "_native_two_row_capacity", #screens.cards == expected_capacity
-        and screens.grid_columns == expected_columns and screens.grid_rows == 2)
+    check(name .. "_native_orientation_capacity", #screens.cards == expected_capacity
+        and screens.grid_columns == expected_columns and screens.grid_rows == expected_rows)
     if width == 600 and height == 800 then check(name .. "_six_visible_cards_at_600x800", #screens.cards == 6) end
     local index, rows, bottom = 0, {}, 0
     for _index, row in ipairs(screens.focus) do if row[1] and row[1].comic then rows[#rows + 1] = row end end
@@ -230,6 +242,10 @@ local function checkGrid(name)
             check(name .. "_card_bounds_" .. index, card.dimen.x >= 0 and card.dimen.y >= 0
                 and card.dimen.x + card.dimen.w <= width and card.dimen.y + card.dimen.h <= height)
             check(name .. "_focus_order_" .. index, screens.cards[index] == card)
+            local title, metadata = textWidget(card, card.text), textWidget(card, card.update)
+            check(name .. "_readable_card_fonts_" .. index, title and metadata
+                and title.face.size >= Font:getFace("cfont", 16).size
+                and metadata.face.size >= Font:getFace("cfont", 14).size)
             local image = coverImage(card, card.comic.cover_path)
             local size = image and image:getSize()
             check(name .. "_portrait_cover_" .. index, size and size.h > size.w and math.abs(size.h / size.w - 4 / 3) <= 0.08)
@@ -244,6 +260,13 @@ local function checkGrid(name)
         end
     end
     check(name .. "_all_cards_focusable", index == #screens.cards)
+    local pagination, focusable = screens.pagination, false
+    for _index, row in ipairs(screens.focus) do
+        if row[1] == pagination.previous and row[2] == pagination.counter and row[3] == pagination.next then focusable = true end
+    end
+    check(name .. "_page_counter_is_a_readable_focusable_action", focusable
+        and type(pagination.counter.callback) == "function" and pagination.counter.enabled ~= false
+        and pagination.counter.text_font_size >= W.font.meta)
     local controls = {}
     for _index, row in ipairs(screens.focus) do for _index, control in ipairs(row) do
         if not control.comic and control.dimen.y >= bottom then controls[#controls + 1] = control end
@@ -251,6 +274,10 @@ local function checkGrid(name)
     check(name .. "_one_bottom_navigation_row", #controls == 4 and controls[1].text == _("Bookshelf")
         and controls[2].text == _("Bookstore") and controls[3].text == _("Search") and controls[4].text == _("Downloads")
         and controls[1].dimen.y == controls[4].dimen.y)
+    for index, tab in ipairs(controls) do
+        check(name .. "_quiet_navigation_state_" .. index, tab.selected == (index == 2)
+            and tab.bordersize == 0 and tab.text_font_bold == (index == 2) and tab[1].invert ~= true)
+    end
 end
 local function checkCoverScope(name, query)
     controller.covers = {}

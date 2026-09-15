@@ -9,13 +9,13 @@ local TextViewer = require("ui/widget/textviewer")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
 local Model = require("bilicomics/ui/model")
-local _ = require("bilicomics/ui/i18n")
+local T = require("bilicomics/ui/i18n")
 local Screens = {}
 Screens.__index = Screens
 
 local function title(record) return record.title or record.short_title or tostring(record.id or "") end
 local function count(map) local total = 0; for _ in pairs(map) do total = total + 1 end; return total end
-local function asset(method) return method == "coupon" and _("coupons") or _("coins") end
+local function asset(method) return method == "coupon" and T("coupons") or T("coins") end
 local function copy(items) local result = {}; for _index, item in ipairs(items) do result[#result + 1] = item end; return result end
 local function accountKey(controller)
     local account = controller:getAccount() or {}
@@ -42,8 +42,37 @@ function Screens.new(options)
         selected = {}, filter = "all", descending = false, loaded = {}, pending = {}, query = "" }, Screens)
 end
 
-function Screens:_navigate(route, id)
-    if self.route == "favorites" then self:_saveBookshelfView() end
+function Screens:_ensureRouteViews()
+    local key = accountKey(self.controller)
+    if self.view_account_initialized and self.view_account == key then return true end
+    self.view_account_initialized, self.view_account, self.route_views = true, key, {}
+    self.query, self.search_results, self.search_error, self.loaded = "", nil, nil, {}
+    self.comic_origin, self.account_origin, self.focused_comic_id = nil, nil, nil
+    self.bookstore_query, self.bookstore_category = nil, nil
+    return false
+end
+
+function Screens:_captureRoute()
+    if not self.route then return nil end
+    local selected = {}
+    for id, value in pairs(self.selected or {}) do selected[id] = value end
+    return { account_key = accountKey(self.controller), route = self.route, comic_id = self.comic_id,
+        page = self.page, filter = self.filter, query = self.query, search_results = self.search_results, search_error = self.search_error,
+        descending = self.descending, selecting = self.selecting, selected = selected,
+        focused_comic_id = self.focused_comic_id, comic_origin = self.comic_origin,
+        account_origin = self.account_origin, bookstore_query = self.bookstore_query,
+        bookstore_category = self.bookstore_category }
+end
+
+function Screens:_navigate(route, id, restore)
+    local same_account = self:_ensureRouteViews()
+    if same_account and self.route then
+        self.route_views[self.route .. ":" .. tostring(self.comic_id or "")] = self:_captureRoute()
+        if self.route == "favorites" then self:_saveBookshelfView() end
+    end
+    local view = restore or route ~= "favorites" and route ~= "comic"
+        and self.route_views[route .. ":" .. tostring(id or "")]
+    if view and view.account_key ~= accountKey(self.controller) then view = nil end
     self:_closeDialog()
     self.purchase_visible = false
     self.epoch = self.epoch + 1
@@ -53,7 +82,34 @@ function Screens:_navigate(route, id)
     self.route, self.comic_id, self.page = route, id, 1
     self.status, self.filter, self.selecting, self.selected = nil, "all", false, {}
     if route == "favorites" then self:_loadBookshelfView() end
+    if view then
+        self.page, self.filter = view.page or 1, view.filter or "all"
+        if route == "search" then self.query, self.search_results, self.search_error = view.query or "", view.search_results, view.search_error end
+        self.descending, self.selecting, self.selected = view.descending == true, view.selecting == true, view.selected or {}
+        self.focused_comic_id, self.comic_origin = view.focused_comic_id, view.comic_origin
+        self.account_origin = view.account_origin
+        self.bookstore_query, self.bookstore_category = view.bookstore_query, view.bookstore_category
+    end
     self:_render()
+end
+
+function Screens:_restoreRoute(view)
+    if not view or view.account_key ~= accountKey(self.controller) then self:showLibrary(); return end
+    self:_navigate(view.route, view.comic_id, view)
+    if view.route == "favorites" then self:_syncBookshelf(false); self:_maybeBookshelfHelp()
+    elseif view.route == "bookstore" and self.controller:getBookstore(self.bookstore_query).stale then self:_refreshBookstore()
+    elseif view.route == "comic" and not self.loaded["comic:" .. tostring(view.comic_id)] then self:_refreshComic() end
+end
+
+function Screens:_rememberReaderReturn(comic_id)
+    local ticket = { account_key = accountKey(self.controller), comic_id = tostring(comic_id),
+        context = self:_captureRoute(), ready = false }
+    self.bookshelf_reader_return = ticket
+    return ticket
+end
+
+function Screens:_clearReaderReturn(ticket)
+    if not ticket or self.bookshelf_reader_return == ticket then self.bookshelf_reader_return = nil end
 end
 
 -- Legacy continue/history links now return to the bookshelf without discarding progress.
@@ -67,12 +123,17 @@ function Screens:showBookstore()
     if self.controller:getBookstore(self.bookstore_query).stale then self:_refreshBookstore() end
 end
 function Screens:showComic(id)
-    if self.route ~= "comic" then self.comic_origin = { route = self.route, page = self.page } end
+    local origin = self.route ~= "comic" and self:_captureRoute() or self.comic_origin
     self:_navigate("comic", tostring(id))
+    self.comic_origin = origin
     if not self.loaded["comic:" .. tostring(id)] then self:_refreshComic() end
 end
 function Screens:showDownloads() self:_navigate("downloads") end
-function Screens:showAccount() self:_navigate("account") end
+function Screens:showAccount()
+    local origin = self.route ~= "account" and self:_captureRoute() or self.account_origin
+    self:_navigate("account")
+    self.account_origin = origin
+end
 function Screens:showSearch() self:_navigate("search") end
 function Screens:refresh()
     if self.bookshelf_reader_return and self.bookshelf_reader_return.account_key ~= accountKey(self.controller) then
@@ -96,6 +157,8 @@ function Screens:close(keep_reader_return)
 end
 
 function Screens:_closeDialog(keep_purchase)
+    local repaint = self.context_dialog_dirty
+    self:_rechargeClose()
     if not keep_purchase then self.purchase_visible = false end
     self.bookstore_synopsis, self.bookstore_synopsis_dirty = nil, nil
     self.bookstore_picker, self.bookstore_picker_state, self.bookstore_picker_dirty = nil, nil, nil
@@ -103,6 +166,7 @@ function Screens:_closeDialog(keep_purchase)
     self.session_input = nil
     if self.qr_login then self.qr_login:close(); self.qr_login = nil end
     if self.dialog then UIManager:close(self.dialog); self.dialog = nil end
+    if repaint and self.route then self:_render() end
 end
 
 function Screens:_loadBookshelfView()
@@ -110,6 +174,7 @@ function Screens:_loadBookshelfView()
     self.bookshelf_view_account, self.bookshelf_view_loaded = accountKey(self.controller), true
     self.filter, self.bookshelf_sort, self.page = view.filter or "all", view.sort or "source", view.page or 1
     self.bookshelf_focused_comic_id = view.focused_comic_id and tostring(view.focused_comic_id) or nil
+    self.bookshelf_restore_focus = self.bookshelf_focused_comic_id ~= nil
     self.bookshelf_order_ids, self.bookshelf_help_seen = copy(view.order_ids or {}), view.help_seen == true
     self.bookshelf_reorder = false
 end
@@ -127,7 +192,7 @@ function Screens:onReaderClosed(event)
     self.bookshelf_reader_return = nil
     if not intent or not intent.ready or self.route ~= nil or intent.account_key ~= accountKey(self.controller)
         or not event or tostring(event.comic_id) ~= intent.comic_id then return false end
-    self:showLibrary()
+    if intent.context then self:_restoreRoute(intent.context) else self:showLibrary() end
     return true
 end
 
@@ -164,8 +229,9 @@ function Screens:_syncBookshelf(manual)
     if self.route ~= "favorites" then return end
     local sync = self:_bookshelfSyncState()
     if sync.syncing or manual and not sync.can_sync then return end
-    local epoch, key = self.epoch, accountKey(self.controller)
+    local epoch, key, completed = self.epoch, accountKey(self.controller), false
     local function done(value, error)
+        completed = true
         if self.route ~= "favorites" or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
         if manual and value and not error then self.bookshelf_reorder = true end
         self:_render()
@@ -174,8 +240,9 @@ function Screens:_syncBookshelf(manual)
     if manual then
         if self.controller.syncBookshelf then self.controller:syncBookshelf(done)
         else self.controller:refreshLibrary("favorites", done) end
-    elseif self.controller.ensureBookshelfSync then self.controller:ensureBookshelfSync(done) end
-    if self.route == "favorites" then self:_render() end
+    elseif self.controller.ensureBookshelfSync then self.controller:ensureBookshelfSync(done)
+    else return end
+    if not completed and self.route == "favorites" and self.epoch == epoch and accountKey(self.controller) == key then self:_render() end
 end
 
 function Screens:_maybeBookshelfHelp()
@@ -192,11 +259,11 @@ end
 
 function Screens:_bookshelfHelp()
     local dialog
-    dialog = self:_showContextDialog(_("Bookshelf help") .. "\n\n"
-        .. _("Tap a cover to resume reading. Hold it to open chapters.") .. "\n\n"
-        .. _("With keys, select a comic, then use More to open its chapter catalog.") .. "\n\n"
-        .. _("Use More for sync, filters, sorting and settings."), {
-        { { text = _("Got it"), callback = function() if self.dialog == dialog then dialog:onClose() end end } },
+    dialog = self:_showContextDialog(T("Bookshelf help") .. "\n\n"
+        .. T("Tap a cover to resume reading. Hold it to open chapters.") .. "\n\n"
+        .. T("With keys, select a comic, then use More to open its chapter catalog.") .. "\n\n"
+        .. T("Use More for sync, filters, sorting and settings."), {
+        { { text = T("Got it"), callback = function() if self.dialog == dialog then dialog:onClose() end end } },
     }, function()
         self.bookshelf_help_seen = true
         if self.route == "favorites" then self:_saveBookshelfView()
@@ -220,36 +287,43 @@ function Screens:_more()
     local epoch, key = self.epoch, accountKey(self.controller)
     local dialog
     local function current() return self.dialog == dialog and self.epoch == epoch and accountKey(self.controller) == key end
-    local buttons, heading = {}, _("More")
+    local buttons, heading = {}, T("More")
     if self.route == "favorites" then
         local sync, comic = self:_bookshelfSyncState(), self:_selectedBookshelfComic()
         self:_saveBookshelfView()
         local timestamp = tonumber(sync.last_synced_at)
-        heading = _("Bookshelf") .. "\n" .. (timestamp and timestamp > 0
-            and string.format(_("Last synced: %s"), os.date("%Y-%m-%d %H:%M", timestamp)) or _("Not synced yet"))
-        if sync.syncing then heading = heading .. "\n" .. _("Syncing bookshelf…") end
+        heading = T("Bookshelf") .. "\n" .. (timestamp and timestamp > 0
+            and string.format(T("Last synced: %s"), os.date("%Y-%m-%d %H:%M", timestamp)) or T("Not synced yet"))
+        if sync.syncing then heading = heading .. "\n" .. T("Syncing bookshelf…") end
         if sync.error then heading = heading .. "\n" .. Model.error(sync.error) end
-        if sync.authenticated == false then heading = heading .. "\n" .. _("Sign in to sync your bookshelf.")
-        elseif sync.offline then heading = heading .. "\n" .. _("Connect, then retry bookshelf sync.")
-        elseif not sync.can_sync then heading = heading .. "\n" .. _("Bookshelf sync is temporarily unavailable.") end
-        if comic then heading = heading .. "\n" .. string.format(_("Selected: %s"), title(comic)) end
-        buttons[#buttons + 1] = { { text = _("Refresh bookshelf"), enabled = sync.can_sync == true and not sync.syncing,
+        if sync.authenticated == false then heading = heading .. "\n" .. T("Sign in to sync your bookshelf.")
+        elseif sync.offline then heading = heading .. "\n" .. T("Connect, then retry bookshelf sync.")
+        elseif not sync.can_sync then heading = heading .. "\n" .. T("Bookshelf sync is temporarily unavailable.") end
+        if comic then heading = heading .. "\n" .. string.format(T("Selected: %s"), title(comic)) end
+        buttons[#buttons + 1] = { { text = T("Refresh bookshelf"), enabled = sync.can_sync == true and not sync.syncing,
             callback = function() if current() then self:_closeDialog(); self:_syncBookshelf(true) end end } }
-        buttons[#buttons + 1] = { { text = _("Filter bookshelf"), callback = function() if current() then self:_bookshelfFilter() end end } }
-        buttons[#buttons + 1] = { { text = _("Sort bookshelf"), callback = function() if current() then self:_bookshelfSort() end end } }
-        buttons[#buttons + 1] = { { text = _("Open chapter catalog"), enabled = comic ~= nil, callback = function()
+        buttons[#buttons + 1] = { { text = T("Filter bookshelf"), callback = function() if current() then self:_bookshelfFilter() end end } }
+        buttons[#buttons + 1] = { { text = T("Sort bookshelf"), callback = function() if current() then self:_bookshelfSort() end end } }
+        buttons[#buttons + 1] = { { text = T("Open chapter catalog"), enabled = comic ~= nil, callback = function()
             if current() and comic then self:showComic(comic.id) end
         end } }
+    elseif self.route == "comic" then
+        buttons[#buttons + 1] = { { text = T("Refresh chapters"), callback = function()
+            if current() then self:_closeDialog(); self:_refreshComic() end
+        end } }
+        buttons[#buttons + 1] = { { text = T("Comic overview"), callback = function()
+            if current() then self:_catalogDetails(self.controller:getComic(self.comic_id) or { id = self.comic_id }) end
+        end } }
     end
-    buttons[#buttons + 1] = { { text = _("Account and settings"), callback = function() if current() then self:showAccount() end end } }
-    buttons[#buttons + 1] = { { text = _("Bookshelf help"), callback = function() if current() then self:_bookshelfHelp() end end } }
-    buttons[#buttons + 1] = { { text = _("Close"), callback = function() if current() then dialog:onClose() end end } }
+    buttons[#buttons + 1] = { { text = T("Account and settings"), callback = function() if current() then self:showAccount() end end } }
+    buttons[#buttons + 1] = { { text = T("Bookshelf help"), callback = function() if current() then self:_bookshelfHelp() end end } }
+    buttons[#buttons + 1] = { { text = T("Close"), callback = function() if current() then dialog:onClose() end end } }
     dialog = self:_showContextDialog(heading, buttons)
 end
 
 function Screens:_bookshelfSort()
     local dialog
-    local choices = { { "source", _("Bookshelf order") }, { "title", _("Title") }, { "recent", _("Recently read") } }
+    local choices = { { "source", T("Bookshelf order") }, { "title", T("Title") }, { "recent", T("Recently read") } }
     local buttons = {}
     for _index, choice in ipairs(choices) do
         local value = choice[1]
@@ -260,8 +334,8 @@ function Screens:_bookshelfSort()
             self:_render(); self:_saveBookshelfView()
         end } }
     end
-    buttons[#buttons + 1] = { { text = _("Cancel"), callback = function() if self.dialog == dialog then dialog:onClose() end end } }
-    dialog = self:_showContextDialog(_("Sort bookshelf"), buttons)
+    buttons[#buttons + 1] = { { text = T("Cancel"), callback = function() if self.dialog == dialog then dialog:onClose() end end } }
+    dialog = self:_showContextDialog(T("Sort bookshelf"), buttons)
 end
 
 function Screens:_bookshelfItems()
@@ -309,25 +383,29 @@ function Screens:_back()
     if self.route == "comic" and self.comic_origin then
         local origin = self.comic_origin
         self.comic_origin = nil
-        if origin.route == "bookstore" then self:showBookstore()
-        elseif origin.route == "search" then self:showSearch()
-        else self:showLibrary(); return end
-        self.page = origin.page or 1; self:_render()
-    elseif self.route == "account" then self:showLibrary()
+        self:_restoreRoute(origin)
+    elseif self.route == "account" then
+        local origin = self.account_origin
+        self.account_origin = nil
+        self:_restoreRoute(origin)
     else self:close() end
 end
 
 function Screens:_error(error)
     local heading, message, action = Model.error(error)
     self:_closeDialog()
-    local buttons = { { { text = _("Close"), callback = function() self:_closeDialog() end } } }
+    local buttons = { { { text = T("Close"), callback = function() self:_closeDialog() end } } }
     if action == "account" then
-        table.insert(buttons, 1, { { text = _("Open account"), callback = function()
+        table.insert(buttons, 1, { { text = T("Open account"), callback = function()
             self:_closeDialog(); self:showAccount()
         end } })
     end
-    self.dialog = ButtonDialog:new{ title = heading .. "\n\n" .. message, buttons = buttons, modal = true }
-    UIManager:show(self.dialog)
+    if error and (error.kind == "low_space" or error.kind == "storage") then
+        table.insert(buttons, 1, { { text = T("Storage and cache"), callback = function() self:_showStorageSettings() end } })
+    elseif error and (error.kind == "source_unavailable" or error.kind == "image_decode") then
+        table.insert(buttons, 1, { { text = T("Downloads"), callback = function() self:showDownloads() end } })
+    end
+    self:_showContextDialog(heading .. "\n\n" .. message, buttons)
 end
 
 function Screens:_invoke(method, args, done, quiet)
@@ -342,7 +420,7 @@ function Screens:_invoke(method, args, done, quiet)
         elseif error then self:_error(error) end
         if self.route then self:_render() end
     end
-    if not quiet then self.status = _("Updating…"); self:_render() end
+    if not quiet then self.status = T("Updating…"); self:_render() end
     local ok = pcall(function() self.controller[method](self.controller, unpack(args)) end)
     if not ok and not completed then
         args[#args](nil, { kind = "internal" })
@@ -375,25 +453,78 @@ function Screens:_buttons(entries)
     return W.row(widgets)
 end
 
-function Screens:_paginate(items, row_height, fixed_height, render, empty_message)
-    local available = self.body_height - fixed_height - W.scale(51)
-    local capacity = math.max(1, math.floor(available / W.scale(row_height)))
-    self.pages = math.max(1, math.ceil(#items / capacity))
-    self.page = math.max(1, math.min(self.page, self.pages))
+function Screens:_pageRanges(items, row_height, fixed_height)
+    local heights = {}
+    for index, item in ipairs(items) do
+        heights[index] = math.max(1, type(row_height) == "function" and row_height(item, index) or W.scale(row_height))
+    end
+    local function partition(reserve)
+        local available = math.max(W.scale(32), self.body_height - fixed_height - reserve)
+        local ranges, first, used = {}, 1, 0
+        for index, height in ipairs(heights) do
+            if index > first and used + height > available then
+                ranges[#ranges + 1] = { first = first, last = index - 1 }
+                first, used = index, 0
+            end
+            used = used + height
+        end
+        if #items > 0 then ranges[#ranges + 1] = { first = first, last = #items } end
+        return ranges
+    end
+    local ranges = partition(0)
+    if #ranges > 1 then ranges = partition(W.scale(42)) end
+    return ranges, ranges[1] and ranges[1].last or 0
+end
+
+function Screens:_jumpPage()
+    self:_closeDialog()
+    local dialog, epoch, key = nil, self.epoch, accountKey(self.controller)
+    dialog = InputDialog:new{ title = T("Go to page"), input = tostring(self.page), input_type = "number", modal = true,
+        description = string.format(T("Choose a page from 1 to %d."), self.pages), buttons = {
+            { { text = T("Cancel"), callback = function() self:_closeDialog() end },
+              { text = T("Go"), is_enter_default = true, callback = function()
+                  if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
+                  local number = tonumber(dialog:getInputText())
+                  if not number or number % 1 ~= 0 or number < 1 or number > self.pages then return end
+                  self:_closeDialog(); self:_changePage(number - self.page)
+              end } },
+        } }
+    self.dialog = dialog; UIManager:show(dialog); dialog:onShowKeyboard()
+end
+
+function Screens:_paginate(items, row_height, fixed_height, render, empty_message, options)
+    options = options or {}
+    local ranges = self:_pageRanges(items, row_height, fixed_height)
+    self.page_ranges, self.pages = ranges, math.max(1, #ranges)
+    if options.target_id then
+        for page, range in ipairs(ranges) do
+            for index = range.first, range.last do
+                local id = options.item_id and options.item_id(items[index]) or items[index].id
+                if tostring(id) == tostring(options.target_id) then self.page = page end
+            end
+        end
+    end
+    self.page = math.max(1, math.min(self.page or 1, self.pages))
     local rows = {}
-    for index = (self.page - 1) * capacity + 1, math.min(self.page * capacity, #items) do
-        rows[#rows + 1] = render(items[index], index)
+    local range = ranges[self.page]
+    if range then
+        for index = range.first, range.last do rows[#rows + 1] = render(items[index], index) end
     end
     if #items == 0 and empty_message ~= false then
-        rows[#rows + 1] = W.text(empty_message or _("Nothing here yet. Refresh your library or search for a comic."), self.width, 20,
-            { height = W.scale(95) })
+        rows[#rows + 1] = W.text(empty_message or T("No items are available."), self.width, W.font.body)
     end
-    rows[#rows + 1] = W.space(8)
-    rows[#rows + 1] = self:_buttons{
-        { text = _("Previous"), enabled = self.page > 1, callback = function() self:_changePage(-1) end },
-        { text = string.format(_("%d / %d"), self.page, self.pages), enabled = false },
-        { text = _("Next"), enabled = self.page < self.pages, callback = function() self:_changePage(1) end },
-    }
+    if self.pages > 1 then
+        local width = math.floor(self.width / 3)
+        local previous = W.button(T("Previous"), width, function() self:_changePage(-1) end,
+            { borderless = true, size = W.font.meta, enabled = self.page > 1, align = "left" })
+        local counter = W.button(string.format(T("%d / %d"), self.page, self.pages) .. " ▾", self.width - 2 * width,
+            options.jump_callback or function() self:_jumpPage() end, { borderless = true, size = W.font.meta })
+        local next_page = W.button(T("Next"), width, function() self:_changePage(1) end,
+            { borderless = true, size = W.font.meta, enabled = self.page < self.pages, align = "right" })
+        rows[#rows + 1], rows[#rows + 2] = W.space(8), W.row{ previous, counter, next_page }
+        self.focus[#self.focus + 1] = { previous, counter, next_page }
+        self.pagination = { previous = previous, counter = counter, next = next_page }
+    end
     return W.column(rows)
 end
 
@@ -411,6 +542,12 @@ end
 
 function Screens:_render()
     if not self.route then return end
+    self:_rechargeCheckCurrent()
+    if not self:_ensureRouteViews() then
+        self.epoch = self.epoch + 1
+        self.page, self.filter, self.selecting, self.selected = 1, "all", false, {}
+        self:_closeDialog()
+    end
     if self.context_dialog and self.context_dialog_account ~= accountKey(self.controller) then self:_closeDialog() end
     if self.route == "favorites" and (not self.bookshelf_view_loaded or self.bookshelf_view_account ~= accountKey(self.controller)) then
         if self.context_dialog then self:_closeDialog() end
@@ -432,29 +569,29 @@ function Screens:_render()
     if self.qr_login then self.qr_login:_current() end
     self.focus, self.cards, self.pagination = {}, {}, nil
     self.render_generation = (self.render_generation or 0) + 1
-    self.width = Device.screen:getWidth() - W.scale(32)
+    self.width = Device.screen:getWidth() - W.scale(28)
     self.height = Device.screen:getHeight()
-    self.body_height = self.height - W.scale(150)
-    local headings = { bookstore = _("Bookstore"), favorites = _("Bookshelf"), comic = _("Chapters"),
-        downloads = _("Downloads"), search = _("Search"), account = _("Account and settings") }
+    local headings = { bookstore = T("Bookstore"), favorites = T("Bookshelf"), comic = T("Chapters"),
+        downloads = T("Downloads"), search = T("Search"), account = T("Account and settings") }
     local side_width = W.scale(78)
-    local header = W.row{
-        self:_button(_("Back"), side_width, function() self:_back() end, { borderless = true, size = 16 }),
-        W.text(headings[self.route], self.width - 2 * side_width, 25, { bold = true, align = "center", height = W.scale(38) }),
-        self:_button(_("More"), side_width, function() self:_more() end, { borderless = true, size = 16 }),
-    }
+    local header = W.column{ W.row{
+        self:_button(T("Back"), side_width, function() self:_back() end, { borderless = true, size = 16 }),
+        W.text(headings[self.route], self.width - 2 * side_width, W.font.page, { bold = true, align = "center", height = W.scale(34) }),
+        self:_button(T("More"), side_width, function() self:_more() end, { borderless = true, size = 16 }),
+    }, W.space(6), W.rule(self.width), W.space(10) }
     local builders = { bookstore = self._bookstore, favorites = self._library, comic = self._comic,
         downloads = self._downloads, search = self._search, account = self._account }
-    local body = builders[self.route](self)
     local navigation, navigation_buttons = W.navigation({
-        { text = _("Bookshelf"), selected = self.route == "favorites", callback = function() self:showLibrary() end },
-        { text = _("Bookstore"), selected = self.route == "bookstore", callback = function() self:showBookstore() end },
-        { text = _("Search"), selected = self.route == "search", callback = function() self:showSearch() end },
-        { text = _("Downloads"), selected = self.route == "downloads", callback = function() self:showDownloads() end },
+        { text = T("Bookshelf"), selected = self.route == "favorites", callback = function() self:showLibrary() end },
+        { text = T("Bookstore"), selected = self.route == "bookstore", callback = function() self:showBookstore() end },
+        { text = T("Search"), selected = self.route == "search", callback = function() self:showSearch() end },
+        { text = T("Downloads"), selected = self.route == "downloads", callback = function() self:showDownloads() end },
     }, self.width)
+    self.body_height = self.height - header:getSize().h - navigation:getSize().h - W.scale(16)
+    local body = builders[self.route](self)
     self.navigation_buttons = navigation_buttons
     self.focus[#self.focus + 1] = navigation_buttons
-    local content = W.column{ header, W.space(6), W.rule(self.width, self.route ~= "favorites"), W.space(10), body }
+    local content = W.column{ header, body }
     local filler = self.height - content:getSize().h - navigation:getSize().h - W.scale(16)
     content[#content + 1] = W.spacePixels(math.max(0, filler))
     content[#content + 1] = navigation
@@ -468,9 +605,11 @@ function Screens:_render()
         if self.focus[position.y] and self.focus[position.y][position.x] then selected = position end
         restore_focus = old and (old.focused or old[1] and old[1].invert)
     end
-    if not selected and self.route == "favorites" and self.bookshelf_focused_comic_id then
+    local wanted_comic = self.route == "favorites" and self.bookshelf_focused_comic_id
+        or self.route == "search" and self.focused_comic_id
+    if not selected and wanted_comic then
         for y, row in ipairs(self.focus) do for x, item in ipairs(row) do
-            if item.comic and tostring(item.comic.id) == self.bookshelf_focused_comic_id then selected = { x = x, y = y } end
+            if item.comic and tostring(item.comic.id) == wanted_comic then selected = { x = x, y = y } end
         end end
     end
     self.widget = W.Panel:new{ content = content, layout = self.focus, selected = selected,
@@ -486,22 +625,32 @@ function Screens:_render()
     end
 end
 
-function Screens:_comicCard(comic)
-    if self.controller.requestCover then self.controller:requestCover(comic.id) end
-    local cover_width, cover_height = W.scale(52), W.scale(70)
+function Screens:_comicCard(comic, measure)
+    if not measure and self.controller.requestCover then self.controller:requestCover(comic.id) end
+    local cover_width, cover_height = W.scale(46), W.scale(62)
     local text_width = self.width - cover_width - W.scale(14)
     local subtitle = comic.latest_episode_title or (comic.extra or {}).latest_episode_title
-        or (comic.latest_order and string.format(_("Latest chapter: %s"), tostring(comic.latest_order))) or _("Open chapter catalog")
-    local title_button = W.button(title(comic), text_width, function() self:showComic(comic.id) end,
-        { borderless = true, align = "left", bold = true, size = 20, height = 27 })
-    self.focus[#self.focus + 1] = { title_button }
-    local texts = { title_button, W.text(subtitle, text_width, 16, { muted = true, height = W.scale(23) }) }
-    local cover = W.cover(comic, cover_width, cover_height)
-    local row = W.row{ cover, W.gap(W.scale(12)), W.column(texts) }
-    local rows = {}
-    rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = row, W.space(8), W.rule(self.width)
-    rows[#rows + 1] = W.space(7)
-    return W.column(rows)
+        or (comic.latest_order and string.format(T("Latest chapter: %s"), tostring(comic.latest_order))) or T("Open chapter catalog")
+    local authors = type(comic.authors) == "table" and comic.authors[1] or comic.authors
+    if type(authors) == "table" then authors = authors.name end
+    local metadata = type(authors) == "string" and authors ~= "" and authors .. " · " .. subtitle or subtitle
+    local cover = measure and W.space(62) or W.cover(comic, cover_width, cover_height)
+    local content = W.column{ W.row{ cover, W.gap(W.scale(12)), W.column{
+        W.text(title(comic), text_width, W.font.item, { bold = true, height = W.scale(42), fixed_height = true }),
+        W.space(3), W.text(metadata, text_width, W.font.meta, { muted = true, height = W.scale(32), fixed_height = true }),
+    } }, W.space(8), W.rule(self.width), W.space(5) }
+    local epoch, key = self.epoch, accountKey(self.controller)
+    local row = W.ActionRow:new{ width = self.width, content = content, callback = function()
+        if self.route ~= "search" or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
+        self.focused_comic_id = tostring(comic.id); self:showComic(comic.id)
+    end, focus_callback = function() self.focused_comic_id = tostring(comic.id) end }
+    row.comic = comic
+    if not measure then
+        self.focus[#self.focus + 1] = { row }
+        self.search_cards = self.search_cards or {}
+        self.search_cards[#self.search_cards + 1] = row
+    end
+    return row
 end
 
 function Screens:_readComic(comic)
@@ -519,8 +668,8 @@ function Screens:_bookshelfFilter()
     local rows, epoch, account = {}, self.epoch, accountKey(self.controller)
     local dialog
     for _, option in ipairs{
-        { "all", _("All") }, { "reading", _("Currently reading") }, { "unknown", _("No reading record") },
-        { "updated", _("Updated") }, { "completed", _("Completed series") },
+        { "all", T("All") }, { "reading", T("Currently reading") }, { "unknown", T("No reading record") },
+        { "updated", T("Updated") }, { "completed", T("Completed series") },
     } do
         local key = option[1]
         rows[#rows + 1] = { { text = (self.filter == key and "[x] " or "[ ] ") .. option[2], callback = function()
@@ -531,15 +680,13 @@ function Screens:_bookshelfFilter()
             self:_render(); self:_saveBookshelfView()
         end } }
     end
-    rows[#rows + 1] = { { text = _("Cancel"), callback = function()
+    rows[#rows + 1] = { { text = T("Cancel"), callback = function()
         if self.dialog == dialog then dialog:onClose() end
     end } }
-    dialog = self:_showContextDialog(_("Filter bookshelf"), rows)
+    dialog = self:_showContextDialog(T("Filter bookshelf"), rows)
 end
 
 function Screens:_bookshelf(items)
-    local labels = { all = _("All"), reading = _("Currently reading"), unknown = _("No reading record"),
-        updated = _("Updated"), completed = _("Completed series") }
     local entries = {}
     for _, comic in ipairs(items) do
         local episodes = Model.array(self.controller:getEpisodes(comic.id))
@@ -547,51 +694,76 @@ function Screens:_bookshelf(items)
         local updated = comic.updated or comic.has_update or (comic.extra or {}).has_update
         if self.filter == "all" or self.filter == progress.state
             or self.filter == "updated" and updated or self.filter == "completed" and comic.finished then
-            entries[#entries + 1] = { comic = comic, progress = progress }
+            entries[#entries + 1] = { comic = comic, progress = progress, updated = not not updated }
         end
     end
-    local rows, fixed = {}, 16
+    local rows = {}
     local sync = self:_bookshelfSyncState()
-    if not self.controller.ensureBookshelfSync then
-        rows[#rows + 1] = self:_button(_("Refresh bookshelf"), self.width, function() self:_syncBookshelf(true) end,
-            { borderless = true, size = 14, height = 24, align = "left" })
-        fixed = fixed + 32
-    end
-    if self.filter ~= "all" then
-        local clear_width = W.scale(106)
-        rows[#rows + 1] = W.row{
-            W.text(string.format(_("Filter: %s"), labels[self.filter] or labels.all), self.width - clear_width, 14, { muted = true }),
-            self:_button(_("Clear filter"), clear_width, function()
-                self.filter, self.page, self.epoch = "all", 1, self.epoch + 1
-                self:_render(); self:_saveBookshelfView()
-            end, { borderless = true, size = 14, height = 24 }),
-        }
-        fixed = fixed + 32
-    end
-    local message = self.status or (sync.syncing and _("Syncing bookshelf…"))
-        or (sync.error and #items > 0 and _("Could not sync. Saved comics are still available."))
-    if message then
+    local message = self.status or (sync.syncing and T("Syncing bookshelf…"))
+        or (sync.error and #items > 0 and T("Could not sync. Saved comics are still available."))
+    if message and #items > 0 then
         rows[#rows + 1] = W.text(message, self.width, 13, { muted = true, height = W.scale(24) })
-        fixed = fixed + 24
     end
     local empty
-    if self.filter ~= "all" then empty = _("No comics match this filter.")
-    elseif sync.syncing then empty = _("Loading your bookshelf…")
+    if self.filter ~= "all" then empty = T("No comics match this filter.")
+    elseif sync.syncing then empty = T("Loading your bookshelf…")
     elseif not sync.has_cache then
-        if sync.authenticated == false then empty = _("Sign in to load your bookshelf.")
-        elseif sync.offline then empty = _("Connect, then retry bookshelf sync.")
-        elseif not sync.can_sync then empty = _("Bookshelf sync is temporarily unavailable.")
-        else empty = _("Your bookshelf has not been synced yet.") end
-    else empty = _("Your bookshelf is empty. Find a comic in Bookstore or Search.") end
-    local body = self:_coverGrid(entries, { rows = rows, bookshelf = true, fixed_height = fixed, hint = "", empty_message = empty })
+        if sync.authenticated == false then empty = T("Sign in to load your bookshelf.")
+        elseif sync.offline then empty = T("Connect, then retry bookshelf sync.")
+        elseif not sync.can_sync then empty = T("Bookshelf sync is temporarily unavailable.")
+        else empty = T("Your bookshelf has not been synced yet.") end
+    else empty = T("Your bookshelf is empty. Find a comic in Bookstore or Search.") end
+    local body = self:_coverGrid(entries, { rows = rows, bookshelf = true, hint = "", empty_message = empty })
     if #entries == 0 and self.filter == "all" then
         local action
-        if sync.authenticated == false then action = self:_button(_("Sign in with QR code"), self.width, function() self:showAccount(); self:_signInWithQR() end)
-        elseif not sync.has_cache and not sync.syncing then action = self:_button(_("Retry sync"), self.width,
+        if sync.authenticated == false then action = self:_button(T("Sign in with QR code"), self.width, function() self:showAccount(); self:_signInWithQR() end)
+        elseif not sync.has_cache and not sync.syncing then action = self:_button(T("Retry sync"), self.width,
             function() self:_syncBookshelf(true) end, { enabled = sync.can_sync == true }) end
         if action then body[#body + 1] = W.space(8); body[#body + 1] = action; body:resetLayout() end
     end
     return body
+end
+
+function Screens:_bookshelfToolbar(pagination, current)
+    local labels = { all = T("All"), reading = T("Currently reading"), unknown = T("No reading record"),
+        updated = T("Updated"), completed = T("Completed series") }
+    local sorts = { source = T("Bookshelf order"), title = T("Title"), recent = T("Recently read") }
+    local pager_width = pagination and pagination.previous:getSize().w + pagination.counter:getSize().w
+        + pagination.next:getSize().w + W.scale(8) or 0
+    local filter_width = math.floor((self.width - pager_width) / 2)
+    local sort_width = self.width - pager_width - filter_width
+    local filter = W.button((labels[self.filter] or labels.all) .. " ▾", filter_width,
+        function() if current() then self:_bookshelfFilter() end end,
+        { borderless = true, size = W.font.meta, height = 28, align = "left" })
+    local sort = W.button((sorts[self.bookshelf_sort] or sorts.source) .. " ▾", sort_width,
+        function() if current() then self:_bookshelfSort() end end,
+        { borderless = true, size = W.font.meta, height = 28, align = "left" })
+    local widgets, focus = { filter, sort }, { filter, sort }
+    if pagination then
+        widgets[#widgets + 1] = W.gap(W.scale(8))
+        for _, button in ipairs({ pagination.previous, pagination.counter, pagination.next }) do
+            widgets[#widgets + 1], focus[#focus + 1] = button, button
+        end
+    end
+    self.bookshelf_filter_button, self.bookshelf_sort_button = filter, sort
+    self.bookshelf_toolbar_buttons = focus
+    self.bookshelf_toolbar = W.row(widgets)
+    self.focus[#self.focus + 1] = focus
+    return self.bookshelf_toolbar
+end
+
+function Screens:_bookshelfProgress(progress)
+    if not progress then return "" end
+    local episode = progress.current_episode or {}
+    local number = tonumber(episode.short_title) or tonumber(episode.order)
+    if not number or number <= 0 or number ~= number or number == math.huge then return progress.label end
+    local chapter = string.format(T("Ch. %s"), tostring(number))
+    if progress.page and progress.total_pages then
+        return chapter .. " · " .. string.format("%d/%d", progress.page, progress.total_pages)
+    elseif progress.page then
+        return chapter .. " · " .. string.format(T("Page %d"), progress.page)
+    end
+    return chapter
 end
 
 function Screens:_coverGrid(entries, options)
@@ -599,30 +771,38 @@ function Screens:_coverGrid(entries, options)
     local gap = W.scale(12)
     local screen_width = Device.screen:getWidth()
     local columns = screen_width >= 720 and 3 or 2
+    if options.bookshelf then columns = screen_width >= 900 and 4 or screen_width >= 600 and 3 or 2 end
     if options.bookstore then columns = screen_width >= 900 and 4 or screen_width >= 600 and 3 or 2 end
     local width = math.floor((self.width - gap * (columns - 1)) / columns)
-    local available = self.body_height - W.scale(options.fixed_height or 96)
-    local caption_height = options.bookshelf and 84 or 128
-    local cover_height = math.max(W.scale(70), math.min(math.floor((width - W.scale(12)) * 1.34), available - W.scale(caption_height + 2)))
-    local row_height = cover_height + W.scale(caption_height)
+    local probe_height = W.scale(80)
+    local probe = W.CoverCard:new{ comic = {}, text = "", progress = "", update = "", width = width,
+        cover_height = probe_height, compact = options.bookstore, bookshelf = options.bookshelf }
+    local metadata_height = probe:getSize().h - probe_height
+    if probe.free then probe:free() end
+    local available = self.body_height - W.column(copy(options.rows or {})):getSize().h - W.scale(42)
+    local cover_height = math.floor((width - W.scale(12)) * 1.34)
+    local row_height = cover_height + metadata_height
     local row_count = math.max(1, math.floor((available + gap) / (row_height + gap)))
-    if options.bookshelf and row_count > 1 then
-        cover_height = math.min(cover_height,
-            math.floor((available - gap * (row_count - 1) - W.scale(18)) / row_count) - W.scale(caption_height))
+    if options.bookshelf then
+        row_count = available >= 2 * (metadata_height + W.scale(70)) + gap and 2 or 1
     end
     if options.bookstore then
-        -- Reserve two browsing rows before sizing covers, including rounded widget padding.
-        local metadata_height, minimum_cover = W.scale(84), W.scale(80)
-        local ordinary_height = self.body_height - W.scale(76)
-        row_count = ordinary_height >= 2 * (metadata_height + minimum_cover) + gap and 2 or 1
-        cover_height = math.max(W.scale(60), math.min(math.floor((width - W.scale(12)) * 1.34),
-            math.floor((available - gap * (row_count - 1)) / row_count) - metadata_height))
+        row_count = available >= 2 * (metadata_height + W.scale(80)) + gap and 2 or 1
+        if Device.screen:getWidth() > Device.screen:getHeight() then row_count = 1 end
     end
     local capacity = columns * row_count
+    if options.bookshelf then
+        if self.bookshelf_restore_focus or self.bookshelf_grid_capacity and self.bookshelf_grid_capacity ~= capacity then
+            for index, entry in ipairs(entries) do
+                if tostring(entry.comic.id) == self.bookshelf_focused_comic_id then self.page = math.ceil(index / capacity); break end
+            end
+        end
+        self.bookshelf_restore_focus, self.bookshelf_grid_capacity = nil, capacity
+    end
     self.pages = math.max(1, math.ceil(#entries / capacity))
     self.page = math.max(1, math.min(self.page, self.pages))
     local rows = options.rows or {}
-    local hint = options.hint or _("Tap to read · Hold for chapters")
+    local hint = options.hint or T("Tap to read · Hold for chapters")
     local epoch, key, render_generation = self.epoch, accountKey(self.controller), self.render_generation
     local route, query_key = self.route, bookstoreQueryKey(options.query)
     local function currentGrid()
@@ -631,28 +811,34 @@ function Screens:_coverGrid(entries, options)
             and (not options.bookstore or bookstoreQueryKey(self.bookstore_query) == query_key)
     end
     if self.pages > 1 or options.can_load_more then
-        local arrow_width, counter_width = W.scale(36), W.scale(64)
+        local arrow_width, counter_width = W.scale(options.bookshelf and 30 or 36), W.scale(64)
         local previous = W.button("‹", arrow_width, function() if currentGrid() then self:_changePage(-1) end end,
-            { borderless = true, size = 22, height = 24, enabled = self.page > 1 })
+            { borderless = true, size = options.bookshelf and 18 or 22, height = options.bookshelf and 28 or 24, enabled = self.page > 1 })
         local next_page = W.button("›", arrow_width, function() if currentGrid() then self:_changePage(1) end end,
-            { borderless = true, size = 22, height = 24,
+            { borderless = true, size = options.bookshelf and 18 or 22, height = options.bookshelf and 28 or 24,
                 enabled = self.page < self.pages or options.can_load_more == true and not self.bookstore_loading })
-        local page_label = options.remote_pagination and string.format(_("Page %d"), self.page)
-            or string.format(_("%d / %d"), self.page, self.pages)
-        local counter = W.text(page_label, counter_width, 13,
-            { muted = true, align = "center" })
+        local page_label = options.remote_pagination and string.format(T("Page %d"), self.page)
+            or string.format(T("%d / %d"), self.page, self.pages)
+        local counter = W.button(page_label, counter_width, function() if currentGrid() then self:_jumpPage() end end,
+            { borderless = true, size = W.font.meta, height = options.bookshelf and 28 or 24 })
         local hint_width = self.width - 2 * arrow_width - counter_width - W.scale(8)
-        rows[#rows + 1] = W.row{
-            hint ~= "" and W.text(hint, hint_width, 12, { muted = true, height = W.scale(20) }) or W.gap(hint_width),
-            W.gap(W.scale(8)), previous, counter, next_page,
-        }
-        self.focus[#self.focus + 1] = { previous, next_page }
         self.pagination = { previous = previous, next = next_page, counter = counter }
+        if not options.bookshelf then
+            rows[#rows + 1] = W.row{
+                hint ~= "" and W.text(hint, hint_width, 12, { muted = true, height = W.scale(20) }) or W.gap(hint_width),
+                W.gap(W.scale(8)), previous, counter, next_page,
+            }
+            self.focus[#self.focus + 1] = { previous, counter, next_page }
+        end
     elseif hint ~= "" then
         rows[#rows + 1] = W.text(hint, self.width, 12,
             { muted = true, height = W.scale(20) })
     end
+    if options.bookshelf then table.insert(rows, 1, self:_bookshelfToolbar(self.pagination, currentGrid)) end
     rows[#rows + 1] = W.space(8)
+    local grid_height = self.body_height - W.column(copy(rows)):getSize().h - W.scale(2)
+    cover_height = math.max(W.scale(30), math.min(cover_height,
+        math.floor((grid_height - gap * (row_count - 1)) / row_count) - metadata_height))
     self.cards, self.grid_columns, self.grid_rows = {}, columns, row_count
     local row, focus
     for index = (self.page - 1) * capacity + 1, math.min(self.page * capacity, #entries) do
@@ -672,9 +858,13 @@ function Screens:_coverGrid(entries, options)
         local card = W.CoverCard:new{ comic = comic, text = title(comic), width = width, cover_height = cover_height,
             compact = options.bookstore, bookshelf = options.bookshelf,
             progress = entry.description or entry.progress and entry.progress.label or "",
+            progress_label = options.bookshelf and self:_bookshelfProgress(entry.progress) or nil,
+            updated = options.bookshelf and entry.updated or false,
             update = options.bookstore and (entry.tags or "") or Model.comicUpdate(comic),
             callback = function()
                 if not current() then return end
+                self.focused_comic_id = tostring(comic.id)
+                if options.bookshelf then self.bookshelf_focused_comic_id = tostring(comic.id) end
                 if options.bookstore then self:showComic(comic.id) else self:_readComic(comic) end
             end,
             hold_callback = function()
@@ -694,10 +884,10 @@ function Screens:_coverGrid(entries, options)
         if not found then self.bookshelf_focused_comic_id = tostring(self.cards[1].comic.id) end
     end
     if #entries == 0 then
-        rows[#rows + 1] = W.text(options.empty_message or _("No recommendations are available."), self.width, 18,
+        rows[#rows + 1] = W.text(options.empty_message or T("No recommendations are available."), self.width, 18,
             { height = W.scale(80) })
         if options.retry then
-            rows[#rows + 1] = self:_button(_("Retry"), W.scale(130), function() self:_refreshBookstore() end)
+            rows[#rows + 1] = self:_button(T("Retry"), W.scale(130), function() self:_refreshBookstore() end)
         end
     end
     return W.column(rows)
@@ -744,6 +934,7 @@ function Screens:_requestBookstore(append)
 end
 
 function Screens:_selectBookstoreCategory(category)
+    self.page = 1
     self.bookstore_category = category and { id = tostring(category.id), name = category.name } or nil
     self.bookstore_query = category and { kind = "category", category_id = tostring(category.id), sort = 0 } or nil
     self:showBookstore()
@@ -778,18 +969,18 @@ end
 function Screens:_renderBookstoreCategoryPicker(state)
     if state ~= self.bookstore_picker_state or state.epoch ~= self.epoch or state.account ~= accountKey(self.controller) then return end
     local catalogue = self.controller:getBookstoreCategories()
-    local heading = _("Choose a category")
-    if state.loading then heading = heading .. "\n" .. _("Loading categories…")
+    local heading = T("Choose a category")
+    if state.loading then heading = heading .. "\n" .. T("Loading categories…")
     elseif state.error then
-        heading = heading .. "\n" .. (#catalogue.items > 0 and _("Could not update categories. Choose a saved category.")
-            or _("Categories could not be loaded. Retry to choose a category."))
+        heading = heading .. "\n" .. (#catalogue.items > 0 and T("Could not update categories. Choose a saved category.")
+            or T("Categories could not be loaded. Retry to choose a category."))
     end
     local dialog
     local function current()
         return self.dialog == dialog and self.bookstore_picker == dialog and self.bookstore_picker_state == state
             and self.route == "bookstore" and self.epoch == state.epoch and accountKey(self.controller) == state.account
     end
-    local buttons = { { { text = (self.bookstore_query and "[ ] " or "[x] ") .. _("All recommendations"),
+    local buttons = { { { text = (self.bookstore_query and "[ ] " or "[x] ") .. T("All recommendations"),
         callback = function() if current() then self:_selectBookstoreCategory(nil) end end } } }
     local row
     for index, category in ipairs(catalogue.items) do
@@ -799,11 +990,11 @@ function Screens:_renderBookstoreCategoryPicker(state)
             callback = function() if current() then self:_selectBookstoreCategory(category) end end }
     end
     if state.error then
-        buttons[#buttons + 1] = { { text = _("Retry"), callback = function()
+        buttons[#buttons + 1] = { { text = T("Retry"), callback = function()
             if current() then self:_refreshBookstoreCategories(state) end
         end } }
     end
-    buttons[#buttons + 1] = { { text = _("Cancel"), callback = function() if current() then dialog:onClose() end end } }
+    buttons[#buttons + 1] = { { text = T("Cancel"), callback = function() if current() then dialog:onClose() end end } }
     dialog = ButtonDialog:new{ title = heading, buttons = buttons, modal = true, width_factor = 0.94, rows_per_page = 8 }
     local owner = self
     function dialog:onCloseWidget()
@@ -823,16 +1014,18 @@ end
 function Screens:_bookstore()
     local query = bookstoreQuery(self.bookstore_query)
     local feed = self.controller:getBookstore(query)
-    local category_name = self.bookstore_category and self.bookstore_category.name or _("Category")
+    local category_name = self.bookstore_category and self.bookstore_category.name or T("Category")
     local entries = {}
-    local sections = { recommendation = _("Recommended"), hot_seller = _("Bestsellers"),
-        internet_hot = _("Trending"), completed = _("Completed picks") }
+    local sections = { recommendation = T("Recommended"), hot_seller = T("Bestsellers"),
+        internet_hot = T("Trending"), completed = T("Completed picks") }
     for _index, comic in ipairs(Model.array(feed.items)) do
         local extra, tags = comic.extra or {}, {}
         for _tag_index, tag in ipairs(extra.tags or {}) do if type(tag) == "string" then tags[#tags + 1] = tag end end
-        local section = query and category_name or sections[extra.recommendation_section] or _("Recommended")
-        entries[#entries + 1] = { comic = comic, description = extra.recommendation or extra.evaluate or "",
-            tags = section .. (#tags > 0 and " · " .. tags[1] or "") }
+        local section = query and category_name or sections[extra.recommendation_section] or T("Recommended")
+        local caption = section
+        if #tags > 0 and tags[1] ~= section then caption = caption .. " · " .. tags[1] end
+        if query and #tags > 0 then caption = tags[1] end
+        entries[#entries + 1] = { comic = comic, description = extra.recommendation or extra.evaluate or "", tags = caption }
     end
     local epoch, generation, key = self.epoch, self.render_generation, accountKey(self.controller)
     local query_key = bookstoreQueryKey(query)
@@ -841,47 +1034,47 @@ function Screens:_bookstore()
             and accountKey(self.controller) == key and bookstoreQueryKey(self.bookstore_query) == query_key
     end
     local category_width, refresh_width = math.floor(self.width * 0.43), W.scale(88)
-    self.bookstore_category_button = W.button((query and category_name or _("All recommendations")) .. " ▾",
+    self.bookstore_category_button = W.button((query and category_name or T("All recommendations")) .. " ▾",
         category_width, function() if current() then self:_bookstoreCategoryPicker() end end,
         { borderless = true, size = 16, bold = true, align = "left" })
-    local refresh = W.button(_("Refresh"), refresh_width, function() if current() then self:_refreshBookstore() end end,
+    local refresh = W.button(T("Refresh"), refresh_width, function() if current() then self:_refreshBookstore() end end,
         { borderless = true, size = 15, enabled = not self.bookstore_loading })
-    local count_label = string.format(query and _("Loaded: %d comics") or _("%d comics"), #entries)
+    local count_label = string.format(query and T("Loaded: %d comics") or T("%d comics"), #entries)
     local rows = { W.row{ self.bookstore_category_button,
         W.text(count_label, self.width - category_width - refresh_width, 14, { muted = true, align = "center" }), refresh }, W.space(8) }
     self.focus[#self.focus + 1] = { self.bookstore_category_button, refresh }
     local offset = 76
     if self.bookstore_error and #entries > 0 then
-        local message = self.bookstore_more_error and _("Could not load more. Tap the next arrow to retry.")
-            or query and _("Could not refresh. Showing saved comics.") or _("Could not refresh. Showing saved recommendations.")
+        local message = self.bookstore_more_error and T("Could not load more. Tap the next arrow to retry.")
+            or query and T("Could not refresh. Showing saved comics.") or T("Could not refresh. Showing saved recommendations.")
         rows[#rows + 1] = W.text(message, self.width, 13,
             { muted = true, height = W.scale(30) })
         offset = offset + 30
     elseif self.bookstore_loading and #entries > 0 then
-        local message = self.bookstore_loading_more and _("Loading more comics…")
-            or query and _("Refreshing comics…") or _("Refreshing recommendations…")
+        local message = self.bookstore_loading_more and T("Loading more comics…")
+            or query and T("Refreshing comics…") or T("Refreshing recommendations…")
         rows[#rows + 1] = W.text(message, self.width, 13,
             { muted = true, height = W.scale(24) })
         offset = offset + 24
     elseif query and feed.limit_reached then
-        rows[#rows + 1] = W.text(_("Browsing limit reached. Use Search to find more comics."), self.width, 13,
+        rows[#rows + 1] = W.text(T("Browsing limit reached. Use Search to find more comics."), self.width, 13,
             { muted = true, height = W.scale(30) })
         offset = offset + 30
     elseif query and #entries > 0 and (feed.loaded_pages or 0) > 0 and feed.has_more == false then
-        rows[#rows + 1] = W.text(_("All available comics are loaded."), self.width, 13,
+        rows[#rows + 1] = W.text(T("All available comics are loaded."), self.width, 13,
             { muted = true, height = W.scale(24) })
         offset = offset + 24
     end
-    local empty = query and _("No comics are available in this category.") or _("No recommendations are available.")
-    if self.bookstore_loading then empty = query and _("Loading comics…") or _("Loading recommendations…")
+    local empty = query and T("No comics are available in this category.") or T("No recommendations are available.")
+    if self.bookstore_loading then empty = query and T("Loading comics…") or T("Loading recommendations…")
     elseif self.bookstore_error then
-        if query then empty = self.bookstore_error.kind == "network" and _("Connect to load this category.")
-            or _("This category could not be loaded. Try again.")
-        else empty = self.bookstore_error.kind == "network" and _("Connect to load recommendations.")
-            or _("Recommendations could not be loaded. Try again.") end
+        if query then empty = self.bookstore_error.kind == "network" and T("Connect to load this category.")
+            or T("This category could not be loaded. Try again.")
+        else empty = self.bookstore_error.kind == "network" and T("Connect to load recommendations.")
+            or T("Recommendations could not be loaded. Try again.") end
     end
     return self:_coverGrid(entries, { rows = rows, bookstore = true, fixed_height = offset,
-        hint = _("Tap: chapters · Hold: synopsis"), empty_message = empty, retry = self.bookstore_error and not self.bookstore_loading,
+        hint = T("Tap: chapters · Hold: synopsis"), empty_message = empty, retry = self.bookstore_error and not self.bookstore_loading,
         query = query, feed_identity = feed.identity, can_load_more = feed.can_load_more == true, remote_pagination = query ~= nil })
 end
 
@@ -890,7 +1083,7 @@ function Screens:_bookstoreSynopsis(comic)
     local extra = comic.extra or {}
     local dialog
     dialog = TextViewer:new{ title = title(comic),
-        text = extra.recommendation or extra.evaluate or _("No synopsis is available."), modal = true,
+        text = extra.recommendation or extra.evaluate or T("No synopsis is available."), modal = true,
         close_callback = function()
             if self.bookstore_synopsis ~= dialog then return end
             local dirty = self.bookstore_synopsis_dirty
@@ -902,485 +1095,147 @@ function Screens:_bookstoreSynopsis(comic)
     UIManager:show(dialog)
 end
 
-function Screens:_read(comic, episode)
-    if not Model.readable(episode) and Model.storage(episode) ~= _("Downloaded") then
-        if episode.access == "locked" then self:_purchaseFor(comic, episode)
-        else self:_error({ kind = "access" }) end
-        return
-    end
-    local from_bookshelf = self.route == "favorites" or self.route == "comic" and self.comic_origin and self.comic_origin.route == "favorites"
-    self.bookshelf_reader_return = from_bookshelf and { account_key = accountKey(self.controller), comic_id = tostring(comic.id), ready = false } or nil
-    self:_saveBookshelfView()
-    self:_invoke("readEpisode", { tostring(comic.id), tostring(episode.id) }, function(_value, error)
-        if error then self.bookshelf_reader_return = nil; self:_error(error)
-        else
-            if self.bookshelf_reader_return then self.bookshelf_reader_return.ready = true end
-            self:close(true)
-        end
-    end)
-end
-
-function Screens:_chapterRow(comic, episode, current)
-    local selected = self.selected[tostring(episode.id)]
-    local downloadable = Model.downloadable(episode)
-    local purchase_download = not self.selecting and episode.access == "locked"
-    local download_width = W.scale(136)
-    local row_width = self.width - (purchase_download and download_width + W.scale(6) or 0)
-    local label = title(episode)
-    if self.selecting then label = (selected and "[x] " or "[ ] ") .. label
-    elseif tostring(episode.id) == current then label = "▌ " .. label end
-    local button = self:_button(label, row_width, function()
-        if self.selecting then
-            if downloadable then
-                self.selected[tostring(episode.id)] = not selected and true or nil
-                self:_render()
-            end
-        else self:_read(comic, episode) end
-    end, { borderless = true, align = "left", bold = tostring(episode.id) == current,
-        enabled = not self.selecting or downloadable, size = 20, height = 28 })
-    if purchase_download then
-        button = W.row{ button, W.gap(W.scale(6)), self:_button(_("Buy then download"), download_width,
-            function() self:_purchaseFor(comic, episode, "download") end, { size = 16, height = 28 }) }
-    end
-    local axis = math.floor((self.width - W.scale(12)) / 3)
-    local status = W.row{
-        W.text(Model.reading(episode, current), axis, 15, { muted = true, height = W.scale(24) }), W.gap(W.scale(6)),
-        W.text(Model.entitlement(episode), axis, 15, { height = W.scale(24) }), W.gap(W.scale(6)),
-        W.text(Model.storage(episode), axis, 15, { muted = true, height = W.scale(24) }),
-    }
-    local rows = { button, W.space(1), status }
-    local expiry = Model.entitlementExpiry(episode)
-    if expiry then
-        rows[#rows + 1] = W.space(1)
-        rows[#rows + 1] = W.text(expiry, self.width, 14, { height = W.scale(24) })
-    end
-    rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = W.space(7), W.rule(self.width), W.space(4)
-    return W.column(rows)
-end
-
-function Screens:_comic()
-    local comic = self.controller:getComic(self.comic_id) or { id = self.comic_id, title = _("Comic details") }
-    if self.controller.requestCover then self.controller:requestCover(self.comic_id) end
-    local all = copy(Model.array(self.controller:getEpisodes(self.comic_id)))
-    table.sort(all, function(a, b)
-        local ao, bo = tonumber(a.order) or 0, tonumber(b.order) or 0
-        if ao == bo then return tostring(a.id) < tostring(b.id) end
-        if self.descending then return ao > bo end
-        return ao < bo
-    end)
-    local current = Model.currentEpisode(comic, all)
-    local row_height = 79
-    for _index, episode in ipairs(all) do
-        if episode.access == "temporary" then row_height = 105; break end
-    end
-    if self.selecting then
-        for _index, episode in ipairs(all) do if not Model.downloadable(episode) then self.selected[tostring(episode.id)] = nil end end
-    end
-    local items = {}
-    for _index, episode in ipairs(all) do
-        if self.filter == "all" or (self.filter == "unread" and Model.reading(episode, current) == _("Unread"))
-            or (self.filter == "downloaded" and Model.storage(episode) == _("Downloaded")) then
-            items[#items + 1] = episode
-        end
-    end
-    local cover_width = W.scale(54)
-    local authors = type(comic.authors) == "table" and table.concat(comic.authors, ", ") or comic.authors or ""
-    local header = W.row{ W.cover(comic, cover_width, W.scale(70)), W.gap(W.scale(12)), W.column{
-        W.text(title(comic), self.width - cover_width - W.scale(16), 24, { bold = true, display = true, height = W.scale(31) }),
-        W.text(authors, self.width - cover_width - W.scale(16), 16, { muted = true, height = W.scale(22) }),
-        W.text(string.format(_("%d chapters"), #all), self.width - cover_width - W.scale(16), 14),
-    } }
-    local controls = self:_buttons{
-        { text = ({ all = _("All"), unread = _("Unread"), downloaded = _("Downloaded") })[self.filter], callback = function()
-            self.filter = ({ all = "unread", unread = "downloaded", downloaded = "all" })[self.filter]; self.page = 1; self:_render()
-        end },
-        { text = self.descending and _("Newest first") or _("Oldest first"), callback = function()
-            self.descending = not self.descending; self.page = 1; self:_render()
-        end },
-        { text = self.selecting and _("Cancel selection") or _("Select downloads"), callback = function()
-            self.selecting = not self.selecting; self.selected = {}; self:_render()
-        end },
-    }
-    local actions
-    if self.selecting then
-        actions = self:_buttons{
-            { text = _("Select downloadable"), callback = function()
-                for _index, episode in ipairs(items) do if Model.downloadable(episode) then self.selected[tostring(episode.id)] = true end end
-                self:_render()
-            end },
-            { text = string.format(_("Download selected (%d)"), count(self.selected)), primary = true,
-                enabled = count(self.selected) > 0, callback = function()
-                local ids = {}
-                for _index, episode in ipairs(all) do if self.selected[tostring(episode.id)] then ids[#ids + 1] = tostring(episode.id) end end
-                self:_invoke("downloadEpisodes", { self.comic_id, ids }, function(_value, error)
-                    if error then self:_error(error) else self:showDownloads() end
-                end)
-            end },
-        }
-    else
-        local following_pending = self.controller.isFavoritePending and self.controller:isFavoritePending(self.comic_id)
-        actions = self:_buttons{
-            { text = _("Current chapter"), enabled = current ~= nil, callback = function()
-                self.filter = "all"
-                local capacity = math.max(1, math.floor((self.body_height - W.scale(212) - W.scale(51)) / W.scale(row_height)))
-                for index, episode in ipairs(all) do
-                    if tostring(episode.id) == current then self.page = math.ceil(index / capacity); break end
-                end
-                self:_render()
-            end },
-            { text = self.status or _("Refresh chapters"), callback = function() self:_refreshComic() end },
-            { text = following_pending and _("Updating follow…") or (comic.favorite and _("Unfollow") or _("Follow")),
-                enabled = not following_pending, callback = function()
-                    local comic_id, target = self.comic_id, not comic.favorite
-                    self:_invoke("setFavorite", { comic_id, target }, function(_value, error)
-                        if error then self:_error(error) end
-                    end, true)
-                    if self.route == "comic" then self:_render() end
-                end },
-        }
-    end
-    return W.column{ header, W.space(10), controls, W.space(6), actions, W.space(10),
-        W.row{ W.text(_("Progress"), math.floor(self.width / 3), 13, { bold = true }),
-            W.text(_("Access"), math.floor(self.width / 3), 13, { bold = true }),
-            W.text(_("Storage"), math.floor(self.width / 3), 13, { bold = true }) },
-        self:_paginate(items, row_height, W.scale(212), function(episode) return self:_chapterRow(comic, episode, current) end) }
-end
-
-function Screens:_jobRow(job)
-    local state_labels = { queued = _("Queued"), running = _("Downloading"), paused = _("Paused"),
-        complete = _("Downloaded"), failed = _("Failed"), canceled = _("Canceled") }
-    local payload = job.payload or {}
-    local comic = self.controller:getComic(job.comic_id) or { id = job.comic_id }
-    local episode = self.controller.getEpisode and self.controller:getEpisode(job.episode_id)
-    if not episode then
-        for _index, item in ipairs(Model.array(self.controller:getEpisodes(job.comic_id))) do
-            if tostring(item.id) == tostring(job.episode_id) then episode = item; break end
-        end
-    end
-    local label = payload.comic_title or title(comic)
-    local chapter = payload.title or (episode and title(episode)) or tostring(job.episode_id or "")
-    local progress = string.format(_("%s · Images %d/%d"), state_labels[job.state] or _("Queued"), job.completed or 0, job.total or 0)
-    local refresh = payload.source_refresh
-    local replacement = payload.version_replacement
-    local context = self:_downloadContext()
-    local actions = {}
-    if payload.replaced_by then
-        progress = string.format(_("%s · Images %d/%d"), _("Older version retained"), job.completed or 0, job.total or 0)
-        actions[1] = { text = _("Read retained version"), callback = function()
-            if self:_downloadContextCurrent(context) then self:_readDownload(job, context) end
-        end }
-        actions[2] = { text = _("Remove download"), callback = function()
-            if self:_downloadContextCurrent(context) then self:_confirmRemoveDownload(job) end
-        end }
-    elseif type(replacement) == "table" then
-        progress = _("Preparing new version…")
-        actions[1] = { text = _("Cancel preparation"), callback = function()
-            if self:_downloadContextCurrent(context) then self:_cancelVersionReplacement(job) end
-        end }
-    elseif type(refresh) == "table" then
-        progress = refresh.stage == "index" and _("Fetching image sources…")
-            or string.format(_("Verifying historical images %d/%d"), refresh.checked or 0, refresh.total or 0)
-        actions[1] = { text = _("Cancel verification"), callback = function()
-            if self:_downloadContextCurrent(context) then self:_cancelSourceRefresh(job) end
-        end }
-        if job.revision then
-            actions[2] = { text = _("Remove download"), callback = function()
-                if self:_downloadContextCurrent(context) then self:_confirmRemoveDownload(job) end
-            end }
-        end
-    elseif job.state == "complete" then
-        actions[1] = { text = _("Read offline"), primary = true, callback = function()
-            if self:_downloadContextCurrent(context) then self:_readDownload(job, context) end
-        end }
-        actions[2] = { text = _("Remove download"), callback = function() self:_confirmRemoveDownload(job) end }
-    else
-        local resume = job.state == "paused" or job.state == "failed" or job.state == "canceled"
-        actions[1] = { text = resume and _("Resume") or _("Pause"), callback = function()
-            if resume then self.controller:resumeJob(job.id) else self.controller:pauseJob(job.id) end; self:_render()
-        end }
-        actions[2] = { text = _("Cancel download"), callback = function() self.controller:cancelJob(job.id); self:_render() end }
-        if job.revision then
-            actions[3] = { text = _("Remove download"), callback = function() self:_confirmRemoveDownload(job) end }
-        end
-        if job.error or job.state == "failed" then
-            actions[#actions + 1] = { text = _("Failure details"), callback = function()
-                if self:_downloadContextCurrent(context) then self:_downloadRecovery(job) end
-            end }
-        elseif self:_canRefreshSources(job) or self:_canReplaceVersion(job) then
-            actions[#actions + 1] = { text = _("Recovery options"), callback = function()
-                if self:_downloadContextCurrent(context) then self:_downloadRecovery(job) end
-            end }
-        end
-    end
-    return W.column{ W.text(label .. " · " .. chapter, self.width, 19, { bold = true, height = W.scale(27) }),
-        W.text(progress, self.width, 16, { muted = true, height = W.scale(24) }),
-        self:_buttons(actions), W.space(8), W.rule(self.width), W.space(8) }
-end
-
-function Screens:_readDownload(job, context)
-    self:_invoke("readDownload", { job.id }, function(_value, error)
-        if not self:_downloadContextCurrent(context) then return end
-        if error then self:_error(error) else self:close() end
-    end)
-end
-
-function Screens:_downloadContext()
-    return { epoch = self.epoch, account_key = accountKey(self.controller), generation = self.controller.generation }
-end
-
-function Screens:_downloadContextCurrent(context)
-    return self.route == "downloads" and self.epoch == context.epoch and accountKey(self.controller) == context.account_key
-        and self.controller.generation == context.generation
-end
-
-function Screens:_canRefreshSources(job)
-    return self.controller.refreshDownloadSources ~= nil and job.revision ~= nil and not (job.payload or {}).removed
-        and not (job.payload or {}).replaced_by and not (job.payload or {}).version_replacement
-        and not (job.payload or {}).source_refresh and (job.state == "paused" or job.state == "failed" or job.state == "canceled")
-end
-
-function Screens:_canReplaceVersion(job)
-    local payload = job.payload or {}
-    return self.controller.replaceDownloadVersion ~= nil and job.revision ~= nil and not payload.removed
-        and not payload.replaced_by and not payload.source_refresh and not payload.version_replacement
-        and (job.state == "paused" or job.state == "failed" or job.state == "canceled")
-end
-
-function Screens:_currentDownload(job_id)
-    for _index, job in ipairs(Model.array(self.controller:getDownloads())) do
-        if job.id == job_id then return job end
-    end
-end
-
-function Screens:_downloadRecovery(job, error)
+function Screens:_searchHome()
     self:_closeDialog()
-    local context, dialog = self:_downloadContext()
-    local heading, message, action
-    if error or job.error then heading, message, action = Model.error(error or job.error)
-    else
-        heading, message = _("Choose a recovery method"), _("Verify matching image sources, or download a separate new version while retaining this one.")
-    end
-    local buttons = {}
-    if action == "account" then
-        buttons[#buttons + 1] = { { text = _("Open account"), callback = function()
-            if self.dialog == dialog and self:_downloadContextCurrent(context) then self:showAccount() end
-        end } }
-    end
-    if self:_canRefreshSources(job) then
-        buttons[#buttons + 1] = { { text = _("Refresh image sources"), callback = function()
-            if self.dialog == dialog and self:_downloadContextCurrent(context) then self:_confirmSourceRefresh(job) end
-        end } }
-    end
-    if self:_canReplaceVersion(job) then
-        buttons[#buttons + 1] = { { text = _("Redownload as new version"), callback = function()
-            if self.dialog == dialog and self:_downloadContextCurrent(context) then self:_confirmVersionReplacement(job) end
-        end } }
-    end
-    buttons[#buttons + 1] = { { text = _("Close"), callback = function() if self.dialog == dialog then self:_closeDialog() end end } }
-    dialog = ButtonDialog:new{ title = _("Download recovery") .. "\n\n" .. heading .. "\n" .. message, buttons = buttons, modal = true }
-    self.dialog = dialog; UIManager:show(dialog)
-end
-
-function Screens:_confirmSourceRefresh(job)
-    if not self:_canRefreshSources(job) then return end
-    self:_closeDialog()
-    local context, dialog, started = self:_downloadContext()
-    dialog = ConfirmBox:new{
-        text = _("Refresh this chapter's image sources? Previously saved images will be downloaded again for verification, using network data. Existing cache and reading progress are retained. If all checks pass, the download resumes. No purchase is made."),
-        ok_text = _("Refresh image sources"), cancel_text = _("Cancel"), modal = true,
-        ok_callback = function()
-            if started or self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
-            local current = self:_currentDownload(job.id)
-            if not current or not self:_canRefreshSources(current) then self:_closeDialog(); self:_render(); return end
-            started = true; self:_closeDialog()
-            self.source_refresh_requests = self.source_refresh_requests or {}
-            self.source_refresh_requests[job.id] = context
-            local function completed(value, err)
-                if self.source_refresh_requests[job.id] ~= context then return end
-                self.source_refresh_requests[job.id] = nil
-                if not self:_downloadContextCurrent(context) then return end
-                if err and err.kind ~= "canceled" and not self.dialog then
-                    local retained = self:_currentDownload(job.id)
-                    if retained and self:_canReplaceVersion(retained) and (err.kind == "unknown_history"
-                        or err.kind == "content_changed" or err.kind == "unverified_position") then
-                        self:_downloadRecovery(retained, err)
-                    else self:_error(err) end
-                end
-                self:_render()
-            end
-            local ok = pcall(function() self.controller:refreshDownloadSources(job.id, completed) end)
-            if not ok then completed(nil, { kind = "internal" }) end
-            if self:_downloadContextCurrent(context) then self:_render() end
-        end,
-    }
-    self.dialog = dialog; UIManager:show(dialog)
-end
-
-function Screens:_confirmVersionReplacement(job)
-    if not self:_canReplaceVersion(job) then return end
-    self:_closeDialog()
-    local context, dialog, started = self:_downloadContext()
-    dialog = ConfirmBox:new{
-        text = _("Download this chapter as a separate new version? All images will be downloaded, requiring additional space and network data. The new version starts from the beginning. This version's cache and reading position stay in a separate older-version row, where you can read or remove them. No purchase is made."),
-        ok_text = _("Redownload as new version"), cancel_text = _("Cancel"), modal = true,
-        ok_callback = function()
-            if started or self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
-            local current = self:_currentDownload(job.id)
-            if not current or not self:_canReplaceVersion(current) then self:_closeDialog(); self:_render(); return end
-            started = true; self:_closeDialog()
-            self.version_replacement_requests = self.version_replacement_requests or {}
-            self.version_replacement_requests[job.id] = context
-            local function completed(_value, err)
-                if self.version_replacement_requests[job.id] ~= context then return end
-                self.version_replacement_requests[job.id] = nil
-                if not self:_downloadContextCurrent(context) then return end
-                if err and err.kind ~= "canceled" and not self.dialog then self:_error(err) end
-                self:_render()
-            end
-            local ok = pcall(function() self.controller:replaceDownloadVersion(job.id, completed) end)
-            if not ok then completed(nil, { kind = "internal" }) end
-            if self:_downloadContextCurrent(context) then self:_render() end
-        end,
-    }
-    self.dialog = dialog; UIManager:show(dialog)
-end
-
-function Screens:_cancelVersionReplacement(job)
-    if self.version_replacement_requests then self.version_replacement_requests[job.id] = nil end
-    local ok, _, err = pcall(self.controller.cancelVersionReplacement, self.controller, job.id)
-    if not ok then self:_error({ kind = "internal" })
-    elseif err then self:_error(err) end
+    self.epoch = self.epoch + 1
+    self.query, self.search_results, self.search_error, self.status = "", nil, nil, nil
+    self.page, self.filter, self.focused_comic_id = 1, "all", nil
     self:_render()
 end
 
-function Screens:_cancelSourceRefresh(job)
-    if self.source_refresh_requests then self.source_refresh_requests[job.id] = nil end
-    local ok, _, err = pcall(self.controller.cancelSourceRefresh, self.controller, job.id)
-    if not ok then self:_error({ kind = "internal" })
-    elseif err then self:_error(err) end
-    self:_render()
-end
-
-function Screens:_confirmRemoveDownload(job)
+function Screens:_runSearch(query)
+    query = tostring(query or ""):match("^%s*(.-)%s*$")
+    if query == "" then self:_searchHome(); return end
     self:_closeDialog()
-    local context, dialog = self:_downloadContext()
-    local verifying = (job.payload or {}).source_refresh ~= nil
-    dialog = ConfirmBox:new{ text = verifying
-            and _("Cancel source verification and remove this downloaded chapter? Reading position and access are preserved.")
-            or _("Remove this downloaded chapter? Reading position and purchase access are preserved."),
-        ok_text = _("Remove download"), cancel_text = _("Cancel"), ok_callback = function()
-            if self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
-            if verifying then
-                if self.source_refresh_requests then self.source_refresh_requests[job.id] = nil end
-                self.controller:cancelSourceRefresh(job.id)
-            end
-            self:_invoke("removeDownload", { job.id }, function(_value, error)
-                if error then self:_error(error) end
-            end)
-        end }
-    self.dialog = dialog; UIManager:show(dialog)
-end
-
-function Screens:_downloads()
-    local jobs = Model.array(self.controller:getDownloads())
-    local items, active, complete = {}, 0, 0
-    for _index, job in ipairs(jobs) do
-        if job.kind == nil or job.kind == "episode_download" then
-            local older = (job.payload or {}).replaced_by ~= nil
-            if not older then
-                if job.state == "complete" then complete = complete + 1 else active = active + 1 end
-            end
-            if self.filter == "all" or (not older and ((self.filter == "complete" and job.state == "complete")
-                or (self.filter == "active" and job.state ~= "complete"))) then items[#items + 1] = job end
+    self.epoch = self.epoch + 1
+    self.query, self.search_results, self.search_error = query, nil, nil
+    self.page, self.filter, self.focused_comic_id = 1, "all", nil
+    self:_invoke("search", { query }, function(value, error)
+        if self.query ~= query then return end
+        self.search_error = error
+        if value and not error then
+            self.search_results = Model.array(value)
+            local history, recent = self.controller:getSetting("search_history", {}), { query }
+            for _, old in ipairs(history) do if old ~= query and #recent < 8 then recent[#recent + 1] = old end end
+            self.controller:setSetting("search_history", recent)
         end
-    end
-    table.sort(items, function(a, b)
-        if ((a.payload or {}).replaced_by ~= nil) ~= ((b.payload or {}).replaced_by ~= nil) then return (a.payload or {}).replaced_by == nil end
-        if (a.state == "complete") ~= (b.state == "complete") then return a.state ~= "complete" end
-        return tostring(a.id) < tostring(b.id)
     end)
-    local storage = self.controller:getStorageSummary() or {}
-    local summary = string.format(_("%d in queue · %d downloaded · %s retained"), active, complete,
-        Model.bytes(storage.pinned_bytes or storage.retained_bytes or storage.download_bytes))
-    return W.column{ W.text(summary, self.width, 17, { height = W.scale(29) }), W.space(6), self:_buttons{
-        { text = ({ all = _("All downloads"), active = _("In progress"), complete = _("Ready offline") })[self.filter], callback = function()
-            self.filter = ({ all = "active", active = "complete", complete = "all" })[self.filter]; self.page = 1; self:_render()
-        end },
-        { text = _("Refresh status"), callback = function() self:_render() end },
-    }, W.space(12), self:_paginate(items, 120, W.scale(92), function(job) return self:_jobRow(job) end) }
 end
 
 function Screens:_editSearch()
     self:_closeDialog()
-    local dialog
-    dialog = InputDialog:new{ title = _("Search comics"), input = self.query, input_hint = _("Title or author"), modal = true,
-        buttons = { { { text = _("Cancel"), callback = function() self:_closeDialog() end },
-            { text = _("Search"), is_enter_default = true, callback = function()
-                local query = dialog:getInputText():match("^%s*(.-)%s*$")
-                self:_closeDialog()
-                if query == "" then return end
-                self.query, self.page, self.search_results = query, 1, nil
-                self:_invoke("search", { query }, function(value, error)
-                    if self.query ~= query then return end
-                    if error then self:_error(error) else
-                        self.search_results = Model.array(value)
-                        local history = self.controller:getSetting("search_history", {})
-                        local recent = { query }
-                        for _index, old in ipairs(history) do if old ~= query and #recent < 8 then recent[#recent + 1] = old end end
-                        self.controller:setSetting("search_history", recent)
-                    end
-                end)
+    local dialog, epoch, key = nil, self.epoch, accountKey(self.controller)
+    dialog = InputDialog:new{ title = T("Search comics"), input = self.query, input_hint = T("Title or author"), modal = true,
+        buttons = { { { text = T("Cancel"), callback = function() self:_closeDialog() end },
+            { text = T("Search"), is_enter_default = true, callback = function()
+                if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
+                self:_runSearch(dialog:getInputText())
             end } } } }
     self.dialog = dialog; UIManager:show(dialog); dialog:onShowKeyboard()
 end
 
+function Screens:_searchFilter()
+    local dialog, epoch, key = nil, self.epoch, accountKey(self.controller)
+    local buttons = {}
+    for _, choice in ipairs({ { "all", T("All") }, { "ongoing", T("Ongoing") }, { "completed", T("Completed") } }) do
+        local value = choice[1]
+        buttons[#buttons + 1] = { { text = (self.filter == value and "[x] " or "[ ] ") .. choice[2], callback = function()
+            if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
+            self:_closeDialog(); self.filter, self.page, self.epoch = value, 1, self.epoch + 1; self:_render()
+        end } }
+    end
+    buttons[#buttons + 1] = { { text = T("Cancel"), callback = function() self:_closeDialog() end } }
+    dialog = self:_showContextDialog(T("Filter search results"), buttons)
+end
+
 function Screens:_search()
-    local rows = { self:_button(self.query ~= "" and self.query or _("Search by title or author"), self.width,
-        function() self:_editSearch() end, { align = "left", size = 20, height = 36 }), W.space(6),
-        self:_button(_("Open by comic ID"), self.width, function() self:_lookupComicID() end), W.space(12) }
+    self.search_cards = {}
+    local rows = { self:_button(self.query ~= "" and self.query or T("Search by title or author"), self.width,
+        function() self:_editSearch() end, { align = "left", size = W.font.item, height = 36 }), W.space(4),
+        self:_buttons{
+            { text = T("Open by comic ID"), callback = function() self:_lookupComicID() end,
+                borderless = true, size = W.font.meta, align = "left" },
+            { text = self.query ~= "" and T("Clear search") or T("Bookstore"), borderless = true, size = W.font.meta,
+                callback = function() if self.query ~= "" then self:_searchHome() else self:showBookstore() end end },
+        }, W.space(12) }
     if self.query == "" then
-        rows[#rows + 1] = W.text(_("Recent searches"), self.width, 18, { bold = true })
-        rows[#rows + 1] = W.space(8)
         local history = self.controller:getSetting("search_history", {})
-        if #history == 0 then rows[#rows + 1] = W.text(_("Search for a comic to start reading."), self.width, 19) end
-        for index, query in ipairs(history) do
-            if index > 5 then break end
-            rows[#rows + 1] = self:_button(query, self.width, function()
-                self.query, self.search_results = query, nil
-                self:_invoke("search", { query }, function(value, error)
-                    if self.query ~= query then return end
-                    if error then self:_error(error) else self.search_results = Model.array(value) end
-                end)
-            end, { align = "left", borderless = true })
+        if #history == 0 then
+            rows[#rows + 1] = W.text(T("Find your next comic"), self.width, W.font.title, { bold = true })
+            rows[#rows + 1] = W.space(8)
+            rows[#rows + 1] = W.text(T("Search by title or author, or browse Bookstore."), self.width, W.font.body)
+        else
+            local clear_width = W.scale(155)
+            rows[#rows + 1] = W.row{ W.text(T("Recent searches"), self.width - clear_width, W.font.item, { bold = true }),
+                self:_button(T("Clear history"), clear_width, function()
+                    local _, error = self.controller:setSetting("search_history", {})
+                    if error then self:_error(error) else self:_render() end
+                end, { borderless = true, size = W.font.meta, align = "right" }) }
+            rows[#rows + 1] = W.space(8)
+            for index, query in ipairs(history) do
+                if index > 5 then break end
+                rows[#rows + 1] = self:_button(query, self.width, function() self:_runSearch(query) end,
+                    { align = "left", borderless = true, size = W.font.body })
+            end
         end
     else
         local results = {}
-        for _index, comic in ipairs(self.search_results or {}) do
-            if self.filter == "all" or (self.filter == "completed" and comic.finished)
-                or (self.filter == "ongoing" and not comic.finished) then results[#results + 1] = comic end
+        for _, comic in ipairs(self.search_results or {}) do
+            if self.filter == "all" or self.filter == "completed" and comic.finished
+                or self.filter == "ongoing" and not comic.finished then results[#results + 1] = comic end
         end
         rows[#rows + 1] = self:_buttons{
-            { text = ({ all = _("All"), ongoing = _("Ongoing"), completed = _("Completed") })[self.filter], callback = function()
-                self.filter = ({ all = "ongoing", ongoing = "completed", completed = "all" })[self.filter]
-                self.page = 1; self:_render()
-            end },
-            { text = _("Change search"), callback = function() self:_editSearch() end },
+            { text = ({ all = T("All"), ongoing = T("Ongoing"), completed = T("Completed") })[self.filter] .. " ▾",
+                callback = function() self:_searchFilter() end, borderless = true, size = W.font.meta, align = "left" },
+            { text = T("Change search"), callback = function() self:_editSearch() end, borderless = true, size = W.font.meta },
         }
-        rows[#rows + 1] = W.space(10)
-        rows[#rows + 1] = W.text(self.status or string.format(_("%d results"), #results), self.width, 16, { muted = true })
-        rows[#rows + 1] = W.space(10)
-        rows[#rows + 1] = self:_paginate(results, 91, W.scale(202), function(comic) return self:_comicCard(comic, false) end)
+        rows[#rows + 1] = W.space(8)
+        if self.status then
+            rows[#rows + 1] = W.text(T("Searching…"), self.width, W.font.item, { bold = true })
+            rows[#rows + 1] = W.space(8)
+            rows[#rows + 1] = W.text(T("Waiting for search results."), self.width, W.font.body)
+        elseif self.search_error then
+            local heading, message = Model.error(self.search_error)
+            rows[#rows + 1] = W.text(heading, self.width, W.font.item, { bold = true })
+            rows[#rows + 1] = W.space(8)
+            rows[#rows + 1] = W.text(message, self.width, W.font.body)
+            rows[#rows + 1] = W.space(12)
+            rows[#rows + 1] = self:_button(T("Retry search"), self.width, function() self:_runSearch(self.query) end, { primary = true })
+        elseif #results == 0 then
+            rows[#rows + 1] = W.text(T("No matching comics"), self.width, W.font.item, { bold = true })
+            rows[#rows + 1] = W.space(8)
+            rows[#rows + 1] = W.text(self.filter ~= "all" and T("Try another filter or return to all results.")
+                or T("Try a shorter title or an author name."), self.width, W.font.body)
+            rows[#rows + 1] = W.space(12)
+            rows[#rows + 1] = self:_button(self.filter ~= "all" and T("Clear filter") or T("Change search"), self.width,
+                function() if self.filter ~= "all" then self.filter, self.page = "all", 1; self:_render() else self:_editSearch() end end,
+                { primary = true })
+        else
+            rows[#rows + 1] = W.text(string.format(T("%d results"), #results), self.width, W.font.meta, { muted = true })
+            rows[#rows + 1] = W.space(8)
+            local header = W.column(rows)
+            local function rowHeight(comic)
+                local row = self:_comicCard(comic, true)
+                local height = row:getSize().h
+                if row.free then row:free() end
+                return height
+            end
+            return W.column{ header, self:_paginate(results, rowHeight, header:getSize().h,
+                function(comic) return self:_comicCard(comic) end, false) }
+        end
     end
+    self.pages, self.page, self.page_ranges = 1, 1, {}
     return W.column(rows)
 end
+
 
 function Screens:_lookupComicID()
     self:_closeDialog()
     local dialog
-    dialog = InputDialog:new{ title = _("Open by comic ID"), input = "", input_hint = "mc12345", modal = true,
-        description = _("Enter a positive comic ID, such as mc12345."),
-        buttons = { { { text = _("Cancel"), callback = function() self:_closeDialog() end },
-            { text = _("Open comic"), is_enter_default = true, callback = function()
+    dialog = InputDialog:new{ title = T("Open by comic ID"), input = "", input_hint = "mc12345", modal = true,
+        description = T("Enter a positive comic ID, such as mc12345."),
+        buttons = { { { text = T("Cancel"), callback = function() self:_closeDialog() end },
+            { text = T("Open comic"), is_enter_default = true, callback = function()
                 local value = dialog:getInputText()
                 self:_closeDialog()
                 self.lookup_sequence = (self.lookup_sequence or 0) + 1
@@ -1397,680 +1252,10 @@ function Screens:_lookupComicID()
     self.dialog = dialog; UIManager:show(dialog); dialog:onShowKeyboard()
 end
 
-function Screens:_importSession()
-    self:_closeDialog()
-    local dialog
-    dialog = InputDialog:new{ title = _("Import web session"), input = "", input_hint = _("Paste the Cookie header from your own Bilibili web session"), modal = true,
-        text_type = "password", description = _("Your session is stored privately on this device. Replacing it switches the account used by this plugin."),
-        buttons = { { { text = _("Import from file"), callback = function()
-            if self.dialog == dialog then self:_importSessionFile() end
-        end } }, { { text = _("Cancel"), callback = function() self:_closeDialog() end },
-            { text = _("Import session"), callback = function()
-                local text = dialog:getInputText()
-                self:_closeDialog()
-                self:_invoke("importSession", { text }, function(_value, error)
-                    if error then self:_error(error) else self.loaded = {}; self:showAccount() end
-                end)
-            end } } } }
-    self.dialog = dialog; UIManager:show(dialog); dialog:onShowKeyboard()
-end
-
-function Screens:_sessionFileCurrent(state, result)
-    local current = accountKey(self.controller)
-    return self.session_input == state and self.route ~= nil and self.epoch == state.epoch
-        and ((current == state.account_key and self.controller.generation == state.generation)
-            or (result and result.account_key == current))
-end
-
-function Screens:_sessionFileError(err)
-    self:_closeDialog()
-    local messages = {
-        size = _("Choose a session text file no larger than 128 KiB."),
-        regular_file = _("Choose a regular file. Folders and symbolic links cannot be imported."),
-        format = _("Choose a nonempty .txt, .json or .cookies session file."),
-        read = _("The selected session file could not be read. Check its location and permissions."),
-    }
-    self.dialog = ButtonDialog:new{ title = _("Session could not be imported") .. "\n\n" .. (messages[err and err.code] or messages.read),
-        buttons = { { { text = _("Close"), callback = function() self:_closeDialog() end } } }, modal = true }
-    UIManager:show(self.dialog)
-end
-
-function Screens:_importSessionFile()
-    self:_closeDialog()
-    local host = self.controller.host_ui or require("apps/reader/readerui").instance
-        or require("apps/filemanager/filemanager").instance
-    if not host or not host.folder_shortcuts then self:_sessionFileError({ code = "read" }); return end
-    local state = { epoch = self.epoch, account_key = accountKey(self.controller), generation = self.controller.generation }
-    self.session_input = state
-    local chooser
-    chooser = FileChooser:new{
-        ui = host,
-        title = _("Choose a session file"), path = require("apps/filemanager/filemanagerutil").getHomeFolder(),
-        modal = true, show_unsupported = false, file_filter = SessionInput.accepts,
-        show_file = function(_chooser, filename) return SessionInput.accepts(filename) end,
-        onFileSelect = function(_chooser, item)
-            if not self:_sessionFileCurrent(state) or state.selected then return end
-            state.selected = true
-            local selected_path = item.path
-            UIManager:close(chooser)
-            if self.dialog == chooser then self.dialog = nil end
-            -- The native picker must finish closing before the import status is shown.
-            UIManager:nextTick(function()
-                if not self:_sessionFileCurrent(state) then return end
-                local content, err = SessionInput.read(selected_path)
-                if not content then self:_sessionFileError(err); return end
-                self.dialog = ButtonDialog:new{ title = _("Validating the selected session…"),
-                    buttons = { { { text = _("Close"), callback = function() self:_closeDialog() end } } }, modal = true }
-                UIManager:show(self.dialog)
-                local function completed(result, error)
-                    if state.completed then return end
-                    state.completed = true
-                    if not self:_sessionFileCurrent(state, result) then return end
-                    if error or not result then self:_error(error); return end
-                    self:_closeDialog(); self.loaded = {}; self:_render()
-                    self.dialog = ButtonDialog:new{ title = _("Session imported") .. "\n\n" .. _("The selected session was validated and saved."),
-                        buttons = { { { text = _("Close"), callback = function() self:_closeDialog() end } } }, modal = true }
-                    UIManager:show(self.dialog)
-                end
-                local ok = pcall(function() self.controller:importSession(content, completed) end)
-                content = nil
-                if not ok then completed(nil, { kind = "internal" }) end
-            end)
-        end,
-        onCloseWidget = function(widget)
-            FileChooser.onCloseWidget(widget)
-            if self.session_input == state and not state.selected then self.session_input = nil end
-            if self.dialog == widget then self.dialog = nil end
-        end,
-        close_callback = function()
-            if self.session_input == state and not state.selected then self.session_input = nil end
-            if self.dialog == chooser then self.dialog = nil end
-        end,
-    }
-    self.dialog = chooser; UIManager:show(chooser)
-end
-
-function Screens:_signInWithQR()
-    self:_closeDialog()
-    local state = { epoch = self.epoch, account_key = accountKey(self.controller), generation = self.controller.generation }
-    local login
-    login = QRLogin.new{ controller = self.controller,
-        is_current = function(confirmed)
-            return self.qr_login == login and self.route ~= nil and self.epoch == state.epoch
-                and (confirmed or (accountKey(self.controller) == state.account_key and self.controller.generation == state.generation))
-        end,
-        on_dialog = function(dialog) self.dialog = dialog end,
-        on_close = function(dialog)
-            if self.dialog == dialog then self.dialog = nil end
-            if self.qr_login == login then self.qr_login = nil end
-        end,
-        on_confirmed = function()
-            self.loaded = {}
-            self:showAccount()
-        end,
-    }
-    self.qr_login = login
-    login:start()
-end
-
-function Screens:_account()
-    local account, wallet = self.controller:getAccount() or {}, self.controller:getWallet() or {}
-    local signed_in = account.session_valid == true or (account.session_valid ~= false and account.id ~= nil)
-    local prefetch = self.controller:getSetting("prefetch_pages", 3)
-    local cache_limit = self.controller:getSetting("cache_limit_mb", 512)
-    local concurrency = self.controller:getSetting("download_concurrency", 2)
-    local storage = self.controller:getStorageSummary() or {}
-    local renewing = account.auth_state == "checking" or account.auth_state == "refreshing"
-        or account.auth_state == "pending_confirmation"
-    local rows = {
-        W.text(signed_in and (account.name or _("Signed in")) or _("Not signed in"), self.width, 27, { display = true, bold = true }),
-        W.space(4), W.text(string.format(_("Coins: %s · Coupons: %s"), tostring(wallet.remain_gold or "—"),
-            tostring(wallet.remain_coupon or "—")), self.width, 19), W.space(4),
-        W.text(account.auth_state == "reauth_required" and _("Sign in again to restore your account.")
-            or renewing and _("Checking or renewing your sign-in…")
-            or account.auth_state == "error" and _("Renewal is temporarily unavailable. Retry or sign in with QR code.")
-            or account.renewable and _("Automatic sign-in renewal is enabled.")
-            or signed_in and _("This imported session cannot renew itself. Sign in with QR code.")
-            or _("Scan a code to sign in and enable automatic renewal."),
-            self.width, 16, { muted = true, height = W.scale(38) }), W.space(4),
-        W.text(wallet.stale and _("Balance may be outdated. Refresh before reviewing a purchase.") or _("Purchases use your existing balance and eligible coupons."),
-            self.width, 16, { muted = true, height = W.scale(38) }), W.space(4),
-        self:_buttons{
-            { text = _("Sign in with QR code"), primary = true, callback = function() self:_signInWithQR() end },
-            { text = signed_in and _("Replace session") or _("Import session"), callback = function() self:_importSession() end },
-        }, W.space(4), self:_buttons{
-            { text = _("Import from file"), callback = function() self:_importSessionFile() end },
-            { text = _("Refresh balance"), callback = function() self:_invoke("refreshWallet", {}, function(_value, error)
-                if error then self:_error(error) end
-            end) end },
-        }, W.space(10), W.rule(self.width, true), W.space(8),
-        W.text(_("Reading and cache"), self.width, 21, { bold = true }), W.space(4),
-        self:_buttons{
-            { text = _("Reader defaults"), callback = function() self:_readerDefaults() end },
-            { text = _("Local diagnostics"), callback = function() self:_diagnostics() end },
-        }, W.space(4),
-        self:_buttons{
-            { text = string.format(_("Preload next images: %d"), prefetch), callback = function()
-                self.controller:setSetting("prefetch_pages", ({ [0] = 1, [1] = 3, [3] = 5, [5] = 0 })[prefetch] or 3); self:_render()
-            end, align = "left", size = 16 },
-            { text = string.format(_("Concurrent images: %d"), concurrency), callback = function() self:_imageConcurrency() end,
-                align = "left", size = 16 },
-        }, W.space(4),
-        self:_button(string.format(_("Automatic cache limit: %d MiB"), cache_limit), self.width, function()
-            self.controller:setSetting("cache_limit_mb", ({ [256] = 512, [512] = 1024, [1024] = 2048, [2048] = 256 })[cache_limit] or 512); self:_render()
-        end, { align = "left" }), W.space(10),
-        W.text(string.format(_("Automatic cache: %s · Downloads: %s"), Model.bytes(storage.automatic_bytes or storage.cache_bytes),
-            Model.bytes(storage.pinned_bytes or storage.retained_bytes)), self.width, 16, { muted = true }), W.space(8),
-        self:_button(_("Clear automatic cache"), self.width, function()
-            self:_closeDialog()
-            self.dialog = ConfirmBox:new{ text = _("Clear automatic cache? Explicit downloads and current reading content are preserved."),
-                ok_text = _("Clear cache"), ok_callback = function()
-                    local _, error = self.controller:clearAutomaticCache()
-                    if error then self:_error(error) end; self:_render()
-                end }
-            UIManager:show(self.dialog)
-        end),
-    }
-    local pending = Model.pending(self.controller)
-    if #pending > 0 then
-        rows[#rows + 1] = W.space(14)
-        rows[#rows + 1] = self:_button(string.format(_("Purchases awaiting confirmation: %d"), #pending), self.width,
-            function() self:_pendingList(pending) end, { primary = true })
-    end
-    return W.column(rows)
-end
-
-function Screens:_imageConcurrency()
-    local selected = self.controller:getSetting("download_concurrency", 2)
-    local buttons, row = {}, nil
-    local dialog, key = nil, accountKey(self.controller)
-    for value = 1, 4 do
-        if value % 2 == 1 then row = {}; buttons[#buttons + 1] = row end
-        row[#row + 1] = { text = (selected == value and "[x] " or "[ ] ") .. value, callback = function()
-            if self.dialog ~= dialog or accountKey(self.controller) ~= key then return end
-            local saved, error = self.controller:setSetting("download_concurrency", value)
-            if saved == nil and error then self:_closeDialog(); self:_render(); self:_error(error)
-            else self.context_dialog_dirty = true; self:_imageConcurrency() end
-        end }
-    end
-    buttons[#buttons + 1] = { { text = _("Close"), callback = function() if self.dialog == dialog then dialog:onClose() end end } }
-    dialog = self:_showContextDialog(_("Concurrent image downloads") .. "\n\n"
-        .. _("Applies to online cache and downloads. Images already downloading will finish."), buttons)
-end
-
-function Screens:_readerDefaults()
-    self:_closeDialog()
-    local mode = self.controller:getSetting("reading_mode", "auto")
-    local direction = self.controller:getSetting("reading_direction", "ltr")
-    local function choose(key, value)
-        local saved, error = self.controller:setSetting(key, value)
-        if saved == nil and error then self:_error(error) else self:_readerDefaults() end
-    end
-    local function label(message, selected) return (selected and "[x] " or "[ ] ") .. _(message) end
-    self.dialog = ButtonDialog:new{ modal = true, title = _("Reader defaults") .. "\n\n"
-        .. _("These defaults apply to new chapters. Saved chapter settings and reading positions are preserved."), buttons = {
-        { { text = label("Automatic", mode == "auto"), callback = function() choose("reading_mode", "auto") end },
-          { text = label("Page comic", mode == "page"), callback = function() choose("reading_mode", "page") end },
-          { text = label("Long strip", mode == "strip"), callback = function() choose("reading_mode", "strip") end } },
-        { { text = label("Left to right", direction == "ltr"), callback = function() choose("reading_direction", "ltr") end },
-          { text = label("Right to left", direction == "rtl"), callback = function() choose("reading_direction", "rtl") end } },
-        { { text = _("Close"), callback = function() self:_closeDialog() end } },
-    } }
-    UIManager:show(self.dialog)
-end
-
-function Screens:_diagnostics()
-    self:_closeDialog()
-    local epoch = self.epoch
-    local loading = ButtonDialog:new{ modal = true, title = _("Checking local capabilities…"), buttons = {
-        { { text = _("Close"), callback = function() self:_closeDialog() end } },
-    } }
-    self.dialog = loading; UIManager:show(loading)
-    self.controller:getDiagnostics(function(snapshot, error)
-        if self.epoch ~= epoch or self.dialog ~= loading or not UIManager:isWidgetShown(loading) then return end
-        self:_closeDialog()
-        if error then self:_error(error); return end
-        local session_labels = { stored = _("Saved; server validity was not checked"), invalid = _("Marked invalid; import a new session"), missing = _("No usable local session") }
-        local platform = snapshot.platform or {}
-        local function known(value) return value and value ~= "unknown" and value or _("Unknown") end
-        local lines = {
-            string.format(_("Plugin version: %s"), known(snapshot.plugin_version)),
-            string.format(_("KOReader version: %s"), known(snapshot.koreader_version)),
-            string.format(_("Platform: %s / %s / %s"), known(platform.os), known(platform.arch), known(platform.target)),
-            "", string.format(_("Local session: %s"), session_labels[snapshot.local_session] or session_labels.missing),
-            string.format(_("Credential storage: %s"), snapshot.credential_storage == "app_private" and _("App-private directory") or _("Account directory")),
-            "", _("Local capabilities"),
-        }
-        for _index, item in ipairs({ { "request_signing", _("Request signing") }, { "response_decoding", _("Response decoding") },
-            { "image_index", _("Chapter image index") }, { "image_tokens", _("Image access adapter") },
-            { "encrypted_images", _("Image conversion") }, { "purchase", _("Purchase adapter") } }) do
-            local value = (snapshot.capabilities or {})[item[1]]
-            local state = value == true and _("Locally available") or value == false and _("Locally unavailable") or _("Not checked")
-            lines[#lines + 1] = item[2] .. ": " .. state
-        end
-        lines[#lines + 1], lines[#lines + 2] = "", _("These local checks do not verify the Bilibili service, account access, image retrieval or purchases.")
-        self.dialog = TextViewer:new{ title = _("Local diagnostics"), text = table.concat(lines, "\n"), modal = true }
-        UIManager:show(self.dialog)
-    end)
-end
-
-function Screens:_pendingList(pending)
-    self:_closeDialog()
-    local epoch, account_key = self.epoch, accountKey(self.controller)
-    local generation = self.controller.generation
-    local buttons = {}
-    for _index, intent in ipairs(pending) do
-        local label = string.format(intent.range_outcome_pending and _("Review purchase %s") or _("Refresh purchase %s"), tostring(intent.id))
-        if intent.range_outcome_pending then label = label .. "\n" .. _("Range result pending; purchases paused") end
-        buttons[#buttons + 1] = { { text = label, height = intent.range_outcome_pending and W.scale(62) or nil, callback = function()
-                if epoch ~= self.epoch or account_key ~= accountKey(self.controller) or generation ~= self.controller.generation then return end
-                self.purchase_state = { intent = intent, comic = self.controller:getComic(intent.comic_id) or {},
-                    episode = { id = (intent.quote or {}).episode_id or (intent.episode_ids or {})[1] }, quote = intent.quote,
-                    purpose = purchasePurpose(intent), epoch = self.epoch, account_key = accountKey(self.controller), generation = generation }
-                self.purchase_visible = true
-            self:_purchaseDialog()
-        end } }
-    end
-    buttons[#buttons + 1] = { { text = _("Close"), callback = function() self:_closeDialog() end } }
-    self.dialog = ButtonDialog:new{ title = _("Purchases awaiting confirmation"), buttons = buttons, modal = true }
-    UIManager:show(self.dialog)
-end
-
-function Screens:_purchaseFor(comic, episode, purpose)
-    self.purchase_state = { comic = comic, episode = episode, loading = true, purpose = purchasePurpose(nil, purpose),
-        epoch = self.epoch, account_key = accountKey(self.controller), generation = self.controller.generation }
-    self.purchase_visible = true
-    for _index, intent in ipairs(Model.pending(self.controller)) do
-        for _index, id in ipairs(intent.episode_ids or {}) do
-            if tostring(id) == tostring(episode.id) then
-                self.purchase_state.intent, self.purchase_state.quote = intent, intent.quote
-                self.purchase_state.purpose = purchasePurpose(intent)
-                self.purchase_state.loading = nil; self:_purchaseDialog(); return
-            end
-        end
-    end
-    self:_quote(nil, nil)
-end
-
-function Screens:_purchaseCurrent(state)
-    return self.purchase_state == state and self.purchase_visible and self.route ~= nil
-        and state.epoch == self.epoch and state.account_key == accountKey(self.controller) and state.generation == self.controller.generation
-end
-
-function Screens:_quote(scope, payment)
-    local state = self.purchase_state
-    if not state or not self:_purchaseCurrent(state) or state.submitting or state.intent then return end
-    if self.scope_dialog then UIManager:close(self.scope_dialog); self.scope_dialog = nil end
-    scope = Model.purchaseScope(scope or state.scope or (state.quote or {}).scope)
-    if state.purpose == "download" then scope = { kind = "single", order = scope.order } end
-    payment = Model.purchasePayment(payment or state.payment or (state.quote or {}).payment)
-    state.options_quote = state.quote or state.options_quote
-    state.scope, state.payment = scope, payment
-    state.loading, state.error, state.quote = true, nil, nil
-    state.request = (state.request or 0) + 1
-    local request = state.request
-    self:_purchaseDialog()
-    -- Nil arguments must retain their positions before the async callback.
-    local epoch = self.epoch
-    self.controller:quotePurchase(tostring(state.episode.id), scope, payment, function(quote, error)
-        if not self:_purchaseCurrent(state) or request ~= state.request or epoch ~= self.epoch then return end
-        state.loading, state.quote, state.error = nil, quote, error
-        if quote then
-            state.scope, state.payment = Model.purchaseScope(quote.scope), Model.purchasePayment(quote.payment)
-            state.options_quote = quote
-        end
-        self:_purchaseDialog()
-    end)
-end
-
-function Screens:_scopeText(quote)
-    local episodes, lines = Model.array(self.controller:getEpisodes(quote.comic_id)), {}
-    local by_id = {}; for _index, episode in ipairs(episodes) do by_id[tostring(episode.id)] = title(episode) end
-    if (quote.scope or {}).kind == "batch" then
-        lines[#lines + 1] = Model.ordinalRange(quote) and Model.purchaseRangeLabel(quote.scope) or _("Batch selection")
-        lines[#lines + 1] = _("Catalog updates or purchases elsewhere may change the actual chapters. Details show the current expected list.")
-        local anchor_id = tostring(quote.episode_id or "")
-        local selected = (self.purchase_state or {}).episode
-        local anchor_title = type(selected) == "table" and tostring(selected.id) == anchor_id and title(selected) or by_id[anchor_id]
-        if anchor_title then lines[#lines + 1] = string.format(_("Starting chapter: %s"), anchor_title) end
-        lines[#lines + 1] = ""
-        lines[#lines + 1] = _("Current expected chapters:")
-    end
-    for _index, id in ipairs(quote.episode_ids or {}) do lines[#lines + 1] = by_id[tostring(id)] or tostring(id) end
-    return table.concat(lines, "\n")
-end
-
-local function purchaseLabel(value)
-    if type(value) ~= "string" and type(value) ~= "number" then return "?" end
-    local text = tostring(value):gsub("[%c]", " ")
-    return #text <= 48 and text or text:sub(1, 45) .. "…"
-end
-
-local function purchaseDiscountName(kind)
-    local names = { none = _("No discount"), discount_card = _("Discount coupon"),
-        activity = _("Activity offer"), free_gold_card = _("Free-coin card") }
-    return names[kind] or _("Unverified discount")
-end
-
-function Screens:_purchaseSelectionText(state, trusted_quote)
-    local scope, payment = state.scope or {}, state.payment or {}
-    local range = trusted_quote and Model.ordinalRange(trusted_quote) and Model.purchaseRangeLabel(scope)
-    local lines = { scope.kind == "batch" and (range or _("Batch selection")) or _("Single chapter"),
-        string.format(_("Payment: %s"), asset(payment.method)) }
-    if type(payment.discount) == "table" and payment.discount.kind ~= "none" then
-        lines[#lines + 1] = string.format(_("Selected discount: %s / %s"), purchaseDiscountName(payment.discount.kind), purchaseLabel(payment.discount.id))
-    elseif payment.method == "coin" then
-        lines[#lines + 1] = _("No discount")
-    end
-    if type(payment.coupon_ids) == "table" and #payment.coupon_ids > 0 then
-        lines[#lines + 1] = string.format(_("Selected coupons: %d"), #payment.coupon_ids)
-    end
-    if trusted_quote and (trusted_quote.payment or {}).method == "coupon" then
-        local ids = Model.couponIdentifiers(trusted_quote)
-        if ids then
-            lines[#lines + 1] = _("Coupon IDs (identification only):")
-            for _index, id in ipairs(ids) do lines[#lines + 1] = id end
-        else lines[#lines + 1] = _("Coupon identifiers are unavailable in this quote.") end
-    end
-    if payment.method == "coin" then
-        lines[#lines + 1] = scope.order == 2 and _("Order: expiry") or _("Order: discount")
-    end
-    return table.concat(lines, "\n")
-end
-
-function Screens:_candidateAmountLines(quote)
-    local values, lines = type(quote.amounts) == "table" and quote.amounts or {}, {}
-    for _index, field in ipairs({ { "original", _("Platform original price: %s") },
-        { "display", _("Platform display reference: %s") }, { "submission", _("Settlement reference (not confirmed charge): %s") },
-        { "free_gold", _("Free-coin deduction reference: %s") } }) do
-        local value = Model.purchaseNumber(values[field[1]])
-        if value then lines[#lines + 1] = string.format(field[2], value) end
-    end
-    return lines
-end
-
-function Screens:_candidateDetails(state, quote)
-    local labels = { scope_unverified = _("Chapter range is not verified."), amount_unverified = _("Final charge is not verified."),
-        asset_unverified = _("Payment asset is not verified."), discount_unverified = _("The discount is not verified."),
-        entitlement_unverified = _("The resulting access is not verified."), asset_unavailable = _("The selected payment asset is unavailable."),
-        context_unverified = _("The offer context is not verified."), offer_unavailable = _("The selected offer is unavailable.") }
-    local lines = { _("This candidate cannot be submitted. Its exact chapters and final charge have not been confirmed."),
-        "", self:_purchaseSelectionText(state), "", _("Reported amounts are separate observations, not a confirmed payable total.") }
-    for _index, line in ipairs(self:_candidateAmountLines(quote)) do lines[#lines + 1] = line end
-    local seen = {}
-    lines[#lines + 1] = ""
-    for _index, code in ipairs(type(quote.blockers) == "table" and quote.blockers or {}) do
-        local message = labels[code] or _("Additional verification is required.")
-        if not seen[message] then lines[#lines + 1] = message; seen[message] = true end
-    end
-    self.scope_dialog = TextViewer:new{ title = _("Unverified offer details"), text = table.concat(lines, "\n"), modal = true }
-    UIManager:show(self.scope_dialog)
-end
-
-function Screens:_purchaseChoices(which, page)
-    local state = self.purchase_state
-    if not state or not self:_purchaseCurrent(state) or state.loading or state.submitting or state.intent then return end
-    local source, request = state.quote or state.options_quote, state.request
-    if not source then source = {}; state.options_quote = source end
-    local entries = {}
-    local function add(selection, label, available, details)
-        for _index, entry in ipairs(entries) do if Model.samePurchaseSelection(entry.selection, selection) then return end end
-        entries[#entries + 1] = { selection = selection, label = label, available = available ~= false, details = details or {} }
-    end
-    if which == "scope" then
-        add(Model.purchaseScope({ kind = "single", order = (state.scope or {}).order }), _("Single chapter"), true)
-        if state.purpose ~= "download" then
-            for index, offer in ipairs(source.batch_offers or {}) do
-                if type(offer.scope) == "table" and offer.scope.kind == "batch" then
-                    local details, amount = {}, Model.purchaseNumber(offer.amount)
-                    if amount and offer.scope.batch_limit ~= 0 then details[#details + 1] = string.format(_("Reported chapters: %s"), amount) end
-                    local original, display = Model.purchaseNumber(offer.original_amount), Model.purchaseNumber(offer.display_amount)
-                    if original then details[#details + 1] = string.format(_("Platform original price: %s"), original) end
-                    if display then details[#details + 1] = string.format(_("Platform display reference: %s"), display) end
-                    add(Model.purchaseScope(offer.scope), offer.scope.batch_limit == 0 and _("Remaining from this chapter")
-                        or string.format(_("Batch offer %d"), index), offer.available, details)
-                end
-            end
-            for index, option in ipairs(source.scopes or {}) do
-                if option.kind == "batch" then
-                    add(Model.purchaseScope(option), option.batch_limit == 0 and _("Remaining from this chapter")
-                        or string.format(_("Supported batch %s"), purchaseLabel(option.batch_limit or index)), option.available)
-                end
-            end
-        end
-    else
-        for _index, option in ipairs(source.payments or {}) do
-            add(Model.purchasePayment(option), asset(option.method), option.available)
-        end
-        add(Model.purchasePayment({ method = "coin" }), _("Coins without discount"), true)
-        for index, option in ipairs(source.discount_options or {}) do
-            if type(option.payment) == "table" then
-                local discount = option.payment.discount or {}
-                add(Model.purchasePayment(option.payment), string.format(_("Coin discount option %d"), index), option.available,
-                    { string.format(_("Discount: %s / %s"), purchaseDiscountName(discount.kind), purchaseLabel(discount.id)) })
-            end
-        end
-        add(Model.purchasePayment(state.payment), _("Current payment selection"), false, { self:_purchaseSelectionText(state) })
-    end
-    local selected = which == "scope" and Model.purchaseScope(state.scope) or Model.purchasePayment(state.payment)
-    local per_page, pages = 2, math.max(1, math.ceil(#entries / 2))
-    if not page then
-        page = 1
-        for index, entry in ipairs(entries) do
-            if Model.samePurchaseSelection(entry.selection, selected) then page = math.ceil(index / per_page); break end
-        end
-    end
-    page = math.max(1, math.min(pages, page))
-    self:_closeDialog(true)
-    local dialog
-    local function current()
-        return self:_purchaseCurrent(state) and self.dialog == dialog and UIManager:getTopmostVisibleWidget() == dialog
-            and state.request == request and (state.quote or state.options_quote or {}) == source
-            and not state.loading and not state.submitting and not state.intent
-    end
-    local heading = which == "scope" and _("Choose purchase range") or _("Choose payment option")
-    if which == "scope" and #(source.batch_offers or {}) > 0 then
-        heading = heading .. "\n" .. _("Reported offer amounts do not confirm the final charge.")
-    end
-    local buttons = {}
-    for index = (page - 1) * per_page + 1, math.min(page * per_page, #entries) do
-        local entry = entries[index]
-        heading = heading .. "\n\n" .. entry.label
-        for _detail_index, line in ipairs(entry.details) do heading = heading .. "\n" .. line end
-        buttons[#buttons + 1] = { { text = (Model.samePurchaseSelection(entry.selection, selected) and "[x] " or "[ ] ") .. entry.label,
-            enabled = entry.available, callback = function()
-                if not current() or not entry.available then return end
-                if which == "scope" then self:_quote(entry.selection, Model.purchasePayment(state.payment))
-                else self:_quote(Model.purchaseScope(state.scope), entry.selection) end
-            end } }
-    end
-    buttons[#buttons + 1] = {
-        { text = _("Previous"), enabled = page > 1, callback = function() if current() then self:_purchaseChoices(which, page - 1) end end },
-        { text = string.format(_("%d / %d"), page, pages), enabled = false },
-        { text = _("Next"), enabled = page < pages, callback = function() if current() then self:_purchaseChoices(which, page + 1) end end },
-    }
-    buttons[#buttons + 1] = { { text = _("Back to quote"), callback = function() if current() then self:_purchaseDialog() end end } }
-    dialog = ButtonDialog:new{ title = heading, buttons = buttons, dismissable = false, modal = true, width_factor = 0.94 }
-    self.dialog = dialog; UIManager:show(dialog)
-end
-
-function Screens:_purchaseSelectionButtons(state, buttons, current)
-    buttons[#buttons + 1] = {
-        { text = _("Choose range"), enabled = not state.submitting, callback = function() if current() then self:_purchaseChoices("scope") end end },
-        { text = _("Choose payment"), enabled = not state.submitting, callback = function() if current() then self:_purchaseChoices("payment") end end },
-    }
-    if (state.payment or {}).method == "coin" then
-        local function order(value)
-            if not current() then return end
-            local scope = Model.purchaseScope(state.scope); scope.order = value
-            self:_quote(scope, Model.purchasePayment(state.payment))
-        end
-        buttons[#buttons + 1] = {
-            { text = ((state.scope.order or 1) == 1 and "[x] " or "[ ] ") .. _("By discount"), enabled = not state.submitting, callback = function() order(1) end },
-            { text = (state.scope.order == 2 and "[x] " or "[ ] ") .. _("By expiry"), enabled = not state.submitting, callback = function() order(2) end },
-        }
-    end
-end
-
-function Screens:_purchaseDialog()
-    local state = self.purchase_state
-    if not state or not self:_purchaseCurrent(state) then return end
-    self:_closeDialog(true)
-    local quote, intent = state.quote, state.intent
-    local purpose = purchasePurpose(intent, state.purpose)
-    local candidate = quote and quote.submittable == false
-    local dialog, request = nil, state.request
-    local function current()
-        return self:_purchaseCurrent(state) and self.dialog == dialog and UIManager:getTopmostVisibleWidget() == dialog
-            and state.request == request and not state.loading and not state.submitting and not state.intent
-    end
-    local heading = (candidate and _("Review unverified offer") or _("Review purchase")) .. "\n" .. title(state.comic)
-    heading = heading .. "\n" .. (purpose == "download" and _("Next action: download this chapter") or _("Next action: read this chapter"))
-    local buttons = {}
-    if state.loading then
-        heading = heading .. "\n\n" .. _("Getting the current price…")
-    elseif state.error then
-        local error_title, message, action = Model.error(state.error)
-        heading = heading .. "\n\n" .. error_title .. "\n" .. message
-        if action == "account" then
-            buttons[#buttons + 1] = { { text = _("Open account"), callback = function() if current() then self:showAccount() end end } }
-        end
-        self:_purchaseSelectionButtons(state, buttons, current)
-        buttons[#buttons + 1] = {
-            { text = _("Single chapter"), callback = function()
-                if current() then self:_quote({ kind = "single", order = (state.scope or {}).order }, Model.purchasePayment(state.payment)) end
-            end },
-            { text = _("Refresh quote"), callback = function() if current() then self:_quote(nil, nil) end end },
-        }
-    elseif intent then
-        local confirmed = intent.state == "access_confirmed" and not intent.persistence_pending
-        local rejected = intent.state == "rejected" and not intent.persistence_pending
-        local range_pending = intent.range_outcome_pending == true
-        heading = heading .. "\n\n" .. (confirmed and (not range_pending and intent.transaction_evidence == "server_accepted" and _("Purchase confirmed") or _("Chapter access confirmed"))
-            or rejected and _("Purchase rejected") or _("Purchase result pending"))
-        heading = heading .. "\n" .. (confirmed and (range_pending
-            and _("Reading access is confirmed, but the range purchase result is still unknown. Further purchases for this comic are paused.")
-            or _("Reading access is ready. Image loading can be retried without purchasing again."))
-            or rejected and _("The purchase was not accepted. Get a new quote before trying again.")
-            or _("This purchase will not be sent again. Refresh the result to confirm chapter access."))
-        if confirmed then
-            buttons[#buttons + 1] = { { text = purpose == "download" and (state.continuation_error and _("Retry download") or _("Download chapter")) or _("Read chapter"),
-                enabled = not state.continuing, callback = function()
-                if not self:_purchaseCurrent(state) or state.intent ~= intent or state.continuing then return end
-                state.continuing, state.continuation_error, state.notice = true, nil, nil
-                local episode_id = tostring((intent.quote or {}).episode_id or (intent.episode_ids or {})[1])
-                self:_purchaseDialog()
-                self:_invoke(purpose == "download" and "downloadEpisodes" or "readEpisode",
-                    { tostring(intent.comic_id), purpose == "download" and { episode_id } or episode_id }, function(_value, error)
-                    state.continuing = nil
-                    if not self:_purchaseCurrent(state) then return end
-                    if error then
-                        local error_title, message = Model.error(error)
-                        state.continuation_error, state.notice = error, error_title .. "\n" .. message
-                        self:_purchaseDialog()
-                    elseif purpose == "download" then self:showDownloads()
-                    else self:close() end
-                end, true)
-            end } }
-        elseif rejected then
-            buttons[#buttons + 1] = { { text = _("Get new quote"), callback = function()
-                if self:_purchaseCurrent(state) and state.intent == intent then state.intent = nil; self:_quote(nil, nil) end
-            end } }
-        else
-            buttons[#buttons + 1] = { { text = state.submitting and _("Checking result…") or _("Refresh result"), enabled = not state.submitting,
-                callback = function()
-                    if not self:_purchaseCurrent(state) or state.submitting then return end
-                    state.submitting = true; self:_purchaseDialog()
-                    self.controller:reconcilePurchase(intent.id, function(value, error)
-                        state.submitting = nil
-                        if value then state.intent = value end
-                        if self:_purchaseCurrent(state) then
-                            if error and not value then state.notice = _("Result is still pending. Check the connection and refresh again.") end
-                            self:_purchaseDialog()
-                        end
-                    end)
-                end } }
-        end
-    elseif candidate then
-        heading = heading .. "\n\n" .. _("Final charge is not confirmed. This offer cannot be submitted.")
-        local display = Model.purchaseNumber((quote.amounts or {}).display)
-        if display then heading = heading .. "\n" .. string.format(_("Platform display reference: %s"), display) end
-        self:_purchaseSelectionButtons(state, buttons, current)
-        buttons[#buttons + 1] = { { text = _("Review candidate details"), callback = function()
-            if current() and state.quote == quote then self:_candidateDetails(state, quote) end
-        end } }
-        buttons[#buttons + 1] = {
-            { text = _("Single chapter"), callback = function()
-                if current() then self:_quote({ kind = "single", order = (state.scope or {}).order }, Model.purchasePayment(state.payment)) end
-            end },
-            { text = _("Refresh quote"), callback = function() if current() then self:_quote(nil, nil) end end },
-        }
-    elseif quote then
-        local amount = tostring(quote.amount or "?")
-        local batch, ordinal = (quote.scope or {}).kind == "batch", Model.ordinalRange(quote)
-        if batch then
-            heading = heading .. "\n\n" .. (ordinal and Model.purchaseRangeLabel(quote.scope) or _("Batch selection"))
-                .. "\n" .. string.format(_("Total: %s %s"), amount, asset(quote.method))
-        else
-            heading = heading .. "\n\n" .. string.format(_("%d chapters · %s %s"), #(quote.episode_ids or {}), amount, asset(quote.method))
-        end
-        local permanent = #(quote.episode_ids or {}) > 0
-        for _index, id in ipairs(quote.episode_ids or {}) do
-            local access = (quote.expected_access or {})[tostring(id)]
-            if not access or access.access ~= "owned" then permanent = false end
-        end
-        heading = heading .. "\n" .. (permanent and _("Permanent ownership") or _("Chapter reading access"))
-        heading = heading .. "\n" .. string.format(_("Available: %s %s"), tostring(quote.balance or "?"), asset(quote.method))
-        if (state.payment or {}).discount and state.payment.discount.kind ~= "none" then
-            heading = heading .. "\n" .. _("A discount option is selected; review its payment details.")
-        end
-        local scope_text = self:_scopeText(quote)
-        if batch then
-            heading = heading .. "\n" .. _("Catalog updates or purchases elsewhere may change the actual chapters. Details show the current expected list.")
-        elseif #(quote.episode_ids or {}) <= 3 then heading = heading .. "\n" .. scope_text end
-        buttons[#buttons + 1] = { { text = batch and _("Review expected chapters") or _("Review exact chapters"), enabled = not state.submitting, callback = function()
-            if not current() or state.quote ~= quote or quote.submittable == false then return end
-            self.scope_dialog = TextViewer:new{ title = batch and _("Expected purchase chapters") or _("Purchase scope"), text = scope_text .. "\n\n"
-                .. self:_purchaseSelectionText({ scope = quote.scope, payment = quote.payment }, quote), modal = true }
-            UIManager:show(self.scope_dialog)
-        end } }
-        self:_purchaseSelectionButtons(state, buttons, current)
-        if quote.can_afford == false then
-            heading = heading .. "\n\n" .. _("Insufficient balance")
-            buttons[#buttons + 1] = { { text = _("Refresh balance"), enabled = not state.submitting, callback = function()
-                if not current() or state.quote ~= quote then return end
-                self:_invoke("refreshWallet", {}, function(_value, error)
-                    if not current() or state.quote ~= quote then return end
-                    if error then self:_error(error) else self:_quote(Model.purchaseScope(state.scope), Model.purchasePayment(state.payment)) end
-                end, true)
-            end } }
-        elseif quote.submittable ~= false and quote.can_afford == true and quote.amount ~= nil and quote.fingerprint then
-            buttons[#buttons + 1] = { { text = state.submitting and _("Submitting purchase…")
-                or string.format(_("Confirm purchase · %s %s"), amount, asset(quote.method)), enabled = not state.submitting,
-                callback = function()
-                    if not current() or state.error or state.quote ~= quote or quote.submittable == false then return end
-                    state.submitting = true; self:_purchaseDialog()
-                    self.controller:purchase(quote, purpose, function(value, error)
-                        state.submitting = nil
-                        if value then state.intent = value
-                        elseif error and (error.kind == "outcome_unknown" or error.kind == "purchase_unknown" or error.kind == "purchase_busy") then
-                            -- The persistent pending record is authoritative after an interrupted worker.
-                            for _index, pending in ipairs(Model.pending(self.controller)) do
-                                if pending.quote and pending.quote.fingerprint == quote.fingerprint then state.intent = pending; break end
-                            end
-                            if not state.intent then state.intent = { state = "outcome_unknown", comic_id = quote.comic_id,
-                                episode_ids = quote.episode_ids, quote = quote, id = error.intent_id, purpose = purpose } end
-                        else state.error = error or { kind = "internal" } end
-                        if self:_purchaseCurrent(state) then self:_purchaseDialog() end
-                    end)
-                end } }
-        end
-    end
-    if state.notice then heading = heading .. "\n\n" .. state.notice end
-    buttons[#buttons + 1] = { { text = _("Close"), enabled = not state.submitting, callback = function() self:_closeDialog() end } }
-    dialog = ButtonDialog:new{ title = heading, buttons = buttons, dismissable = not state.submitting, width_factor = 0.94, modal = true,
-        tap_close_callback = function() self:_closeDialog() end }
-    self.dialog = dialog; UIManager:show(dialog)
-end
+require("bilicomics/ui/catalog_screens")(Screens)
+require("bilicomics/ui/downloads_screens")(Screens)
+require("bilicomics/ui/account_screens")(Screens)
+require("bilicomics/ui/recharge_screens")(Screens)
+require("bilicomics/ui/purchase_screens")(Screens)
 
 return Screens

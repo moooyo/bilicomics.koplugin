@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "assertions": 107,
+  "passed_assertions": 107,
+  "failed": 0,
+  "recharge_assertions": 20,
+  "source_unchanged": true,
+  "network": "unshare --net; injected client; no live account, purchase or recharge",
+  "source_sha256": {
+    "bilicomics/jobs/runner.lua": "df0c8bf84872c5c4aaa2c0830f25c5c2dddf8eb71abc6286edb57ad1a66195eb",
+    "bilicomics/jobs/download_service.lua": "c230f607d1a285275a5da1818156a3794b32541f1586c6d7e7db0ddf6351324a",
+    "bilicomics/jobs/worker.lua": "22e131221c26a5ff83aba69e0dcfae260aef40072b9c8b48e659ff919b4c25df",
+    "bilicomics/controller.lua": "456bc555d591b74054ebe142d769016f68e7f0b04aed9c93242e7fe7c1457e36",
+    "bilicomics/jobs/storage_budget.lua": "a50252f77cc279408168c35d61f8e7e9d754bad5af3640dcdbdaa5609c2fbf59",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/protocol/client.lua": "83059ef595c6fe3cb63c66a778073efc4d5c7a2181bcbbf0538d3056dd84e5e2",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac",
+    "spec/jobs/cancel_race.lua": "18c70589bf9eba82cc9ceea86d1c3ec98fb131fe8ce753a3bece1b97095648f0",
+    "spec/jobs/concurrency_spec.lua": "a1db5408023132b113aad00989e02e9b3f32bd55c21abf21eab417968ff57425",
+    "spec/jobs/cover_policy_spec.lua": "90151a0bc1bcda89a45a35a8f0d135fba09bbf6b97cfc8aa84f57801bfc01b1d",
+    "spec/jobs/cover_thumbnail_live_spec.lua": "5cbb332c89d5511129eb09a3bb0bdb706470cc795a82bd084ed1009309fe43c9",
+    "spec/jobs/download_connectivity_runner_spec.lua": "a33d6d682a2bd91849af396faa53070799cf1927d6f620a8adf12841855703c0",
+    "spec/jobs/download_connectivity_spec.lua": "7ffae3bcf48a7618d2c8a75f7d600fe52038372ae248c5202f60ddc22c2ef9b0",
+    "spec/jobs/download_service_spec.lua": "4a53fe261051507b78efacfa82398f975a1b110610dedfdcb05e428862758b28",
+    "spec/jobs/parent_exit_fixture.lua": "780ae6a03177aa2d20509ad3822898d352112f9530b8d14b2cb537e71de63219",
+    "spec/jobs/parent_exit_spec.py": "f687b15fb24cf101a6f2eaab1949a5da9a0db42c2424391f95789a13b8466dc1",
+    "spec/jobs/run_concurrency.py": "dee908169d500b302ff7e2e7c91ef04cd3494c5dc68eb5fae9fcadf82d7d041d",
+    "spec/jobs/run_download_connectivity.py": "d7a8c395ded0e3059d98db71a2cd05893666b2418c910d5f98314eb97b5fe403",
+    "spec/jobs/run_remote.py": "8d8f0326dd72d4146d5c2bec0f9e6af9f592b38c69b3c487ae81a8d684d9817a",
+    "spec/jobs/runner_spec.lua": "bcdf3dd51fedcb2289e74a0892ed31951b6048c4b64ea6956d196677757a6e82",
+    "spec/jobs/source_epoch_spec.lua": "4a746b5ebffe6f027ef6da9a4ae1fe1028d0253cb654cd971aad31adec8cd2fb",
+    "spec/jobs/source_verification_spec.lua": "5cad7d757f35552ab9b29b57562319407a8c8cc96f73438f8728bda02529f043",
+    "spec/jobs/storage_budget_spec.lua": "4625dfa58fe4068bb28b431b9f6325bba462584ff7e4dcd89c21a70da8b2deb1",
+    "spec/jobs/worker_extensions_spec.lua": "85d85ac73fe4c06a844d8df1624942227851e8cbe0b45edbb181c36436487310",
+    "spec/jobs/worker_spec.lua": "29a0fe1454567cb43d973f9c778a1cdcb7f4a73bb6065cc6b600efefc1646e24"
+  },
+  "result_path": "/var/tmp/bilicomics-recharge-integration-20260915/worker-recharge-1/worker-result.json",
+  "recharge_checks": [
+    {
+      "passed": true,
+      "name": "Read workers reject createRechargeOrder"
+    },
+    {
+      "passed": true,
+      "name": "getRechargeConfig preserves the request arguments"
+    },
+    {
+      "passed": true,
+      "name": "getRechargeConfig returns its read result"
+    },
+    {
+      "passed": true,
+      "name": "getRechargeConfig constructs an isolated client with the expected configuration"
+    },
+    {
+      "passed": true,
+      "name": "rechargeHistory preserves the request arguments"
+    },
+    {
+      "passed": true,
+      "name": "rechargeHistory returns its read result"
+    },
+    {
+      "passed": true,
+      "name": "rechargeHistory constructs an isolated client with the expected configuration"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 1 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 2 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 3 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 4 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 5 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 6 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 7 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Malformed recharge intent 8 cannot call order creation"
+    },
+    {
+      "passed": true,
+      "name": "Recharge forwards the confirmed cents and fingerprint without a local journal identifier"
+    },
+    {
+      "passed": true,
+      "name": "A committed recharge intent invokes only one order creation"
+    },
+    {
+      "passed": true,
+      "name": "Recharge returns the exact large order identity without numeric conversion"
+    },
+    {
+      "passed": true,
+      "name": "An unknown recharge result is propagated once without retry or substitute reads"
+    },
+    {
+      "passed": true,
+      "name": "Even a complete recharge intent cannot authorize creation through a read worker"
+    }
+  ]
+}

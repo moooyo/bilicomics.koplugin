@@ -1,6 +1,7 @@
 """Render synthetic native bookshelf cases only in the remote Linux test environment."""
 import argparse
 import hashlib
+from run_ui_sources import ui_source_names
 import json
 import math
 import os
@@ -77,7 +78,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     summary = {"scope": "Synthetic native bookshelf UI only; no real account; isolated network namespace", "cases": []}
     summary["sources"] = {name: hashlib.sha256((args.plugin / name).read_bytes()).hexdigest()
-                          for name in ("main.lua", "bilicomics/ui/screens.lua", "bilicomics/ui/widgets.lua",
+                          for name in ui_source_names(args.plugin) + ("main.lua", "bilicomics/ui/screens.lua", "bilicomics/ui/widgets.lua",
                                        "bilicomics/ui/model.lua", "l10n/bilicomics_zh_CN.lua")}
     for language in ("zh_CN", "C"):
         for width, height in ((480, 640), (600, 800), (720, 960), (960, 720)):

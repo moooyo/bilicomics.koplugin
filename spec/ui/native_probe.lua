@@ -106,7 +106,8 @@ local function dialog_button(message)
     local expected = _(message)
     for _index, row in ipairs(screens.dialog.buttons) do
         for _index, button in ipairs(row) do
-            local label = type(button.text) == "string" and button.text:gsub("^%[x%] ", ""):gsub("^%[ %] ", "")
+            local label = type(button.text) == "string" and button.text:match("^[^\n]*")
+                :gsub("^%[x%] ", ""):gsub("^%[ %] ", ""):gsub("^● ", ""):gsub("^○ ", "")
             if button.text == expected or label == expected then return button end
         end
     end
@@ -115,6 +116,17 @@ end
 local function dialog_press(message)
     local button = dialog_button(message)
     assert(button.enabled ~= false, "Button disabled"); button.callback()
+end
+local function chapter_actions(chapter_title)
+    for _index, row in ipairs(screens.focus) do
+        local label = row[1] and type(row[1].text) == "string" and row[1].text:gsub("^▌ ", ""):gsub("^› ", "")
+        if label == chapter_title then
+            local button = assert(row[2], "Chapter action button missing")
+            assert(button.text == "…" and button.enabled ~= false and button.callback, "Chapter action button unavailable")
+            button.callback(); return
+        end
+    end
+    error("Chapter row not found: " .. chapter_title)
 end
 local function capture(name)
     local widget = assert(screens.widget)
@@ -180,11 +192,14 @@ screens:_closeDialog()
 check("chapter_three_axes", Model.reading(controller.episodes[3]) == _("Unread")
     and Model.entitlement(controller.episodes[3]) == _("Free") and Model.storage(controller.episodes[3]) == _("Downloaded"))
 press("Select downloads")
-press("Select downloadable")
+press("Select scope…")
+dialog_press("Select all downloadable matches")
 check("locked_and_online_only_chapters_never_selected", screens.selected["6"] and not screens.selected["7"] and not screens.selected["8"] and not screens.selected["17"])
 capture("download-selection")
 press(string.format(_("Download selected (%d)"), 6))
-check("selection_dispatches_exact_ids", #controller.calls[#controller.calls].args[2] == 6)
+check("selection_dispatches_exact_ids", controller.calls[#controller.calls].method == "downloadEpisodes"
+    and controller.calls[#controller.calls].args[1] == "1"
+    and table.concat(controller.calls[#controller.calls].args[2], ",") == "1,2,3,4,5,6")
 finish(true)
 capture("downloads")
 press("Pause")
@@ -193,12 +208,15 @@ press("Resume")
 check("resume_calls_controller", controller.calls.resume == "one")
 controller.jobs[1].state, controller.jobs[1].error = "failed", { kind = "authentication" }
 screens:refresh()
-press("Failure details")
-check("download_failure_exposes_login_recovery", screens.dialog.title:find(_("Sign in required"), 1, true) ~= nil)
+press("More actions")
+dialog_press("Recovery options")
+check("download_failure_exposes_login_recovery", screens.dialog.title:find(_("Sign in required"), 1, true) ~= nil
+    and dialog_button("Open account"))
 screens:_closeDialog()
 controller.jobs[1].state, controller.jobs[1].error = "running", nil
 screens:refresh()
-press("Remove download")
+press("More actions")
+dialog_press("Remove download")
 check("remove_download_requires_confirmation", #controller.waiting == 0 and screens.dialog.ok_callback ~= nil)
 screens.dialog.ok_callback()
 check("remove_download_uses_async_controller", controller.waiting[1].method == "removeDownload")
@@ -210,9 +228,9 @@ capture("account")
 controller.purchases = { { id = "layout-pending", state = "outcome_unknown" } }
 screens:refresh(); capture("account-pending")
 controller.purchases = {}; screens:refresh()
-press("Reader defaults")
-dialog_press("[ ] " .. _("Long strip"))
-dialog_press("[ ] " .. _("Right to left"))
+press("Defaults for new chapters")
+dialog_press("Long strip")
+dialog_press("Right to left")
 check("reader_default_controls_persist_exact_enums", controller.settings.reading_mode == "strip" and controller.settings.reading_direction == "rtl")
 capture("reader-defaults")
 dialog_press("Close")
@@ -228,8 +246,11 @@ screens:_closeDialog()
 press("Local diagnostics"); screens:_closeDialog(); finish(diagnostics)
 check("closed_diagnostic_request_does_not_reopen_dialog", screens.dialog == nil)
 press(string.format(_("Preload next images: %d"), 3))
+dialog_press(string.format(_("%d images"), 5))
 check("prefetch_setting_persists", controller.settings.prefetch_pages == 5)
-press("Replace session")
+dialog_press("Close")
+press("Other sign-in methods")
+dialog_press("Paste web session")
 check("session_input_is_private", screens.dialog._input_widget.is_password_type == true)
 screens.dialog._input_widget:setText("synthetic-secret")
 check("session_render_masks_characters", screens.dialog._input_widget.text_widget.text ~= "synthetic-secret")
@@ -261,7 +282,7 @@ local quote = { id = "quote", episode_id = "8", comic_id = "1", episode_ids = { 
 finish(quote)
 capture("purchase")
 dialog_press("Choose range")
-dialog_press("[ ] " .. string.format(_("Supported batch %s"), "3"))
+dialog_press(string.format(_("Requested batch: %s chapters"), "3"))
 check("batch_selection_requests_a_new_server_quote", controller.calls[#controller.calls].args[2].kind == "batch"
     and controller.calls[#controller.calls].args[2].batch_limit == 3)
 local batch_quote = {}
@@ -271,12 +292,12 @@ batch_quote.expected_access = { ["8"] = { access = "owned" }, ["9"] = { access =
 finish(batch_quote)
 check("batch_uses_returned_total", screens.purchase_state.quote.amount == 51 and #screens.purchase_state.quote.episode_ids == 3)
 capture("purchase-batch")
-check("quote_shows_permanent_access", screens.dialog.title:find(_("Permanent ownership"), 1, true) ~= nil)
+check("quote_shows_permanent_access", screens.dialog.purchase_text:find(_("Permanent ownership"), 1, true) ~= nil)
 screens:_quote(nil, nil)
 check("quote_refresh_preserves_selected_scope", controller.calls[#controller.calls].args[2].kind == "batch")
 finish(batch_quote)
 dialog_press("Choose range")
-dialog_press("[ ] " .. _("Single chapter"))
+dialog_press("Single chapter")
 finish(quote)
 dialog_press(string.format(_("Confirm purchase · %s %s"), "20", _("coins")))
 check("purchase_is_async", controller.waiting[1].method == "purchase")
@@ -323,30 +344,34 @@ screens:_closeDialog()
 finish(quote)
 check("dismissed_quote_does_not_reopen", screens.dialog == nil)
 
-screens:showComic("1"); screens.descending = true; screens:refresh()
+screens:showComic("1")
+if not screens.descending then press("Oldest first") end
+local download_episode_id = "17"
+press("Jump…")
+screens.dialog._input_widget:setText(download_episode_id)
+dialog_press("Find chapter")
 capture("locked-download-action")
-press("Buy then download")
-local download_episode_id = controller.calls[#controller.calls].args[1]
+chapter_actions(controller.episodes[tonumber(download_episode_id)].title)
+dialog_press("Buy then download")
 check("locked_download_entry_quotes_only_the_selected_single_chapter", screens.purchase_state.purpose == "download"
-    and controller.calls[#controller.calls].method == "quotePurchase" and controller.calls[#controller.calls].args[2].kind == "single")
+    and controller.calls[#controller.calls].method == "quotePurchase" and controller.calls[#controller.calls].args[1] == download_episode_id
+    and controller.calls[#controller.calls].args[2].kind == "single")
 local download_quote = {}
 for key, value in pairs(quote) do download_quote[key] = value end
 download_quote.id, download_quote.episode_id, download_quote.episode_ids = "download-quote", download_episode_id, { download_episode_id }
 download_quote.fingerprint, download_quote.can_afford, download_quote.balance = "download-coin", true, 80
 download_quote.expected_access = { [download_episode_id] = { access = "owned" } }
 finish(download_quote)
-check("download_purpose_is_visible_before_payment_confirmation", screens.dialog.title:find(_("Next action: download this chapter"), 1, true) ~= nil)
+check("download_purpose_is_visible_before_payment_confirmation", screens.dialog.purchase_text:find(_("Next action: download this chapter"), 1, true) ~= nil)
 local offers_batch = false
-dialog_press("Choose range")
 for _index, row in ipairs(screens.dialog.buttons) do for _index, button in ipairs(row) do
-    if button.text:find(string.format(_("Supported batch %s"), "3"), 1, true) then offers_batch = true end
+    if button.text == _("Choose range") or button.text:find(string.format(_("Requested batch: %s chapters"), "3"), 1, true) then offers_batch = true end
 end end
 check("single_download_entry_never_offers_a_batch_purchase", not offers_batch)
-dialog_press("Back to quote")
 capture("purchase-download")
 local obsolete_confirmation = dialog_button(string.format(_("Confirm purchase · %s %s"), "20", _("coins"))).callback
 dialog_press("Choose payment")
-dialog_press("[ ] " .. _("coupons"))
+dialog_press("Reading coupons")
 local before_obsolete_confirmation = #controller.calls
 obsolete_confirmation()
 check("changing_payment_invalidates_the_previous_confirmation_button", #controller.calls == before_obsolete_confirmation
@@ -365,8 +390,12 @@ finish(download_intent)
 check("unknown_download_result_has_no_automatic_acquisition", #controller.waiting == 0)
 screens:_closeDialog()
 screens:_pendingList(controller.purchases)
-dialog_press(string.format(_("Refresh purchase %s"), download_intent.id))
-check("pending_list_restores_the_durable_download_purpose", screens.purchase_state.purpose == "download")
+local pending_button = dialog_button(controller.comics[1].title .. " · " .. controller.episodes[tonumber(download_episode_id)].title)
+check("pending_list_identifies_comic_chapter_and_status", pending_button.text:find(_("Purchase result pending"), 1, true)
+    and not pending_button.text:find(download_intent.id, 1, true))
+assert(pending_button.enabled ~= false, "Pending purchase button disabled"); pending_button.callback()
+check("pending_list_restores_the_durable_download_purpose", screens.purchase_state.purpose == "download"
+    and screens.purchase_state.intent.id == download_intent.id)
 screens:_closeDialog()
 screens:_purchaseFor(controller.comics[1], controller.episodes[tonumber(download_episode_id)], "read")
 check("read_entry_cannot_replace_an_existing_download_intent", screens.purchase_state.purpose == "download" and #controller.waiting == 0)

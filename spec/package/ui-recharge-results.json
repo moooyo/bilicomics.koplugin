@@ -1,0 +1,192 @@
+{
+  "scope": "Deterministic packaging, native artifact integrity, and private-data exclusions",
+  "checks": [
+    {
+      "name": "repeated_package_bytes_are_identical",
+      "passed": true
+    },
+    {
+      "name": "all_files_have_one_plugin_root",
+      "passed": true
+    },
+    {
+      "name": "production_entry_and_startup_dependencies_are_present",
+      "passed": true
+    },
+    {
+      "name": "no_research_fixtures_or_account_directories",
+      "passed": true
+    },
+    {
+      "name": "no_duplicate_archive_paths",
+      "passed": true
+    },
+    {
+      "name": "archive_manifest_covers_every_file",
+      "passed": true
+    },
+    {
+      "name": "archive_manifest_file_hashes_match",
+      "passed": true
+    },
+    {
+      "name": "archive_digest_matches_manifest",
+      "passed": true
+    },
+    {
+      "name": "arm32_rel_tables_are_adjacent_with_bind_now_and_relro",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_linux-x86_64",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_linux-armhf",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_linux-aarch64",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_android-arm64-v8a",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_android-armeabi-v7a",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_android-x86_64",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbiliwasm_android-x86",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_linux-x86_64",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_linux-armhf",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_linux-aarch64",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_android-arm64-v8a",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_android-armeabi-v7a",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_android-x86",
+      "passed": true
+    },
+    {
+      "name": "native_manifest_matches_libbilicrypto_android-x86_64",
+      "passed": true
+    },
+    {
+      "name": "redistribution_notices_are_included",
+      "passed": true
+    },
+    {
+      "name": "private_directories_excluded_even_under_production_root",
+      "passed": true
+    },
+    {
+      "name": "misplaced_session_data_rejects_packaging",
+      "passed": true
+    },
+    {
+      "name": "symlink_inputs_reject_packaging",
+      "passed": true
+    }
+  ],
+  "archive": {
+    "file": "bilicomics-0.1.0-dev.zip",
+    "sha256": "c154b0ea053c9dd2cf887858451cda016f598adfe822971e6ed611aa06ae9abb",
+    "bytes": 2554834,
+    "files": 123,
+    "native_artifacts": [
+      {
+        "target": "linux-x86_64",
+        "path": "bilicomics/protocol/native/bin/linux-x86_64/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "linux-armhf",
+        "path": "bilicomics/protocol/native/bin/linux-armhf/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "linux-aarch64",
+        "path": "bilicomics/protocol/native/bin/linux-aarch64/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-arm64-v8a",
+        "path": "bilicomics/protocol/native/bin/android-arm64-v8a/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-armeabi-v7a",
+        "path": "bilicomics/protocol/native/bin/android-armeabi-v7a/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-x86_64",
+        "path": "bilicomics/protocol/native/bin/android-x86_64/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-x86",
+        "path": "bilicomics/protocol/native/bin/android-x86/libbiliwasm.so",
+        "device_verified": false
+      },
+      {
+        "target": "linux-x86_64",
+        "path": "bilicomics/protocol/native/bin/linux-x86_64/libbilicrypto.so",
+        "device_verified": false
+      },
+      {
+        "target": "linux-armhf",
+        "path": "bilicomics/protocol/native/bin/linux-armhf/libbilicrypto.so",
+        "device_verified": false
+      },
+      {
+        "target": "linux-aarch64",
+        "path": "bilicomics/protocol/native/bin/linux-aarch64/libbilicrypto.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-arm64-v8a",
+        "path": "bilicomics/protocol/native/bin/android-arm64-v8a/libbilicrypto.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-armeabi-v7a",
+        "path": "bilicomics/protocol/native/bin/android-armeabi-v7a/libbilicrypto.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-x86",
+        "path": "bilicomics/protocol/native/bin/android-x86/libbilicrypto.so",
+        "device_verified": false
+      },
+      {
+        "target": "android-x86_64",
+        "path": "bilicomics/protocol/native/bin/android-x86_64/libbilicrypto.so",
+        "device_verified": false
+      }
+    ]
+  },
+  "passed": true
+}

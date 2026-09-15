@@ -11,9 +11,10 @@ end
 local Runner = {}
 Runner.__index = Runner
 local read_methods = { listFavorites = true, listHistory = true, search = true, comicDetail = true,
-    imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true }
+    imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true,
+    getRechargeConfig = true, rechargeHistory = true }
 local read_kinds = { library = true, quote = true, reconcile_purchase = true, download_page = true, download_cover = true }
-local mutations = { purchase_submit = true, set_favorite = true, auth = true }
+local mutations = { purchase_submit = true, set_favorite = true, recharge = true, auth = true }
 local function imageConcurrency(value)
     return type(value) == "number" and value % 1 == 0 and value >= 1 and value <= 4 and value or nil
 end
@@ -258,10 +259,11 @@ function Runner:cancel(id)
     if task then task.cancel_kind = "cancel"; killTask(task); self:_schedule(); return true end
     return false
 end
-function Runner:_read(task)
+function Runner:_read(task, maximum_bytes)
     local available = ffiutil.getNonBlockingReadSize(task.fd)
     if available == nil then return nil, Util.error("capability", "Nonblocking worker pipes are unavailable.") end
     local budget = math.min(available, 256 * 1024)
+    if maximum_bytes then budget = math.min(budget, maximum_bytes) end
     if budget > 0 then
         local chunk = ffi.new("uint8_t[?]", budget)
         local count = tonumber(ffi.C.read(task.fd, chunk, budget))
@@ -279,7 +281,25 @@ function Runner:_read(task)
     end
     return packet
 end
+function Runner:_drainRechargeReceipt(task)
+    if task.request.kind ~= "recharge" or task.packet or task.read_error or not task.fd then return end
+    -- The child has been stopped and reaped. Read only bytes already buffered in
+    -- its nonblocking pipe, bounded by one permitted frame including its header.
+    local remaining = math.max(0, self.limit + 9 - #task.buffer)
+    while not task.packet and not task.read_error do
+        local before = #task.buffer
+        task.packet, task.read_error = self:_read(task, remaining)
+        local received = #task.buffer - before
+        remaining = remaining - received
+        if task.packet or task.read_error or received == 0 or remaining <= 0 then break end
+    end
+end
 function Runner:_finish(task, packet, err)
+    if task.request.kind == "recharge" and packet and packet.id == task.id and packet.attempt == task.attempt then
+        -- A complete validated recharge response is stronger evidence than a
+        -- later timeout or teardown. Never discard its exact order identity.
+        task.cancel_kind, err = nil, nil
+    end
     closeFD(task)
     self.tasks[task.id] = nil
     -- The subprocess has been reaped; its partial file is now the only remaining disk consumption.
@@ -323,6 +343,7 @@ function Runner:_tick()
         end
         local done = ffiutil.isSubProcessDone(task.pid)
         if done then
+            if task.request.kind == "recharge" and task.cancel_kind then self:_drainRechargeReceipt(task) end
             if not task.packet and not task.read_error and not task.cancel_kind then task.packet, task.read_error = self:_read(task) end
             -- Drain large completed responses over subsequent ticks without blocking the UI.
             if task.packet or task.read_error or task.cancel_kind or ffiutil.getNonBlockingReadSize(task.fd) == 0 then
@@ -349,7 +370,10 @@ function Runner:close()
         -- Only teardown waits to reap; no network work remains in these killed processes.
         ffiutil.isSubProcessDone(task.pid, true)
         task.cancel_kind = "close"
-        self:_finish(task)
+        if task.request.kind == "recharge" then
+            self:_drainRechargeReceipt(task)
+            self:_finish(task, task.packet, task.read_error)
+        else self:_finish(task) end
     end
     if self.scheduled then self.ui:unschedule(self.tick); self.scheduled = false end
 end

@@ -1,0 +1,18 @@
+return {
+    ["Ch. %s"] = "第%s话",
+    ["Clear history"] = "清空历史",
+    ["Go to page"] = "跳转页面",
+    ["Choose a page from 1 to %d."] = "请输入 1 至 %d 之间的页码。",
+    ["Go"] = "跳转",
+    ["No items are available."] = "暂无内容。",
+    ["Clear search"] = "清空搜索",
+    ["Find your next comic"] = "找一本想读的漫画",
+    ["Search by title or author, or browse Bookstore."] = "输入漫画名或作者，也可以前往书城浏览。",
+    ["Filter search results"] = "筛选搜索结果",
+    ["Searching…"] = "正在搜索…",
+    ["Waiting for search results."] = "正在获取搜索结果，请稍候。",
+    ["Retry search"] = "重新搜索",
+    ["No matching comics"] = "没有找到匹配的漫画",
+    ["Try another filter or return to all results."] = "试试其他筛选条件，或返回全部结果。",
+    ["Try a shorter title or an author name."] = "试试更短的漫画名，或输入作者名字。",
+}

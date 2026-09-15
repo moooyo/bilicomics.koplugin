@@ -35,6 +35,31 @@ end
 local function write(path, value)
     local file = assert(io.open(path, "wb")); file:write(json.encode(value)); file:close()
 end
+local function unchangedOutside(buffer, left, top, right, bottom, value)
+    for y = 0, buffer:getHeight() - 1 do
+        for x = 0, buffer:getWidth() - 1 do
+            if (x < left or x >= right or y < top or y >= bottom)
+                and buffer:getPixel(x, y):getR() ~= value then return false end
+        end
+    end
+    return true
+end
+local function solidPixels(buffer, value, tolerance)
+    for y = 0, buffer:getHeight() - 1 do
+        for x = 0, buffer:getWidth() - 1 do
+            if math.abs(buffer:getPixel(x, y):getR() - value) > (tolerance or 0) then return false end
+        end
+    end
+    return true
+end
+local function invertedPixels(ordinary, inverted)
+    for y = 0, ordinary:getHeight() - 1 do
+        for x = 0, ordinary:getWidth() - 1 do
+            if inverted:getPixel(x, y):getR() ~= 255 - ordinary:getPixel(x, y):getR() then return false end
+        end
+    end
+    return true
+end
 local manifest_path = output .. "/chapter.bcomic"
 local records = read(output .. "/pages.json")
 local hints, events, active = 0, {}, 0
@@ -82,21 +107,60 @@ local function render()
     check("provider page count", document:getPageCount() == #records)
     check("missing geometry is local", document:getNativePageDimensions(2).h == 1600 and hints == 0)
     local target = BB.new(600, 400)
+    local loading_background, unavailable_background = 245, 235
     document:drawPage(target, 0, 0, Geom:new{ x = 0, y = 650, w = 600, h = 400 }, 1, 1, 0, 1, 1)
     check("native crop", math.abs(target:getPixel(300, 100):getR() - 100) <= 2)
+    check("ready image is not decorated with placeholder content", solidPixels(target, 100, 2))
     check("native owners closed after rendering", next(document._document.active) == nil)
     services.authorizeDescriptor = function()
         return nil, { kind = "entitlement", message = "Synthetic permission expiry", retryable = false }
     end
     document:drawPage(target, 0, 0, Geom:new{ x = 0, y = 650, w = 600, h = 400 }, 1, 1, 0, 1, 1)
-    check("permission expiry blocks even an existing rendered tile", target:getPixel(300, 100):getR() == 215
+    check("permission expiry blocks even an existing rendered tile", target:getPixel(300, 100):getR() == unavailable_background
         and next(document._document.active) == nil)
+    document:drawPageInverted(target, 0, 0, Geom:new{ x = 0, y = 650, w = 600, h = 400 }, 1, 1, 0, 1, 1)
+    check("expired permission also blocks inverted cached pixels", target:getPixel(300, 100):getR() == 255 - unavailable_background
+        and next(document._document.active) == nil)
+    check("expired permission cannot expose a cover", document:getCoverPageImage() == nil)
     services.authorizeDescriptor = authorize
     local missing = Geom:new{ x = 70, y = 600, w = 600, h = 400 }
     document:drawPage(target, 0, 0, missing, 2, 1, 0, 1, 1)
-    check("missing ordinary draw", target:getPixel(300, 100):getR() == 235)
+    check("missing ordinary draw", target:getPixel(300, 100):getR() == loading_background)
     document:drawPageInverted(target, 0, 0, missing, 2, 1, 0, 1, 1)
-    check("missing inverted draw", target:getPixel(300, 100):getR() == 20)
+    check("missing inverted draw", target:getPixel(300, 100):getR() == 255 - loading_background)
+    local tiny, tiny_inverted = BB.new(8, 8), BB.new(8, 8)
+    local tiny_region = Geom:new{ x = 70, y = 600, w = 8, h = 8 }
+    local hints_before_tiny = hints
+    document:drawPage(tiny, 0, 0, tiny_region, 2, 1, 0, 1, 1)
+    check("tiny missing region is drawable without acquiring twice", tiny:getPixel(4, 7):getR() == loading_background
+        and tiny:getPixel(4, 0):getR() < loading_background and hints == hints_before_tiny + 1
+        and next(document._document.active) == nil)
+    document:drawPageInverted(tiny_inverted, 0, 0, tiny_region, 2, 1, 0, 1, 1)
+    check("tiny inverted region complements its entire edge and background", invertedPixels(tiny, tiny_inverted))
+    tiny:free(); tiny_inverted:free()
+    local sentinel = 37
+    local clipped = BB.new(320, 200)
+    clipped:fill(BB.Color8(sentinel))
+    document:drawPage(clipped, 12, 10, tiny_region, 2, 1, 0, 1, 1)
+    check("tiny positioned placeholder leaves neighboring pixels unchanged",
+        clipped:getPixel(16, 17):getR() == loading_background and unchangedOutside(clipped, 12, 10, 20, 18, sentinel))
+    clipped:fill(BB.Color8(sentinel))
+    local clipped_region = Geom:new{ x = 0, y = 400, w = 240, h = 160 }
+    document:drawPage(clipped, -80, -40, clipped_region, 2, 1, 0, 1, 1)
+    check("negative offset clips background and text to the visible intersection",
+        clipped:getPixel(159, 119):getR() == loading_background and unchangedOutside(clipped, 0, 0, 160, 120, sentinel))
+    clipped:fill(BB.Color8(sentinel))
+    document:drawPageInverted(clipped, -80, -40, clipped_region, 2, 1, 0, 1, 1)
+    check("negative offset inverted placeholder preserves pixels outside its region",
+        clipped:getPixel(159, 119):getR() == 255 - loading_background and unchangedOutside(clipped, 0, 0, 160, 120, sentinel))
+    clipped:fill(BB.Color8(sentinel))
+    document:drawPage(clipped, 10, -7, tiny_region, 2, 1, 0, 1, 1)
+    check("one row intersection does not overrun its clipped height",
+        clipped:getPixel(14, 0):getR() ~= sentinel and unchangedOutside(clipped, 10, 0, 18, 1, sentinel))
+    clipped:fill(BB.Color8(sentinel))
+    document:drawPage(clipped, -16, -16, tiny_region, 2, 1, 0, 1, 1)
+    check("fully offscreen missing region leaves the destination unchanged", solidPixels(clipped, sentinel))
+    clipped:free()
     check("missing full-page unavailable", document:renderPage(2, nil, 1, 0, 1, 1) == nil)
     local part = Geom:new{ x = 50, y = 100, w = 30, h = 50 }
     part.scaled_rect = Geom:new{ x = 100, y = 200, w = 60, h = 100 }
@@ -110,6 +174,7 @@ local function render()
     records[2].state = "ready"; records[2].content_generation = 2
     document:drawPage(target, 0, 0, Geom:new{ x = 0, y = 0, w = 600, h = 400 }, 2, 1, 0, 1, 1)
     check("missing image completion", math.abs(target:getPixel(300, 100):getR() - 60) <= 2)
+    check("completed image replaces every placeholder pixel", solidPixels(target, 60, 2))
     check("persistent generation participates in hash", before ~= document:getFullPageHash(2, 1, 0, 1, 1))
     for index = 3, 7 do
         local page = records[index]
@@ -152,9 +217,9 @@ local function render()
     local ready = document:isPageReady(16)
     check("oversized lossless blocked before native decode", not ready and next(document._document.active) == nil)
     document:drawPage(target, 0, 0, Geom:new{ x = 0, y = 0, w = 600, h = 400 }, 16, 1, 0, 1, 1)
-    check("oversized input gets explicit unavailable state", target:getPixel(100, 100):getR() == 215)
+    check("oversized input gets explicit unavailable state", target:getPixel(100, 100):getR() == unavailable_background)
     document:drawPage(target, 0, 0, Geom:new{ x = 0, y = 0, w = 600, h = 400 }, 17, 1, 0, 1, 1)
-    check("corrupt image guarded", target:getPixel(100, 100):getR() == 215 and document._render_errors[17] ~= nil)
+    check("corrupt image guarded", target:getPixel(100, 100):getR() == unavailable_background and document._render_errors[17] ~= nil)
     check("corrupt image handles released", next(document._document.active) == nil)
     local cover = document:getCoverPageImage()
     check("ready cover is independently owned", cover and cover:getHeight() <= 800)
@@ -219,9 +284,16 @@ local function nativeUI()
             local callback_result, callback_count = nil, 0
             local thumbnail = reader.thumbnail
             check("native thumbnail integration exists", thumbnail and thumbnail.thumbnails_requests ~= nil)
-            thumbnail:getPageThumbnail(2, 100, 100, "missing", function(tile)
+            local missing_callbacks, hints_before_thumbnail = 0, hints
+            local cache_slots = thumbnail.tile_cache and thumbnail.tile_cache.cache.used_slots() or 0
+            local missing_queued = thumbnail:getPageThumbnail(2, 100, 100, "missing", function(tile)
+                missing_callbacks = missing_callbacks + 1
                 check("missing thumbnail callback unavailable", tile == nil)
             end)
+            check("missing thumbnail completes exactly once without queued work", missing_callbacks == 1
+                and missing_queued == false and thumbnail.thumbnails_requests.missing == nil and hints == hints_before_thumbnail)
+            check("missing thumbnail never enters the native cache",
+                (thumbnail.tile_cache and thumbnail.tile_cache.cache.used_slots() or 0) == cache_slots)
             thumbnail:getPageThumbnail(1, 100, 100, "stale", function(tile)
                 callback_result = tile; callback_count = callback_count + 1
             end)

@@ -2,10 +2,11 @@ local Util = require("bilicomics/util")
 
 local SessionRunner = {}
 local read_methods = { listFavorites = true, listHistory = true, search = true, comicDetail = true,
-    imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true }
+    imageIndex = true, wallet = true, purchaseInfo = true, validateSession = true,
+    getRechargeConfig = true, rechargeHistory = true }
 local read_kinds = { library = true, quote = true, reconcile_purchase = true, download_page = true,
     download_cover = true, source_index = true, verify_source_page = true }
-local mutations = { purchase_submit = true, set_favorite = true }
+local mutations = { purchase_submit = true, set_favorite = true, recharge = true }
 local function copy(value)
     local result = {}
     for key, item in pairs(value or {}) do result[key] = item end
@@ -156,15 +157,16 @@ function SessionRunner:_dispatch(task)
         self:_result(task, value, err, session_update)
     end
     local identifier
-    if replayable(task.request) then
+    if replayable(task.request) or task.request.kind == "recharge" then
         -- A submission exception inside a maintenance callback must still settle a read waiter.
-        -- Mutation dispatch retains its existing receipt and uncertainty handling.
+        -- Recharge dispatch exceptions also settle the durable intent without replay.
         local ok
         ok, identifier = pcall(self._runner.submit, self._runner, task.request, options, done)
         if not ok then
             if not completed and not task.done then
-                self:_finish(task, nil, Util.error("worker", "The background read could not be scheduled.",
-                    { transmitted = task.dispatch_started == true, retryable = false }))
+                self:_finish(task, nil, Util.error("worker", "The background operation could not be scheduled.",
+                    { transmitted = task.dispatch_started == true,
+                        definitive = task.request.kind == "recharge" and not task.dispatch_started or nil, retryable = false }))
             end
             return
         end

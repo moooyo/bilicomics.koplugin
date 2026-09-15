@@ -60,7 +60,7 @@ function BiliComics:addToMainMenu(menu_items)
     }
     if self.ui and self.ui.document and self.ui.document.provider == "bilicomics_document" then
         menu_items.bilicomics_chapter = {
-            text = _("Chapter catalog"), sorting_hint = "navigation",
+            text = _("Comic actions"), sorting_hint = "navigation",
             callback = function() self:_open(function(app) app:showReaderMenu() end) end,
         }
     end

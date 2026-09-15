@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "host": "test-env",
+  "archive": "bilicomics-ui-recharge-20260915.zip",
+  "archive_sha256": "c154b0ea053c9dd2cf887858451cda016f598adfe822971e6ed611aa06ae9abb",
+  "archive_bytes": 2554834,
+  "archive_files": 123,
+  "package_checks": 27,
+  "matched_ui_source_files": 87,
+  "ui_report_sha256": "8f592b27cfeef3dd163526206c6f78a0d125dd4308e1d4a9a8957f91340f8f65",
+  "ui_runs": [
+    {
+      "suite": "ui",
+      "width": 600,
+      "height": 800,
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "count": 190,
+      "screens": 30,
+      "result_file": "/var/tmp/bilicomics-recharge-integration-20260915/ui-inline-actions-1/ui-600x800/ui-result.json"
+    },
+    {
+      "suite": "ui",
+      "width": 480,
+      "height": 640,
+      "passed": true,
+      "returncode": 0,
+      "timed_out": false,
+      "count": 190,
+      "screens": 30,
+      "result_file": "/var/tmp/bilicomics-recharge-integration-20260915/ui-inline-actions-1/ui-480x640/ui-result.json"
+    }
+  ],
+  "actual_order_created": false,
+  "actual_payment_made": false
+}

@@ -1,6 +1,7 @@
 """Exercise synthetic native bookshelf finishing only on the remote Linux test host."""
 import argparse
 import hashlib
+from run_ui_sources import ui_source_names
 import json
 import os
 from pathlib import Path
@@ -22,7 +23,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     summary = {"scope": "Synthetic native bookshelf finishing: sync, menu, view-state, category and navigation checks; original synthetic covers; no HTTP, account or purchase", "cases": []}
     summary["sources"] = {name: hashlib.sha256((args.plugin / name).read_bytes()).hexdigest()
-                          for name in ("main.lua", "bilicomics/ui/screens.lua", "bilicomics/ui/widgets.lua",
+                          for name in ui_source_names(args.plugin) + ("main.lua", "bilicomics/ui/screens.lua", "bilicomics/ui/widgets.lua",
                                        "bilicomics/ui/model.lua", "l10n/bilicomics_zh_CN.lua",
                                        "spec/ui/bookshelf_finishing_spec.lua", "spec/ui/run_bookshelf_finishing.py")}
     for language in ("zh_CN", "C"):

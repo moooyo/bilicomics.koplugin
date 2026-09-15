@@ -1,0 +1,18 @@
+{
+  "overviewCards": 7,
+  "defaultCards": 203,
+  "smallCards": 203,
+  "searchMatches": 1,
+  "image": {
+    "width": 480,
+    "height": 640
+  },
+  "exportContainsNote": true,
+  "persistedNote": true,
+  "mobileWidth": {
+    "viewport": 390,
+    "content": 390
+  },
+  "errors": [],
+  "passed": true
+}

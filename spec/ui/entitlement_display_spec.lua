@@ -47,7 +47,7 @@ local function usingDate(stub, callback)
     return result
 end
 
-local controller = { calls = {}, forbidden = {}, episodes = {},
+local controller = { calls = {}, forbidden = {}, episodes = {}, generation = 1,
     comic = { id = "10", title = "Synthetic expiry catalog", authors = { "Metadata fixture" },
         current_episode_id = "17", favorite = false } }
 local read_methods = { getComic = true, getEpisodes = true, getAccount = true }
@@ -64,6 +64,7 @@ end
 function controller:getAccount()
     record("getAccount"); return { id = "expiry_fixture", account_key = "bili_expiry_fixture" }
 end
+function controller:cancelPendingRead() end
 setmetatable(controller, { __index = function(_controller, key)
     -- These are optional metadata features, not operations permitted by the spec.
     if key == "requestCover" or key == "isFavoritePending" then return nil end
@@ -71,6 +72,7 @@ setmetatable(controller, { __index = function(_controller, key)
     error("Controller member is outside the read-only metadata allowlist: " .. tostring(key))
 end })
 local screens = Screens.new{ controller = controller }
+screens:_ensureRouteViews()
 local function textWidgets(widget, result, seen)
     result, seen = result or {}, seen or {}
     if type(widget) ~= "table" or seen[widget] then return result end
@@ -90,6 +92,20 @@ local function screenButton(message)
     end
 end
 local function press(message)
+    if message == "Current chapter" then
+        local jump = assert(screenButton("Jump…"), "Missing chapter jump control")
+        assert(jump.callback and jump.enabled ~= false)
+        jump.callback()
+        for _row_index, row in ipairs(assert(screens.dialog).buttons) do
+            for _button_index, button in ipairs(row) do
+                if button.text == _(message) then
+                    assert(button.callback and button.enabled ~= false)
+                    button.callback(); return
+                end
+            end
+        end
+        error("The jump picker must expose the current chapter")
+    end
     local button = assert(screenButton(message), "Missing navigation button: " .. message)
     assert(button.callback and button.enabled ~= false, "The requested navigation button is disabled")
     button.callback()
@@ -116,7 +132,8 @@ local function capture(name)
     UIManager:forceRePaint()
     check(name .. "_has_no_dialog", screens.dialog == nil)
     for index, expiry_widget in ipairs(expiryTexts()) do
-        check(name .. "_expiry_" .. index .. "_uses_full_width", expiry_widget.width == screens.width)
+        check(name .. "_expiry_" .. index .. "_uses_the_chapter_content_width",
+            expiry_widget.width > 0 and expiry_widget.width <= screens.width)
         local box = expiry_widget:getSize()
         check(name .. "_expiry_" .. index .. "_fits", box.w <= report.width and box.h <= report.height)
     end

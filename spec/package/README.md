@@ -1,6 +1,17 @@
 # Integrated development package verification
 
-The latest default archive is the 108-file finishing revision, with automatic
+The approved native UI and recharge candidate is
+`dist/bilicomics-ui-recharge-20260915.zip`, with its adjacent file manifest,
+[package checks](ui-recharge-results.json), and
+[source binding](ui-recharge-source-binding.json). The 123-file archive passed
+27 remote package checks, and its 87 Lua and localization source files match the
+latest verified native UI revision. Its payment-code footer contains one
+row with Check credit and Close. Packaging checks include the new screen mixins,
+recharge protocol/controller/service modules, and Chinese localization files.
+This candidate has remote synthetic UI evidence; no real recharge or payment
+acceptance is claimed.
+
+The preceding default archive is the 108-file finishing revision, with automatic
 site initialization, the quiet synchronized bookshelf and configurable concurrent
 downloads. Its [final binding](finishing-acceptance-binding.json),
 [package checks](finishing-results.json) and

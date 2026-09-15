@@ -1,0 +1,7 @@
+{
+  "host": "test-env",
+  "passed": true,
+  "imageChecks": 60,
+  "networkRequests": 0,
+  "errors": []
+}

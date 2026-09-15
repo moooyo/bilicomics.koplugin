@@ -212,11 +212,54 @@ end
 
 function ComicDocument:_placeholder(target, x, y, rect, index, inverted)
     local _, failure = self:isPageReady(index)
-    local gray = failure and failure.kind ~= "page_missing" and 215 or 235
+    local unavailable = failure and failure.kind ~= "page_missing"
+    local gray = unavailable and 235 or 245
     if inverted then gray = 255 - gray end
-    target:paintRect(x, y, rect.w, rect.h, Blitbuffer.Color8(gray))
-    local stripe = math.min(4, rect.h)
-    target:paintRect(x, y, rect.w, stripe, Blitbuffer.Color8(inverted and 175 or 80))
+    local left, top = math.max(0, math.floor(x)), math.max(0, math.floor(y))
+    local right = math.min(target:getWidth(), math.ceil(x + rect.w))
+    local bottom = math.min(target:getHeight(), math.ceil(y + rect.h))
+    local width, height = right - left, bottom - top
+    if width > 0 and height > 0 then
+        target:paintRect(left, top, width, height, Blitbuffer.Color8(gray))
+        target:paintRect(left, top, width, math.min(3, height), Blitbuffer.Color8(inverted and 175 or 80))
+        -- A bounded temporary buffer keeps glyph painting inside even cropped native tiles.
+        -- Unavailable thumbnails still return nil through the dedicated thumbnail paths.
+        if not self._thumbnail_mode and width >= 160 and height >= 64 then
+            local heading, detail, notice
+            pcall(function()
+                local Font = require("ui/font")
+                local TextWidget = require("ui/widget/textwidget")
+                local W = require("bilicomics/ui/widgets")
+                local _ = require("bilicomics/ui/i18n")
+                local text_width = math.min(width - 24, 540)
+                local ink = inverted and Blitbuffer.COLOR_WHITE or Blitbuffer.COLOR_BLACK
+                heading = TextWidget:new{
+                    text = string.format(unavailable and _("Image unavailable · %d / %d") or _("Loading image · %d / %d"),
+                        index, #self.descriptor.pages),
+                    face = Font:getFace("cfont", W.font and W.font.body or 18),
+                    bold = true, fgcolor = ink, padding = 0, max_width = text_width,
+                }
+                detail = TextWidget:new{
+                    text = unavailable and _("Open comic actions for recovery.") or _("Waiting for the image to load."),
+                    face = Font:getFace("cfont", W.font and W.font.meta or 14),
+                    fgcolor = ink, padding = 0, max_width = text_width,
+                }
+                local heading_size, detail_size = heading:getSize(), detail:getSize()
+                local show_detail = heading_size.h + detail_size.h + 16 <= height
+                local notice_height = heading_size.h + (show_detail and detail_size.h + 8 or 0)
+                if notice_height > height - 8 then return end
+                notice = Blitbuffer.new(text_width, notice_height, target:getType())
+                notice:fill(Blitbuffer.Color8(gray))
+                heading:paintTo(notice, math.floor((text_width - heading_size.w) / 2), 0)
+                if show_detail then detail:paintTo(notice, math.floor((text_width - detail_size.w) / 2), heading_size.h + 8) end
+                target:blitFrom(notice, left + math.floor((width - text_width) / 2),
+                    top + math.floor((height - notice_height) / 2), 0, 0, text_width, notice_height)
+            end)
+            if notice then notice:free() end
+            if heading then heading:free() end
+            if detail then detail:free() end
+        end
+    end
     if not failure or failure.retryable then self:requestPage(index, false) end
     if failure and failure.kind ~= "page_missing" and self.services and self.services.onReaderEvent then
         local signature = self:getPageGeneration(index) .. ":" .. failure.kind

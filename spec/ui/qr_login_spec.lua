@@ -35,21 +35,27 @@ function controller:beginQRLogin(callback) self.begin[#self.begin + 1] = callbac
 function controller:pollQRLogin(key, callback) self.poll[#self.poll + 1] = { key = key, callback = callback } end
 function controller:cancelQRLogin() self.canceled = self.canceled + 1 end
 local screens = Screens.new{ controller = controller }
-local function press(message)
-    for _index, row in ipairs(screens.focus) do
+local function findButton(rows, message, scope)
+    local found
+    for _index, row in ipairs(rows) do
         for _index, button in ipairs(row) do
-            if button.text == _(message) and button.callback then button.callback(); return end
+            if button.text == _(message) then
+                assert(not found, scope .. " button is ambiguous: " .. message)
+                found = button
+            end
         end
     end
-    error("Account button not found: " .. message)
+    return assert(found, scope .. " button not found: " .. message)
+end
+local function press(message)
+    local button = findButton(screens.focus, message, "Account")
+    assert(button.enabled ~= false and type(button.callback) == "function", "Account button is not actionable: " .. message)
+    button.callback()
 end
 local function dialogPress(message)
-    for _index, row in ipairs(assert(screens.dialog).buttons) do
-        for _index, button in ipairs(row) do
-            if button.text == _(message) then button.callback(); return end
-        end
-    end
-    error("Dialog button not found: " .. message)
+    local button = findButton(assert(screens.dialog).buttons, message, "Dialog")
+    assert(button.enabled ~= false and type(button.callback) == "function", "Dialog button is not actionable: " .. message)
+    button.callback()
 end
 local function capture(name)
     UIManager:forceRePaint()
@@ -62,16 +68,28 @@ local function capture(name)
     Device.screen.bb:writePNG(output .. "/" .. name .. ".png")
     results.screens[#results.screens + 1] = name .. ".png"
 end
-local function hasText(widget, message)
-    if widget.text == _(message) then return true end
+local function findWidget(widget, predicate, seen)
+    if type(widget) ~= "table" then return nil end
+    seen = seen or {}
+    if seen[widget] then return nil end
+    seen[widget] = true
+    if predicate(widget) then return widget end
     for _index, child in ipairs(widget) do
-        if type(child) == "table" and hasText(child, message) then return true end
+        local found = findWidget(child, predicate, seen)
+        if found then return found end
     end
-    return false
+    for _, field in ipairs({ "content", "_added_widgets" }) do
+        local found = findWidget(widget[field], predicate, seen)
+        if found then return found end
+    end
 end
+local function hasText(widget, message)
+    return findWidget(widget, function(child) return child.text == _(message) end) ~= nil
+end
+local qr_url = "https://passport.bilibili.com/h5-app/passport/login/scan?navhide=1&qrcode_key=synthetic-qr-key"
 local function generated(expiry)
     controller.begin[#controller.begin]({ key = "synthetic-qr-key", expires_at = expiry,
-        url = "https://passport.bilibili.com/h5-app/passport/login/scan?navhide=1&qrcode_key=synthetic-qr-key" })
+        url = qr_url })
 end
 local function tick()
     local timer = assert(screens.qr_login.timer)
@@ -93,8 +111,8 @@ check("account_action_begins_qr_login", #controller.begin == 1 and screens.qr_lo
 capture("qr-loading")
 generated()
 local waiting_dialog = screens.dialog
-local native_qr = waiting_dialog._added_widgets[1][1]
-check("native_qr_image_is_created", native_qr.image ~= nil and native_qr.text:find("synthetic-qr-key", 1, true))
+local native_qr = findWidget(waiting_dialog, function(widget) return widget.image ~= nil and widget.text == qr_url end)
+check("native_qr_image_is_created", native_qr ~= nil)
 check("qr_key_is_not_in_visible_text", not waiting_dialog.title:find("synthetic-qr-key", 1, true))
 capture("qr-waiting")
 local timer = tick()
@@ -127,11 +145,14 @@ for _index, state in ipairs({ "checking", "refreshing", "pending_confirmation" }
     controller.account.auth_state = state
     screens:refresh()
     check("renewal_maintenance_state_" .. state, hasText(screens.widget.content, "Checking or renewing your sign-in…"))
+    check("renewal_maintenance_disables_balance_refresh_" .. state,
+        findButton(screens.focus, "Refresh balance", "Account").enabled == false)
 end
 capture("qr-account-maintenance")
 controller.account.auth_state = "error"
 screens:refresh()
-check("renewal_error_is_actionable", hasText(screens.widget.content, "Renewal is temporarily unavailable. Retry or sign in with QR code."))
+check("renewal_error_is_actionable", hasText(screens.widget.content, "Automatic renewal is unavailable. Sign in again with QR code.")
+    and findButton(screens.focus, "Sign in with QR code", "Account").enabled ~= false)
 capture("qr-account-renewal-error")
 controller.account.auth_state = "reauth_required"
 screens:refresh()
@@ -157,9 +178,12 @@ stale_begin({ key = "obsolete", url = "https://example.invalid/obsolete" })
 check("new_flow_ignores_old_generation_callback", screens.dialog == current_dialog and screens.qr_login.status == "loading")
 generated()
 local replaced_timer = screens.qr_login.timer
-press("Replace session")
-check("new_dialog_cancels_qr_polling", screens.qr_login == nil and timers[replaced_timer] == nil)
-screens:_closeDialog()
+press("Other sign-in methods")
+check("new_dialog_cancels_qr_polling", screens.qr_login == nil and timers[replaced_timer] == nil
+    and screens.dialog == screens.context_dialog and screens.dialog ~= current_dialog)
+check("other_sign_in_methods_exposes_session_import", findButton(screens.dialog.buttons, "Paste web session", "Dialog").callback
+    and findButton(screens.dialog.buttons, "Import from file", "Dialog").callback)
+dialogPress("Close")
 
 start()
 local native_dialog, native_timer = screens.dialog, screens.qr_login.timer

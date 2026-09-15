@@ -48,7 +48,7 @@ function QRLogin:_show(status)
         waiting = _("Scan with the Bilibili app, then confirm sign-in on your phone."),
         scanned = _("Code scanned. Confirm sign-in on your phone."),
         expired = _("This code has expired. Get a new code to continue."),
-        error = _("Sign-in could not be completed. Check your connection and try again."),
+        error = _("Sign-in could not be completed. Check your connection, then get a new code."),
     }
     local buttons = { { { text = _("Cancel"), callback = function() self:close() end } } }
     if status == "expired" or status == "error" then

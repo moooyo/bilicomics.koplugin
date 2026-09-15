@@ -1,0 +1,183 @@
+{
+  "host": "test-env",
+  "runtime": "/var/tmp/bilicomics-bookstore-protocol-7g7nf8co/runtime/lib/koreader",
+  "runtime_version": "v2026.07.1",
+  "scope": "Real POSIX subprocesses, pipes, SQLite and synthetic image files; injected download runner and protocol client; no account or real purchase",
+  "source_sha256": {
+    "bilicomics/jobs/runner.lua": "df0c8bf84872c5c4aaa2c0830f25c5c2dddf8eb71abc6286edb57ad1a66195eb",
+    "bilicomics/jobs/download_service.lua": "c230f607d1a285275a5da1818156a3794b32541f1586c6d7e7db0ddf6351324a",
+    "bilicomics/jobs/worker.lua": "22e131221c26a5ff83aba69e0dcfae260aef40072b9c8b48e659ff919b4c25df",
+    "bilicomics/controller.lua": "456bc555d591b74054ebe142d769016f68e7f0b04aed9c93242e7fe7c1457e36",
+    "bilicomics/jobs/storage_budget.lua": "a50252f77cc279408168c35d61f8e7e9d754bad5af3640dcdbdaa5609c2fbf59",
+    "bilicomics/storage/store.lua": "59c45d65d134369dacd3dfc55a52ea9a4d74f22e06a1bd1e4607e7b5e0fcec38",
+    "bilicomics/storage/page_store.lua": "8c672b632d8e228f1e536c14321743fb49596c60b8f482c061158cf40701833a",
+    "bilicomics/protocol/client.lua": "83059ef595c6fe3cb63c66a778073efc4d5c7a2181bcbbf0538d3056dd84e5e2",
+    "bilicomics/protocol/platform.lua": "a37a1adbe901d56963b32f22d491d5df3e4a4a08d4d0428af5b8a1adeb869e5a",
+    "bilicomics/protocol/image.lua": "33b0a029fa6b9a82ff0818c4cf2fe94f16e0a2456e2e7a9afa08a90b63ce9dcf",
+    "bilicomics/image_policy.lua": "c7db6cbf32858f97f227496fbad201e3994821dd09209b13dcfd63d0c4b5b5b4",
+    "bilicomics/storage/image_header.lua": "60a27b3501952e57546a07d7d5b2b946ba04cbcfdc837c11c6a8e5656d5e89d6",
+    "_meta.lua": "b766c24fb08b64c85ba64a32969e8ce024735f46977e0774d45c612d2dcfc7ac"
+  },
+  "test_source_sha256": {
+    "spec/jobs/cancel_race.lua": "18c70589bf9eba82cc9ceea86d1c3ec98fb131fe8ce753a3bece1b97095648f0",
+    "spec/jobs/concurrency_spec.lua": "a1db5408023132b113aad00989e02e9b3f32bd55c21abf21eab417968ff57425",
+    "spec/jobs/cover_policy_spec.lua": "90151a0bc1bcda89a45a35a8f0d135fba09bbf6b97cfc8aa84f57801bfc01b1d",
+    "spec/jobs/cover_thumbnail_live_spec.lua": "5cbb332c89d5511129eb09a3bb0bdb706470cc795a82bd084ed1009309fe43c9",
+    "spec/jobs/download_connectivity_runner_spec.lua": "a33d6d682a2bd91849af396faa53070799cf1927d6f620a8adf12841855703c0",
+    "spec/jobs/download_connectivity_spec.lua": "7ffae3bcf48a7618d2c8a75f7d600fe52038372ae248c5202f60ddc22c2ef9b0",
+    "spec/jobs/download_service_spec.lua": "4a53fe261051507b78efacfa82398f975a1b110610dedfdcb05e428862758b28",
+    "spec/jobs/parent_exit_fixture.lua": "780ae6a03177aa2d20509ad3822898d352112f9530b8d14b2cb537e71de63219",
+    "spec/jobs/parent_exit_spec.py": "f687b15fb24cf101a6f2eaab1949a5da9a0db42c2424391f95789a13b8466dc1",
+    "spec/jobs/run_concurrency.py": "dee908169d500b302ff7e2e7c91ef04cd3494c5dc68eb5fae9fcadf82d7d041d",
+    "spec/jobs/run_download_connectivity.py": "d7a8c395ded0e3059d98db71a2cd05893666b2418c910d5f98314eb97b5fe403",
+    "spec/jobs/run_remote.py": "8d8f0326dd72d4146d5c2bec0f9e6af9f592b38c69b3c487ae81a8d684d9817a",
+    "spec/jobs/runner_spec.lua": "bcdf3dd51fedcb2289e74a0892ed31951b6048c4b64ea6956d196677757a6e82",
+    "spec/jobs/source_epoch_spec.lua": "4a746b5ebffe6f027ef6da9a4ae1fe1028d0253cb654cd971aad31adec8cd2fb",
+    "spec/jobs/source_verification_spec.lua": "5cad7d757f35552ab9b29b57562319407a8c8cc96f73438f8728bda02529f043",
+    "spec/jobs/storage_budget_spec.lua": "4625dfa58fe4068bb28b431b9f6325bba462584ff7e4dcd89c21a70da8b2deb1",
+    "spec/jobs/worker_extensions_spec.lua": "85d85ac73fe4c06a844d8df1624942227851e8cbe0b45edbb181c36436487310",
+    "spec/jobs/worker_spec.lua": "cc67b86e3633d492c65a509487d69a9a8b69db4049b7e577ea0cd4be684f0936"
+  },
+  "image_fixtures": [
+    {
+      "name": "cover-6mp.png",
+      "width": 3000,
+      "height": 2000,
+      "pixels": 6000000,
+      "encoded_bytes": 5908,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    },
+    {
+      "name": "cover-4mp.png",
+      "width": 2000,
+      "height": 2000,
+      "pixels": 4000000,
+      "encoded_bytes": 3958,
+      "generation": "streamed grayscale rows; no bitmap allocation or decoding"
+    }
+  ],
+  "suites": [
+    {
+      "suite": "runner",
+      "returncode": 0,
+      "result": {
+        "tests": [
+          {
+            "name": "Responses larger than kernel pipe capacity are drained without deadlock",
+            "passed": true
+          },
+          {
+            "name": "Active cancellation reaps the child and invokes its callback exactly once",
+            "passed": true
+          },
+          {
+            "name": "Canceling queued work never forks or reports transmission",
+            "passed": true
+          },
+          {
+            "name": "Timeouts kill and reap real workers with balanced standby ownership",
+            "passed": true
+          },
+          {
+            "name": "Visible image preempts and later restarts prefetch without a spurious callback",
+            "passed": true
+          },
+          {
+            "name": "Noncancelable purchase work is never preempted by a visible request",
+            "passed": true
+          },
+          {
+            "name": "Resource limits allow metadata beside one image and queue a second image",
+            "passed": true
+          },
+          {
+            "name": "Suspension requeues prefetch and stops polling until resume",
+            "passed": true
+          },
+          {
+            "name": "Oversized responses fail explicitly and worker crashes leave no child or pipe",
+            "passed": true
+          },
+          {
+            "name": "Immediate close terminates a child before its process group exists",
+            "passed": true
+          },
+          {
+            "name": "Read network retries back off without polling and deliver one final successful response",
+            "passed": true
+          },
+          {
+            "name": "Permanent transient failure stops after three executions even when a caller requests more",
+            "passed": true
+          },
+          {
+            "name": "HTTP 429 and image 5xx errors retry while authentication and forbidden errors do not",
+            "passed": true
+          },
+          {
+            "name": "Expired page tokens retry only page acquisition and native timeouts can recover",
+            "passed": true
+          },
+          {
+            "name": "A retryable purchase response still executes its submission exactly once",
+            "passed": true
+          },
+          {
+            "name": "Purchase submissions cannot be preempted or restarted by suspend even with default options",
+            "passed": true
+          },
+          {
+            "name": "Favorite mutations retain their original child across suspension and urgent reads",
+            "passed": true
+          },
+          {
+            "name": "Favorite mutation timeouts and retryable transport errors never cause automatic resubmission",
+            "passed": true
+          },
+          {
+            "name": "Canceling or closing during retry backoff settles once without spawning another child",
+            "passed": true
+          },
+          {
+            "name": "Suspending retry backoff preserves the request without a worker or recurring polling",
+            "passed": true
+          },
+          {
+            "name": "New urgent work wakes the runner before an existing retry deadline",
+            "passed": true
+          },
+          {
+            "name": "A future high-priority retry cannot preempt currently useful lower-priority work",
+            "passed": true
+          },
+          {
+            "name": "Recharge defaults prevent preemption and suspension from replaying creation",
+            "passed": true
+          },
+          {
+            "name": "Recharge transport failures and timeouts never retry order creation",
+            "passed": true
+          },
+          {
+            "name": "Close preserves a recharge receipt already read from its real pipe",
+            "passed": true
+          },
+          {
+            "name": "Close drains a complete unread recharge receipt after stopping its child",
+            "passed": true
+          },
+          {
+            "name": "A recharge receipt read before timeout survives termination of its lingering child",
+            "passed": true
+          },
+          {
+            "name": "Teardown receipt recovery still rejects mismatched identity, attempt, and oversize",
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    }
+  ],
+  "passed": true
+}
