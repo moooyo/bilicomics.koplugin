@@ -85,7 +85,7 @@ for index = 20, 31 do
     controller.episodes[#controller.episodes + 1] = { id = tostring(index), comic_id = "10", order = index - 19,
         title = "Synthetic chapter " .. index, access = "locked" }
 end
-local allowed = { getAccount = true, getComic = true, getEpisodes = true, getPendingPurchases = true,
+local allowed = { getAccount = true, getComic = true, getEpisodes = true, getPendingPurchases = true, getWallet = true,
     quotePurchase = true, refreshWallet = true, purchase = true, reconcilePurchase = true }
 local function record(method, args)
     assert(allowed[method], "Unexpected synthetic controller operation")
@@ -106,6 +106,7 @@ end
 function controller:getComic() record("getComic"); return copy(self.comic) end
 function controller:getEpisodes() record("getEpisodes"); return copy(self.episodes) end
 function controller:getPendingPurchases() record("getPendingPurchases"); return {} end
+function controller:getWallet() record("getWallet"); return {} end
 function controller:cancelPendingRead() end
 function controller:quotePurchase(episode_id, scope, payment, callback)
     enqueue("quotePurchase", { episode_id, scope, payment }, callback)

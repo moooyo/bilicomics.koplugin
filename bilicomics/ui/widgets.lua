@@ -56,6 +56,22 @@ function W.text(text, width, size, options)
     }
 end
 
+-- Single-line labels have explicit layout height, independent of glyph extents.
+function W.line(text, width, size, options)
+    options = options or {}
+    local label = TextWidget:new{ text = tostring(text or ""), max_width = math.max(1, width),
+        face = Font:getFace("cfont", size or W.font.body), bold = options.bold or false,
+        fgcolor = options.color or (options.muted and W.muted or W.ink), padding = 0 }
+    local height = options.height or math.ceil(label.face.size * 1.3)
+    local result = W.box(label, width, height, { align = options.align or "left", background = options.background })
+    result.text, result.face, result.label_widget = label.text, label.face, label
+    function result:setText(value)
+        self.text = tostring(value or "")
+        self.label_widget:setText(self.text)
+    end
+    return result
+end
+
 function W.rule(width, dark)
     return FrameContainer:new{ padding = 0, margin = 0, bordersize = 0,
         background = dark and W.ink or W.divider,
@@ -210,14 +226,21 @@ function W.header(title, total_width, options)
     }, margin, margin, W.dp(15), 0)
     local buttons = {}
     local bar_height = W.dp(116) - W.dp(40) - math.max(1, W.dp(1))
-    local back = options.back_callback and W.button(_("‹ Back"), side, options.back_callback,
-        { borderless = true, size = W.fontSize(22), height_px = bar_height }) or W.box(nil, side, bar_height)
-    local more = options.more_callback and W.button(_("More"), side, options.more_callback,
-        { borderless = true, size = W.fontSize(22), height_px = bar_height }) or W.box(nil, side, bar_height)
-    if options.back_callback then buttons[#buttons + 1] = back end
-    if options.more_callback then buttons[#buttons + 1] = more end
+    local function action(label, callback)
+        local measured = TextWidget:new{ text = label, face = Font:getFace("cfont", W.fontSize(22)) }
+        local action_width = measured:getSize().w + W.dp(40)
+        measured:free()
+        return W.button(label, action_width, callback,
+            { borderless = true, size = W.fontSize(22), height_px = W.dp(54), padding_h = W.dp(20) })
+    end
+    local back_button = options.back_callback and action(_("‹ Back"), options.back_callback)
+    local more_button = options.more_callback and action(_("More"), options.more_callback)
+    local back = W.inset(W.box(back_button, side - W.dp(36), bar_height, { align = "left" }), W.dp(36), 0, 0, 0)
+    local more = W.inset(W.box(more_button, side - W.dp(36), bar_height, { align = "right" }), 0, W.dp(36), 0, 0)
+    if options.back_callback then buttons[#buttons + 1] = back_button end
+    if options.more_callback then buttons[#buttons + 1] = more_button end
     local bar = W.row{ back,
-        W.box(W.text(title, math.max(1, total_width - 2 * side), W.font.page,
+        W.box(W.line(title, math.max(1, total_width - 2 * side), W.font.page,
             { bold = true, align = "center", height = W.dp(48) }), total_width - 2 * side, bar_height), more }
     local header = W.column{ W.box(strip, total_width, W.dp(40)), bar, W.rule(total_width, true) }
     header.status_strip, header.title_bar = header[1], bar
@@ -270,12 +293,12 @@ function CoverCard:init()
         self.card_cover_width, self.card_cover_inset = self.width, 0
         local content = { W.cover(self.comic, self.width, self.cover_height, { offline = self.offline, hero = self.hero }),
             W.spacePixels(W.dp(10)),
-            W.text(self.text, self.width, W.fontSize(self.bookshelf and 18 or 19),
-                { bold = true, height = W.dp(26), fixed_height = true }),
+            W.line(self.text, self.width, W.fontSize(self.bookshelf and 18 or 19),
+                { bold = true, height = W.dp(self.bookshelf and 23.4 or 24.7) }),
             W.spacePixels(W.dp(4)),
-            W.text(self.progress_label or self.progress or self.update or "", self.width,
+            W.line(self.progress_label or self.progress or self.update or "", self.width,
                 W.fontSize(self.bookshelf and 15 or 16),
-                { muted = self.progress_muted or not self.bookshelf, height = W.dp(23), fixed_height = true }),
+                { muted = self.progress_muted or not self.bookshelf, height = W.dp(self.bookshelf and 19.5 or 20.8) }),
         }
         self.frame = FrameContainer:new{ padding = 0, margin = 0, bordersize = 0,
             color = W.paper, background = W.paper, W.column(content) }
@@ -284,7 +307,7 @@ function CoverCard:init()
             self.update_badge = FrameContainer:new{ padding = 0, padding_left = W.dp(8), padding_right = W.dp(8),
                 padding_top = W.dp(6), padding_bottom = W.dp(6), margin = 0, bordersize = 0, radius = 0,
                 background = W.ink,
-                TextWidget:new{ text = _("Updated"), face = Font:getFace("cfont", W.fontSize(14)),
+                TextWidget:new{ text = _("New chapters"), face = Font:getFace("cfont", W.fontSize(14)),
                     bold = true, fgcolor = W.paper, padding = 0 } }
         end
         self.dimen = Geom:new{ x = 0, y = 0, w = self.width, h = self.frame:getSize().h }

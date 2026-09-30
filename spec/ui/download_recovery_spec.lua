@@ -46,7 +46,7 @@ local function rawError(kind, status)
 end
 
 local allowed = { getDownloads = true, getComic = true, getEpisode = true, getEpisodes = true,
-    getStorageSummary = true, getAccount = true, resumeJob = true, pauseJob = true,
+    getStorageSummary = true, getAccount = true, getSetting = true, resumeJob = true, pauseJob = true,
     cancelJob = true, removeDownload = true, refreshDownloadSources = true, cancelSourceRefresh = true }
 local controller = { jobs = {}, calls = {}, waiting = {}, forbidden = {}, generation = 1,
     account_key = "bili_ui_fixture_a", account = { key = "bili_ui_fixture_a" },
@@ -71,6 +71,10 @@ end
 function controller:getStorageSummary()
     record("getStorageSummary")
     return { automatic_bytes = 1048576, pinned_bytes = 2097152 }
+end
+function controller:getSetting(_key, fallback)
+    record("getSetting")
+    return fallback
 end
 function controller:resumeJob(job_id)
     record("resumeJob", job_id)
@@ -385,7 +389,10 @@ local function run()
     controller.jobs = { replacement_job }
     confirm()
     check("source_confirmation_rechecks_exact_revision", callCount("refreshDownloadSources") == refresh_count
-        and not dialogShown() and contains(visibleText(screens.widget), replacement_job.revision))
+        and not dialogShown())
+    press("More actions")
+    check("replacement_revision_is_reachable_in_download_actions", contains(screens.dialog.download_text, replacement_job.revision))
+    pressDialog("Close")
 
     job = reset("paused")
     openRefreshConfirmation()

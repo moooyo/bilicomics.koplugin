@@ -2,7 +2,7 @@
   "scope": "User-authorized local KOReader emulator acceptance",
   "runtime": "KOReader v2026.07.1",
   "design_readme_sha256": "5bd2b3dec86279012d182aa4eb0b4e98024d110cd7fa3865ecfa53a0c2372305",
-  "production_archive_sha256": "b6ea29cb7f8679d9a6be53d47998c7364bf474b7e9d1ec2a6335e92efd6b08ae",
+  "production_archive_sha256": "f7974ccf6e76292242dd1d0638f24c48be81fc768ec79b9266c15ed1fcd0d6d3",
   "production_file_count": 123,
   "native_plugin_loaded": true,
   "native_ui_opened": true,
@@ -15,8 +15,8 @@
     "passed": true,
     "languages": ["zh_CN", "C"],
     "sizes": ["1860x2480", "480x640", "600x800", "960x720"],
-    "assertions": 4006,
-    "framebuffer_screenshots": 480,
+    "assertions": 4228,
+    "framebuffer_screenshots": 528,
     "source_unchanged": true,
     "receipt": "spec/ui/scribe-handoff-verification.json"
   },
@@ -27,10 +27,11 @@
     "catalog_entitlement_and_keyboard": 480,
     "quote_selection": 232,
     "ordinal_range": 212,
-    "download_recovery": 784,
-    "version_replacement": 798,
+    "download_recovery": 1179,
+    "version_replacement": 1200,
     "session_import": 94,
-    "forced_recharge_pagination": 19
+    "forced_recharge_pagination": 19,
+    "account_recharge_fidelity": 1548
   },
   "limits": "Synthetic interaction and native emulator evidence; physical e-ink behavior and actual payment outcomes are not established."
 }

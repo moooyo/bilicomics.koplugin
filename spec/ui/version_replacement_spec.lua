@@ -44,7 +44,7 @@ local function rawError(kind)
 end
 
 local allowed = { getDownloads = true, getComic = true, getEpisode = true, getEpisodes = true,
-    getStorageSummary = true, getAccount = true, resumeJob = true, pauseJob = true, cancelJob = true,
+    getStorageSummary = true, getAccount = true, getSetting = true, resumeJob = true, pauseJob = true, cancelJob = true,
     removeDownload = true, readDownload = true, refreshDownloadSources = true, cancelSourceRefresh = true,
     replaceDownloadVersion = true, cancelVersionReplacement = true }
 local controller = { jobs = {}, calls = {}, waiting = {}, forbidden = {}, generation = 1,
@@ -73,6 +73,10 @@ function controller:getAccount()
 end
 function controller:getStorageSummary()
     record("getStorageSummary"); return { automatic_bytes = 1048576, pinned_bytes = 4194304 }
+end
+function controller:getSetting(_key, fallback)
+    record("getSetting")
+    return fallback
 end
 function controller:resumeJob(job_id)
     record("resumeJob", job_id)
@@ -203,7 +207,7 @@ local function visitRow(message)
         pressButton(screens.pagination.next)
     end
 end
-local filter_labels = { all = "All", active = "In progress", attention = "Needs attention", complete = "Ready offline" }
+local filter_labels = { all = "All", active = "In progress", attention = "Needs action", complete = "Offline-ready" }
 local function filterButton(value)
     local prefix = _(filter_labels[value]) .. " "
     for _row_index, row in ipairs(screens.focus or {}) do
@@ -519,7 +523,10 @@ local function run()
     controller.jobs = { changed_job }
     confirm()
     check("replacement_confirmation_rechecks_exact_revision", callCount("replaceDownloadVersion") == replacements
-        and not dialogShown() and contains(visibleText(screens.widget), changed_job.revision))
+        and not dialogShown())
+    press("More actions")
+    check("changed_revision_is_reachable_in_download_actions", contains(screens.dialog.download_text, changed_job.revision))
+    pressDialog("Close")
 
     old_job = reset("paused")
     openReplacementConfirmation()

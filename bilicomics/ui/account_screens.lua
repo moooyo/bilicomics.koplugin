@@ -24,7 +24,8 @@ local function face(value) return W.fontSize(value) end
 local function singleText(value, size, options)
     options = options or {}
     return TextWidget:new{ text = tostring(value), face = Font:getFace("cfont", face(size)),
-        bold = options.bold or false, fgcolor = options.muted and W.muted or W.ink, padding = 0 }
+        bold = options.bold or false, fgcolor = options.color or (options.muted and W.muted or W.ink), padding = 0,
+        forced_height = options.height, forced_baseline = options.baseline, max_width = options.width }
 end
 local function box(content, width, height, border, background)
     border = border or 0
@@ -39,7 +40,7 @@ function SettingsRow:init()
     local text_width = self.width - label_width - arrow_width
     self.frame = box(W.row{
         W.text(self.label, label_width, face(21)),
-        W.text(self.value or "", text_width, face(19), { muted = true, align = "right", height = W.dp(32), fixed_height = true }),
+        W.text(self.value or "", text_width, face(19), { muted = true, align = "right" }),
         W.text("›", arrow_width, face(22), { muted = true, align = "right" }),
     }, self.width, W.dp(66))
     self[1] = self.frame
@@ -297,7 +298,7 @@ function Screens:_account()
         or T("Sign in to sync your bookshelf, read purchased chapters, and use your manga coins. QR sign-in renews automatically.")
     local recharge_supported = account.recharge_supported == true and self._openRecharge ~= nil
     local recharge_orders = recharge_supported and self:_rechargeOrdersSnapshot() or {}
-    local width, rows, focus_start = self.width, { space(32) }, #self.focus
+    local width, rows, focus_start = self.width, { space(signed_in and 32 or 40) }, #self.focus
     local function setting(label, value, callback)
         rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
         local row = SettingsRow:new{ width = width, label = label, value = value, callback = callback }
@@ -306,7 +307,8 @@ function Screens:_account()
         self.focus[#self.focus + 1] = { row }
     end
     local function group(label)
-        local heading = W.column{ space(26), W.text(label, width, face(18), { bold = true, muted = true }), space(10) }
+        local heading = W.column{ space(28), W.line(label, width, face(18), {
+            bold = true, muted = true, height = W.dp(24), fixed_height = true }), space(10) }
         heading.account_group_heading = true
         rows[#rows + 1] = heading
     end
@@ -315,26 +317,32 @@ function Screens:_account()
         local name = account.name or T("Signed in")
         local name_width = math.min(width - tag_width - gap, singleText(name, 36, { bold = true }):getSize().w)
         rows[#rows + 1] = W.row{
-            W.text(name, name_width, face(36), { bold = true, height = W.dp(48), fixed_height = true }),
+            W.line(name, name_width, face(36), { bold = true, height = W.dp(48) }),
             W.gap(gap), box(W.text(account.renewable and T("QR sign-in") or T("Imported session"), tag_width - W.dp(12), face(15),
                 { align = "center" }), tag_width, W.dp(32), W.dp(1.5)),
         }
-        rows[#rows + 1] = space(10)
-        rows[#rows + 1] = W.text((account.id and ("UID " .. tostring(account.id) .. " · ") or "") .. status,
-            width, face(17), { muted = not attention, bold = attention, height = W.dp(26), fixed_height = true })
-        rows[#rows + 1] = space(20)
+        rows[#rows + 1] = space(8)
+        rows[#rows + 1] = W.line((account.id and ("UID " .. tostring(account.id) .. " · ") or "") .. status,
+            width, face(17), { muted = not attention, bold = attention, height = W.dp(26) })
+        rows[#rows + 1] = space(26)
         local balance_row = W.row{
-            singleText(wallet.remain_gold or "—", 48, { bold = true }), W.gap(W.dp(10)),
-            singleText(T("Manga coins"), 19), W.gap(W.dp(48)),
-            singleText(wallet.remain_coupon or "—", 48, { bold = true }), W.gap(W.dp(10)),
-            singleText(T("Reading coupons"), 19),
+            singleText(wallet.remain_gold or "—", 48, { bold = true, height = W.dp(48), baseline = W.dp(43) }), W.gap(W.dp(8)),
+            singleText(T("Manga coins"), 19, { height = W.dp(48), baseline = W.dp(43) }), W.gap(W.dp(48)),
+            singleText(wallet.remain_coupon or "—", 48, { bold = true, height = W.dp(48), baseline = W.dp(43) }), W.gap(W.dp(8)),
+            singleText(T("Reading coupons"), 19, { height = W.dp(48), baseline = W.dp(43) }),
         }
-        rows[#rows + 1] = balance_row
         local updated = timestamp(wallet.updated_at)
-        rows[#rows + 1] = W.text(wallet.stale and T("Balance may be outdated. Refresh before reviewing a purchase.")
-            or updated and string.format(T("Balance updated at %s"), updated) or T("Balance has not been refreshed."),
-            width, face(16), { muted = true, height = W.dp(28), fixed_height = true })
-        rows[#rows + 1] = space(14)
+        local balance_note = wallet.stale and T("Balance may be outdated. Refresh before reviewing a purchase.")
+            or updated and string.format(T("Balance updated at %s"), updated) or T("Balance has not been refreshed.")
+        local balance_width = balance_row:getSize().w
+        local note_width = math.max(1, width - balance_width - W.dp(16))
+        rows[#rows + 1] = W.row{
+            W.box(balance_row, balance_width, W.dp(48), { align = "left", valign = "bottom" }),
+            W.gap(W.dp(16)), W.box(singleText(balance_note, 16, {
+                muted = true, height = W.dp(48), baseline = W.dp(43), width = note_width }),
+                note_width, W.dp(48), { align = "right" }),
+        }
+        rows[#rows + 1] = space(26)
         local actions, action_focus = {}, {}
         local function append_action(widget)
             if #actions > 0 then actions[#actions + 1] = W.gap(W.dp(16)) end
@@ -355,10 +363,10 @@ function Screens:_account()
         rows[#rows + 1] = action_row
         self.focus[#self.focus + 1] = action_focus
     else
-        rows[#rows + 1] = W.text(T("Not signed in"), width, face(36), { bold = true })
-        rows[#rows + 1] = space(14)
-        rows[#rows + 1] = W.text(status, width, face(20), { muted = not attention, bold = attention, line_height = 1.6 })
-        rows[#rows + 1] = space(24)
+        rows[#rows + 1] = W.line(T("Not signed in"), width, face(36), { bold = true, height = W.dp(48) })
+        rows[#rows + 1] = space(12)
+        rows[#rows + 1] = W.text(status, width, face(19), { muted = not attention, bold = attention, line_height = 1.7 })
+        rows[#rows + 1] = space(28)
         local login = W.button(T("Sign in with QR code"), W.dp(260), function() self:_signInWithQR() end,
             { primary = true, size = face(22), height_px = W.dp(66) })
         local alternate = W.button(T("Other sign-in methods"), W.dp(240), function() self:_otherSignInMethods() end,
@@ -368,7 +376,7 @@ function Screens:_account()
         rows[#rows + 1] = action_row
         self.focus[#self.focus + 1] = { login, alternate }
     end
-    rows[#rows + 1] = space(26)
+    rows[#rows + 1] = space(signed_in and 28 or 34)
     rows[#rows + 1] = W.rule1dp(width, BB.Color8(0x11))
     local import = self.session_import
     if import and import.status == "validating" and import.import_sequence
@@ -513,12 +521,18 @@ function Screens:_storageSettings(page)
     local total = storage.total_bytes or automatic + downloaded
     local free = storage.free_bytes or storage.available_bytes
     local limit = self.controller:getSetting("cache_limit_mb", 512)
-    local width, rows, layout = self.width, { space(38) }, {}
+    local width, rows, layout = self.width, { space(36) }, {}
     local dialog, key = nil, accountKey(self.controller)
-    rows[#rows + 1] = W.text(Model.bytes(total), width, face(52), { bold = true })
-    rows[#rows + 1] = space(12)
-    rows[#rows + 1] = W.text(string.format(T("Plugin storage · Device free %s"), free and Model.bytes(free) or T("Unknown")), width, face(18), { muted = true })
-    rows[#rows + 1] = space(24)
+    local usage = singleText(Model.bytes(total), 52, { bold = true, height = W.dp(60), baseline = W.dp(53) })
+    local usage_width = math.min(usage:getSize().w, math.floor(width * 0.50))
+    local free_width = width - usage_width - W.dp(14)
+    rows[#rows + 1] = W.row{
+        W.box(usage, usage_width, W.dp(60), { align = "left", valign = "bottom" }), W.gap(W.dp(14)),
+        W.box(singleText(string.format(T("Plugin storage · Device free %s"), free and Model.bytes(free) or T("Unknown")),
+            19, { muted = true, height = W.dp(60), baseline = W.dp(53), width = free_width }),
+            free_width, W.dp(60), { align = "left" }),
+    }
+    rows[#rows + 1] = space(22)
     local stroke, capacity = W.dp(1), math.max(1, total + (free or 0))
     local bar_width = width - stroke * 2
     local manual_width = math.floor(bar_width * downloaded / capacity)
@@ -529,24 +543,26 @@ function Screens:_storageSettings(page)
             box(space(0), automatic_width, W.dp(18) - stroke * 2, 0, BB.Color8(0x99)),
             box(space(0), math.max(0, bar_width - manual_width - automatic_width), W.dp(18) - stroke * 2),
         } }
-    rows[#rows + 1] = space(24)
+    rows[#rows + 1] = space(30)
+    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0x11))
     local function legend(label, description, value, shade)
         local swatch = box(space(0), W.dp(22), W.dp(22), shade and 0 or W.dp(1.5), shade and BB.Color8(shade) or W.paper)
         rows[#rows + 1] = box(W.row{
             swatch, W.gap(W.dp(18)),
-            W.column{ W.text(label, width - W.dp(210), face(21)), space(5),
-                W.text(description or "", width - W.dp(210), face(16), { muted = true }) },
+            W.column{ W.text(label, width - W.dp(210), face(21)), description ~= "" and space(3) or space(0),
+                description ~= "" and W.text(description or "", width - W.dp(210), face(16), { muted = true }) or space(0) },
             W.text(value, W.dp(170), face(21), { bold = true, align = "right" }),
         }, width, W.dp(80))
+        rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
     end
     legend(T("Manual downloads"), T("Kept until you remove them"), Model.bytes(downloaded), 0x11)
     legend(T("Automatic cache"), T("Online images saved automatically; older images are cleared at the limit"), Model.bytes(automatic), 0x99)
     legend(T("Device free"), "", free and Model.bytes(free) or T("Unknown"))
-    rows[#rows + 1] = space(28)
+    rows[#rows + 1] = space(40)
     rows[#rows + 1] = W.row{
         W.text(T("Automatic cache limit"), math.floor(width * 0.48), face(22), { bold = true }),
         W.text(string.format(T("Used %s / %s"), Model.bytes(automatic), Model.bytes(limit * 1024 * 1024)),
-            width - math.floor(width * 0.48), face(18), { muted = true, align = "right" }),
+            width - math.floor(width * 0.48), face(16), { muted = true, align = "right" }),
     }
     rows[#rows + 1] = space(16)
     rows[#rows + 1] = self:_accountSegments({
@@ -576,17 +592,17 @@ function Screens:_storageSettings(page)
             } }, nil, { placement = "center", width = self.width - W.dp(32), selected = { x = 1, y = 1 }, close_callback = cancel })
         else save() end
     end, layout, 66)
-    rows[#rows + 1] = space(16)
+    rows[#rows + 1] = space(14)
     rows[#rows + 1] = W.text(T("Increasing the limit applies immediately. Decreasing asks before clearing older cache. Downloads and current reading content are preserved."),
-        width, face(18), { muted = true, line_height = 1.6 })
-    rows[#rows + 1] = space(30)
+        width, face(17), { muted = true, line_height = 1.7 })
+    rows[#rows + 1] = space(40)
     rows[#rows + 1] = W.text(T("Cleanup"), width, face(22), { bold = true })
     rows[#rows + 1] = space(16)
     local clear = W.button(string.format(T("Clear unused automatic cache · %s"), Model.bytes(automatic)), width,
         function() if self.dialog == dialog then self:_clearAutomaticCache() end end, { size = face(21), height_px = W.dp(66) })
     local manage = W.button(T("Manage manual downloads") .. " ›", width,
         function() if self.dialog == dialog then self:showDownloads() end end, { size = face(21), height_px = W.dp(66) })
-    rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = clear, space(14), manage
+    rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = clear, space(12), manage
     layout[#layout + 1], layout[#layout + 2] = { clear }, { manage }
     dialog = self:_showAccountFlow(T("Storage and cache"), W.column(rows), layout, nil,
         { page = page, rebuild = function(next_page) self:_storageSettings(next_page) end })
@@ -645,9 +661,9 @@ function Screens:_readerDefaults(page)
     rows[#rows + 1] = W.text(T("These defaults apply to new chapters. Saved chapter settings and reading positions are preserved.")
         .. " " .. T("To change the chapter you are reading, use its reading menu. Your selection here is saved immediately."),
         width, face(19), { muted = true, line_height = 1.6 })
-    rows[#rows + 1] = space(24)
-    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0x11))
     rows[#rows + 1] = space(28)
+    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0x11))
+    rows[#rows + 1] = space(34)
     rows[#rows + 1] = W.text(T("Reading mode"), width, face(22), { bold = true })
     rows[#rows + 1] = space(16)
     local card_width, cards, card_focus = math.floor((width - W.dp(32)) / 3), {}, {}
@@ -665,28 +681,31 @@ function Screens:_readerDefaults(page)
         elseif entry.value == "page" then diagram = box(space(0), W.dp(62), W.dp(84), W.dp(2))
         else diagram = box(space(0), W.dp(34), W.dp(96), W.dp(2)) end
         local selected = mode == entry.value
-        local content = box(W.column{
-            W.text(entry.label .. (selected and " ✓" or ""), card_width - W.dp(20), face(21),
-                { align = "center", bold = selected }),
-            space(16), CenterContainer:new{ dimen = Geom:new{ w = card_width - W.dp(20), h = W.dp(100) }, diagram },
-            space(12), W.text(entry.hint, card_width - W.dp(22), face(15),
-                { align = "center", muted = true, height = W.dp(38), fixed_height = true }),
-        }, card_width, W.dp(204), W.dp(selected and 3 or 1.5))
+        local border = W.dp(selected and 3 or 1.5)
+        local inset_width = card_width - W.dp(40) - border * 2
+        local diagram_height = W.dp(112) - border * 2
+        local content = box(W.inset(W.column{
+            CenterContainer:new{ dimen = Geom:new{ w = inset_width, h = diagram_height }, diagram },
+            W.line(entry.label .. (selected and " ✓" or ""), inset_width, face(21), { bold = selected, height = W.dp(30) }),
+            space(4), W.line(entry.hint, inset_width, face(15), { muted = true, height = W.dp(22) }),
+        }, W.dp(20), W.dp(20), W.dp(18), W.dp(18)), card_width, W.dp(204), border)
         local card = ChoiceCard:new{ content = content, width = card_width, height = W.dp(204),
             callback = function() choose("reading_mode", entry.value) end }
         cards[#cards + 1], card_focus[#card_focus + 1] = card, card
     end
     rows[#rows + 1], layout[#layout + 1] = W.row(cards), card_focus
     local function section(title, entries, selected, setting, hint)
-        rows[#rows + 1] = space(28)
-        rows[#rows + 1] = W.text(title, width, face(22), { bold = true })
-        rows[#rows + 1] = space(14)
+        rows[#rows + 1] = space(36)
+        if hint then
+            local title_width = math.floor(width * 0.40)
+            rows[#rows + 1] = W.row{
+                W.text(title, title_width, face(22), { bold = true }),
+                W.text(hint, width - title_width, face(16), { muted = true, align = "right" }),
+            }
+        else rows[#rows + 1] = W.text(title, width, face(22), { bold = true }) end
+        rows[#rows + 1] = space(16)
         rows[#rows + 1] = self:_accountSegments(entries, selected, width,
             function(value) choose(setting, value) end, layout, 64)
-        if hint then
-            rows[#rows + 1] = space(10)
-            rows[#rows + 1] = W.text(hint, width, face(17), { muted = true })
-        end
     end
     section(T("Reading direction"), {
         { text = T("Left to right"), value = "ltr" }, { text = T("Right to left (manga)"), value = "rtl" },
@@ -698,7 +717,7 @@ function Screens:_readerDefaults(page)
     local concurrent_entries = {}
     for value = 1, 4 do concurrent_entries[#concurrent_entries + 1] = { text = string.format(T("%d images"), value), value = value } end
     section(T("Concurrent image downloads"), concurrent_entries, concurrency, "download_concurrency", T("Applies to online cache and downloads."))
-    dialog = self:_showAccountFlow(T("Defaults for new chapters"), W.column(rows), layout, nil,
+    dialog = self:_showAccountFlow(T("Reading defaults"), W.column(rows), layout, nil,
         { page = page, rebuild = function(next_page) self:_readerDefaults(next_page) end })
 end
 function Screens:_diagnostics()

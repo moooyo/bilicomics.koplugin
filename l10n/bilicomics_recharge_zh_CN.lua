@@ -76,6 +76,7 @@ return {
     ["Official amounts"] = "官方档位",
     ["Official amount"] = "官方金额",
     ["Enter another amount"] = "输入其他金额",
+    ["Must match an official option"] = "需与官方档位一致",
     ["Enter another amount · Must match an official option"] = "输入其他金额 · 需与官方档位一致",
     ["%s manga coins"] = "%s 漫币",
     ["Next: review amount"] = "下一步：核对金额",

@@ -2006,6 +2006,8 @@ local function readerOverlayUI()
     local W = require("bilicomics/ui/widgets")
     local CenterContainer = require("ui/widget/container/centercontainer")
     local FrameContainer = require("ui/widget/container/framecontainer")
+    local TextWidget = require("ui/widget/textwidget")
+    local Font = require("ui/font")
     local Geom = require("ui/geometry")
     local screen_width = require("device").screen:getWidth()
     local margin = W.dp(56)
@@ -2014,23 +2016,29 @@ local function readerOverlayUI()
         return W.text(text, width or self.width, W.fontSize(size), options)
     end
     function ui:space(height) return W.spacePixels(W.dp(height)) end
-    function ui:rule(width)
-        return W.rule(width or self.width)
+    function ui:rule(width, dark)
+        return W.rule(width or self.width, dark)
     end
     function ui:button(text, callback, width, primary, height)
         local button = W.button(text, width or self.width, callback,
-            { primary = primary, size = W.fontSize(primary and 23 or 22), height_px = W.dp(height or 68) })
+            { primary = primary, size = W.fontSize(primary and 23 or 21), height_px = W.dp(height or 68) })
         return button
     end
     function ui:progress(index, total)
-        return W.progress(self.width, W.dp(8), index / math.max(1, total))
+        local counter = TextWidget:new{ text = string.format(_("Image %d / %d"), index, total),
+            face = Font:getFace("cfont", W.fontSize(17)), fgcolor = W.muted, padding = 0 }
+        local gap = W.dp(16)
+        return W.row{ W.progress(self.width - gap - counter:getSize().w, W.dp(8), index / math.max(1, total)),
+            W.gap(gap), counter }
     end
     function ui:row(label, hint, callback)
         local label_width = math.floor(self.width * 0.58)
+        local chevron_width, gap = W.dp(14), W.dp(14)
         local row = W.ActionRow:new{ width = self.width, callback = callback,
             content = CenterContainer:new{ dimen = Geom:new{ w = self.width, h = W.dp(72) },
                 W.row{ self:text(label, label_width, 21),
-                    self:text(hint or "", self.width - label_width, 17, { muted = true, align = "right" }) } } }
+                    self:text(hint or "", self.width - label_width - gap - chevron_width, 17, { muted = true, align = "right" }),
+                    W.gap(gap), self:text("›", chevron_width, 22, { muted = true, align = "right" }) } } }
         self.focus[#self.focus + 1] = { row }
         return W.column{ row, self:rule() }
     end
@@ -2040,15 +2048,13 @@ local function readerOverlayUI()
             W.inset(content, W.dp(26), W.dp(26), W.dp(22), W.dp(22)) }
     end
     function ui:tag(text)
-        local TextWidget = require("ui/widget/textwidget")
-        local Font = require("ui/font")
-        return FrameContainer:new{ padding = W.dp(4), margin = 0, bordersize = W.dp(1.5), radius = 0,
-            color = W.ink, background = W.paper, W.row{ W.gap(W.dp(5)),
-                TextWidget:new{ text = text, face = Font:getFace("cfont", W.fontSize(18)),
-                    bold = true, fgcolor = W.ink, padding = 0 }, W.gap(W.dp(5)) } }
+        return FrameContainer:new{ padding = 0, margin = 0, bordersize = W.dp(1.5), radius = 0,
+            color = W.ink, background = W.paper,
+            W.inset(TextWidget:new{ text = text, face = Font:getFace("cfont", W.fontSize(18)),
+                bold = true, fgcolor = W.ink, padding = 0 }, W.dp(12), W.dp(12), W.dp(6), W.dp(6)) }
     end
-    function ui:sheet(content, dismiss)
-        return W.sheetDialog(W.inset(content, margin, margin, W.dp(30), W.dp(36)), self.focus,
+    function ui:sheet(content, dismiss, top, bottom)
+        return W.sheetDialog(W.inset(content, margin, margin, W.dp(top or 30), W.dp(bottom or 36)), self.focus,
             { width = screen_width, padding = 0, close_callback = dismiss })
     end
     return ui
@@ -2071,8 +2077,8 @@ function Controller:_chapterBoundary(event)
     end
     local ui = readerOverlayUI()
     local W = ui.W
-    local content = { ui:text(heading, nil, 30, { bold = true }), ui:space(12),
-        ui:text(string.format(_("Finished: %s"), readerCaption(properties.title or event.descriptor.episode_id)), nil, 20) }
+    local content = { ui:text(heading, nil, 30, { bold = true }), ui:space(8),
+        ui:text(string.format(_("Finished: %s"), readerCaption(properties.title or event.descriptor.episode_id)), nil, 18, { muted = true }) }
     local next_readable = next_episode and DownloadService.isReadable(next_episode, false)
     if next_episode then
         local card_width = ui.width - 2 * W.dp(26) - 2 * W.dp(1.5)
@@ -2081,16 +2087,17 @@ function Controller:_chapterBoundary(event)
             or (next_episode.access == "locked" and _("Unread · purchase required before reading") or available)
         local preload_key = tostring(event.reader_generation) .. ":" .. tostring(next_episode.id)
         if next_readable and self.preloaded[preload_key] then status = status .. " · " .. _("Preloading started") end
-        local details = { ui:text(_("Next chapter"), card_width, 16, { muted = true }), ui:space(6),
-            ui:text(readerCaption(next_episode.title or next_episode.short_title or next_episode.id), card_width, 25, { bold = true }),
-            ui:space(10), ui:text(status, card_width, 17, { muted = true }) }
         local price = tonumber(next_episode.pay_gold)
+        local price_tag
         if next_episode.access == "locked" and price and price == price and price >= 0 and price < math.huge then
-            details[#details + 1] = ui:space(12)
-            details[#details + 1] = ui:tag(string.format(_("%s comic coins"), tostring(price)))
+            price_tag = ui:tag(string.format(_("%s comic coins"), tostring(price)))
+            card_width = card_width - W.dp(20) - price_tag:getSize().w
         end
-        content[#content + 1] = ui:space(26)
-        content[#content + 1] = ui:card(W.column(details))
+        local details = W.column{ ui:text(_("Next chapter"), card_width, 16, { muted = true }), ui:space(6),
+            ui:text(readerCaption(next_episode.title or next_episode.short_title or next_episode.id), card_width, 25, { bold = true }),
+            ui:space(6), ui:text(status, card_width, 17, { muted = true }) }
+        content[#content + 1] = ui:space(24)
+        content[#content + 1] = ui:card(price_tag and W.row{ details, W.gap(W.dp(20)), price_tag } or details)
     else
         content[#content + 1] = ui:space(20)
         content[#content + 1] = ui:text(_("Check the catalog for future updates."), nil, 19, { muted = true })
@@ -2116,15 +2123,11 @@ function Controller:_chapterBoundary(event)
         end
     end
     if primary then
-        content[#content + 1] = ui:space(26)
+        content[#content + 1] = ui:space(22)
         content[#content + 1] = primary
         ui.focus[#ui.focus + 1] = { primary }
-        if not next_readable then
-            content[#content + 1] = ui:space(14)
-            content[#content + 1] = ui:text(_("No automatic purchase. A quote must be confirmed before submitting."), nil, 17, { muted = true })
-        end
     end
-    local gap, catalog_width = W.dp(16), math.floor((ui.width - 2 * W.dp(16)) / 3)
+    local gap, catalog_width = W.dp(12), math.floor((ui.width - 2 * W.dp(12)) / 3)
     local catalog = ui:button(_("Chapter catalog"), function()
         if not current() then return end
         dismiss(); if self.screens then self.screens:showComic(event.descriptor.comic_id) end
@@ -2141,10 +2144,14 @@ function Controller:_chapterBoundary(event)
         end)
     end, catalog_width, false, 64)
     local stay = ui:button(_("Stay in this chapter"), dismiss, ui.width - 2 * catalog_width - 2 * gap, false, 64)
-    content[#content + 1] = ui:space(16)
+    content[#content + 1] = ui:space(12)
     content[#content + 1] = W.row{ catalog, W.gap(gap), bookshelf, W.gap(gap), stay }
     ui.focus[#ui.focus + 1] = { catalog, bookshelf, stay }
-    self.chapter_dialog = ui:sheet(W.column(content), dismiss)
+    if primary and not next_readable then
+        content[#content + 1] = ui:space(16)
+        content[#content + 1] = ui:text(_("No automatic purchase. A quote must be confirmed before submitting."), nil, 16, { muted = true })
+    end
+    self.chapter_dialog = ui:sheet(W.column(content), dismiss, 34, 38)
     self.ui_manager:show(self.chapter_dialog)
 end
 
@@ -2253,8 +2260,7 @@ function Controller:showReaderMenu()
     end
     local rows = { W.row{ ui:text(_("Comic actions"), title_width, 26, { bold = true }),
             ui:text(chapter, ui.width - title_width, 17, { muted = true, align = "right" }) },
-        ui:space(24), ui:text(string.format(_("Image %d / %d"), index, #descriptor.pages), nil, 17, { muted = true }),
-        ui:space(10), ui:progress(index, #descriptor.pages), ui:space(18),
+        ui:space(16), ui:progress(index, #descriptor.pages), ui:space(20), ui:rule(nil, true),
         ui:row(_("Chapter catalog"), string.format(_("%d chapters in total"), #self:getEpisodes(descriptor.comic_id)), function()
             if not current() then return end
             close(); if self.screens then self.screens:showComic(descriptor.comic_id) end
@@ -2290,7 +2296,7 @@ function Controller:showReaderMenu()
         end)
     end)
     local back = ui:button(_("Back to reading"), close, nil, true)
-    rows[#rows + 1] = ui:space(24)
+    rows[#rows + 1] = ui:space(22)
     rows[#rows + 1] = back
     ui.focus[#ui.focus + 1] = { back }
     dialog = ui:sheet(W.column(rows), close)

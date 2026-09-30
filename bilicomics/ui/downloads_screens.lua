@@ -1,6 +1,8 @@
 local Blitbuffer = require("ffi/blitbuffer")
 local Device = require("device")
 local FrameContainer = require("ui/widget/container/framecontainer")
+local Font = require("ui/font")
+local TextWidget = require("ui/widget/textwidget")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
 local Model = require("bilicomics/ui/model")
@@ -11,6 +13,23 @@ local Screen = Device.screen
 
 local function space(value) return W.spacePixels(W.dp(value)) end
 local function text(value, width, size, options) return W.text(value, width, W.fontSize(size), options) end
+local function naturalText(value, size, muted, bold)
+    return TextWidget:new{ text = tostring(value), face = Font:getFace("cfont", W.fontSize(size)),
+        fgcolor = muted and W.muted or W.ink, bold = bold or false, padding = 0 }
+end
+local function line(value, width, size, options) return W.line(value, width, W.fontSize(size), options) end
+local function baselineRow(entries, width, gap)
+    local baseline, height = 0, 0
+    for _, entry in ipairs(entries) do baseline = math.max(baseline, entry:getBaseline()) end
+    for _, entry in ipairs(entries) do height = math.max(height, baseline - entry:getBaseline() + entry:getSize().h) end
+    local widgets = {}
+    for index, entry in ipairs(entries) do
+        local top = baseline - entry:getBaseline()
+        if index > 1 and gap then widgets[#widgets + 1] = W.gap(gap) end
+        widgets[#widgets + 1] = W.inset(entry, 0, 0, top, height - top - entry:getSize().h)
+    end
+    return W.box(W.row(widgets), width, height, { align = "left" })
+end
 local function stopped(job) return job.state == "paused" or job.state == "failed" or job.state == "canceled" end
 local function savedCount(job) return math.max(0, math.floor(tonumber(job.completed) or 0)) end
 local function totalCount(job) return math.max(0, math.floor(tonumber(job.total) or 0)) end
@@ -48,7 +67,7 @@ local function downloadMenu(heading, paragraphs, buttons, options)
         if value.text then capture[#capture + 1] = value.text end
     end
     local dialog = W.menuDialog(heading, adjusted, buttons, options)
-    dialog.download_text = table.concat(capture, "\n")
+    dialog.download_text = options and options.capture_text or table.concat(capture, "\n")
     return dialog
 end
 
@@ -271,43 +290,48 @@ function Screens:_jobRow(job, measure, render_jobs)
             progress = string.format(T("Checked %d/%d images"), payload.source_refresh.checked or 0, payload.source_refresh.total or 0)
         end
     end
-    local action_width, gap = W.dp(190), W.dp(24)
+    local action_width, gap = W.dp(job.error and 190 or 150), W.dp(24)
     local info_width = self.width - action_width - gap
     local actions = self:_downloadActions(job, render_jobs)
     local main = actions[1]
     local main_button = main and W.button(main.text, action_width, main.callback,
         { primary = main.primary and self.download_primary_job_id == job.id,
             size = W.fontSize(20), height_px = W.dp(58) })
-    local focus = main_button and { main_button } or {}
+    local focus = {}
     local status_text = status .. " · " .. progress
     if payload.replaced_by then status_text = self:_downloadCopyLabel(job, true) .. " · " .. progress end
-    local detail = { text(comic .. " · " .. chapter, info_width, 21, { bold = true }), space(8),
-        text(status_text, info_width, 17, { muted = not payload.replaced_by }), }
-    if job.revision and not payload.replaced_by then
-        detail[#detail + 1] = space(5)
-        detail[#detail + 1] = text(self:_downloadCopyLabel(job, true)
-            .. ((payload.source_refresh or payload.version_replacement) and " · " .. self:_downloadProgress(job) or ""), info_width, 15, { muted = true })
-    end
-    local rows = { space(16), W.row{ W.column(detail), W.gap(gap), main_button or W.gap(action_width) } }
-    if payload.replaced_by then
-        rows[#rows + 1] = space(8)
-        rows[#rows + 1] = text(T("Only saved images remain readable; missing images cannot be fetched in this copy."), self.width, 17)
+    if job.state == "running" and not payload.source_refresh and not payload.version_replacement then
+        local concurrency = self.controller:getSetting("download_concurrency", 2)
+        status_text = string.format(T("Downloading · %d / %d images · Concurrent %d images"), savedCount(job), totalCount(job), concurrency)
     elseif job.error and not payload.source_refresh and not payload.version_replacement then
         local heading = Model.error(job.error)
-        rows[#rows + 1] = space(8)
-        rows[#rows + 1] = text(heading, self.width, 17)
+        status_text = heading .. " · " .. T("Saved images and reading position are preserved")
     end
-    if not payload.replaced_by and totalCount(job) > 0 then
-        rows[#rows + 1], rows[#rows + 2] = space(12), W.progress(self.width, W.dp(8), savedCount(job) / totalCount(job))
+    local show_progress = not payload.replaced_by and not job.error and totalCount(job) > 0
+    local detail = { line(comic .. " · " .. chapter, info_width, 21,
+            { bold = true, height = W.dp(34), fixed_height = true }), space(6),
+        text(status_text, info_width, 17, { muted = not job.error and not payload.replaced_by,
+            height = W.dp(show_progress and 28 or 52), fixed_height = true }) }
+    if show_progress then
+        detail[#detail + 1], detail[#detail + 2] = space(12), W.progress(info_width, W.dp(8), savedCount(job) / totalCount(job))
     end
+    if payload.replaced_by then
+        detail[#detail + 1] = space(8)
+        detail[#detail + 1] = text(T("Only saved images remain readable; missing images cannot be fetched in this copy."), info_width, 17,
+            { height = W.dp(52), fixed_height = true })
+    end
+    local detail_content = W.column(detail)
+    local information = W.box(detail_content, info_width, math.max(W.dp(92), detail_content:getSize().h), { align = "left" })
     if #actions > 1 then
-        local more = W.button(T("More actions") .. " ›", self.width, function()
-            if actions[2].text == T("More actions") then actions[2].callback()
-            else self:_downloadMore(job, actions) end
-        end,
-            { borderless = true, align = "right", size = W.fontSize(17), height_px = W.dp(46) })
-        rows[#rows + 1], focus[#focus + 1] = more, more
+        local function more()
+            if actions[2].text == T("More actions") then actions[2].callback() else self:_downloadMore(job, actions) end
+        end
+        information = W.ActionRow:new{ width = info_width, content = information, callback = more, hold_callback = more }
+        information.text = T("More actions")
+        focus[#focus + 1] = information
     end
+    if main_button then focus[#focus + 1] = main_button end
+    local rows = { space(16), W.row{ information, W.gap(gap), main_button or W.gap(action_width) } }
     rows[#rows + 1], rows[#rows + 2] = space(20), W.rule1dp(self.width, Blitbuffer.Color8(0xCC))
     if not measure and #focus > 0 then self.focus[#self.focus + 1] = focus end
     return W.column(rows), focus
@@ -406,9 +430,15 @@ function Screens:_downloadRecovery(job, error)
     end
     local width, rows = Screen:getWidth() - W.dp(112), {}
     local comic, chapter = self:_downloadIdentity(job)
-    rows[#rows + 1] = { widget = W.column{ text(comic .. " · " .. chapter, width, 26, { bold = true }), space(10),
-        text(self:_downloadCopyLabel(job, true) .. " · " .. self:_downloadProgress(job), width, 18, { muted = true }),
-        space(28), W.rule1dp(width, W.ink), space(32), text(heading, width, 30, { bold = true }), space(20) } }
+    local payload = job.payload or {}
+    local kind_label = payload.replaced_by and T("Retained copy") or payload.replaces_job_id and T("New copy") or T("Current copy")
+    local size = tonumber(job.bytes or payload.bytes or payload.saved_bytes)
+    local copy_summary = string.format(T("%s · Saved %d / %d images"), kind_label, savedCount(job), totalCount(job))
+        .. (size and string.format(T(" · Uses %s"), Model.bytes(size)) or "")
+    rows[#rows + 1] = { widget = W.column{ space(30), line(comic .. " · " .. chapter, width, 26,
+            { bold = true, height = W.dp(38) }), space(8),
+        line(copy_summary, width, 18, { muted = true, height = W.dp(28) }),
+        space(26), W.rule1dp(width, W.ink), space(32), text(heading, width, 30, { bold = true }), space(12) } }
     for paragraph in (message .. "\n\n"):gmatch("(.-)\n\n") do
         rows[#rows + 1] = { widget = W.column{ text(paragraph, width, 20, { line_height = 0.7 }), space(24) } }
     end
@@ -420,15 +450,20 @@ function Screens:_downloadRecovery(job, error)
         [T("Open this copy")] = T("Opening the current copy may fetch missing images using your sign-in and network connection."),
         [T("Remove download")] = T("Remove saved images from this copy. Reading position and purchase access are preserved."),
     }
+    for index, spec in ipairs(buttons) do
+        if spec[1].text == T("Redownload as new version") then
+            table.insert(buttons, 1, table.remove(buttons, index)); break
+        end
+    end
     for _, spec in ipairs(buttons) do
         local entry = spec[1]
         local description = descriptions[entry.text]
         local inner = width - W.dp(56)
         local card = FrameContainer:new{ padding = W.dp(22), padding_left = W.dp(26), padding_right = W.dp(26), margin = 0,
             bordersize = W.dp(entry.text == T("Redownload as new version") and 2 or 1.5), color = W.ink, background = W.paper,
-            W.column{ W.row{ text(entry.text, inner - W.dp(36), 21, { bold = entry.text == T("Redownload as new version") }),
+            W.column{ W.row{ text(entry.text, inner - W.dp(36), 22, { bold = entry.text == T("Redownload as new version") }),
                 text("›", W.dp(36), 26, { align = "right" }) },
-                description and space(10) or space(0), description and text(description, inner, 17,
+                description and space(6) or space(0), description and text(description, inner, 17,
                     { muted = true, line_height = 0.6 }) or space(0) } }
         local row = W.ActionRow:new{ width = width, content = card, callback = entry.callback }
         row.text = entry.text
@@ -437,7 +472,7 @@ function Screens:_downloadRecovery(job, error)
     rows[#rows + 1] = { widget = text(T("None of these operations purchases a chapter."), width, 16, { muted = true }) }
     local close = function() if self.dialog == dialog then self:_closeDownloadDialog() end end
     dialog = downloadFlow(T("Download recovery"), {}, { { { text = T("Back to downloads"), callback = close } } },
-        { body_rows = rows, capture_text = self:_downloadTargetText(job) .. "\n" .. message,
+        { body_rows = rows, body_padding_top_px = 0, capture_text = self:_downloadTargetText(job) .. "\n" .. message,
             close = close, on_replace = function(replacement, previous)
             UIManager:close(previous); dialog = replacement; self:_showDownloadDialog(replacement)
         end })
@@ -572,10 +607,19 @@ function Screens:_confirmRemoveDownload(job)
             end)
         end }
     local close = function() if self.dialog == dialog then self:_closeDownloadDialog() end end
-    dialog = downloadMenu(T("Remove this chapter download?"), { confirmation.text }, { {
+    local comic, chapter = self:_downloadIdentity(job)
+    local bytes = tonumber(job.bytes or (job.payload or {}).bytes or (job.payload or {}).saved_bytes)
+    local target = comic .. " · " .. chapter .. (bytes and " · " .. Model.bytes(bytes) or "")
+    dialog = downloadMenu(T("Remove this chapter download?"), {
+        { text = target, size = 20 },
+        { text = self:_downloadCopyLabel(job, true) .. " · " .. self:_downloadProgress(job), size = 16, muted = true },
+        { text = (verifying and T("Stop verification and remove this copy's saved images?") .. "\n" or "")
+            .. T("Tasks using this same copy will stop. Other versions, reading positions, and purchase access are preserved. Offline reading of this copy will no longer be available."),
+            size = 19, muted = true },
+    }, { {
         { text = confirmation.cancel_text, callback = close },
         { text = confirmation.ok_text, callback = confirmation.ok_callback, primary = true },
-    } }, { placement = "center", width = Screen:getWidth() - W.dp(230), top = W.dp(420), close = close,
+    } }, { placement = "center", width = Screen:getWidth() - W.dp(230), top = W.dp(420), close = close, capture_text = confirmation.text,
         selected = { x = 1, y = 1 } })
     self:_showDownloadDialog(dialog)
 end
@@ -696,25 +740,51 @@ function Screens:_downloads()
         self.focus[#self.focus + 1] = { storage_right }
     else storage_right = text(string.format(T("Device free %s"), free and Model.bytes(free) or T("Unknown")), self.width - storage_heading_width, 18,
         { muted = true, align = "right" }) end
-    local header_rows = { space(28), W.row{
-        W.column{ text(Model.bytes(used), storage_heading_width, 36, { bold = true }), space(5),
-            text(total_jobs == 0 and pinned == 0 and T("Automatic cache") or T("Plugin storage"), storage_heading_width, 18, { muted = true }) },
-        storage_right }, space(18), bar, space(12),
-        text(string.format(T("Manual downloads %s · Automatic cache %s"), Model.bytes(pinned), Model.bytes(automatic)), self.width, 16, { muted = true }),
+    local amount = naturalText(Model.bytes(used), 36, false, true)
+    local usage_label = naturalText(total_jobs == 0 and pinned == 0 and T("Automatic cache") or T("Plugin storage"), 18, true)
+    local usage = baselineRow({ amount, usage_label }, storage_heading_width, W.dp(12))
+    if total_jobs > 0 then
+        local remaining = naturalText(string.format(T("Device free %s"), free and Model.bytes(free) or T("Unknown")), 18, true)
+        local y = amount:getBaseline() - remaining:getBaseline()
+        storage_right = W.box(W.inset(remaining, 0, 0, math.max(0, y), 0), self.width - storage_heading_width,
+            usage:getSize().h, { align = "right" })
+    end
+    local legend_items = {}
+    for index, entry in ipairs({ { T("Manual downloads %s"), Model.bytes(pinned), W.ink },
+        { T("Automatic cache %s"), Model.bytes(automatic), Blitbuffer.Color8(0x99) }, { T("Remaining space"), nil } }) do
+        if index > 1 then legend_items[#legend_items + 1] = W.gap(W.dp(28)) end
+        local swatch = W.box(nil, W.dp(16), W.dp(16), entry[3] and { background = entry[3] } or { border_px = W.dp(1) })
+        legend_items[#legend_items + 1] = W.row{ swatch, W.gap(W.dp(8)),
+            naturalText(entry[2] and string.format(entry[1], entry[2]) or entry[1], 16, true) }
+    end
+    local header_rows = { space(28), W.row{ usage, storage_right }, space(16), bar, space(12), W.row(legend_items),
         space(24), W.rule1dp(self.width, W.ink) }
-    local tabs, tab_focus, tab_width = {}, {}, math.floor(self.width / 4)
+    local tabs, tab_focus = {}, {}
     local filters = { { "all", T("All"), total_jobs }, { "active", T("In progress"), #buckets.active },
-        { "attention", T("Needs attention"), #buckets.attention }, { "complete", T("Ready offline"), #ready_groups } }
+        { "attention", T("Needs action"), #buckets.attention }, { "complete", T("Offline-ready"), #ready_groups } }
+    local total_tab_width = 0
+    for index, filter in ipairs(filters) do
+        local label = naturalText(filter[2] .. " " .. filter[3], 20, false, filter[1] == self.filter)
+        filter.label_width = label:getSize().w
+        filter.width = filter.label_width + W.dp(index == 1 and 20 or 40)
+        total_tab_width = total_tab_width + filter.width
+        label:free()
+    end
     for index, filter in ipairs(filters) do
         local value, label = filter[1], filter[2] .. " " .. filter[3]
-        local width = index == 4 and self.width - 3 * tab_width or tab_width
+        local width = math.floor(filter.width * math.min(1, self.width / total_tab_width))
+        local left = index == 1 and 0 or W.dp(20)
+        local label_width = math.max(1, width - left - W.dp(20))
         local selected = value == self.filter
-        local button = W.button(label, width, function()
+        local indicator = W.box(nil, label_width, W.dp(5), { background = selected and W.ink or W.paper })
+        local content = W.inset(W.column{ line(label, label_width, 20,
+            { bold = selected, height = W.dp(57) }), indicator }, left, W.dp(20), 0, 0)
+        local button = W.ActionRow:new{ width = width, content = content, callback = function()
             if not self:_downloadContextCurrent(context) then return end
             self.filter, self.page = value, 1; self:_render()
-        end, { borderless = true, bold = selected, size = W.fontSize(20), height_px = W.dp(57) })
-        local indicator = selected and W.box(space(0), math.floor(width * 0.7), W.dp(5), { background = W.ink }) or space(0)
-        tabs[#tabs + 1] = W.column{ button, W.box(indicator, width, W.dp(5)) }
+        end }
+        button.text = label
+        tabs[#tabs + 1] = button
         tab_focus[#tab_focus + 1] = button
     end
     self.focus[#self.focus + 1] = tab_focus

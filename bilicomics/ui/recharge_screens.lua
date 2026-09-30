@@ -2,11 +2,13 @@ local BB = require("ffi/blitbuffer")
 local CenterContainer = require("ui/widget/container/centercontainer")
 local Device = require("device")
 local FrameContainer = require("ui/widget/container/framecontainer")
+local Font = require("ui/font")
 local Geom = require("ui/geometry")
 local GestureRange = require("ui/gesturerange")
 local InputDialog = require("ui/widget/inputdialog")
 local InputContainer = require("ui/widget/container/inputcontainer")
 local QRWidget = require("ui/widget/qrwidget")
+local TextWidget = require("ui/widget/textwidget")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
 local Helpers = require("bilicomics/ui/screen_helpers")
@@ -25,11 +27,16 @@ local function box(content, width, height, border, background)
         color = BB.Color8(0x11), background = background or W.paper,
         centered(content, width - border * 2, height - border * 2) }
 end
-local function keyValue(label, value, width)
+local function singleText(value, size, color, bold, max_width)
+    return TextWidget:new{ text = tostring(value), face = Font:getFace("cfont", face(size)),
+        bold = bold or false, fgcolor = color or W.ink, padding = 0,
+        forced_height = W.dp(44), forced_baseline = W.dp(37), max_width = max_width }
+end
+local function keyValue(label, value, width, receipt)
     return W.column{ W.rule1dp(width, BB.Color8(0xCC)), box(W.row{
-        W.text(label, W.dp(160), face(20), { muted = true }),
-        W.text(value, width - W.dp(160), face(20), { height = W.dp(52), fixed_height = true }),
-    }, width, W.dp(70)) }
+        W.text(label, W.dp(170), face(20), { muted = true }),
+        W.text(value, width - W.dp(170), face(20), { align = receipt and "right" or "left" }),
+    }, width, W.dp(receipt and 66 or 70) - W.dp(1)) }
 end
 
 local AmountTile = InputContainer:extend{}
@@ -355,13 +362,13 @@ function Screens:_rechargeAmountsView(state)
         end
         if #grid > 0 then grid[#grid + 1] = W.gap(W.dp(18)) end
         local color, background = selected and W.paper or BB.Color8(0x11), selected and BB.Color8(0x11) or W.paper
-        local tile_rows = {
-            W.text(option.coin_amount ~= nil and text(option.coin_amount, 40) or T("Official amount"), tile_width - W.dp(24),
-                face(option.coin_amount ~= nil and 36 or 25), { bold = true, color = color, background = background, align = "center" }),
-            space(5),
-        }
-        if option.coin_amount ~= nil then tile_rows[#tile_rows + 1] = W.text(T("Manga coins"), tile_width - W.dp(24), face(17), { color = color, background = background, align = "center" }) end
-        tile_rows[#tile_rows + 1], tile_rows[#tile_rows + 2] = space(12),
+        local unit = singleText(T("Manga coins"), 17, color)
+        local coins = option.coin_amount ~= nil and W.row{
+            singleText(text(option.coin_amount, 40), 36, color, true, tile_width - W.dp(30) - unit:getSize().w), W.gap(W.dp(6)), unit,
+        } or W.text(T("Official amount"), tile_width - W.dp(24), face(25), {
+            bold = true, color = color, background = background, align = "center" })
+        local tile_rows = { centered(coins, tile_width - W.dp(24), W.dp(52)) }
+        tile_rows[#tile_rows + 1], tile_rows[#tile_rows + 2] = space(8),
             W.text(string.format(T("CNY %s"), yuan(option.amount_cents)), tile_width - W.dp(24), face(22), { color = color, background = background, align = "center" })
         local tile = AmountTile:new{
             content = box(W.column(tile_rows), tile_width, W.dp(150), W.dp(1.5), selected and BB.Color8(0x11) or W.paper),
@@ -383,10 +390,17 @@ function Screens:_rechargeAmountsView(state)
         rows[#rows + 1] = centered(W.row{ previous, W.text(string.format("%d / %d", state.options_page, pages), W.dp(80), face(20), { align = "center" }), next_page }, width, W.dp(52))
         layout[#layout + 1] = { previous, next_page }
     end
-    rows[#rows + 1] = space(22)
-    local input = W.button((rules and T("Enter another amount") or T("Enter another amount · Must match an official option")) .. " ›", width,
-        function() self:_rechargeInputAmount(state) end, { borderless = true, align = "left", size = face(21), height_px = W.dp(78) })
+    rows[#rows + 1] = space(26)
+    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
+    local input_label = rules and T("Enter another amount") or T("Enter another amount · Must match an official option")
+    local input = W.ActionRow:new{ width = width, text = input_label .. " ›", content = box(W.row{
+        W.text(T("Enter another amount"), math.floor(width * 0.50), face(21)),
+        W.text((rules and "" or T("Must match an official option")) .. " ›", width - math.floor(width * 0.50),
+            face(17), { muted = true, align = "right" }),
+    }, width, W.dp(78) - W.dp(2)), callback = function() self:_rechargeInputAmount(state) end }
     rows[#rows + 1], layout[#layout + 1] = input, { input }
+    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
+    rows[#rows + 1] = space(26)
     local notes = rules and string.format(T("Custom amount allowed: CNY %s to %s."), yuan(rules.min_cents), yuan(rules.max_cents))
         or T("The server has not enabled arbitrary amounts. Typed amounts must match an official option.")
     if type(state.config.notice) == "string" and state.config.notice ~= "" then notes = notes .. "\n" .. text(state.config.notice, 180) end
@@ -575,9 +589,9 @@ function Screens:_rechargeOrderView(state)
         rows[#rows + 1] = W.text(updated_balance and string.format(T("Current balance %s manga coins"), tostring(wallet.remain_gold or "—"))
             or T("Balance is refreshing; return to Account to check it."), width, face(20), { align = "center" })
         rows[#rows + 1], rows[#rows + 2] = space(46), W.rule1dp(width, BB.Color8(0x11))
-        rows[#rows + 1] = keyValue(T("Order number"), reference, width)
-        rows[#rows + 1] = keyValue(T("Amount"), string.format(T("CNY %s"), yuan(order.amount_cents)), width)
-        rows[#rows + 1] = keyValue(T("Credit confirmed at"), timeLabel(order.credited_observed_at) or T("Unknown"), width)
+        rows[#rows + 1] = keyValue(T("Order number"), reference, width, true)
+        rows[#rows + 1] = keyValue(T("Amount"), string.format(T("CNY %s"), yuan(order.amount_cents)), width, true)
+        rows[#rows + 1] = keyValue(T("Credit confirmed at"), timeLabel(order.credited_observed_at) or T("Unknown"), width, true)
         rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
         paragraphs[#paragraphs + 1] = T("Recharge credited. Return to Account to view your manga coin balance.")
         actions = {

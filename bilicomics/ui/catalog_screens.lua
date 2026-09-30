@@ -2,6 +2,9 @@ local InputDialog = require("ui/widget/inputdialog")
 local BB = require("ffi/blitbuffer")
 local Device = require("device")
 local Font = require("ui/font")
+local Geom = require("ui/geometry")
+local GestureRange = require("ui/gesturerange")
+local TextWidget = require("ui/widget/textwidget")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
 local Model = require("bilicomics/ui/model")
@@ -13,8 +16,8 @@ local function space(value) return W.spacePixels(W.dp(value)) end
 local function text(value, width, size, options) return W.text(value, width, W.fontSize(size), options) end
 local function lineText(value, width, size, height, options)
     options = options or {}
-    options.height, options.fixed_height = W.dp(size), true
-    return W.box(text(value, width, size, options), width, W.dp(height), { align = "left" })
+    options.height = W.dp(height)
+    return W.line(value, width, W.fontSize(size), options)
 end
 local function button(value, width, callback, options)
     options = options or {}
@@ -95,18 +98,85 @@ end
 
 local CatalogJumpDialog = InputDialog:extend{}
 function CatalogJumpDialog:init()
+    self._closing = false
     InputDialog.init(self)
     local native_title = self.title_bar
     local padding = W.dp(32)
     local width = self.width - 2 * padding
-    self.title_bar = W.inset(W.column{
-        lineText(self.title, width, 26, 40, { bold = true }), space(14),
-        text(self.description or "", width, 17, { muted = true, line_height = 0.4 }), space(12),
-    }, padding, padding, W.dp(30), 0)
-    self.vgroup[1] = self.title_bar
-    self.vgroup:resetLayout()
-    self.dialog_frame.radius = 0
+    self.title_bar = W.column{
+        lineText(self.title, width, 26, 34, { bold = true }), space(8),
+        text(self.description or "", width, 17, { muted = true, line_height = 0.4 }), space(22),
+    }
+    self._input_widget.bordersize, self._input_widget._frame_textwidget.bordersize = 0, 0
+    self._input_widget._frame_textwidget.color = W.ink
+    self._input_widget.dimen = self._input_widget._frame:getSize()
+    self.input_field = W.box(W.inset(self._input_widget, W.dp(20), W.dp(20), 0, 0), width, W.dp(70),
+        { border_px = W.dp(1.5), align = "left", color = W.ink })
+    self.dialog_frame.radius, self.dialog_frame.color = 0, W.ink
+    self[1] = self.dialog_frame
+    self.ges_events.SwipePage = { GestureRange:new{ ges = "swipe",
+        range = Geom:new{ w = self.screen_width, h = self.screen_height } } }
+    if Device:hasKeys() then
+        self.key_events.NextPage = { { Device.input.group.PgFwd } }
+        self.key_events.PreviousPage = { { Device.input.group.PgBack } }
+    end
     native_title:free()
+    self:refreshResults()
+end
+
+function CatalogJumpDialog:refreshResults()
+    if not self.input_field or self._closing then return end
+    if self.results_content then self.results_content:free() end
+    local content, focus = self.build_results(self)
+    self.results_content = content
+    self.vgroup = W.inset(W.column{ self.title_bar, self.input_field, content }, W.dp(32), W.dp(32), W.dp(30), W.dp(32))
+    self.dialog_frame[1] = self.vgroup
+    self.layout = { { self._input_widget } }
+    for _, row in ipairs(focus) do self.layout[#self.layout + 1] = row end
+    UIManager:setDirty(self, "ui")
+end
+
+function CatalogJumpDialog:paintTo(bb, _x, _y)
+    local size = self.dialog_frame:getSize()
+    local keyboard_height = self:isKeyboardVisible() and self._input_widget:getKeyboardDimen().h or 0
+    local top = math.max(0, math.min(W.dp(176), Device.screen:getHeight() - keyboard_height - size.h))
+    self.dialog_frame:paintTo(bb, math.floor((Device.screen:getWidth() - size.w) / 2), top)
+end
+
+function CatalogJumpDialog:onShowKeyboard(...)
+    InputDialog.onShowKeyboard(self, ...)
+    self:refreshResults()
+end
+
+function CatalogJumpDialog:onCloseKeyboard()
+    InputDialog.onCloseKeyboard(self)
+    self:refreshResults()
+end
+
+function CatalogJumpDialog:onClose()
+    self._closing = true
+    return InputDialog.onClose(self)
+end
+
+function CatalogJumpDialog:onCloseDialog()
+    if self.dismiss_callback then self.dismiss_callback() end
+    return true
+end
+
+function CatalogJumpDialog:onNextPage()
+    if self.turn_results then self.turn_results(1) end
+    return true
+end
+
+function CatalogJumpDialog:onPreviousPage()
+    if self.turn_results then self.turn_results(-1) end
+    return true
+end
+
+function CatalogJumpDialog:onSwipePage(_, gesture)
+    if gesture.direction == "west" or gesture.direction == "north" then return self:onNextPage() end
+    if gesture.direction == "east" or gesture.direction == "south" then return self:onPreviousPage() end
+    return true
 end
 
 local function authorsOf(comic)
@@ -239,106 +309,122 @@ function Screens:_catalogLocate(episode_id)
     self:_render()
 end
 
-function Screens:_catalogJump(query)
+function Screens:_catalogJump(query, page, selected_id)
     self:_closeDialog()
     local context, dialog = self:_catalogContext()
-    local current = self.catalog_current_id
-    local buttons = {}
-    if current then
-        buttons[#buttons + 1] = { { text = T("Current chapter"), callback = function()
-            if self.dialog == dialog and self:_catalogCurrent(context) then self:_catalogLocate(current) end
-        end } }
-    end
-    buttons[#buttons + 1] = {
-        { text = T("Cancel"), callback = function() if self.dialog == dialog then self:_closeDialog() end end },
-        { text = T("Find chapter"), is_enter_default = true, callback = function()
-            if self.dialog ~= dialog or not self:_catalogCurrent(context) then return end
-            local value = dialog:getInputText():match("^%s*(.-)%s*$")
-            if value == "" then return end
-            self:_catalogJumpResults(value)
-        end },
-    }
-    for _, row in ipairs(buttons) do
-        for _, entry in ipairs(row) do entry.font_face, entry.font_size = "cfont", W.fontSize(22) end
+    local close_callback = function() if self.dialog == dialog then self:_closeDialog() end end
+    local function build_results(owner)
+        local value = owner:getInputText():match("^%s*(.-)%s*$")
+        if owner.search_query ~= value then owner.search_query, owner.results_page, owner.selected_episode_id = value, 1, nil end
+        local matches = {}
+        if value ~= "" then
+            local needle = value:lower()
+            for _, episode in ipairs(self.catalog_all or {}) do
+                if chapterNumber(episode):lower():find(needle, 1, true) or title(episode):lower():find(needle, 1, true) then
+                    matches[#matches + 1] = episode
+                end
+            end
+        end
+        local width = owner.width - W.dp(64)
+        local keyboard_height = owner:isKeyboardVisible() and owner._input_widget:getKeyboardDimen().h or 0
+        local available = Device.screen:getHeight() - keyboard_height - W.dp(176) - W.dp(344)
+        local per_page = math.max(1, math.min(6, math.floor(available / W.dp(82))))
+        local pages = math.max(1, math.ceil(#matches / per_page))
+        if owner.results_per_page ~= per_page and owner.selected_episode_id then
+            for index, episode in ipairs(matches) do
+                if tostring(episode.id) == owner.selected_episode_id then owner.results_page = math.ceil(index / per_page); break end
+            end
+        end
+        owner.results_per_page = per_page
+        owner.results_page = math.max(1, math.min(owner.results_page or 1, pages))
+        local first = (owner.results_page - 1) * per_page + 1
+        local selected
+        for _, episode in ipairs(matches) do if tostring(episode.id) == owner.selected_episode_id then selected = episode end end
+        if not selected then selected = matches[first]; owner.selected_episode_id = selected and tostring(selected.id) or nil end
+        local rows, focus, result_rows = { space(20),
+            lineText(value ~= "" and (#matches == 0 and T("No matching chapter. Try another number or title.")
+                or string.format(T("Matching chapters: %d"), #matches)) or T("Enter a chapter number or title to find matches."),
+                width, 16, 24, { muted = true }), space(10) }, {}, {}
+        for index = first, math.min(#matches, first + per_page - 1) do
+            local episode = matches[index]
+            local episode_id = tostring(episode.id)
+            local active = episode_id == owner.selected_episode_id
+            local color, inset, gap = active and W.paper or W.ink, W.dp(22), W.dp(18)
+            local status = readingLabel(episode, self.catalog_current_id) .. " · "
+                .. (episode.access == "locked" and T("Pending purchase") or Model.entitlement(episode))
+            local status_width = math.min(W.dp(205), math.floor(width * 0.3))
+            local content = W.row{
+                lineText(chapterNumber(episode), W.dp(60), 24, 36, { bold = true, color = color }), W.gap(gap),
+                lineText(title(episode), math.max(1, width - 2 * inset - W.dp(60) - status_width - 2 * gap), 21, 36, { color = color }),
+                W.gap(gap), lineText(status, status_width, 16, 36, { color = active and W.paper or W.muted, align = "right" }),
+            }
+            local result = W.ActionRow:new{ width = width,
+                content = W.box(W.inset(content, inset, inset, 0, 0), width, W.dp(72),
+                    { border_px = W.dp(1.5), background = active and W.ink or W.paper }),
+                callback = function()
+                    if self.dialog ~= owner or not self:_catalogCurrent(context) then return end
+                    owner.selected_episode_id = episode_id
+                    owner:onCloseKeyboard()
+                end }
+            result.text, result.episode, result.selected = title(episode), episode, active
+            rows[#rows + 1], focus[#focus + 1], result_rows[#result_rows + 1] = result, { result }, result
+            if index < math.min(#matches, first + per_page - 1) then rows[#rows + 1] = space(10) end
+        end
+        local function turn(delta)
+            if self.dialog == owner and self:_catalogCurrent(context) and owner.results_page + delta >= 1
+                and owner.results_page + delta <= pages then
+                owner.results_page, owner.selected_episode_id = owner.results_page + delta, nil
+                owner:refreshResults()
+            end
+        end
+        owner.turn_results = turn
+        if pages > 1 then
+            rows[#rows + 1] = space(10)
+            local cell_width = math.floor(width / 3)
+            local previous = button(T("‹ Previous page"), cell_width, function() turn(-1) end,
+                { borderless = true, height = 54, size = 20, enabled = owner.results_page > 1, align = "left" })
+            local next_page = button(T("Next page ›"), cell_width, function() turn(1) end,
+                { borderless = true, height = 54, size = 20, enabled = owner.results_page < pages, align = "right" })
+            rows[#rows + 1] = W.row{ previous, lineText(string.format("%d / %d", owner.results_page, pages),
+                width - 2 * cell_width, 20, 54, { align = "center" }), next_page }
+            focus[#focus + 1] = { previous, next_page }
+        end
+        rows[#rows + 1] = space(26)
+        local cancel_width, gap = W.dp(180), W.dp(14)
+        local locate_label = selected and string.format(T("Locate chapter %s"), chapterNumber(selected)) or T("Locate chapter")
+        local locate_callback = function()
+            if self.dialog == owner and self:_catalogCurrent(context) and selected then self:_catalogLocate(selected.id) end
+        end
+        local cancel = button(T("Cancel"), cancel_width, close_callback, { height = 66, size = 21 })
+        local locate = button(locate_label, width - cancel_width - gap, locate_callback,
+            { height = 66, size = 22, primary = true, enabled = selected ~= nil })
+        rows[#rows + 1], focus[#focus + 1] = W.row{ cancel, W.gap(gap), locate }, { cancel, locate }
+        owner.result_rows, owner.locate_button = result_rows, locate
+        owner.matches, owner.results_pages = matches, pages
+        owner.buttons = { { { text = T("Cancel"), id = "close", callback = close_callback },
+            { text = locate_label, callback = locate_callback, enabled = selected ~= nil } } }
+        return W.column(rows), focus
     end
     dialog = CatalogJumpDialog:new{ title = T("Jump to chapter"), input = query or "", input_hint = T("Chapter number or title"),
-        description = T("Choose a result to locate it in this catalog."), buttons = buttons, modal = true,
-        width = Device.screen:getWidth() - W.dp(112) - 2 * W.dp(2), text_height = W.dp(70),
-        input_face = Font:getFace("cfont", W.fontSize(22)), border_size = W.dp(2),
-        input_padding = W.dp(12), input_margin = W.dp(4), button_padding = W.dp(32), is_movable = false }
-    self.dialog = dialog
-    dialog.dialog_frame.radius = 0
-    UIManager:show(dialog)
-    dialog:onShowKeyboard()
-end
-
-function Screens:_catalogJumpResults(query, page)
-    local context, dialog = self:_catalogContext()
-    local numeric, matches = tonumber(query), {}
-    for _, episode in ipairs(self.catalog_all or {}) do
-        local number_match = numeric and (tonumber(episode.order) == numeric or tonumber(episode.short_title) == numeric)
-        if number_match then matches[#matches + 1] = episode end
-    end
-    if #matches == 0 then
-        for _, episode in ipairs(self.catalog_all or {}) do
-            if tostring(title(episode)):lower():find(query:lower(), 1, true) then matches[#matches + 1] = episode end
-        end
-    end
-    if #matches == 1 then self:_catalogLocate(matches[1].id); return end
-    self:_closeDialog()
-    local outer = Device.screen:getWidth() - W.dp(112)
-    local width = outer - W.dp(68)
-    local per_page = math.max(1, math.min(6, math.floor((Device.screen:getHeight() - W.dp(530)) / W.dp(82))))
-    local pages = math.max(1, math.ceil(#matches / per_page))
-    page = math.max(1, math.min(page or 1, pages))
-    local rows, focus, buttons = { text(T("Jump to chapter"), width, 26, { bold = true, height = W.dp(42) }), space(14),
-        text(#matches == 0 and T("No matching chapter. Try another number or title.")
-            or string.format(T("Matching chapters: %d"), #matches), width, 17, { muted = true, height = W.dp(46) }), space(12) }, {}, {}
-    local first = (page - 1) * per_page + 1
-    for index = first, math.min(#matches, first + per_page - 1) do
-        local episode, active = matches[index], index == first
-        local episode_id = tostring(episode.id)
-        local color = active and W.paper or W.ink
-        local content = W.row{ text(chapterNumber(episode), W.dp(60), 24, { bold = true, color = color, height = W.dp(36) }),
-            text(title(episode), width - W.dp(178), 21, { color = color, height = W.dp(36) }),
-            text(readingLabel(episode, self.catalog_current_id), W.dp(110), 16,
-                { color = color, align = "right", height = W.dp(36) }) }
-        local result = W.ActionRow:new{ width = width,
-            content = W.box(content, width, W.dp(72), { border_px = W.dp(1.5), background = active and W.ink or W.paper }),
-            callback = function() if self.dialog == dialog and self:_catalogCurrent(context) then self:_catalogLocate(episode_id) end end }
-        result.text, result.episode = title(episode), episode
-        rows[#rows + 1], rows[#rows + 2], focus[#focus + 1] = result, space(10), { result }
-        buttons[#buttons + 1] = { { text = result.text, callback = result.callback } }
-    end
-    local function turn(delta)
-        if self.dialog == dialog and self:_catalogCurrent(context) and page + delta >= 1 and page + delta <= pages then
-            self:_catalogJumpResults(query, page + delta)
-        end
-    end
-    if pages > 1 then
-        local cell_width = math.floor(width / 3)
-        local previous = button(T("‹ Previous page"), cell_width, function() turn(-1) end,
-            { borderless = true, height = 54, size = 20, enabled = page > 1, align = "left" })
-        local next_page = button(T("Next page ›"), cell_width, function() turn(1) end,
-            { borderless = true, height = 54, size = 20, enabled = page < pages, align = "right" })
-        rows[#rows + 1] = W.row{ previous, text(string.format("%d / %d", page, pages), width - 2 * cell_width, 20,
-            { align = "center", height = W.dp(54) }), next_page }
-        focus[#focus + 1] = { previous, next_page }
-    end
-    rows[#rows + 1] = space(24)
-    local gap, cell_width = W.dp(16), math.floor((width - W.dp(16)) / 2)
-    local edit_callback = function() if self.dialog == dialog and self:_catalogCurrent(context) then self:_catalogJump(query) end end
-    local close_callback = function() if self.dialog == dialog then self:_closeDialog() end end
-    local edit = button(T("Edit search"), cell_width, edit_callback, { height = 66, size = 22 })
-    local close = button(T("Close"), width - cell_width - gap, close_callback, { height = 66, size = 22 })
-    rows[#rows + 1], focus[#focus + 1] = W.row{ edit, W.gap(gap), close }, { edit, close }
-    buttons[#buttons + 1] = { { text = T("Edit search"), callback = edit_callback }, { text = T("Close"), callback = close_callback } }
-    dialog = W.sheetDialog(W.inset(W.column(rows), W.dp(32), W.dp(32), W.dp(30), W.dp(32)), focus,
-        { placement = "center", top = W.dp(176), width = outer, close_callback = close_callback,
-            next_page = function() turn(1) end, previous_page = function() turn(-1) end })
-    dialog.title, dialog.buttons = T("Jump to chapter"), buttons
+        description = T("Choose a result to locate it in this catalog."), modal = true, keyboard_visible = false,
+        buttons = { { { text = T("Cancel"), id = "close", callback = close_callback } } },
+        width = Device.screen:getWidth() - W.dp(112) - 2 * W.dp(2),
+        text_width = Device.screen:getWidth() - W.dp(112 + 4 + 64 + 40 + 3), text_height = W.dp(34),
+        input_face = Font:getFace("cfont", W.fontSize(24)), border_size = W.dp(2),
+        input_padding = 0, input_margin = 0, button_padding = W.dp(32), is_movable = false,
+        results_page = page or 1, selected_episode_id = selected_id, search_query = query or "", build_results = build_results,
+        dismiss_callback = close_callback, edited_callback = function()
+            if dialog and self.dialog == dialog and self:_catalogCurrent(context) then dialog:refreshResults() end
+        end,
+        enter_callback = function()
+            if dialog and self.dialog == dialog and self:_catalogCurrent(context) then dialog:onCloseKeyboard() end
+        end }
     self.dialog, self.context_dialog, self.context_dialog_account = dialog, dialog, context.account
     UIManager:show(dialog)
+end
+
+function Screens:_catalogJumpResults(query, page, selected_id)
+    self:_catalogJump(query, page, selected_id)
 end
 
 function Screens:_chapterActions(comic, episode)
@@ -355,11 +441,15 @@ function Screens:_chapterActions(comic, episode)
             self:_closeDialog(); self:_read(comic, episode)
         end, { primary = true, enabled = readable or episode.access == "locked", height = 68, size = 23 })
     local rows, focus = {}, { { read } }
-    rows[#rows + 1] = W.row{ text(chapterNumber(episode), W.dp(70), 28, { bold = true, muted = true, height = W.dp(42) }),
-        text(title(episode), width - W.dp(70), 28, { bold = true, height = W.dp(42) }) }
-    rows[#rows + 1] = space(12)
-    rows[#rows + 1] = text(title(comic) .. " · " .. readingLabel(episode, self.catalog_current_id) .. " · "
-        .. accessLabel(episode) .. " · " .. Model.storage(episode), width, 18, { muted = true, height = W.dp(60) })
+    local number = TextWidget:new{ text = chapterNumber(episode), face = Font:getFace("cfont", W.fontSize(28)),
+        bold = true, fgcolor = W.muted }
+    local number_width = number:getSize().w
+    rows[#rows + 1] = W.row{ W.box(number, number_width, W.dp(36)), W.gap(W.dp(18)),
+        lineText(title(episode), width - number_width - W.dp(18), 28, 36, { bold = true }) }
+    rows[#rows + 1] = space(8)
+    local access = episode.access == "locked" and T("Pending purchase") .. " " .. chapterPrice(episode) or accessLabel(episode)
+    rows[#rows + 1] = lineText(title(comic) .. " · " .. readingLabel(episode, self.catalog_current_id) .. " · "
+        .. access .. " · " .. Model.storage(episode), width, 18, 24, { muted = true })
     local expiry = Model.entitlementExpiry(episode)
     if expiry then rows[#rows + 1] = text(expiry, width, 16, { muted = true, height = W.dp(42) }) end
     rows[#rows + 1], rows[#rows + 2] = space(28), read
@@ -377,7 +467,7 @@ function Screens:_chapterActions(comic, episode)
     local close = button(T("Close"), width, function() if self.dialog == dialog then self:_closeDialog() end end,
         { height = 68, size = 23 })
     rows[#rows + 1], rows[#rows + 2], focus[#focus + 1] = space(12), close, { close }
-    dialog = self:_catalogSheet(W.inset(W.column(rows), W.dp(56), W.dp(56), W.dp(38), W.dp(40)), focus, context)
+    dialog = self:_catalogSheet(W.inset(W.column(rows), W.dp(56), W.dp(56), W.dp(34), W.dp(40)), focus, context)
 end
 
 function Screens:_catalogSelectionMenu()
@@ -460,7 +550,7 @@ function Screens:_chapterRow(comic, episode, current, register_focus)
     local color = self.selecting and not downloadable and BB.Color8(0x88) or read_row and W.muted or W.ink
     local cells = {}
     local function cell(value, width, size, bold)
-        return text(value, width, size, { bold = bold, color = color, height = W.dp(32), fixed_height = true })
+        return lineText(value, width, size, 40, { bold = bold, color = color })
     end
     if self.selecting then
         local checkbox = W.box(text(selected and "✓" or "", W.dp(26), 20,
@@ -531,7 +621,7 @@ end
 
 function Screens:_catalogSelectionFooter()
     local width, context = Device.screen:getWidth(), self:_catalogContext()
-    local inner, gap = width - W.dp(112), W.dp(16)
+    local inner, gap = width - W.dp(112), W.dp(14)
     local cancel_width, download_width = W.dp(150), W.dp(230)
     local total, visible = count(self.selected), 0
     for _, episode in ipairs(self.catalog_visible_items or {}) do
@@ -540,16 +630,16 @@ function Screens:_catalogSelectionFooter()
     local summary_width = inner - cancel_width - download_width - 2 * gap
     local summary = W.column{
         lineText(string.format(T("Selected chapters: %d"), total), summary_width, 22, 30, { bold = true }),
-        space(3), lineText(string.format(T("This page %d · Other pages %d"), visible, total - visible), summary_width, 16, 25,
+        space(4), lineText(string.format(T("This page %d · Other pages %d"), visible, total - visible), summary_width, 16, 25,
             { muted = true }),
     }
     local cancel = button(T("Cancel"), cancel_width, function()
         if not self:_catalogCurrent(context) then return end
         self.selecting, self.selected = false, {}; self:_render()
-    end, { height = 66, size = 23 })
+    end, { height = 66, size = 21 })
     local download = button(self.status or string.format(T("Download %d selected chapters"), total), download_width, function()
         if self:_catalogCurrent(context) then self:_catalogDownloadSelection() end
-    end, { height = 66, size = 23, primary = true, enabled = total > 0 and not self.status })
+    end, { height = 66, size = 22, primary = true, enabled = total > 0 and not self.status })
     local footer_rule = W.rule1dp(width, W.ink)
     local actions = W.row{ summary, W.gap(gap), cancel, W.gap(gap), download }
     local bottom = math.max(0, W.dp(108) - footer_rule:getSize().h - actions:getSize().h - W.dp(20))
@@ -588,7 +678,7 @@ function Screens:_comic()
     end
     self.catalog_all, self.catalog_items, self.catalog_current_id = all, items, current
     local context = self:_catalogContext()
-    local cover_width, cover_height, cover_gap = W.dp(114), W.dp(152), W.dp(26)
+    local cover_width, cover_height, cover_gap = W.dp(114), W.dp(152), W.dp(28)
     local identity_width = self.width - cover_width - cover_gap
     local author, tags = authorsOf(comic), tagsOf(comic)
     local metadata = author ~= "" and author .. " · " or ""
@@ -647,20 +737,26 @@ function Screens:_comic()
     end
     local rows = { space(28), W.row{ W.cover(comic, cover_width, cover_height),
         W.gap(cover_gap), W.column(identity_rows) }, space(26), W.rule1dp(self.width, W.ink) }
-    local tab_width, tabs, tab_focus = W.dp(108), {}, {}
-    for _, entry in ipairs({ { "all", T("All") }, { "unread", T("Unread") },
+    local tabs_width, tabs, tab_focus = 0, {}, {}
+    for index, entry in ipairs({ { "all", T("All") }, { "unread", T("Unread") },
         { "readable", T("Readable") }, { "downloaded", T("Downloaded") } }) do
         local value, label = entry[1], entry[2]
         local active = self.filter == value
+        local measured = TextWidget:new{ text = label, face = Font:getFace("cfont", W.fontSize(20)), bold = active }
+        local label_width = measured:getSize().w
+        measured:free()
+        local left_padding, right_padding = index == 1 and 0 or W.dp(20), W.dp(20)
+        local tab_width = label_width + left_padding + right_padding
         local tab = button(label, tab_width, function()
             if not self:_catalogCurrent(context) then return end
             self.filter, self.page, self.epoch = value, 1, self.epoch + 1; self:_render()
-        end, { borderless = true, height = 57, size = 20, bold = active })
-        local underline = active and W.box(nil, tab_width - W.dp(24), W.dp(5), { background = W.ink }) or space(5)
-        tabs[#tabs + 1] = W.column{ tab, W.box(underline, tab_width, W.dp(5)) }
+        end, { borderless = true, height = 57, size = 20, bold = active, align = "left", padding_h = left_padding })
+        local underline = W.box(nil, label_width, W.dp(5), { background = active and W.ink or W.paper })
+        tabs[#tabs + 1] = W.column{ tab, W.inset(underline, left_padding, right_padding, 0, 0) }
+        tabs_width = tabs_width + tab_width
         tab_focus[#tab_focus + 1] = tab
     end
-    local utility_width = self.width - 4 * tab_width
+    local utility_width = self.width - tabs_width
     if self.selecting then
         local clear = button(T("Clear selection"), utility_width, function()
             if not self:_catalogCurrent(context) then return end

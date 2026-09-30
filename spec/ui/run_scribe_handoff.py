@@ -35,7 +35,7 @@ def screen_size(value):
 
 def source_hashes(plugin):
     names = set(ui_source_names(plugin))
-    names.update(("spec/ui/scribe_handoff_spec.lua", "spec/ui/run_scribe_handoff.py",
+    names.update(("spec/ui/scribe_handoff_spec.lua", "spec/ui/fidelity_geometry.lua", "spec/ui/run_scribe_handoff.py",
                   "spec/ui/run_bookshelf_grid.py", "spec/ui/run_ui_sources.py"))
     return {name: hashlib.sha256((plugin / name).read_bytes()).hexdigest()
             for name in sorted(names)}

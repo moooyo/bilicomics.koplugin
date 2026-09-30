@@ -1,4 +1,5 @@
 return {
+    ["New chapters"] = "更新",
     ["Ch. %s"] = "第%s话",
     ["Clear history"] = "清空",
     ["Go to page"] = "跳转页面",

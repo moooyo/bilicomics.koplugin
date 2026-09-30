@@ -45,11 +45,14 @@ official KOReader v2026.07.1 Linux emulator in local WSL, with isolated profiles
 Synthetic UI tests use a network namespace and original fixture art; they do
 not import an account, execute a real purchase, or create a real recharge order.
 
-The complete UI matrix passed 4,006 assertions and produced 480 native
+The follow-up UI matrix passed 4,228 assertions and produced 528 native
 framebuffer screenshots: Chinese and English at 1860x2480, 480x640, 600x800, and
 960x720. The receipt is
 [`scribe-handoff-verification.json`](../spec/ui/scribe-handoff-verification.json).
 It records unchanged UI source hashes and the pinned runtime identity.
+The initial interaction acceptance did not establish complete visual fidelity;
+the later [fidelity audit](scribe-ui-fidelity.md) documents the measured
+deviations, corrections, and remaining reference/data differences.
 
 Shared widget and reader-overlay checks passed 29 assertions, native reader
 regressions passed 327 assertions across nine modes, and the existing controller

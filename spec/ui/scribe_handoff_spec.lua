@@ -247,6 +247,7 @@ local function closeDialog() screens:_closeDialog() end
 local function capture(name, options)
     options = options or {}
     UIManager:forceRePaint()
+    require("spec/ui/fidelity_geometry").check(screens, name, W, check, report)
     local top = screens.dialog or assert(screens.widget)
     local size = rectangle(top)
     check(name .. "_native_surface_fits", within(size), size)
@@ -425,6 +426,17 @@ end)
 
 scenario("search", function()
     screens:showSearch(); capture("search-history"); chrome("search", 3)
+    screens:_editSearch()
+    if screens.dialog.skip_first_show_keyboard then screens.dialog.skip_first_show_keyboard = false end
+    if not screens.dialog:isKeyboardVisible() then screens.dialog:onShowKeyboard() end
+    capture("search-native-keyboard")
+    check("search_input_keeps_native_keyboard", screens.dialog:isKeyboardVisible())
+    if scribe then
+        local input_frame = rectangle(screens.dialog.dialog_frame)
+        check("scribe_search_input_matches_design_width", math.abs(input_frame.w - W.dp(818)) <= 1, input_frame)
+        check("scribe_search_input_matches_design_top", math.abs(input_frame.y - W.dp(160)) <= 1, input_frame)
+    end
+    closeDialog()
     screens:_runSearch("Original"); capture("search-loading")
     finish("search", controller.comics); capture("search-results")
     check("search_has_results_and_local_pagination", screens.search_results and #screens.search_results == 24 and screens.pages > 1)
@@ -482,6 +494,46 @@ scenario("catalog", function()
     check("catalog_page_key_changes_page", screens.page == old_page + 1)
     screens:_catalogDetails(controller.comics[1]); capture("catalog-overview-sheet"); closeDialog()
     screens:_chapterActions(controller.comics[1], controller.episodes[6]); capture("catalog-locked-actions"); closeDialog()
+    local original_number = controller.episodes[16].short_title
+    controller.episodes[16].short_title = "115"
+    screens:_catalogJump("15"); capture("catalog-jump-results")
+    local jump = assert(screens.dialog)
+    check("catalog_jump_retains_native_input_and_results_in_one_dialog", jump._input_widget ~= nil
+        and jump.input_field ~= nil and #jump.result_rows == 2 and jump:getInputText() == "15")
+    check("catalog_jump_numeric_substring_matches_15_and_115", #jump.matches == 2
+        and jump.matches[1].id == "15" and jump.matches[2].id == "16")
+    check("catalog_jump_input_is_70dp", math.abs(jump.input_field:getSize().h - W.dp(70)) <= 1)
+    if scribe then
+        local frame = rectangle(jump.dialog_frame)
+        check("scribe_catalog_jump_uses_handoff_dialog_bounds", frame.x == W.dp(56) and frame.y == W.dp(176)
+            and frame.w == width - W.dp(112), frame)
+    end
+    local epoch, old_page, calls_before = screens.epoch, screens.page, #controller.calls
+    local result_callback = jump.result_rows[2].callback
+    result_callback(); capture("catalog-jump-selected")
+    check("catalog_jump_result_tap_selects_without_locating_or_reading", screens.dialog == jump
+        and screens.epoch == epoch and screens.page == old_page and #controller.calls == calls_before
+        and jump.selected_episode_id == "16" and jump.result_rows[2].selected == true)
+    check("catalog_jump_exposes_explicit_primary_locate", jump.locate_button.text == string.format(T("Locate chapter %s"), "115")
+        and jump.locate_button.enabled == true and jump.locate_button[1].invert == true)
+    local locate_callback = jump.locate_button.callback
+    locate_callback(); capture("catalog-jump-located")
+    check("catalog_jump_locates_only_after_explicit_confirmation", screens.dialog == nil and screens.catalog_highlight_id == "16"
+        and screens.filter == "all" and #controller.calls == calls_before)
+    local located_epoch = screens.epoch
+    result_callback(); locate_callback()
+    check("catalog_jump_stale_callbacks_cannot_change_catalog", screens.epoch == located_epoch and screens.dialog == nil)
+    screens:_catalogJump("15"); jump = assert(screens.dialog)
+    jump:setInputText("missing-synthetic-chapter"); capture("catalog-jump-no-match")
+    check("catalog_jump_updates_results_without_replacing_input_dialog", screens.dialog == jump and #jump.matches == 0
+        and jump.locate_button.enabled == false and jump:getInputText() == "missing-synthetic-chapter")
+    jump:setInputText("15"); jump:onShowKeyboard()
+    -- The emulator advertises a physical keyboard and skips the first explicit virtual-keyboard request.
+    if not jump:isKeyboardVisible() then jump:onShowKeyboard() end
+    capture("catalog-jump-native-keyboard")
+    check("catalog_jump_uses_native_keyboard", jump:isKeyboardVisible() == true and jump._input_widget.keyboard ~= nil)
+    closeDialog()
+    controller.episodes[16].short_title = original_number
     screens.selecting = true; screens:_render(); capture("catalog-download-selection")
     check("catalog_selection_rejects_online_only_and_locked_chapters", not Model.downloadable(controller.episodes[4])
         and not Model.downloadable(controller.episodes[6]))

@@ -3,6 +3,8 @@ local CenterContainer = require("ui/widget/container/centercontainer")
 local Device = require("device")
 local FrameContainer = require("ui/widget/container/framecontainer")
 local Geom = require("ui/geometry")
+local Font = require("ui/font")
+local TextWidget = require("ui/widget/textwidget")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
 local Model = require("bilicomics/ui/model")
@@ -13,14 +15,15 @@ local accountKey, purchasePurpose = Helpers.accountKey, Helpers.purchasePurpose
 local Screen = Device.screen
 local function space(value) return W.spacePixels(W.dp(value)) end
 local function text(value, width, size, options) return W.text(value, width, W.fontSize(size), options) end
+local function line(value, width, size, options) return W.line(value, width, W.fontSize(size), options) end
 local function block(widget, focus) return { widget = widget, focus = focus } end
 
 local function keyValue(label, value, width, options)
     options = options or {}
     local label_width = W.dp(options.label_width or 170)
     return W.column{ W.box(W.row{
-        text(label, label_width, options.size or 20, { muted = true }),
-        text(value, width - label_width, options.size or 20, { bold = options.bold, align = options.align or "left" }),
+        line(label, label_width, options.size or 20, { muted = true, height = W.dp(28) }),
+        line(value, width - label_width, options.size or 20, { bold = options.bold, align = options.align or "left", height = W.dp(28) }),
     }, width, W.dp(options.height or 68)), W.rule1dp(width, Blitbuffer.Color8(0xCC)) }
 end
 
@@ -48,7 +51,12 @@ local function purchaseDate(value)
         return short(value, 48)
     end
     if not number or number ~= number or number <= 0 or number > 253402300799 then return T("Time unavailable") end
-    local ok, result = pcall(os.date, "!%Y-%m-%d %H:%M UTC", number)
+    local ok, result = pcall(function()
+        if os.date("%Y-%m-%d", number) == os.date("%Y-%m-%d") then
+            return string.format(T("Today %s"), os.date("%H:%M", number))
+        end
+        return os.date("%Y-%m-%d %H:%M", number)
+    end)
     return ok and result or T("Time unavailable")
 end
 
@@ -166,6 +174,43 @@ end
 function Screens:_purchaseContext(state, quote)
     local chapter = self:_purchaseChapter(state, quote)
     return short(title(state.comic or {}), 34) .. "\n" .. short(chapter, 40)
+end
+
+function Screens:_purchaseSummary(state, quote, purpose, width)
+    local chapter, chapter_id = self:_purchaseChapter(state, quote)
+    local episode = state.episode or {}
+    if tostring(episode.id or "") ~= chapter_id then
+        for _, candidate in ipairs(Model.array(self.controller:getEpisodes((quote or {}).comic_id or (state.comic or {}).id))) do
+            if tostring(candidate.id) == chapter_id then episode = candidate; break end
+        end
+    end
+    local number = episode.order or episode.short_title
+    local subtitle = number and string.format(purpose == "download"
+        and T("From Chapter %s · %s · Download after purchase")
+        or T("From Chapter %s · %s · Continue reading after purchase"), tostring(number), chapter)
+        or chapter .. " · " .. (purpose == "download" and T("Download after purchase") or T("Continue reading after purchase"))
+    local cover_width, cover_height, gap = W.dp(84), W.dp(112), W.dp(24)
+    return W.column{ space(28), W.row{ W.cover(state.comic or {}, cover_width, cover_height), W.gap(gap),
+        W.column{ line(short(title(state.comic or {}), 42), width - cover_width - gap, 28,
+                { bold = true, height = W.dp(38), fixed_height = true }), space(8),
+            line(subtitle, width - cover_width - gap, 18, { muted = true, height = W.dp(28), fixed_height = true }) } },
+        space(26), W.rule1dp(width, W.ink) }
+end
+
+local function totalAmount(quote, width, spread_label)
+    local amount = TextWidget:new{ text = tostring(quote.amount or "?"),
+        face = Font:getFace("cfont", W.fontSize(quote.can_afford == false and 44 or 48)), bold = true, fgcolor = W.ink, padding = 0 }
+    local unit = TextWidget:new{ text = asset(quote.method), face = Font:getFace("cfont", W.fontSize(20)), fgcolor = W.ink, padding = 0 }
+    local label = TextWidget:new{ text = T("Total"), face = Font:getFace("cfont", W.fontSize(20)), fgcolor = W.ink, padding = 0 }
+    amount:setMaxWidth(math.max(W.dp(50), width - label:getSize().w - unit:getSize().w - W.dp(16)))
+    local common_baseline, height = amount:getBaseline(), amount:getSize().h
+    local function baseline(widget)
+        local top = math.max(0, common_baseline - widget:getBaseline())
+        return W.inset(widget, 0, 0, top, math.max(0, height - top - widget:getSize().h))
+    end
+    local gap = spread_label and math.max(W.dp(8), width - label:getSize().w - amount:getSize().w - unit:getSize().w - W.dp(8)) or W.dp(8)
+    local row = W.row{ baseline(label), W.gap(gap), amount, W.gap(W.dp(8)), baseline(unit) }
+    return W.box(row, width, W.dp(quote.can_afford == false and 44 or 48), { align = "right" })
 end
 
 function Screens:_pendingList(pending)
@@ -604,7 +649,7 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         local label_width = width - W.dp(52) - price_width
         local detail = entry.detail
         if which == "payment" and selected and quote.balance ~= nil then
-            detail = string.format(T("Available: %s %s"), tostring(quote.balance), asset(quote.method))
+            detail = string.format(T("Available %s %s"), tostring(quote.balance), asset(quote.method))
         end
         local label = W.column{ text(entry.label, label_width, 21, { bold = selected, muted = not entry.available }),
             detail and space(5) or space(0), detail and text(detail, label_width, 16, { muted = true }) or space(0) }
@@ -624,7 +669,8 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         add(row, { row })
     end
     if state.submitting and not intent then
-        add(W.column{ space(38), W.row{ tag(T("Locked"), W.dp(88)), W.gap(W.dp(16)),
+        add(self:_purchaseSummary(state, quote, purpose, width))
+        add(W.column{ space(34), W.row{ tag(T("Locked"), W.dp(88)), W.gap(W.dp(14)),
             text(T("Submitted purchase terms"), width - W.dp(104), 22, { bold = true }) }, space(24) })
         add(keyValue(T("Purchase range"), (quote.scope or {}).kind == "batch"
             and (Model.ordinalRange(quote) and Model.purchaseRangeLabel(quote.scope) or T("Batch selection"))
@@ -647,9 +693,9 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         if confirmed then
             local mark = FrameContainer:new{ padding = 0, margin = 0, bordersize = 0, background = W.ink,
                 W.box(text("✓", W.dp(88), 50, { color = W.paper, bold = true, align = "center" }), W.dp(88), W.dp(88)) }
-            add(W.column{ space(72), W.box(mark, width, W.dp(88)), space(24),
-                text(intentHeading(intent), width, 36, { bold = true, align = "center" }), space(16),
-                text(self:_purchaseChapter(state, submitted_quote), width, 21, { align = "center" }), space(44) })
+            add(W.column{ space(72), W.box(mark, width, W.dp(88)), space(28),
+                text(intentHeading(intent), width, 36, { bold = true, align = "center" }), space(12),
+                text(self:_purchaseChapter(state, submitted_quote), width, 21, { align = "center" }), space(44), W.rule1dp(width, W.ink) })
         else
             add(W.column{ space(44), tag(rejected and T("Rejected") or T("Pending confirmation"), W.dp(126)), space(20),
                 text(heading, width, 36, { bold = true }), space(18) })
@@ -658,17 +704,32 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
                 or T("The connection was interrupted and this purchase cannot yet be confirmed. It will not be submitted again. Refresh the result to confirm chapter access."), 20,
                 { line_height = 0.7 })
         end
-        section(confirmed and T("Confirmed chapter access") or T("Terms submitted"))
-        add(keyValue(T("Chapters"), self:_purchaseContext(state, submitted_quote):gsub("\n", " · "), width, { height = 74 }))
         local amount = Model.purchaseNumber(submitted_quote.amount)
-        add(keyValue(T("Submitted quote"), (amount and tostring(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"))
-            .. " · " .. paymentName(submitted_quote.payment), width, { height = 74 }))
-        add(keyValue(T("Submitted at"), purchaseDate(intent.created_at), width))
-        if confirmed and intent.access_confirmed_at then add(keyValue(T("Confirmed at"), purchaseDate(intent.access_confirmed_at), width)) end
-        add(keyValue(T("Record ID"), short(intent.id, 60), width))
-        paragraph(T("Submitted terms are a reference, not proof of payment.")
-            .. (intent.range_outcome_pending and "\n" .. T("The range purchase result remains unverified. Reading access does not prove which chapters were purchased. Further purchases for this comic remain paused.")
-                or not confirmed and not rejected and "\n" .. T("Further purchases for this comic are paused until this result is confirmed.") or ""), 16, { muted = true, line_height = 0.7 })
+        if confirmed then
+            local wallet = self.controller:getWallet() or {}
+            local balance = not wallet.error and Model.purchaseNumber(submitted_quote.method == "coupon" and wallet.remain_coupon or wallet.remain_gold)
+            add(keyValue(intent.transaction_evidence == "server_accepted" and T("Confirmed quote") or T("Submitted quote"),
+                amount and tostring(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"), width, { height = 66, align = "right" }))
+            add(keyValue(T("Current balance"), balance and tostring(balance) .. " " .. asset(submitted_quote.method) or T("Unknown"), width,
+                { height = 66, align = "right" }))
+            add(keyValue(T("Confirmed at"), purchaseDate(intent.access_confirmed_at), width, { height = 66, align = "right" }))
+            if intent.transaction_evidence ~= "server_accepted" or intent.range_outcome_pending then
+                paragraph(T("Submitted terms are a reference, not proof of payment.")
+                    .. (intent.range_outcome_pending and "\n" .. T("The range purchase result remains unverified. Reading access does not prove which chapters were purchased. Further purchases for this comic remain paused.") or ""),
+                    16, { muted = true, line_height = 0.7 })
+            end
+        else
+            add(W.column{ space(20), W.rule1dp(width, W.ink) })
+            section(T("Terms submitted"))
+            add(keyValue(T("Chapters"), self:_purchaseContext(state, submitted_quote):gsub("\n", " · "), width, { height = 66 }))
+            add(keyValue(T("Submitted quote"), (amount and tostring(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"))
+                .. " · " .. paymentName(submitted_quote.payment), width, { height = 66 }))
+            add(keyValue(T("Submitted at"), purchaseDate(intent.created_at), width, { height = 66 }))
+            add(keyValue(T("Record ID"), short(intent.id, 60), width, { height = 66 }))
+            paragraph(T("Submitted terms are a reference, not proof of payment.")
+                .. (not rejected and "\n" .. T("Further purchases for this comic are paused until this result is confirmed.") or ""),
+                16, { muted = true, line_height = 0.7 })
+        end
         local result_error = state.continuation_error or state.result_error
         if result_error then
             local error_heading, message = purchaseError(result_error, state.continuation_error and "content" or "result")
@@ -689,12 +750,7 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         close.width = W.dp(200)
         return rows, { { close, primary or action(T("Close"), close.callback) } }, T("Purchase result")
     end
-    local cover_width, cover_height, gap = W.dp(84), W.dp(112), W.dp(24)
-    add(W.column{ space(28), W.row{ W.cover(state.comic or {}, cover_width, cover_height), W.gap(gap),
-        W.column{ text(short(title(state.comic or {}), 42), width - cover_width - gap, 28, { bold = true }), space(10),
-            text(self:_purchaseChapter(state, quote), width - cover_width - gap, 18, { muted = true }), space(8),
-            text(purpose == "download" and T("Download after purchase") or T("Continue reading after purchase"),
-                width - cover_width - gap, 18, { muted = true }) } }, space(24), W.rule1dp(width, W.ink) })
+    add(self:_purchaseSummary(state, quote, purpose, width))
     if quote and quote.submittable ~= false and not state.error then
         section(T("Purchase range"), T("Server quote determines the price"))
         for _, entry in ipairs(self:_purchaseInlineEntries(state, "scope")) do radio(entry, "scope") end
@@ -711,25 +767,32 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         local border = W.dp(quote.can_afford == false and 2 or 1.5)
         local total_inner = width - W.dp(52) - 2 * border
         local total_label_width = total_inner - W.dp(248)
-        local total_rows = { W.row{
-            W.column{ text(permanent and T("Permanent ownership after purchase") or T("Chapter reading access"), total_label_width, 17, { muted = true }), space(8),
-                text(amount and balance and string.format(T("Balance after payment: %s %s"), math.max(0, balance - amount), asset(quote.method))
-                    or string.format(T("Available: %s %s"), tostring(quote.balance or "?"), asset(quote.method)), total_label_width, 17, { muted = true }) },
-            W.column{ text(T("Total"), W.dp(248), 20, { align = "right" }),
-                text(tostring(quote.amount or "?") .. " " .. asset(quote.method), W.dp(248), quote.can_afford == false and 44 or 48,
-                    { bold = true, align = "right" }) } } }
+        local total_rows = quote.can_afford == false and { totalAmount(quote, total_inner, true) } or { W.row{
+            W.column{ line(permanent and T("Permanent ownership after purchase") or T("Chapter reading access"), total_label_width, 17,
+                    { muted = true, height = W.dp(29) }),
+                line(amount and balance and string.format(T("Balance after payment: %s %s"), math.max(0, balance - amount), asset(quote.method))
+                    or string.format(T("Available: %s %s"), tostring(quote.balance or "?"), asset(quote.method)), total_label_width, 17,
+                    { muted = true, height = W.dp(29) }) },
+            totalAmount(quote, W.dp(248)) } }
         if quote.can_afford == false then
-            total_rows[#total_rows + 1] = space(18)
-            total_rows[#total_rows + 1] = W.rule1dp(total_inner, Blitbuffer.Color8(0xCC))
             total_rows[#total_rows + 1] = space(16)
-            total_rows[#total_rows + 1] = text(string.format(T("Available balance: %s %s"), tostring(quote.balance or "?"), asset(quote.method)), total_inner, 19)
-            total_rows[#total_rows + 1] = space(12)
-            total_rows[#total_rows + 1] = text(amount and balance and string.format(T("Insufficient balance · short by %s %s"), amount - balance, asset(quote.method))
-                or T("Insufficient balance"), total_inner, 20, { bold = true })
+            total_rows[#total_rows + 1] = W.rule1dp(total_inner, Blitbuffer.Color8(0xCC))
+            total_rows[#total_rows + 1] = space(14)
+            total_rows[#total_rows + 1] = W.row{ line(T("Available balance"), math.floor(total_inner / 2), 19, { muted = true, height = W.dp(28) }),
+                line(tostring(quote.balance or "?") .. " " .. asset(quote.method), total_inner - math.floor(total_inner / 2), 19,
+                    { align = "right", height = W.dp(28) }) }
+            total_rows[#total_rows + 1] = space(8)
+            total_rows[#total_rows + 1] = W.row{ line(T("Insufficient balance, short by"), math.floor(total_inner / 2), 20,
+                    { bold = true, height = W.dp(28) }),
+                line(amount and balance and tostring(amount - balance) .. " " .. asset(quote.method) or T("Unknown"),
+                    total_inner - math.floor(total_inner / 2), 20, { bold = true, align = "right", height = W.dp(28) }) }
         end
-        add(W.column{ space(24), FrameContainer:new{ padding = W.dp(22), padding_left = W.dp(26), padding_right = W.dp(26), margin = 0,
+        add(W.column{ space(30), FrameContainer:new{ padding = W.dp(22), padding_left = W.dp(26), padding_right = W.dp(26), margin = 0,
             bordersize = border, color = W.ink, background = W.paper, W.column(total_rows) }, space(18) })
-        if (quote.scope or {}).kind == "batch" then paragraph(T("Expected chapters may change with catalog updates or purchases elsewhere. Review the scope."), 16, { muted = true, line_height = 0.7 }) end
+        if quote.can_afford ~= false then
+            paragraph(T("Batch ranges are currently expected chapters. Catalog updates or purchases elsewhere may change them; the quote is checked again before submission."), 16,
+                { muted = true, line_height = 0.6 })
+        end
         extraButtons{ action((quote.scope or {}).kind == "batch" and T("Review expected chapters") or T("Review exact chapters"),
             function() if current() and state.quote == quote then self:_purchaseRecordDetails(state) end end) }
         if quote.can_afford == false and primary then
@@ -933,6 +996,7 @@ function Screens:_purchaseDialog()
     local body_rows, footer, flow_heading = self:_purchaseLayout(state, quote, intent, purpose, heading, paragraphs, buttons,
         current, intentCurrent, visible)
     dialog = dialogWithSummary(flow_heading, paragraphs, footer, { body_rows = body_rows, page = state.flow_page,
+        body_padding_top_px = 0,
         on_page = function(page) if visible() then state.flow_page = page; self:_purchaseDialog() end end,
         dismissable = not state.submitting, no_back = state.submitting,
         selected = not state.submitting and { x = 1, y = 1 } or nil,

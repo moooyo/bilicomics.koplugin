@@ -1,5 +1,6 @@
 local ConfirmBox = require("ui/widget/confirmbox")
 local Device = require("device")
+local Font = require("ui/font")
 local InputDialog = require("ui/widget/inputdialog")
 local FileChooser = require("ui/widget/filechooser")
 local SessionInput = require("bilicomics/ui/session_input")
@@ -38,6 +39,34 @@ local function textPages(value, width, size, max_height, line_height)
 end
 
 local function title(record) return record.title or record.short_title or tostring(record.id or "") end
+local SearchInputDialog = InputDialog:extend{}
+function SearchInputDialog:init()
+    InputDialog.init(self)
+    local inner = self.width - W.dp(64)
+    local native_title = self.title_bar
+    self.title_bar = W.line(self.title, inner, W.fontSize(24), { bold = true, height = W.dp(32) })
+    self._input_widget.bordersize, self._input_widget._frame_textwidget.bordersize = 0, 0
+    local field = W.box(W.inset(self._input_widget, W.dp(22), W.dp(22), 0, 0), inner, W.dp(70),
+        { border_px = W.dp(1.5), align = "left" })
+    local buttons, focus = {}, {}
+    for index, entry in ipairs(self.buttons[1]) do
+        if index > 1 then buttons[#buttons + 1] = W.gap(W.dp(16)) end
+        local button = W.button(entry.text, math.floor((inner - W.dp(16)) / 2), entry.callback,
+            { height_px = W.dp(64), size = W.fontSize(21), primary = index == 2 })
+        buttons[#buttons + 1], focus[#focus + 1] = button, button
+    end
+    self.vgroup = W.inset(W.column{ self.title_bar, space(18), field, space(20), W.row(buttons) },
+        W.dp(32), W.dp(32), W.dp(28), W.dp(30))
+    self.dialog_frame[1], self.dialog_frame.radius, self.dialog_frame.color = self.vgroup, 0, W.ink
+    self[1], self.layout = self.dialog_frame, { { self._input_widget }, focus }
+    native_title:free()
+end
+function SearchInputDialog:paintTo(bb, _x, _y)
+    local size = self.dialog_frame:getSize()
+    local keyboard = self:isKeyboardVisible() and self._input_widget:getKeyboardDimen().h or 0
+    self.dialog_frame:paintTo(bb, math.floor((Device.screen:getWidth() - size.w) / 2),
+        math.max(0, math.min(W.dp(160), Device.screen:getHeight() - keyboard - size.h)))
+end
 local function count(map) local total = 0; for _ in pairs(map) do total = total + 1 end; return total end
 local function asset(method) return method == "coupon" and T("coupons") or T("coins") end
 local function copy(items) local result = {}; for _index, item in ipairs(items) do result[#result + 1] = item end; return result end
@@ -710,12 +739,12 @@ function Screens:_comicCard(comic, measure)
     metadata[#metadata + 1] = subtitle
     local cover = measure and W.box(space(0), cover_width, cover_height) or W.cover(comic, cover_width, cover_height)
     local columns = { cover, W.gap(W.dp(28)), W.column{
-        text(title(comic), text_width, 22, { bold = true, height = W.dp(30), fixed_height = true }),
-        space(6), text(type(authors) == "string" and authors or "", text_width, 18, { height = W.dp(26), fixed_height = true }),
-        space(6), text(table.concat(metadata, " · "), text_width, 16, { muted = true, height = W.dp(24), fixed_height = true }),
+        W.line(title(comic), text_width, W.fontSize(22), { bold = true, height = W.dp(28.6) }),
+        space(5), W.line(type(authors) == "string" and authors or "", text_width, W.fontSize(18), { height = W.dp(23.4) }),
+        space(5), W.line(table.concat(metadata, " · "), text_width, W.fontSize(16), { muted = true, height = W.dp(20.8) }),
     } }
     if comic.favorite then
-        columns[#columns + 1] = W.box(text(T("In bookshelf"), W.dp(88), 16, { align = "center" }),
+        columns[#columns + 1] = W.box(W.line(T("In bookshelf"), W.dp(88), W.fontSize(16), { align = "center", height = W.dp(28) }),
             tag_width, W.dp(36), { border_px = W.dp(1.5) })
     end
     columns[#columns + 1] = text("›", W.dp(36), 28, { muted = true, align = "right" })
@@ -839,18 +868,19 @@ function Screens:_resumeBlock(comic, progress, timestamp, current)
             or episode.cached_complete or extra.cached_complete)
         tag_note = downloaded and T("Downloaded chapters · Offline reading") or T("Connection required")
     end
-    local tag_width = W.dp(104)
-    local tag = W.box(text(T("Last read"), tag_width, 17, { bold = true, align = "center", color = W.paper }),
-        tag_width, W.dp(36), { background = W.ink })
+    local tag_width = W.dp(88)
+    local tag = W.box(W.line(T("Last read"), tag_width, W.fontSize(17),
+        { bold = true, align = "center", color = W.paper, height = W.dp(29) }),
+        tag_width, W.dp(29), { background = W.ink })
     local episode = progress.current_episode or {}
     local chapter_number = tonumber(episode.short_title) or tonumber(episode.order)
     local chapter_label = chapter_number and string.format(T("Ch. %s"), tostring(chapter_number)) or self:_bookshelfProgress(progress)
     if episode.title and episode.title ~= "" then chapter_label = chapter_label .. " · " .. episode.title end
-    local top = W.column{ W.row{ tag, W.gap(W.dp(14)), text(tag_note, right_width - tag_width - W.dp(14), 17, { muted = true }) },
-        space(compact and 12 or 20), text(title(comic), right_width, compact and 32 or 46,
-            { bold = true, height = W.dp(compact and 42 or 56), fixed_height = true }), space(10),
-        text(chapter_label, right_width,
-            compact and 20 or 23, { height = W.dp(30), fixed_height = true }) }
+    local top = W.column{ W.row{ tag, W.gap(W.dp(14)), W.line(tag_note, right_width - tag_width - W.dp(14), W.fontSize(17),
+        { muted = true, height = W.dp(29) }) }, space(compact and 12 or 20),
+        W.line(title(comic), right_width, W.fontSize(compact and 32 or 46),
+            { bold = true, height = W.dp(compact and 42 or 53) }), space(10),
+        W.line(chapter_label, right_width, W.fontSize(compact and 20 or 23), { height = W.dp(30) }) }
     local fraction = progress.page and progress.total_pages and progress.page / progress.total_pages or 0
     local percent = progress.total_pages and string.format("%d%%", math.floor(fraction * 100 + 0.5)) or ""
     local label = progress.page and progress.total_pages and string.format(T("Page %d / %d"), progress.page, progress.total_pages)
@@ -862,8 +892,8 @@ function Screens:_resumeBlock(comic, progress, timestamp, current)
     local catalog = W.button(T("Chapter catalog"), catalog_width,
         function() if current() then self:showComic(comic.id) end end, buttonOptions{ height_dp = 66, size_dp = 21 })
     resume.comic, catalog.comic = comic, comic
-    local bottom = W.column{ W.row{ text(label, right_width - W.dp(60), 17, { muted = true }),
-        text(percent, W.dp(60), 17, { muted = true, align = "right" }) }, space(10),
+    local bottom = W.column{ W.row{ W.line(label, right_width - W.dp(60), W.fontSize(17), { muted = true, height = W.dp(22) }),
+        W.line(percent, W.dp(60), W.fontSize(17), { muted = true, align = "right", height = W.dp(22) }) }, space(10),
         W.progress(right_width, W.dp(10), fraction), space(compact and 14 or 24), W.row{ resume, W.gap(W.dp(16)), catalog } }
     local right = W.column{ top, W.spacePixels(math.max(0, cover_height - top:getSize().h - bottom:getSize().h)), bottom }
     local cover = W.ActionRow:new{ width = cover_width,
@@ -984,13 +1014,18 @@ function Screens:_bookshelfToolbar(pagination, current, options)
         controls[#controls + 1] = text(note, self.width - heading_width - pager_width, 18, { muted = true, align = "right" })
     else
         local width = self.width - heading_width - pager_width
-        local filter_width = math.floor(width * 0.43)
+        local control_width = width - W.dp(21)
+        local filter_width = math.floor(control_width * 0.43)
         local filter = W.button((labels[self.filter] or labels.all) .. " ▾", filter_width,
             function() if current() then self:_bookshelfFilter() end end,
             buttonOptions{ borderless = true, size_dp = 20, height_dp = 52, bold = self.filter ~= "all" })
-        local sort = W.button((sorts[self.bookshelf_sort] or sorts.source) .. " ▾", width - filter_width,
+        local sort = W.button((sorts[self.bookshelf_sort] or sorts.source) .. " ▾", control_width - filter_width,
             function() if current() then self:_bookshelfSort() end end, buttonOptions{ borderless = true, size_dp = 20, height_dp = 52 })
-        controls[#controls + 1], controls[#controls + 2] = filter, sort
+        controls[#controls + 1] = filter
+        controls[#controls + 1] = W.gap(W.dp(10))
+        controls[#controls + 1] = W.box(nil, W.dp(1), W.dp(28), { background = W.divider })
+        controls[#controls + 1] = W.gap(W.dp(10))
+        controls[#controls + 1] = sort
         focus[#focus + 1], focus[#focus + 2] = filter, sort
         self.bookshelf_filter_button, self.bookshelf_sort_button = filter, sort
     end
@@ -1027,7 +1062,8 @@ function Screens:_coverGrid(entries, options)
     local row_gap = W.dp(options.bookshelf and 26 or 22)
     local width = math.floor((self.width - gap * (columns - 1)) / columns)
     local cover_height = math.floor(width * 4 / 3)
-    local metadata_height = W.dp(63)
+    local metadata_height = W.dp(10) + W.dp(options.bookshelf and 23.4 or 24.7)
+        + W.dp(4) + W.dp(options.bookshelf and 19.5 or 20.8)
     local rows = options.rows or {}
     local fixed_height = W.column(copy(rows)):getSize().h + W.dp(options.bookshelf and 84 or 88)
     if options.bookshelf and self.filter ~= "all" then fixed_height = fixed_height + W.dp(88) end
@@ -1036,6 +1072,7 @@ function Screens:_coverGrid(entries, options)
     local row_count = math.max(1, math.min(desired_rows, math.floor((available + row_gap) / (cover_height + metadata_height + row_gap))))
     if not landscape and screen_width >= 1400 then row_count = desired_rows end
     cover_height = math.min(cover_height, math.max(W.dp(70), math.floor((available - row_gap * (row_count - 1)) / row_count) - metadata_height))
+    if not options.bookshelf and not landscape and screen_width >= 1400 then cover_height = W.dp(240) end
     local capacity = columns * row_count
     if options.bookshelf then
         if self.bookshelf_restore_focus or self.bookshelf_grid_capacity and self.bookshelf_grid_capacity ~= capacity then
@@ -1454,7 +1491,10 @@ end
 function Screens:_editSearch()
     self:_closeDialog()
     local dialog, epoch, key = nil, self.epoch, accountKey(self.controller)
-    dialog = InputDialog:new{ title = T("Search comics"), input = self.query, input_hint = T("Title or author"), modal = true,
+    dialog = SearchInputDialog:new{ title = T("Search comics"), input = self.query, input_hint = T("Title or author"), modal = true,
+        width = Device.screen:getWidth() - W.dp(112) - 2 * W.dp(2), border_size = W.dp(2), is_movable = false,
+        text_width = self.width - W.dp(112) - 2 * W.dp(1.5), input_padding = 0, input_margin = 0,
+        input_face = Font:getFace("cfont", W.fontSize(22)),
         buttons = { { { text = T("Cancel"), callback = function() self:_closeDialog() end },
             { text = T("Search"), is_enter_default = true, callback = function()
                 if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
