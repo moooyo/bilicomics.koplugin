@@ -46,6 +46,8 @@ return {
     ["Select chapters to download"] = "选择要下载的章节",
     ["Downloaded and locked chapters are unavailable · Selection persists across pages"] = "已下载、待购买的章节不可选 · 选中状态跨页保留",
     ["This page %d · Other pages %d"] = "本页 %d 话 · 其他页 %d 话",
+    [" · About %s"] = " · 约 %s",
+    [" · Size unknown"] = " · 大小未知",
     ["Download %d selected chapters"] = "下载所选 %d 话",
     ["Start reading"] = "开始阅读",
     ["Jump…"] = "跳转…",

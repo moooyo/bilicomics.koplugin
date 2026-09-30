@@ -6,7 +6,6 @@ local Geom = require("ui/geometry")
 local GestureRange = require("ui/gesturerange")
 local InputContainer = require("ui/widget/container/inputcontainer")
 local InputDialog = require("ui/widget/inputdialog")
-local InfoMessage = require("ui/widget/infomessage")
 local FileChooser = require("ui/widget/filechooser")
 local SessionInput = require("bilicomics/ui/session_input")
 local QRLogin = require("bilicomics/ui/qr_login")
@@ -51,7 +50,7 @@ function SettingsRow:paintTo(bb, x, y)
     self.dimen.x, self.dimen.y = x, y
     self.frame:paintTo(bb, x, y)
     if self.focused then
-        bb:paintRect(x, y, W.dp(4), self.dimen.h, BB.Color8(0x11))
+        bb:paintBorder(x, y, self.width, self.dimen.h, math.max(1, W.dp(2)), W.ink, 0)
     end
 end
 function SettingsRow:onFocus() self.focused = true; return true end
@@ -68,7 +67,10 @@ end
 function ChoiceCard:paintTo(bb, x, y)
     self.dimen.x, self.dimen.y = x, y
     self.content:paintTo(bb, x, y)
-    if self.focused then bb:paintRect(x, y + self.height - W.dp(5), self.width, W.dp(5), BB.Color8(0x11)) end
+    if self.focused then
+        local inset, stroke = W.dp(5), math.max(1, W.dp(2))
+        bb:paintBorder(x + inset, y + inset, self.width - inset * 2, self.height - inset * 2, stroke, W.ink, 0)
+    end
 end
 function ChoiceCard:onFocus() self.focused = true; return true end
 function ChoiceCard:onUnfocus() self.focused = false; return true end
@@ -83,6 +85,17 @@ local function timestamp(value)
     if type(value) ~= "number" or value <= 0 then return nil end
     local ok, label = pcall(os.date, "%H:%M", value)
     return ok and label or nil
+end
+local function sessionNotice(message, width)
+    local notice
+    local function close() if notice then UIManager:close(notice) end end
+    notice = W.sheetDialog(W.inset(W.text(message, width - W.dp(52), face(20), { align = "center" }),
+        W.dp(24), W.dp(24), W.dp(20), W.dp(20)), {}, {
+        placement = "center", width = width, border_px = W.dp(2), close_callback = close,
+    })
+    notice.toast, notice.modal = true, false
+    UIManager:show(notice)
+    UIManager:scheduleIn(6, close)
 end
 
 return function(Screens)
@@ -183,9 +196,9 @@ function Screens:_beginSessionImport(content, source, directory)
         if foreground then
             self:_sessionImportResult(state)
         else
-            UIManager:show(InfoMessage:new{ text = state.status == "complete"
+            sessionNotice(state.status == "complete"
                 and T("Session imported. View the result in Account.")
-                or T("Session import failed. View the result in Account."), timeout = 6 })
+                or T("Session import failed. View the result in Account."), self.width)
         end
     end
     local ok = pcall(function() self.controller:importSession(content, completed) end)
@@ -258,6 +271,7 @@ function Screens:_importSessionFile(directory)
 end
 
 function Screens:_signInWithQR()
+    local origin = self:_captureRoute()
     self:_closeDialog()
     self.session_import = nil
     local state = { epoch = self.epoch, account_key = accountKey(self.controller), generation = self.controller.generation }
@@ -274,7 +288,21 @@ function Screens:_signInWithQR()
         end,
         on_confirmed = function()
             self.loaded = {}
-            self:showAccount()
+            local route = origin and origin.route or "account"
+            if route == "favorites" then self:showLibrary()
+            elseif route == "bookstore" then self:showBookstore()
+            elseif route == "search" then
+                self.query, self.search_results, self.search_error = "", nil, nil
+                self:showSearch()
+            elseif route == "downloads" then self:showDownloads()
+            elseif route == "comic" and origin.comic_id then self:showComic(origin.comic_id)
+            else self:showAccount() end
+            if route ~= "favorites" and self.controller.ensureBookshelfSync then
+                local key = accountKey(self.controller)
+                self.controller:ensureBookshelfSync(function()
+                    if self.route and accountKey(self.controller) == key then self:refresh() end
+                end)
+            end
         end,
         on_other_methods = function() self:_otherSignInMethods() end,
     }
@@ -313,7 +341,7 @@ function Screens:_account()
         rows[#rows + 1] = heading
     end
     if signed_in then
-        local tag_width, gap = W.dp(104), W.dp(16)
+        local tag_width, gap = W.dp(104), W.dp(14)
         local name = account.name or T("Signed in")
         local name_width = math.min(width - tag_width - gap, singleText(name, 36, { bold = true }):getSize().w)
         rows[#rows + 1] = W.row{
@@ -336,16 +364,20 @@ function Screens:_account()
             or updated and string.format(T("Balance updated at %s"), updated) or T("Balance has not been refreshed.")
         local balance_width = balance_row:getSize().w
         local note_width = math.max(1, width - balance_width - W.dp(16))
+        local note_fits = singleText(balance_note, 16):getSize().w <= note_width
         rows[#rows + 1] = W.row{
             W.box(balance_row, balance_width, W.dp(48), { align = "left", valign = "bottom" }),
-            W.gap(W.dp(16)), W.box(singleText(balance_note, 16, {
+            W.gap(W.dp(16)), W.box(singleText(note_fits and balance_note or "", 16, {
                 muted = true, height = W.dp(48), baseline = W.dp(43), width = note_width }),
                 note_width, W.dp(48), { align = "right" }),
         }
+        if not note_fits then
+            rows[#rows + 1], rows[#rows + 2] = space(8), W.text(balance_note, width, face(16), { muted = true, line_height = 1.6 })
+        end
         rows[#rows + 1] = space(26)
         local actions, action_focus = {}, {}
         local function append_action(widget)
-            if #actions > 0 then actions[#actions + 1] = W.gap(W.dp(16)) end
+            if #actions > 0 then actions[#actions + 1] = W.gap(W.dp(14)) end
             actions[#actions + 1], action_focus[#action_focus + 1] = widget, widget
         end
         if recharge_supported then
@@ -355,7 +387,7 @@ function Screens:_account()
         append_action(W.button(T("Refresh balance"), W.dp(180), function()
             self:_invoke("refreshWallet", {}, function(_value, error) if error then self:_error(error) end end)
         end, { enabled = not renewing, size = face(21), height_px = W.dp(62) }))
-        local switch_width = width - (#actions > 1 and W.dp(432) or W.dp(196))
+        local switch_width = width - (#actions > 1 and W.dp(428) or W.dp(194))
         append_action(W.button(T("Switch account") .. " ›", switch_width, function() self:_signInWithQR() end,
             { borderless = true, size = face(19), align = "right", height_px = W.dp(62) }))
         local action_row = W.row(actions)
@@ -371,7 +403,7 @@ function Screens:_account()
             { primary = true, size = face(22), height_px = W.dp(66) })
         local alternate = W.button(T("Other sign-in methods"), W.dp(240), function() self:_otherSignInMethods() end,
             { size = face(21), height_px = W.dp(66) })
-        local action_row = W.row{ login, W.gap(W.dp(16)), alternate }
+        local action_row = W.row{ login, W.gap(W.dp(14)), alternate }
         action_row.account_focus = { login, alternate }
         rows[#rows + 1] = action_row
         self.focus[#self.focus + 1] = { login, alternate }
@@ -470,6 +502,7 @@ end
 
 function Screens:_showAccountFlow(title, body, layout, buttons, options)
     options = options or {}
+    local previous = self.context_dialog
     local dirty = self.context_dialog_dirty
     self:_closeDialog()
     local owner, epoch, key = self, self.epoch, accountKey(self.controller)
@@ -482,6 +515,7 @@ function Screens:_showAccountFlow(title, body, layout, buttons, options)
         else owner:_showAccountFlow(title, body, layout, buttons, options) end
     end
     local dialog = W.flowDialog(title, {}, buttons or { { { text = T("Close"), callback = options.close_callback } } }, options)
+    if previous and previous.fullpage and previous.title == title then dialog.refresh_mode = "ui" end
     local native_close = dialog.onCloseWidget
     function dialog:onCloseWidget()
         if native_close then native_close(self) end
@@ -520,7 +554,8 @@ function Screens:_storageSettings(page)
     local downloaded = storage.pinned_bytes or storage.retained_bytes or 0
     local total = storage.total_bytes or automatic + downloaded
     local free = storage.free_bytes or storage.available_bytes
-    local limit = self.controller:getSetting("cache_limit_mb", 512)
+    local limit = self.controller:getSetting("cache_limit_bytes")
+    if type(limit) ~= "number" then limit = self.controller:getSetting("cache_limit_mb", 256) * 1024 * 1024 end
     local width, rows, layout = self.width, { space(36) }, {}
     local dialog, key = nil, accountKey(self.controller)
     local usage = singleText(Model.bytes(total), 52, { bold = true, height = W.dp(60), baseline = W.dp(53) })
@@ -561,28 +596,28 @@ function Screens:_storageSettings(page)
     rows[#rows + 1] = space(40)
     rows[#rows + 1] = W.row{
         W.text(T("Automatic cache limit"), math.floor(width * 0.48), face(22), { bold = true }),
-        W.text(string.format(T("Used %s / %s"), Model.bytes(automatic), Model.bytes(limit * 1024 * 1024)),
+        W.text(string.format(T("Used %s / %s"), Model.bytes(automatic), Model.bytes(limit)),
             width - math.floor(width * 0.48), face(16), { muted = true, align = "right" }),
     }
     rows[#rows + 1] = space(16)
     rows[#rows + 1] = self:_accountSegments({
-        { text = "256 MB", value = 256 }, { text = "512 MB", value = 512 },
-        { text = "1 GB", value = 1024 }, { text = "2 GB", value = 2048 },
+        { text = "256 MB", value = 256000000 }, { text = "512 MB", value = 512000000 },
+        { text = "1 GB", value = 1000000000 }, { text = "2 GB", value = 2000000000 },
     }, limit, width, function(value)
         if self.dialog ~= dialog or accountKey(self.controller) ~= key or value == limit then return end
         local function save()
             if accountKey(self.controller) ~= key then return end
-            if self:_saveAccountSetting("cache_limit_mb", value) then self:_storageSettings() end
+            if self:_saveAccountSetting("cache_limit_bytes", value) then self:_storageSettings(page) end
         end
         if value < limit then
             self:_closeDialog()
             local confirmation
             local function cancel()
                 self:_closeDialog()
-                if accountKey(self.controller) == key then self:_storageSettings() end
+                if accountKey(self.controller) == key then self:_storageSettings(page) end
             end
             confirmation = self:_showContextDialog(T("Automatic cache limit") .. "\n\n"
-                .. string.format(T("Reduce automatic cache to %d MiB? Older automatic images above this limit will be removed now. Downloads and current reading content are preserved."), value), { {
+                .. string.format(T("Reduce automatic cache to %s? Older automatic images above this limit will be removed now. Downloads and current reading content are preserved."), Model.bytes(value)), { {
                 { text = T("Cancel"), callback = function() if self.dialog == confirmation then cancel() end end },
                 { text = T("Apply cache limit"), primary = true, callback = function()
                     if self.dialog ~= confirmation or accountKey(self.controller) ~= key then return end
@@ -656,7 +691,7 @@ function Screens:_readerDefaults(page)
     local dialog, key = nil, accountKey(self.controller)
     local function choose(setting, value)
         if self.dialog ~= dialog or accountKey(self.controller) ~= key then return end
-        if self:_saveAccountSetting(setting, value) then self:_readerDefaults() end
+        if self:_saveAccountSetting(setting, value) then self:_readerDefaults(page) end
     end
     rows[#rows + 1] = W.text(T("These defaults apply to new chapters. Saved chapter settings and reading positions are preserved.")
         .. " " .. T("To change the chapter you are reading, use its reading menu. Your selection here is saved immediately."),
@@ -683,11 +718,14 @@ function Screens:_readerDefaults(page)
         local selected = mode == entry.value
         local border = W.dp(selected and 3 or 1.5)
         local inset_width = card_width - W.dp(40) - border * 2
-        local diagram_height = W.dp(112) - border * 2
+        local hint = W.text(entry.hint, inset_width, face(15), { muted = true, line_height = 1.4,
+            height = W.dp(44), fixed_height = false })
+        local hint_height = hint:getSize().h
+        local diagram_height = W.dp(204) - border * 2 - W.dp(70) - hint_height
         local content = box(W.inset(W.column{
             CenterContainer:new{ dimen = Geom:new{ w = inset_width, h = diagram_height }, diagram },
             W.line(entry.label .. (selected and " ✓" or ""), inset_width, face(21), { bold = selected, height = W.dp(30) }),
-            space(4), W.line(entry.hint, inset_width, face(15), { muted = true, height = W.dp(22) }),
+            space(4), hint,
         }, W.dp(20), W.dp(20), W.dp(18), W.dp(18)), card_width, W.dp(204), border)
         local card = ChoiceCard:new{ content = content, width = card_width, height = W.dp(204),
             callback = function() choose("reading_mode", entry.value) end }

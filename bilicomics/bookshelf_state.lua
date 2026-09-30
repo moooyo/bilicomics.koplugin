@@ -41,7 +41,8 @@ function Bookshelf.syncCache(value, account_key)
         or value.last_synced_at <= 0 or value.last_synced_at > 253402300799 then return nil end
     local ids = orderedIDs(value.order_ids)
     if not ids then return nil end
-    return { schema_version = 1, account_key = account_key, last_synced_at = value.last_synced_at, order_ids = ids }
+    return { schema_version = 1, account_key = account_key, last_synced_at = value.last_synced_at, order_ids = ids,
+        presentation_ready = value.presentation_ready ~= false }
 end
 
 function Bookshelf.view(value, account_key)

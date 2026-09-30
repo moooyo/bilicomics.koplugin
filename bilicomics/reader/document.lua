@@ -167,6 +167,7 @@ function ComicDocument:getDocumentProps()
     local episode = self.services.store:getEpisode(self.descriptor.episode_id)
     local comic = self.services.store:getComic(self.descriptor.comic_id)
     return { title = episode and episode.title or self.descriptor.episode_id,
+        short_title = episode and episode.short_title, chapter_order = episode and episode.order,
         series = comic and comic.title or nil,
         authors = comic and (type(comic.authors) == "table" and table.concat(comic.authors, ", ") or comic.authors) or nil }
 end
@@ -243,14 +244,15 @@ function ComicDocument:_placeholder(target, x, y, rect, index, inverted)
                 local ink = inverted and Blitbuffer.Color8(0xEE) or W.ink
                 heading = W.text(string.format(unavailable and _("Reader image unavailable · %d / %d")
                     or _("Reader loading image · %d / %d"), index, #self.descriptor.pages),
-                    text_width, W.fontSize(28), { bold = true, align = "center", color = ink })
+                    text_width, W.fontSize(unavailable and 17 or 28), { bold = not unavailable, align = "center",
+                        color = unavailable and (inverted and Blitbuffer.Color8(0xAA) or W.muted) or ink })
                 detail = W.text(unavailable and _("Open comic actions for recovery.")
                     or _("The image will appear when ready. Cached images are available offline."),
-                    text_width, W.fontSize(20), { align = "center", line_height = 0.7,
+                    text_width, W.fontSize(18), { align = "center", line_height = 0,
                         color = inverted and Blitbuffer.Color8(0xAA) or W.muted })
                 local heading_size, detail_size = heading:getSize(), detail:getSize()
-                local gap = W.dp(16)
-                local show_detail = heading_size.h + detail_size.h + gap + 2 * inset <= height
+                local gap = W.dp(12)
+                local show_detail = not unavailable and heading_size.h + detail_size.h + gap + 2 * inset <= height
                 local notice_height = heading_size.h + (show_detail and detail_size.h + gap or 0)
                 if notice_height > height - 2 * inset then return end
                 notice = Blitbuffer.new(text_width, notice_height, target:getType())
@@ -258,7 +260,8 @@ function ComicDocument:_placeholder(target, x, y, rect, index, inverted)
                 heading:paintTo(notice, math.floor((text_width - heading_size.w) / 2), 0)
                 if show_detail then detail:paintTo(notice, math.floor((text_width - detail_size.w) / 2), heading_size.h + gap) end
                 target:blitFrom(notice, left + math.floor((width - text_width) / 2),
-                    top + math.floor((height - notice_height) / 2), 0, 0, text_width, notice_height)
+                    top + (unavailable and math.min(W.dp(40), height - notice_height)
+                        or math.floor((height - notice_height) / 2)), 0, 0, text_width, notice_height)
             end)
             if notice then notice:free() end
             if heading then heading:free() end

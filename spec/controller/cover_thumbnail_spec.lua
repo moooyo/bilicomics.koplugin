@@ -83,7 +83,7 @@ function network:isConnected() return self.connected end
 local app = Controller.new{ root = output .. "/data", ui_manager = ui, runner_factory = runnerFactory,
     network = network, clock = function() return now end }
 ui:drain()
-local cookie = "SESSDATA=synthetic-thumbnail-session; DedeUserID=42"
+local cookie = "SESSDATA=synthetic-thumbnail-session; DedeUserID=42; buvid3=synthetic-thumbnail-device"
 local session = assert(Session.parse(cookie))
 assert(session:withIdentity({ id = "42", name = "Synthetic thumbnail account" }))
 app:importSession(cookie, function(value, err) assert(value, err and err.kind) end)

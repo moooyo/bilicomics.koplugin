@@ -1,4 +1,6 @@
 return {
+    ["Choose amount"] = "选择金额",
+    ["Complete payment by scanning with WeChat or Alipay on your phone."] = "付款请使用手机微信或支付宝扫码完成。",
     ["Recharge"] = "充值",
     ["Recharge orders (%d)"] = "充值订单（%d）",
     ["Amount unavailable"] = "金额待确认",

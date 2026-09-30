@@ -41,7 +41,8 @@ local T = require("bilicomics/ui/i18n")
 local json = require("rapidjson")
 local width, height = Device.screen:getWidth(), Device.screen:getHeight()
 local scribe = width == 1860 and height == 2480
-local report = { spec = "native-scribe-handoff", width = width, height = height, language = arg[3] or "zh_CN",
+local report = { spec = "native-all-pages-def", width = width, height = height, language = arg[3] or "zh_CN",
+    artboards = { "D1", "D2", "D3", "D4", "F1", "F2", "F3", "F4" },
     synthetic_only = true, actual_purchase_executed = false, actual_recharge_created = false,
     network_namespace_isolated = true, no_network_routes = true, assertions = {}, screenshots = {}, scenarios = {},
     density_scope = "Independent handoff requirements; no replacement of historical density assertions" }
@@ -68,7 +69,7 @@ local function allButtons(widget)
         and type(item.getSize) == "function" end)
 end
 local function normalize(label)
-    return type(label) == "string" and label:gsub("^%[[x ]%] ", ""):gsub(" ▾$", ""):gsub(" ✓$", "") or label
+    return type(label) == "string" and label:gsub("^%[[x ]%] ", ""):gsub(" ▾$", "") or label
 end
 local function button(widget, message, optional)
     local label = T(message)
@@ -284,7 +285,6 @@ local function capture(name, options)
     local path = output_dir .. "/" .. name .. ".png"
     Device.screen.bb:writePNG(path)
     report.screenshots[#report.screenshots + 1] = { name = name, file = name .. ".png", route = screens.route,
-        design_id = options.design_id,
         fullpage = options.fullpage == true, native_framebuffer = true }
 end
 local function chrome(name, active)
@@ -360,10 +360,7 @@ local function neutralFocus(name, paid_label)
         or label == T("Back to catalog") or label == T("Back to edit"), { label = label })
     check(name .. "_payment_is_not_an_enter_default", not button(dialog, paid_label).is_enter_default)
 end
-local selected_domains, running_extra = {}, false
-for name in (os.getenv("BILI_HANDOFF_DOMAINS") or ""):gmatch("[^,]+") do selected_domains[name] = true end
 local function scenario(name, callback)
-    if not running_extra and next(selected_domains) and not selected_domains[name] then return end
     local ok, failure = xpcall(callback, debug.traceback)
     report.scenarios[#report.scenarios + 1] = { name = name, completed = ok, error = not ok and tostring(failure) or nil }
     check(name .. "_scenario_completed", ok, not ok and tostring(failure) or nil)
@@ -377,307 +374,249 @@ local function scenario(name, callback)
     screens = Screens.new{ controller = controller }
 end
 
-scenario("bookshelf", function()
-    screens:showLibrary(); capture("bookshelf-resume"); chrome("bookshelf", 1)
-    local columns, rows = cardsGeometry("bookshelf-resume")
-    check("bookshelf_hero_is_most_recent_local_progress", screens.resume_comic and screens.resume_comic.id == "1")
-    local unique_hero = true
-    for _, card in ipairs(screens.cards) do if card.comic.id == "1" then unique_hero = false end end
-    check("bookshelf_hero_is_not_repeated_in_grid", unique_hero)
-    if scribe then check("scribe_bookshelf_has_five_columns_and_two_rows", columns == 5 and rows == 2 and #screens.cards == 10,
-        { columns = columns, rows = rows, cards = #screens.cards }) end
-    local pager = assert(screens.pagination)
-    local retired_card = assert(screens.cards[1])
-    local old_page = screens.page
-    activate(pager.next); capture("bookshelf-page-two")
-    check("bookshelf_pager_tap_changes_page", screens.page == old_page + 1)
-    local before_retired = #controller.calls
-    retired_card.callback()
-    check("bookshelf_pagination_retires_old_card_callback", #controller.calls == before_retired)
-    screens.widget:onPreviousPage(); check("bookshelf_previous_page_key_changes_page", screens.page == old_page)
-    screens.widget:onNextPage(); check("bookshelf_next_page_key_changes_page", screens.page == old_page + 1)
-    screens.widget:onSwipePage(nil, { direction = "east" })
-    check("bookshelf_swipe_previous_changes_page", screens.page == old_page)
-    screens:_bookshelfFilter(); capture("bookshelf-filter")
-    pressDialog("Updated"); capture("bookshelf-filtered")
-    check("bookshelf_filter_applies_explicitly", screens.filter == "updated" and screens.page == 1)
-    screens:_bookshelfSort(); capture("bookshelf-sort"); closeDialog()
-    screens:_more(); capture("bookshelf-more"); closeDialog()
-    controller.sync.offline = true; screens:refresh(); capture("bookshelf-offline")
-    check("bookshelf_offline_status_is_visible", hasText(screens.widget.content[1], "Offline"))
-    populate(24, false); screens.filter = "all"; screens:refresh(); capture("bookshelf-no-resume")
-    columns, rows = cardsGeometry("bookshelf-no-resume")
-    check("bookshelf_without_local_progress_has_no_resume", screens.resume_comic == nil)
-    if scribe then check("scribe_bookshelf_without_resume_keeps_five_by_two", columns == 5 and rows == 2 and #screens.cards == 10,
-        { columns = columns, rows = rows, cards = #screens.cards }) end
-    populate(0, false); controller.sync.offline = false; screens:refresh(); capture("bookshelf-empty")
-    controller.sync.has_cache, controller.sync.syncing = false, true; screens:refresh(); capture("bookshelf-first-sync")
-    controller.sync.syncing, controller.sync.error = false, { kind = "network" }; screens:refresh(); capture("bookshelf-sync-error")
-    controller.signed_in, controller.sync.authenticated = false, false; screens:refresh(); capture("bookshelf-signed-out")
-end)
-
-scenario("bookstore", function()
-    screens:showBookstore(); capture("bookstore-default"); chrome("bookstore", 2)
-    local columns, rows = cardsGeometry("bookstore-default")
-    if scribe then check("scribe_bookstore_is_four_by_three", columns == 4 and rows == 3 and #screens.cards == 12,
-        { columns = columns, rows = rows, cards = #screens.cards }) end
-    screens:_bookstoreCategoryPicker(); capture("bookstore-categories"); closeDialog()
-    controller.feed_items, controller.feed_stale = {}, true
-    screens:showBookstore(); capture("bookstore-loading")
-    finish("refreshBookstore", nil, { kind = "network" }); capture("bookstore-error")
-    controller.feed_stale = false; screens:showBookstore(); capture("bookstore-empty")
-end)
-
-scenario("search", function()
-    screens:showSearch(); capture("search-history"); chrome("search", 3)
-    screens:_editSearch()
-    if screens.dialog.skip_first_show_keyboard then screens.dialog.skip_first_show_keyboard = false end
-    if not screens.dialog:isKeyboardVisible() then screens.dialog:onShowKeyboard() end
-    capture("search-native-keyboard")
-    check("search_input_keeps_native_keyboard", screens.dialog:isKeyboardVisible())
-    if scribe then
-        local input_frame = rectangle(screens.dialog.dialog_frame)
-        check("scribe_search_input_matches_design_width", math.abs(input_frame.w - W.dp(818)) <= 1, input_frame)
-        check("scribe_search_input_matches_design_top", math.abs(input_frame.y - W.dp(160)) <= 1, input_frame)
+local function everyDialogPage(name, design_id)
+    local dialog = assert(screens.dialog)
+    local pages = dialog.pages or 1
+    for page = 1, pages do
+        if page > 1 then screens.dialog:onNextPage() end
+        capture(name .. (page > 1 and "-page-" .. page or ""), { fullpage = screens.dialog.fullpage })
+        report.screenshots[#report.screenshots].design_id = design_id
     end
-    closeDialog()
-    screens:_runSearch("Original"); capture("search-loading")
-    finish("search", controller.comics); capture("search-results")
-    check("search_has_results_and_local_pagination", screens.search_results and #screens.search_results == 24 and screens.pages > 1)
-    screens:_searchFilter(); capture("search-filter"); closeDialog()
-    screens:_runSearch("Missing"); finish("search", {}); capture("search-empty-results")
-    screens:_runSearch("Network"); finish("search", nil, { kind = "network" }); capture("search-error")
-end)
-
-scenario("catalog", function()
-    screens:showLibrary(); screens:showComic("1"); finish("refreshComic", controller.comics[1])
-    capture("catalog-default"); chrome("catalog", 1)
-    local visible = assert(screens.catalog_visible_items)
-    if scribe then check("scribe_catalog_has_ten_chapter_rows", #visible == 10, { rows = #visible }) end
-    local axes, aligned = {}, true
-    for _, episode in ipairs(visible) do
-        local row
-        for _, focus_row in ipairs(screens.focus) do
-            for _, item in ipairs(focus_row) do if item.text == episode.title and item.hold_callback then row = item end end
-        end
-        if row then
-            local title_widget = visit(row, function(item) return item.text == episode.title and not item.callback end)[1]
-            local number_widget = visit(row, function(item) return item.text == tostring(episode.order) and not item.callback end)[1]
-            if title_widget and number_widget then
-                local number_axis, title_axis = rectangle(number_widget).x, rectangle(title_widget).x
-                if axes.number and (axes.number ~= number_axis or axes.title ~= title_axis) then aligned = false end
-                axes.number, axes.title = number_axis, title_axis
-                check("catalog_" .. episode.id .. "_number_precedes_title", number_axis < title_axis)
-                check("catalog_" .. episode.id .. "_touch_bounds_match_row", row.dimen.h == row:getSize().h
-                    and row.ges_events.TapSelect[1].range == row.dimen)
-            else aligned = false end
-        else aligned = false end
+    for page = pages - 1, 1, -1 do
+        screens.dialog:onPreviousPage()
+        capture(name .. "-return-page-" .. page, { fullpage = screens.dialog.fullpage })
+        report.screenshots[#report.screenshots].design_id = design_id
     end
-    check("catalog_number_and_title_columns_are_aligned", aligned and axes.number ~= nil, axes)
-    local common_offsets, offset_aligned = nil, true
-    local actual_rows = screens.catalog_rows or {}
-    check("catalog_exposes_actual_native_rows", #actual_rows == #visible)
-    for _, chapter in ipairs(actual_rows) do
-        local offsets, order = chapter.chapter_column_offsets, chapter.chapter_column_order
-        local columns, total = chapter.chapter_columns, 0
-        if not offsets or not order or not columns then offset_aligned = false
-        else
-            for _, key in ipairs(order) do
-                if offsets[key] ~= total or columns[key] <= 0 then offset_aligned = false end
-                if common_offsets and common_offsets[key] ~= offsets[key] then offset_aligned = false end
-                total = total + columns[key]
-            end
-            common_offsets = offsets
-            check("catalog_" .. chapter.episode.id .. "_columns_fill_row", math.abs(total - screens.width) <= 1, { total = total, width = screens.width })
-            check("catalog_" .. chapter.episode.id .. "_has_separate_status_axes", offsets.title < offsets.progress
-                and offsets.progress < offsets.access and offsets.access < offsets.storage and offsets.storage < offsets.actions)
-        end
-    end
-    check("catalog_all_status_columns_share_axes", offset_aligned and common_offsets ~= nil, common_offsets)
-    local old_page = screens.page; screens.widget:onNextPage(); capture("catalog-page-two")
-    check("catalog_page_key_changes_page", screens.page == old_page + 1)
-    screens:_catalogDetails(controller.comics[1]); capture("catalog-overview-sheet"); closeDialog()
-    screens:_chapterActions(controller.comics[1], controller.episodes[6]); capture("catalog-locked-actions"); closeDialog()
-    local original_number = controller.episodes[16].short_title
-    controller.episodes[16].short_title = "115"
-    screens:_catalogJump("15"); capture("catalog-jump-results")
-    local jump = assert(screens.dialog)
-    check("catalog_jump_retains_native_input_and_results_in_one_dialog", jump._input_widget ~= nil
-        and jump.input_field ~= nil and #jump.result_rows == 2 and jump:getInputText() == "15")
-    check("catalog_jump_numeric_substring_matches_15_and_115", #jump.matches == 2
-        and jump.matches[1].id == "15" and jump.matches[2].id == "16")
-    check("catalog_jump_input_is_70dp", math.abs(jump.input_field:getSize().h - W.dp(70)) <= 1)
-    if scribe then
-        local frame = rectangle(jump.dialog_frame)
-        check("scribe_catalog_jump_uses_handoff_dialog_bounds", frame.x == W.dp(56) and frame.y == W.dp(176)
-            and frame.w == width - W.dp(112), frame)
-    end
-    local epoch, old_page, calls_before = screens.epoch, screens.page, #controller.calls
-    local result_callback = jump.result_rows[2].callback
-    result_callback(); capture("catalog-jump-selected")
-    check("catalog_jump_result_tap_selects_without_locating_or_reading", screens.dialog == jump
-        and screens.epoch == epoch and screens.page == old_page and #controller.calls == calls_before
-        and jump.selected_episode_id == "16" and jump.result_rows[2].selected == true)
-    check("catalog_jump_exposes_explicit_primary_locate", jump.locate_button.text == string.format(T("Locate chapter %s"), "115")
-        and jump.locate_button.enabled == true and jump.locate_button[1].invert == true)
-    local locate_callback = jump.locate_button.callback
-    locate_callback(); capture("catalog-jump-located")
-    check("catalog_jump_locates_only_after_explicit_confirmation", screens.dialog == nil and screens.catalog_highlight_id == "16"
-        and screens.filter == "all" and #controller.calls == calls_before)
-    local located_epoch = screens.epoch
-    result_callback(); locate_callback()
-    check("catalog_jump_stale_callbacks_cannot_change_catalog", screens.epoch == located_epoch and screens.dialog == nil)
-    screens:_catalogJump("15"); jump = assert(screens.dialog)
-    jump:setInputText("missing-synthetic-chapter"); capture("catalog-jump-no-match")
-    check("catalog_jump_updates_results_without_replacing_input_dialog", screens.dialog == jump and #jump.matches == 0
-        and jump.locate_button.enabled == false and jump:getInputText() == "missing-synthetic-chapter")
-    jump:setInputText("15"); jump:onShowKeyboard()
-    -- The emulator advertises a physical keyboard and skips the first explicit virtual-keyboard request.
-    if not jump:isKeyboardVisible() then jump:onShowKeyboard() end
-    capture("catalog-jump-native-keyboard")
-    check("catalog_jump_uses_native_keyboard", jump:isKeyboardVisible() == true and jump._input_widget.keyboard ~= nil)
-    closeDialog()
-    controller.episodes[16].short_title = original_number
-    screens.selecting = true; screens:_render(); capture("catalog-download-selection")
-    check("catalog_selection_rejects_online_only_and_locked_chapters", not Model.downloadable(controller.episodes[4])
-        and not Model.downloadable(controller.episodes[6]))
-    screens.selecting, controller.hide_episodes = false, true; screens:_render(); capture("catalog-empty")
-end)
-
-scenario("downloads", function()
-    screens:showDownloads(); capture("downloads-mixed-states"); chrome("downloads", 4)
-    screens:_downloadRecovery(controller.jobs[3]); capture("download-recovery", { fullpage = true }); closeDialog()
-    controller.jobs = {}; screens:refresh(); capture("downloads-empty")
-end)
-
-scenario("account-settings", function()
-    screens:showAccount(); capture("account-signed-in"); chrome("account", nil)
-    screens:_storageSettings(); capture("storage-settings", { fullpage = true }); closeDialog()
-    screens:_readerDefaults(); capture("reader-defaults", { fullpage = true })
-    activate(dialogActionWithText("Long strip"))
-    activate(dialogActionWithText("Right to left (manga)"))
-    check("reader_default_controls_persist_exact_enums", controller.settings.reading_mode == "strip"
-        and controller.settings.reading_direction == "rtl")
-    capture("reader-defaults-selected", { fullpage = true }); closeDialog()
-    controller.signed_in, controller.auth_state = false, "reauth_required"; screens:refresh(); capture("account-expired")
-    controller.auth_state = nil; screens:refresh(); capture("account-signed-out")
-end)
-
-local quote = { id = "synthetic-quote", episode_id = "6", comic_id = "1", episode_ids = { "6" },
-    scope = { kind = "single", order = 1 }, payment = { method = "coin" }, method = "coin", amount = 20, balance = 80,
-    can_afford = true, submittable = true, fingerprint = "synthetic-handoff-quote",
-    expected_access = { ["6"] = { access = "owned" } },
-    scopes = { { kind = "single" }, { kind = "batch", batch_limit = 3 } },
-    payments = { { method = "coin", available = true }, { method = "coupon", available = true } } }
-scenario("purchase", function()
-    screens:showComic("1"); finish("refreshComic", controller.comics[1])
-    screens:_purchaseFor(controller.comics[1], controller.episodes[6]); capture("purchase-loading", { fullpage = true })
-    finish("quotePurchase", quote); capture("purchase-confirmation", { fullpage = true })
-    local confirm_label = string.format(T("Confirm purchase · %s %s"), "20", T("coins"))
-    neutralFocus("purchase", confirm_label)
-    footer("purchase-confirmation", "Cancel", confirm_label)
-    local count_before = callCount("purchase")
-    local confirm = button(screens.dialog, confirm_label)
-    activate(confirm); capture("purchase-submitting", { fullpage = true })
-    confirm.callback()
-    check("purchase_duplicate_confirmation_sends_one_synthetic_request", callCount("purchase") == count_before + 1)
-    local intent = { id = "synthetic-purchase-1", state = "outcome_unknown", comic_id = "1", episode_ids = { "6" },
-        quote = copy(quote), purpose = "read", transaction_evidence = "none", created_at = os.time() }
-    controller.purchases = { intent }; finish("purchase", intent); capture("purchase-unknown", { fullpage = true })
-    check("purchase_unknown_result_has_no_confirmation_button", button(screens.dialog, confirm_label, true) == nil)
-    local quote_count = callCount("quotePurchase")
-    pressDialog("Refresh result")
-    check("purchase_unknown_result_reconciles_without_resubmit", callCount("purchase") == count_before + 1
-        and callCount("quotePurchase") == quote_count and pending("reconcilePurchase").args[1] == intent.id)
-    intent.state, intent.transaction_evidence, intent.access_confirmed_at = "access_confirmed", "server_accepted", os.time()
-    controller.purchases = {}; finish("reconcilePurchase", intent); capture("purchase-confirmed", { fullpage = true })
-    check("purchase_access_confirmation_waits_for_explicit_read", callCount("readEpisode") == 0)
-    closeDialog()
-    screens:_purchaseFor(controller.comics[1], controller.episodes[7])
-    local unaffordable = copy(quote); unaffordable.episode_id, unaffordable.episode_ids = "7", { "7" }
-    unaffordable.amount, unaffordable.balance, unaffordable.can_afford = 120, 80, false
-    finish("quotePurchase", unaffordable); capture("purchase-insufficient-balance", { fullpage = true })
-    check("purchase_insufficient_balance_cannot_confirm", button(screens.dialog,
-        string.format(T("Confirm purchase · %s %s"), "120", T("coins")), true) == nil)
-    closeDialog(); screens:_purchaseFor(controller.comics[1], controller.episodes[8])
-    finish("quotePurchase", nil, { kind = "network" }); capture("purchase-quote-error", { fullpage = true })
-end)
-
-scenario("qr-sign-in", function()
-    screens:showAccount(); screens:_signInWithQR(); capture("qr-loading", { fullpage = true })
-    finish("beginQRLogin", { key = "synthetic-key", expires_at = os.time() + 600,
-        url = "https://passport.bilibili.com/h5-app/passport/login/scan?navhide=1&qrcode_key=synthetic-key" })
-    capture("qr-waiting", { fullpage = true })
-    footer("qr-waiting", "Other sign-in methods", "Cancel")
-    local native_qr = visit(screens.dialog, function(item) return item.image ~= nil and item.text and item.text:find("qrcode_key=", 1, true) end)
-    check("qr_sign_in_uses_native_qr_image", #native_qr == 1)
-    local timer = assert(screens.qr_login.timer)
-    check("qr_poll_is_scheduled_without_animation", timers[timer] == 3); timer()
-    finish("pollQRLogin", { status = "scanned" }); capture("qr-scanned", { fullpage = true })
-    screens.qr_login.timer(); finish("pollQRLogin", { status = "expired" }); capture("qr-expired", { fullpage = true })
-    check("qr_expiry_stops_polling", screens.qr_login.timer == nil)
-    pressDialog("Get a new code"); finish("beginQRLogin", nil, { kind = "network" }); capture("qr-error", { fullpage = true })
-end)
-
-scenario("recharge", function()
-    screens:showAccount(); screens:_openRecharge(); capture("recharge-loading", { fullpage = true })
-    local config = { confirmation_token = "synthetic-config-token", channels = { "Wechat", "Ali" },
-        custom_amount = { allowed = false }, options = { { amount_cents = 600, amount_yuan = "6.00", coin_amount = 600 },
-            { amount_cents = 1000, amount_yuan = "10.00", coin_amount = 1000 },
-            { amount_cents = 3000, amount_yuan = "30.00", coin_amount = 3000 } } }
-    controller.config_snapshot = copy(config); finish("getRechargeConfig", config); capture("recharge-amounts", { fullpage = true })
-    local amount_label = string.format(T("CNY %s"), "10.00")
-    local amount_tile = visit(screens.dialog, function(item) return type(item.callback) == "function"
-        and item.text == nil and hasText(item, amount_label) end)[1]
-    activate(assert(amount_tile, "The native recharge amount tile was not found"))
-    check("recharge_tile_selects_the_exact_official_amount", screens.recharge_state.amount_input == "10.00")
-    capture("recharge-amount-selected", { fullpage = true })
-    pressDialog("Next: review amount"); capture("recharge-confirmation", { fullpage = true })
-    neutralFocus("recharge", "Create payment QR")
-    local before = callCount("createRechargeOrder")
-    local create = button(screens.dialog, "Create payment QR")
-    activate(create); capture("recharge-creating", { fullpage = true }); create.callback()
-    check("recharge_duplicate_confirmation_creates_one_synthetic_order", callCount("createRechargeOrder") == before + 1)
-    local order = { id = "synthetic-order", local_id = "synthetic-order", account_key = controller.account_key,
-        order_id = "900719925474099312345678901", state = "pending", amount_cents = 1000,
-        code_url = "https://pay.bilibili.com/payplatform-h5/index.html?order_id=900719925474099312345678901",
-        qr_validated = true, expires_at = os.time() + 600 }
-    controller.orders = { order }; finish("createRechargeOrder", order); capture("recharge-payment-code", { fullpage = true })
-    footer("recharge-payment-code", "Check credit", "Close")
-    local code = visit(screens.dialog, function(item) return item.image ~= nil and item.text == order.code_url end)
-    check("recharge_uses_native_qr_image", #code == 1)
-    pressDialog("Check credit"); order.state = "unknown"; controller.orders = { order }
-    finish("refreshRechargeOrder", order); capture("recharge-unknown", { fullpage = true })
-    check("recharge_unknown_does_not_create_another_order", callCount("createRechargeOrder") == before + 1)
-    closeDialog(); order.state, order.qr_expired = "expired", true; controller.orders = { order }
-    screens:_showRechargeOrders(); capture("recharge-order-history", { fullpage = true })
-    screens:_rechargeAttachOrder(screens.recharge_state, copy(order)); capture("recharge-expired", { fullpage = true })
-    check("recharge_expired_code_is_not_shown", #visit(screens.dialog, function(item) return item.image ~= nil and item.text == order.code_url end) == 0)
-    pressDialog("Check credit"); order.state, order.qr_expired = "credited", false
-    order.history_evidence, order.credited_observed_at = { product_amount = 1000 }, os.time()
-    controller.wallet = { remain_gold = 1080, remain_coupon = 2, updated_at = os.time(), stale = false }
-    controller.orders = { order }
-    finish("refreshRechargeOrder", order); capture("recharge-credited", { fullpage = true })
-end)
-
-local extra_modules = os.getenv("BILI_HANDOFF_EXTRA_MODULES") or ""
-running_extra = true
-for module_name in extra_modules:gmatch("[^,]+") do
-    assert(module_name:match("^[%w_]+$"), "Only named local acceptance modules are permitted")
-    require("spec/ui/" .. module_name){ controller = controller, screens = function() return screens end,
-        scenario = scenario, capture = capture, check = check, activate = activate,
-        press = press, pressDialog = pressDialog, closeDialog = closeDialog, populate = populate,
-        finish = finish, pending = pending, visit = visit, rectangle = rectangle, button = button,
-        hasText = hasText, shownText = shownText, cardsGeometry = cardsGeometry, copy = copy,
-        W = W, T = T, Device = Device, UIManager = UIManager, report = report,
-        output_dir = output_dir, width = width, height = height, scribe = scribe,
-        neutralFocus = neutralFocus, footer = footer }
+    if pages > 1 then check(name .. "_returns_to_first_native_page", screens.dialog.page == 1) end
 end
+local function captured(name, design_id, options)
+    capture(name, options)
+    report.screenshots[#report.screenshots].design_id = design_id
+end
+local function measure(name, actual, expected, tolerance)
+    if not scribe then return end
+    report.fidelity_measurements = report.fidelity_measurements or {}
+    report.fidelity_measurements[#report.fidelity_measurements + 1] = {
+        metric = name, actual_px = actual, design_px = expected, tolerance_px = tolerance or 1 }
+    check(name, math.abs(actual - expected) <= (tolerance or 1), { actual = actual, expected = expected })
+end
+function controller:getDownloadEstimate(_comic_id, ids)
+    if self.estimate_unknown then return { total_chapters = #ids, known_chapters = 0, estimated = true } end
+    return { bytes = #ids * 16 * 1024 * 1024, total_chapters = #ids, known_chapters = #ids, estimated = true,
+        descriptors = copy(self.estimate_descriptors or {}) }
+end
+function controller:removeDownload(id, callback) enqueue("removeDownload", { id }, callback) end
+function controller:readDownload(id, callback) enqueue("readDownload", { id }, callback) end
+function controller:cancelSourceRefresh() return true end
+function controller:cancelVersionReplacement() return true end
+
+scenario("D1-D4", function()
+    local fixture = copy(controller.episodes)
+    for index = 1, 32 do
+        controller.episodes[index].access = index <= 20 and "owned" or "locked"
+        controller.episodes[index].offline_allowed = index <= 20
+    end
+    controller.episodes[4].access, controller.episodes[4].expires_at = "temporary", os.time() + 86400 * 2
+    controller.episodes[4].offline_allowed = false
+    controller.comics[1].tags = { "Fantasy", "Adventure" }
+    controller.comics[1].reading_position = { episode_id = "12", index = 8, revision = "synthetic-r1" }
+    controller.comics[1].current_episode_id = "12"
+    screens:showLibrary(); screens:showComic("1"); finish("refreshComic", controller.comics[1])
+    captured("D1-default", "D1"); chrome("D1", 1)
+    local cover = visit(screens.widget, function(item) return item.outer_width == W.dp(114) and item.outer_height == W.dp(152) end)[1]
+    check("D1_native_official_cover_slot", cover ~= nil)
+    if cover then
+        local box = rectangle(cover)
+        measure("D1_cover_x", box.x, W.dp(56)); measure("D1_cover_y", box.y, W.dp(144))
+        measure("D1_cover_width", box.w, W.dp(114)); measure("D1_cover_height", box.h, W.dp(152))
+    end
+    check("D1_catalog_opens_on_current_page", screens.page == 2 or not scribe, screens.page)
+    screens:_catalogFilter(); everyDialogPage("D1-filter-menu", "D1"); closeDialog()
+    for _, catalog_row in ipairs(screens.catalog_rows) do
+        measure("D1_row_height_" .. catalog_row.episode.id, catalog_row:getSize().h, W.dp(64))
+        for _, focus_item in ipairs(catalog_row.catalog_focus or {}) do
+            if focus_item.current_marker then
+                local box = rectangle(focus_item)
+                check("D1_current_marker_reaches_screen_edge", Device.screen.bb:getPixel(0, box.y + math.floor(box.h / 2)):getR() == 0x11)
+            end
+        end
+    end
+    for _, filter in ipairs({ "unread", "readable", "downloaded" }) do
+        screens.filter, screens.page = filter, 1; screens:_render(); captured("D1-filter-" .. filter, "D1")
+        for _, episode in ipairs(screens.catalog_visible_items) do
+            check("D1_" .. filter .. "_episode_" .. episode.id,
+                filter == "unread" and Model.reading(episode, screens.catalog_current_id) == T("Unread")
+                or filter == "readable" and (Model.readable(episode) or Model.storage(episode) == T("Downloaded"))
+                or filter == "downloaded" and Model.storage(episode) == T("Downloaded"))
+        end
+    end
+    screens.filter, screens.page, screens.descending = "all", 1, true
+    screens:_render(); captured("D1-descending", "D1")
+    check("D1_descending_preserves_status_and_order", screens.catalog_visible_items[1].order > screens.catalog_visible_items[#screens.catalog_visible_items].order)
+    screens.descending, screens.selecting, screens.page = false, true, 1
+    screens.selected = { ["1"] = true, ["2"] = true, ["12"] = true, ["21"] = true }
+    screens:_render(); captured("D2-cross-page-selection", "D2")
+    if scribe then check("D2_ten_rows_match_design", #screens.catalog_visible_items == 10) end
+    check("D2_locked_selection_is_removed", screens.selected["21"] == nil)
+    check("D2_cross_page_selection_and_estimate", screens.navigation.selection_detail:find(Model.bytes(48 * 1024 * 1024), 1, true) ~= nil)
+    check("D2_no_overview_in_selecting_header", not hasText(screens.widget, "Overview ›"))
+    measure("D2_action_bar_height", screens.navigation:getSize().h, W.dp(108))
+    screens:_catalogSelectionMenu(); everyDialogPage("D2-selection-scope", "D2"); closeDialog()
+    screens:_catalogSelected(); everyDialogPage("D2-selected-review", "D2"); closeDialog()
+    local selected_before = copy(screens.selected)
+    screens.widget:onNextPage(); captured("D2-selection-next-page", "D2")
+    check("D2_selection_survives_native_pagination", screens.selected["1"] == selected_before["1"] and screens.selected["12"] == true)
+    controller.estimate_unknown = true; screens:_render(); captured("D2-unknown-size", "D2")
+    check("D2_unknown_size_does_not_invent_mb", screens.navigation.selection_detail:find(T(" · Size unknown"), 1, true) ~= nil)
+    controller.estimate_unknown = nil
+    screens.selecting, screens.selected, screens.page = false, {}, 1; screens:_render()
+    screens:_more(); everyDialogPage("D1-more-menu", "D1"); closeDialog()
+    screens:_chapterActions(controller.comics[1], controller.episodes[21]); captured("D3-locked", "D3"); closeDialog()
+    screens:_chapterActions(controller.comics[1], controller.episodes[2]); captured("D3-readable", "D3"); closeDialog()
+    screens:_chapterActions(controller.comics[1], controller.episodes[4]); captured("D3-temporary", "D3"); closeDialog()
+    UIManager:forceRePaint()
+    local catalog_underlay = Device.screen.bb:copy()
+    screens:_catalogJump(); captured("D4-empty-query", "D4")
+    check("D4_empty_input_does_not_enable_locate", screens.dialog.locate_button.enabled == false)
+    closeDialog(); screens:_catalogJump("12"); captured("D4-number-match", "D4")
+    local jump = screens.dialog
+    measure("D4_dialog_left", rectangle(jump.dialog_frame).x, W.dp(56))
+    measure("D4_dialog_top", rectangle(jump.dialog_frame).y, W.dp(176))
+    measure("D4_input_height", jump.input_field:getSize().h, W.dp(70))
+    jump:setInputText("horizon"); captured("D4-title-many-results", "D4")
+    if jump.results_pages > 1 then jump:onNextPage(); captured("D4-title-results-next-page", "D4") end
+    local previous_frame = rectangle(jump.dialog_frame)
+    check("D4_title_matching_uses_all_catalog_pages", #jump.matches == 32)
+    jump:setInputText("unmatched synthetic title"); captured("D4-no-match", "D4")
+    check("D4_no_match_disables_locate", #jump.matches == 0 and jump.locate_button.enabled == false)
+    local current_frame, restored = rectangle(jump.dialog_frame), true
+    for y = current_frame.y + current_frame.h + 1, math.min(height - 1, previous_frame.y + previous_frame.h - 1), math.max(1, W.dp(12)) do
+        for x = previous_frame.x + W.dp(4), math.min(width - 1, previous_frame.x + previous_frame.w - W.dp(4)), math.max(1, W.dp(12)) do
+            if Device.screen.bb:getPixel(x, y):getR() ~= catalog_underlay:getPixel(x, y):getR() then restored = false end
+        end
+    end
+    check("D4_shrinking_results_restores_catalog_underlay_pixels", restored)
+    catalog_underlay:free()
+    jump:setInputText("12"); jump:onShowKeyboard(); if not jump:isKeyboardVisible() then jump:onShowKeyboard() end
+    captured("D4-native-keyboard", "D4")
+    check("D4_uses_native_keyboard", jump._input_widget.keyboard ~= nil and jump:isKeyboardVisible())
+    closeDialog()
+    screens:_catalogDetails(controller.comics[1]); everyDialogPage("D1-overview", "D1"); closeDialog()
+    controller.hide_episodes = true; screens:_render(); captured("D1-empty-catalog", "D1")
+    screens.filter = "downloaded"; screens:_render(); captured("D1-filter-empty", "D1")
+    controller.episodes = fixture
+end)
+
+scenario("F1-F4", function()
+    controller.storage = { pinned_bytes = 690 * 1024 * 1024, automatic_bytes = 312 * 1024 * 1024,
+        free_bytes = 5800 * 1024 * 1024, capacity_bytes = 8192 * 1024 * 1024 }
+    controller.jobs[3].error = { kind = "content_changed" }
+    for _, job in ipairs(controller.jobs) do job.bytes = 21 * 1024 * 1024 end
+    for index = 5, 8 do
+        controller.jobs[#controller.jobs + 1] = { id = "complete-" .. index, kind = "episode_download", comic_id = tostring(index),
+            episode_id = "3", revision = "synthetic-r1", state = "complete", completed = 24, total = 24, bytes = 42 * 1024 * 1024 }
+    end
+    screens:showDownloads(); captured("F1-all-groups", "F1"); chrome("F1", 4)
+    local ready_row = button(screens.widget, controller.comics[4].title, true)
+    local first_download_page = screens.page
+    while not ready_row and screens.page < screens.pages do
+        screens.widget:onNextPage(); captured("F1-offline-groups-page-" .. screens.page, "F1")
+        ready_row = button(screens.widget, controller.comics[4].title, true)
+    end
+    assert(ready_row, "An offline comic must remain reachable through native pagination")
+    local comic_label = visit(ready_row, function(item) return item.text == controller.comics[4].title and item.label_widget ~= nil end)[1]
+    local range_label = visit(ready_row, function(item) return item.text == screens:_downloadChapterRange({ controller.jobs[4] }) and item.label_widget ~= nil end)[1]
+    if comic_label and range_label then
+        measure("F1_offline_range_gap", rectangle(range_label).x - rectangle(comic_label).x - comic_label:getSize().w, W.dp(16))
+    else check("F1_offline_labels_expose_native_geometry", false) end
+    while screens.page > first_download_page do
+        screens.widget:onPreviousPage(); captured("F1-return-page-" .. screens.page, "F1")
+    end
+    local job_heights = {}
+    for _, job in ipairs(controller.jobs) do job_heights[#job_heights + 1] = { id = job.id, height = screens:_jobRow(job, true, {}):getSize().h } end
+    check("F1_density_measurements", true, { body_height = screens.body_height, header_height = screens.download_header:getSize().h,
+        job_heights = job_heights, ranges = screens.page_ranges })
+    if scribe and report.language == "zh_CN" then check("F1_design_eight_tasks_fit_one_page", screens.pages == 1, { pages = screens.pages }) end
+    for _, filter in ipairs({ "active", "attention", "complete" }) do
+        screens.filter, screens.page = filter, 1; screens:_render(); captured("F1-filter-" .. filter, "F1")
+    end
+    screens.filter, screens.page = "all", 1; screens:_render()
+    screens:_downloadFilter(); everyDialogPage("F1-filter-menu", "F1"); closeDialog()
+    local job_actions = screens:_downloadActions(controller.jobs[1])
+    activate(assert(job_actions[2])); everyDialogPage("F1-more-menu", "F1"); closeDialog()
+    local failed = controller.jobs[3]
+    screens:_downloadRecovery(failed); everyDialogPage("F2-content-changed", "F2")
+    check("F2_unknown_new_version_does_not_promise_old_image_count", screens.dialog.download_text:find(T("All images will be downloaded, using additional space and network data."), 1, true) ~= nil)
+    check("F2_content_changed_has_new_version_and_remove", button(screens.dialog, "Redownload as new version", true) ~= nil
+        or screens.dialog.pages > 1)
+    closeDialog()
+    controller.estimate_descriptors = { [tostring(failed.episode_id)] = { revision = "synthetic-new-version", total_pages = 32 } }
+    screens:_downloadRecovery(failed); everyDialogPage("F2-known-new-version", "F2")
+    check("F2_new_version_uses_verified_new_image_count", screens.dialog.download_text:find(string.format(T("Download all %d images%s. A separate new copy starts from the beginning. This copy's saved images and reading position stay separate."),
+        32, string.format(T(", about %s"), Model.bytes(16 * 1024 * 1024))), 1, true) ~= nil)
+    closeDialog(); controller.estimate_descriptors = nil
+    for _, kind in ipairs({ "network", "authentication", "access", "storage", "busy", "unsupported_image_size",
+        "unknown_history", "unverified_position", "source_unavailable", "source_refresh_interrupted",
+        "version_replacement_interrupted", "reference_changed", "stale_source_refresh", "stale_version_replacement" }) do
+        failed.error = { kind = kind }
+        screens:_downloadRecovery(failed); everyDialogPage("F2-" .. kind, "F2"); closeDialog()
+    end
+    failed.error = { kind = "content_changed" }
+    controller.jobs[#controller.jobs + 1] = { id = "retained", comic_id = "1", episode_id = "2", revision = "old-r1",
+        state = "paused", completed = 14, total = 32, bytes = 21 * 1024 * 1024, payload = { replaced_by = "running" } }
+    local retained = controller.jobs[#controller.jobs]
+    screens:_render(); captured("F1-retained-version", "F1")
+    screens:_downloadRecovery(retained); everyDialogPage("F2-retained-version", "F2"); closeDialog()
+    for _, kind in ipairs({ "network", "storage", "authentication" }) do
+        screens:_downloadRecovery(retained, { kind = kind }); everyDialogPage("F2-retained-" .. kind, "F2")
+        local all = screens.dialog.download_text
+        check("F2_retained_" .. kind .. "_has_no_dead_resume_option", all:find(T("Retry download"), 1, true) == nil
+            and all:find(T("Storage is ready; retry download"), 1, true) == nil and all:find(T("Retry with current sign-in"), 1, true) == nil)
+        closeDialog()
+    end
+    controller.jobs[2].payload = { source_refresh = { stage = "verify", checked = 5, total = 12 } }
+    screens:_render(); captured("F1-source-verification", "F1")
+    controller.jobs[2].payload = { version_replacement = { stage = "index" } }
+    screens:_render(); captured("F1-version-preparation", "F1")
+    controller.jobs[2].payload = nil
+    screens:_downloadComicCopies("4"); everyDialogPage("F1-offline-comic-copies", "F1"); closeDialog()
+    screens:_confirmSourceRefresh(failed); everyDialogPage("F2-source-refresh-confirmation", "F2")
+    local revision = failed.revision
+    local obsolete_refresh = button(screens.dialog, "Refresh image sources").callback
+    failed.revision = "synthetic-new-revision"
+    obsolete_refresh()
+    check("F2_stale_revision_cannot_refresh_new_sources", callCount("refreshDownloadSources") == 0 and screens.dialog == nil)
+    failed.revision = revision
+    screens:_confirmVersionReplacement(failed); everyDialogPage("F2-version-replacement-confirmation", "F2")
+    local obsolete_replace = button(screens.dialog, "Redownload as new version").callback
+    failed.revision = "synthetic-new-revision"
+    obsolete_replace()
+    check("F2_stale_revision_cannot_replace_new_version", callCount("replaceDownloadVersion") == 0 and screens.dialog == nil)
+    failed.revision = revision
+    screens:_confirmRemoveDownload(controller.jobs[4]); captured("F3-remove-normal", "F3")
+    local remove = button(screens.dialog, "Remove download")
+    measure("F3_dialog_left", rectangle(screens.dialog.frame).x, W.dp(115))
+    measure("F3_dialog_top", rectangle(screens.dialog.frame).y, W.dp(420))
+    measure("F3_button_height", remove:getSize().h, W.dp(66))
+    local stale = remove.callback; controller.jobs[4].revision = "new-revision"
+    stale()
+    check("F3_stale_revision_cannot_remove_replacement", callCount("removeDownload") == 0 and screens.dialog == nil)
+    screens:_confirmRemoveDownload(retained); captured("F3-remove-retained", "F3"); closeDialog()
+    failed.payload = { source_refresh = { stage = "verify", checked = 5, total = 24 } }
+    screens:_confirmRemoveDownload(failed); captured("F3-remove-verifying", "F3"); closeDialog()
+    controller.jobs = {}; controller.storage.pinned_bytes = 0
+    screens:_render(); captured("F4-empty-with-cache", "F4")
+    check("F4_has_no_download_filter_tabs", not hasText(screens.widget, "In progress") and not hasText(screens.widget, "Remaining space"))
+    check("F4_has_cache_and_bookshelf_actions", button(screens.widget, "Manage cache ›", true) ~= nil
+        and button(screens.widget, "Choose a comic from the bookshelf", true) ~= nil)
+    controller.storage.automatic_bytes = 0; screens:_render(); captured("F4-empty-no-cache", "F4")
+end)
+
 UIManager.scheduleIn, UIManager.unschedule = native_schedule, native_unschedule
 for _, name in ipairs(forbidden_modules) do check("production_module_remains_unloaded_" .. name:gsub("/", "_"), package.loaded[name] == nil) end
 report.passed = true
 for _, item in ipairs(report.assertions) do if not item.passed then report.passed = false end end
-local result_file = assert(io.open(output_dir .. "/scribe-handoff-result.json", "wb"))
+local result_file = assert(io.open(output_dir .. "/all-pages-def-result.json", "wb"))
 result_file:write(json.encode(report, { pretty = true })); result_file:close()
 print(json.encode({ passed = report.passed, assertions = #report.assertions, screenshots = #report.screenshots,
     width = width, height = height, language = report.language }))

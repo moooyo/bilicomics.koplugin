@@ -46,6 +46,19 @@ check("bottom_sheet_fits_screen", sheet.panel_dimen.x == 0 and sheet.panel_dimen
 local shell = W.Panel:new{ content = W.column{ header,
     W.box(nil, sw, sh - W.dp(116) - W.dp(88)), nav }, layout = { nav_buttons }, close_callback = function() end }
 capture(shell, "shared-shell.png")
+local native_date, power = os.date, Device:getPowerDevice()
+local native_capacity = power.getCapacity
+os.date = function(format, ...) if format == "%H:%M" then return "12:34" end; return native_date(format, ...) end
+power.getCapacity = function() return 67 end
+header:paintTo(bb, 0, 0)
+check("header_repaints_device_time_and_battery", header.time_widget.text == "12:34"
+    and header.battery_widget.text:find("67%%") ~= nil)
+shell:onNetworkConnected()
+check("network_event_updates_the_existing_header", header.connection_widget.text == require("bilicomics/ui/i18n")("Online"))
+shell:onNetworkDisconnected()
+check("offline_header_emphasis_does_not_change_battery_emphasis", header.connection_widget.bold == true
+    and header.connection_widget.fgcolor == W.ink and header.battery_widget.fgcolor == W.muted)
+os.date, power.getCapacity = native_date, native_capacity
 
 local primary = W.button("Primary", W.dp(300), function() end, { primary = true, height_px = W.dp(68) })
 primary:paintTo(bb, W.dp(56), W.dp(120))
@@ -54,6 +67,29 @@ primary:_undoFeedbackHighlight(false)
 check("primary_keeps_fill_after_native_tap_feedback", primary.frame.invert == true)
 primary:onFocus(); primary:onUnfocus()
 check("primary_keeps_fill_after_focus_moves", primary.frame.invert == true)
+local right_button = W.button("Right aligned", W.dp(300), function() end,
+    { align = "right", height_px = W.dp(68), padding_h = W.dp(10) })
+local label_x, native_label_paint = nil, right_button.label_widget.paintTo
+function right_button.label_widget:paintTo(buffer, x, y)
+    label_x = x
+    return native_label_paint(self, buffer, x, y)
+end
+right_button:paintTo(bb, W.dp(56), W.dp(120))
+check("button_right_alignment_matches_inner_right_edge", label_x + right_button.label_widget:getSize().w
+    == W.dp(56) + right_button:getSize().w - right_button.frame.bordersize - right_button.frame._padding_right)
+local disabled = W.button("Disabled", W.dp(300), nil, { enabled = false, height_px = W.dp(68) })
+disabled:onFocus()
+check("disabled_button_stays_disabled_when_key_focused", disabled.frame.invert ~= true
+    and disabled.frame.color == W.divider and disabled.label_widget.fgcolor == W.faint)
+local plain_flow = W.flowDialog("Amount", {}, { {
+    { text = "CNY 10", static = true, align = "left", font_bold = true },
+    { text = "Review", callback = function() end, primary = true },
+} }, { close_callback = function() end })
+check("static_flow_summary_is_not_a_focusable_action", #plain_flow.footer_buttons == 1
+    and plain_flow:getFocusItem() == plain_flow.footer_buttons[1])
+local Model = require("bilicomics/ui/model")
+check("storage_display_uses_decimal_design_units", Model.bytes(1000000) == "1.0 MB"
+    and Model.bytes(1000000000) == "1.0 GB" and Model.bytes(1500000000) == "1.5 GB")
 local label_css = W.text("Line height", W.dp(300), W.fontSize(20), { line_height = 1.7 })
 local label_legacy = W.text("Line height", W.dp(300), W.fontSize(20), { line_height = 0.7 })
 check("css_and_legacy_line_height_share_the_intended_baseline", label_css.line_height_px == label_legacy.line_height_px
@@ -101,6 +137,9 @@ replace_owner.dialog = W.flowDialog("Replacement flow", {}, { { { text = "Close"
 UIManager:show(replace_owner.dialog)
 replace_owner.dialog:onNextPage(); replace_owner.dialog:onNextPage()
 check("flow_on_replace_receives_current_previous", replacement_previous[1] and replacement_previous[2])
+replace_owner.dialog:onPreviousPage(); replace_owner.dialog:onPreviousPage()
+local replacement_repaint = pcall(function() replace_owner.dialog:paintTo(bb, 0, 0) end)
+check("flow_replacement_can_return_to_a_previously_painted_page", replacement_repaint and replace_owner.dialog.page == 1)
 UIManager:close(replace_owner.dialog)
 check("flow_replacement_does_not_leave_an_old_page", UIManager:getTopmostVisibleWidget() == nil)
 if UIManager:getTopmostVisibleWidget() then UIManager:close(UIManager:getTopmostVisibleWidget()) end

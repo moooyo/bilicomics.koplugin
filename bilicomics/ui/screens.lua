@@ -1,6 +1,8 @@
 local ConfirmBox = require("ui/widget/confirmbox")
+local BB = require("ffi/blitbuffer")
 local Device = require("device")
 local Font = require("ui/font")
+local TextWidget = require("ui/widget/textwidget")
 local InputDialog = require("ui/widget/inputdialog")
 local FileChooser = require("ui/widget/filechooser")
 local SessionInput = require("bilicomics/ui/session_input")
@@ -14,6 +16,12 @@ Screens.__index = Screens
 
 local function text(value, width, size, options) return W.text(value, width, W.fontSize(size), options) end
 local function space(value) return W.spacePixels(W.dp(value)) end
+local function inline(value, size, options)
+    options = options or {}
+    local label = TextWidget:new{ text = tostring(value or ""), face = Font:getFace("cfont", W.fontSize(size)),
+        bold = options.bold == true, fgcolor = options.muted and W.muted or W.ink, padding = 0, max_width = options.max_width }
+    return W.box(label, label:getSize().w, W.dp(size * 1.3), { align = "left" })
+end
 local function buttonOptions(options)
     options = options or {}
     options.height_px = W.dp(options.height_dp or 64)
@@ -39,6 +47,25 @@ local function textPages(value, width, size, max_height, line_height)
 end
 
 local function title(record) return record.title or record.short_title or tostring(record.id or "") end
+local function comicTags(comic)
+    local result, extra = {}, comic.extra or {}
+    local tags = comic.tags or extra.tags or {}
+    if type(tags) == "string" then return tags ~= "" and { tags } or {} end
+    if type(tags) ~= "table" then return result end
+    for _, value in ipairs(tags) do
+        local name = type(value) == "table" and (value.name or value.title) or value
+        if type(name) == "string" and name ~= "" then result[#result + 1] = name end
+    end
+    return result
+end
+local function comicPublication(comic)
+    local extra = comic.extra or {}
+    local latest = tonumber(comic.latest_order or extra.latest_order)
+    if latest and latest > 0 and latest < math.huge and latest == math.floor(latest) then
+        return string.format(comic.finished and T("Completed · %s chapters") or T("Serialized through %s chapters"), tostring(latest))
+    end
+    return comic.finished and T("Completed") or comic.latest_episode_title or extra.latest_episode_title
+end
 local SearchInputDialog = InputDialog:extend{}
 function SearchInputDialog:init()
     InputDialog.init(self)
@@ -375,8 +402,8 @@ function Screens:_bookshelfMore()
         local right = value and W.dp(132) or 0
         local content
         if subline then content = W.column{ text(label, inner, 21, { bold = true }), space(8), text(subline, inner, 16, { muted = true }) }
-        else content = W.row{ text(label, inner - right, 21),
-            value and text(value .. " ›", right, 19, { muted = true, align = "right" }) or W.gap(0) } end
+        else content = W.row{ W.line(label, inner - right, W.fontSize(21), { height = W.dp(27.3) }),
+            value and W.line(value .. " ›", right, W.fontSize(19), { muted = true, align = "right", height = W.dp(24.7) }) or W.gap(0) } end
         local action = W.ActionRow:new{ width = inner, enabled = enabled ~= false,
             content = W.box(content, inner, W.dp(height), { align = "left" }),
             callback = function() if current() then callback() end end }
@@ -426,9 +453,9 @@ function Screens:_bookshelfSort()
     dialog = self:_showContextDialog(T("Sort bookshelf"), buttons)
 end
 
-function Screens:_bookshelfItems()
-    local items = copy(Model.array(self.controller.getBookshelfItems and self.controller:getBookshelfItems()
-        or self.controller:getLibrary("favorites")))
+function Screens:_bookshelfItems(source)
+    local items = copy(Model.array(source or (self.controller.getBookshelfItems and self.controller:getBookshelfItems()
+        or self.controller:getLibrary("favorites"))))
     local records, source_order = {}, {}
     for index, comic in ipairs(items) do records[tostring(comic.id)], source_order[tostring(comic.id)] = comic, index end
     if self.bookshelf_reorder or #(self.bookshelf_order_ids or {}) == 0 then
@@ -642,6 +669,7 @@ function Screens:_render()
         self.epoch = self.epoch + 1
         self:_loadBookshelfView()
     end
+    if self._rechargeRefreshVisible and self:_rechargeRefreshVisible() then return end
     if self.context_dialog and self.dialog == self.context_dialog then
         self.context_dialog_dirty = true
         return
@@ -711,7 +739,8 @@ function Screens:_render()
         end end
     end
     self.widget = W.Panel:new{ content = content, layout = self.focus, selected = selected,
-        view_epoch = self.epoch, view_route = self.route, view_page = self.page,
+        view_epoch = self.epoch, view_route = self.route, view_page = self.page, view_comic_id = self.comic_id,
+        refresh_mode = previous and previous.view_route == self.route and previous.view_comic_id == self.comic_id and "ui" or "flashui",
         close_callback = function() self:_back() end,
         next_page = function() self:_changePage(1) end,
         previous_page = function() self:_changePage(-1) end }
@@ -726,28 +755,27 @@ end
 function Screens:_comicCard(comic, measure)
     if not measure and self.controller.requestCover then self.controller:requestCover(comic.id) end
     local cover_width, cover_height = W.dp(78), W.dp(104)
-    local tag_width = comic.favorite and W.dp(106) or 0
-    local text_width = self.width - cover_width - W.dp(28) - W.dp(36) - tag_width
-    local subtitle = comic.latest_episode_title or (comic.extra or {}).latest_episode_title
-        or (comic.latest_order and string.format(T("Latest chapter: %s"), tostring(comic.latest_order))) or T("Open chapter catalog")
+    local tag_label = comic.favorite and inline(T("In bookshelf"), 16) or nil
+    local tag_width = tag_label and tag_label:getSize().w + W.dp(23) or 0
+    local text_width = self.width - cover_width - W.dp(24) - W.dp(46) - tag_width
+    local subtitle = comicPublication(comic) or T("Open chapter catalog")
     local authors = type(comic.authors) == "table" and comic.authors[1] or comic.authors
     if type(authors) == "table" then authors = authors.name end
     local metadata = {}
-    for _, value in ipairs((comic.extra or {}).tags or {}) do
-        if type(value) == "string" and #metadata < 2 then metadata[#metadata + 1] = value end
+    for _, value in ipairs(comicTags(comic)) do
+        if #metadata < 2 then metadata[#metadata + 1] = value end
     end
     metadata[#metadata + 1] = subtitle
     local cover = measure and W.box(space(0), cover_width, cover_height) or W.cover(comic, cover_width, cover_height)
-    local columns = { cover, W.gap(W.dp(28)), W.column{
+    local columns = { cover, W.gap(W.dp(24)), W.column{
         W.line(title(comic), text_width, W.fontSize(22), { bold = true, height = W.dp(28.6) }),
         space(5), W.line(type(authors) == "string" and authors or "", text_width, W.fontSize(18), { height = W.dp(23.4) }),
         space(5), W.line(table.concat(metadata, " · "), text_width, W.fontSize(16), { muted = true, height = W.dp(20.8) }),
     } }
     if comic.favorite then
-        columns[#columns + 1] = W.box(W.line(T("In bookshelf"), W.dp(88), W.fontSize(16), { align = "center", height = W.dp(28) }),
-            tag_width, W.dp(36), { border_px = W.dp(1.5) })
+        columns[#columns + 1] = W.box(tag_label, tag_width, W.dp(31.8), { border_px = W.dp(1.5) })
     end
-    columns[#columns + 1] = text("›", W.dp(36), 28, { muted = true, align = "right" })
+    columns[#columns + 1] = W.line("›", W.dp(46), W.fontSize(22), { muted = true, align = "right", height = W.dp(28.6) })
     local content = W.column{ W.box(W.row(columns), self.width, W.dp(129), { align = "left" }), W.rule(self.width) }
     local epoch, key = self.epoch, accountKey(self.controller)
     local row = W.ActionRow:new{ width = self.width, content = content, callback = function()
@@ -799,15 +827,19 @@ end
 function Screens:_stateBlock(heading, message, actions, options)
     options = options or {}
     local width = math.min(self.width, W.dp(600))
-    local rows = { text(heading, width, 34, { bold = true, align = "center" }), space(20),
+    local rows = { text(heading, width, options.title_size or 34, { bold = true, align = "center" }), space(options.body_gap or 20),
         text(message, width, 20, { muted = true, align = "center", line_height = 0.7 }) }
-    local action_width = math.min(width, W.dp(360))
+    local action_width = math.min(width, W.dp(options.action_width or 360))
     for index, action in ipairs(actions or {}) do
         rows[#rows + 1] = space(index == 1 and 42 or 14)
         rows[#rows + 1] = W.box(self:_button(action.text, action_width, action.callback,
-            buttonOptions{ primary = action.primary, enabled = action.enabled, height_dp = 68, size_dp = 23 }), width, W.dp(68))
+            buttonOptions{ primary = action.primary, enabled = action.enabled, height_dp = 68, size_dp = action.primary and 23 or 22 }), width, W.dp(68))
     end
     local content = W.column(rows)
+    if options.area_height then
+        local bottom = W.dp(options.bottom_padding or 0)
+        return W.inset(W.box(content, self.width, math.max(content:getSize().h, options.area_height - bottom)), 0, 0, 0, bottom)
+    end
     return W.inset(W.box(content, self.width, content:getSize().h), 0, 0, W.dp(options.top or 120), 0)
 end
 
@@ -825,13 +857,17 @@ function Screens:_inlinePager(current, can_load_more)
 end
 
 function Screens:_offlineAvailability(comic)
-    local ready = 0
-    for _, episode in ipairs(Model.array(self.controller:getEpisodes(comic.id))) do
+    local ready, episodes = 0, Model.array(self.controller:getEpisodes(comic.id))
+    for _, episode in ipairs(episodes) do
         local extra = episode.extra or {}
         if Model.downloadable(episode) and (episode.downloaded or extra.downloaded
             or episode.cached_complete or extra.cached_complete) then
             ready = ready + 1
         end
+    end
+    local latest = tonumber(comic.latest_order or (comic.extra or {}).latest_order)
+    if ready > 0 and comic.finished and latest and latest > 0 and ready == latest and #episodes == latest then
+        return T("Offline · Complete series"), ready
     end
     return ready > 0 and string.format(T("Offline · %d chapters"), ready) or T("Connection required"), ready
 end
@@ -890,7 +926,7 @@ function Screens:_resumeBlock(comic, progress, timestamp, current)
         function() if current() then self:_readComic(comic) end end,
         buttonOptions{ primary = true, height_dp = 66, size_dp = compact and 21 or 23 })
     local catalog = W.button(T("Chapter catalog"), catalog_width,
-        function() if current() then self:showComic(comic.id) end end, buttonOptions{ height_dp = 66, size_dp = 21 })
+        function() if current() then self:showComic(comic.id) end end, buttonOptions{ height_dp = 66, size_dp = 22 })
     resume.comic, catalog.comic = comic, comic
     local bottom = W.column{ W.row{ W.line(label, right_width - W.dp(60), W.fontSize(17), { muted = true, height = W.dp(22) }),
         W.line(percent, W.dp(60), W.fontSize(17), { muted = true, align = "right", height = W.dp(22) }) }, space(10),
@@ -914,22 +950,25 @@ function Screens:_bookshelf(items)
     local function current() return self.route == "favorites" and self.epoch == epoch
         and self.render_generation == generation and accountKey(self.controller) == key end
     self.resume_comic, self.resume_progress, self.resume_card = nil, nil, nil
-    if sync.syncing and not sync.has_cache then
+    if sync.syncing and (sync.first_sync or not sync.has_cache) then
         self.pages, self.page, self.page_ranges = 1, 1, {}
-        local rows = { space(64), text(T("Syncing bookshelf…"), self.width, 34, { bold = true }), space(20),
+        local rows = { space(64), W.line(T("Syncing bookshelf…"), self.width, W.fontSize(34), { bold = true, height = W.dp(44.2) }), space(14),
             text(T("The first sync takes a moment. Your bookshelf appears when it is ready. You can browse Bookstore or Search meanwhile."),
-                math.min(self.width, W.dp(600)), 20, { muted = true, line_height = 0.7 }), space(34) }
+                self.width, 20, { muted = true, line_height = 0.7 }), space(34) }
         local fetched, ready, total = tonumber(sync.comics_count), tonumber(sync.covers_ready), tonumber(sync.covers_total)
-        if fetched then
+        local preparing_covers = sync.phase == "covers" or sync.phase == nil and ready and total
+        if fetched and preparing_covers then
             local counter = ready and total and string.format("%d / %d", ready, total) or ""
-            rows[#rows + 1] = W.row{ text(string.format(T("Fetched %d comics · Preparing visible covers"), fetched), self.width - W.dp(100), 17,
-                { muted = true }), text(counter, W.dp(100), 17, { muted = true, align = "right" }) }
+            rows[#rows + 1] = W.row{ W.line(string.format(T("Fetched %d comics · Preparing visible covers"), fetched), self.width - W.dp(100), W.fontSize(17),
+                { muted = true, height = W.dp(22.1) }), W.line(counter, W.dp(100), W.fontSize(17), { muted = true, align = "right", height = W.dp(22.1) }) }
+        elseif fetched and fetched > 0 then
+            rows[#rows + 1] = text(string.format(T("Fetched %d comics · Fetching reading progress…"), fetched), self.width, 17, { muted = true })
         else rows[#rows + 1] = text(T("Fetching your bookshelf and reading progress…"), self.width, 17, { muted = true }) end
-        local fraction = tonumber(sync.progress) or ready and total and total > 0 and ready / total
+        local fraction = preparing_covers and (tonumber(sync.progress) or ready and total and total > 0 and ready / total)
         if fraction and fraction == fraction and fraction >= 0 and fraction <= 1 then
             rows[#rows + 1], rows[#rows + 2] = space(10), W.progress(self.width, W.dp(10), fraction)
         end
-        rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = space(44), W.rule(self.width, true), space(30)
+        rows[#rows + 1], rows[#rows + 2], rows[#rows + 3] = space(44), W.rule(self.width, true), space(32)
         local browse = self:_button(T("Go to Bookstore"), W.dp(240), function() if current() then self:showBookstore() end end,
             buttonOptions{ height_dp = 64 })
         local search = self:_button(T("Search comics"), W.dp(240), function() if current() then self:showSearch() end end,
@@ -942,9 +981,9 @@ function Screens:_bookshelf(items)
         local state = self:_stateBlock(T("Sign in to sync your bookshelf"),
             T("Scan a QR code to sign in to Bilibili. Followed comics and reading progress will appear here. Downloaded chapters are available offline without signing in."), {
                 { text = T("Sign in with QR code"), primary = true, callback = function()
-                    if current() then self:showAccount(); self:_signInWithQR() end end },
-                { text = T("Browse Bookstore"), callback = function() if current() then self:showBookstore() end end },
-            })
+                    if current() then self:_signInWithQR() end end },
+                { text = T("Explore Bookstore"), callback = function() if current() then self:showBookstore() end end },
+            }, { top = 0, body_gap = 18 })
         local downloaded, seen = 0, {}
         for _, job in ipairs(Model.array(self.controller.getDownloads and self.controller:getDownloads() or {})) do
             local id = tostring(job.comic_id or (job.payload or {}).comic_id or "")
@@ -952,10 +991,11 @@ function Screens:_bookshelf(items)
         end
         local footer_width = math.min(self.width, W.dp(560))
         local offline = self:_button(T("Read offline") .. " ›", W.dp(160), function() if current() then self:showDownloads() end end,
-            buttonOptions{ borderless = true, align = "right", height_dp = 68, size_dp = 20 })
-        return W.column{ state, space(72), W.box(W.column{ W.rule(footer_width), W.row{
-            text(string.format(T("%d comics downloaded locally"), downloaded), footer_width - W.dp(160), 20, { muted = true }), offline } },
-            self.width, W.dp(70)) }
+            buttonOptions{ borderless = true, align = "right", height_dp = 68, size_dp = 19 })
+        local content = W.column{ state, space(72), W.box(W.column{ W.rule(footer_width), space(8), W.row{
+            text(string.format(T("%d comics downloaded locally"), downloaded), footer_width - W.dp(160), 19, { muted = true }), offline } },
+            self.width, W.dp(77)) }
+        return W.box(content, self.width, self.body_height)
     end
     local hero, hero_progress, timestamp = self:_resumeComic(items)
     local matched = 0
@@ -1051,8 +1091,7 @@ function Screens:_bookshelfProgress(progress)
     return chapter
 end
 
-function Screens:_coverGrid(entries, options)
-    options = options or {}
+local function gridMetrics(screen, options, fixed_height)
     local screen_width, screen_height = Device.screen:getWidth(), Device.screen:getHeight()
     local landscape = screen_width > screen_height
     local columns = options.bookshelf and (screen_width >= 1400 and 5 or screen_width >= 1000 and 4 or 3)
@@ -1060,19 +1099,56 @@ function Screens:_coverGrid(entries, options)
     if landscape then columns = options.bookshelf and 6 or 5 end
     local gap = W.dp(options.bookshelf and 22 or 24)
     local row_gap = W.dp(options.bookshelf and 26 or 22)
-    local width = math.floor((self.width - gap * (columns - 1)) / columns)
+    local width = math.floor((screen.width - gap * (columns - 1)) / columns)
     local cover_height = math.floor(width * 4 / 3)
     local metadata_height = W.dp(10) + W.dp(options.bookshelf and 23.4 or 24.7)
         + W.dp(4) + W.dp(options.bookshelf and 19.5 or 20.8)
-    local rows = options.rows or {}
-    local fixed_height = W.column(copy(rows)):getSize().h + W.dp(options.bookshelf and 84 or 88)
-    if options.bookshelf and self.filter ~= "all" then fixed_height = fixed_height + W.dp(88) end
-    local available = self.body_height - fixed_height
+    fixed_height = fixed_height + W.dp(options.bookshelf and 84 or 88)
+    if options.bookshelf and screen.filter ~= "all" then fixed_height = fixed_height + W.dp(88) end
+    local available = screen.body_height - fixed_height
     local desired_rows = landscape and 1 or options.bookshelf and 2 or 3
     local row_count = math.max(1, math.min(desired_rows, math.floor((available + row_gap) / (cover_height + metadata_height + row_gap))))
     if not landscape and screen_width >= 1400 then row_count = desired_rows end
     cover_height = math.min(cover_height, math.max(W.dp(70), math.floor((available - row_gap * (row_count - 1)) / row_count) - metadata_height))
     if not options.bookshelf and not landscape and screen_width >= 1400 then cover_height = W.dp(240) end
+    return columns, row_count, width, cover_height, gap, row_gap
+end
+
+-- Select real first-sync cover work using the same persisted view and grid metrics.
+-- This does not render or request covers, and a navigation change cannot alter it.
+function Screens:getInitialBookshelfCoverIDs(items)
+    local view = Screens.new{ controller = self.controller }
+    view:_loadBookshelfView()
+    local screen_width, screen_height = Device.screen:getWidth(), Device.screen:getHeight()
+    view.width, view.body_height = screen_width - 2 * W.dp(56), screen_height - W.dp(116) - W.dp(88)
+    local ordered, entries, ids = view:_bookshelfItems(items), {}, {}
+    local hero = view:_resumeComic(ordered)
+    if hero then ids[#ids + 1] = tostring(hero.id) end
+    for _, comic in ipairs(ordered) do
+        local progress = Model.comicProgress(comic, self.controller:getEpisodes(comic.id))
+        local updated = comic.updated or comic.has_update or (comic.extra or {}).has_update
+        if (view.filter == "all" or view.filter == progress.state or view.filter == "updated" and updated
+            or view.filter == "completed" and comic.finished) and (not hero or tostring(comic.id) ~= tostring(hero.id)) then
+            entries[#entries + 1] = comic
+        end
+    end
+    local compact = screen_width > screen_height or screen_width < 1000
+    local columns, rows = gridMetrics(view, { bookshelf = true }, hero and W.dp(compact and 241 or 355) or 0)
+    local capacity = columns * rows
+    view.page = math.max(1, math.min(view.page, math.max(1, math.ceil(#entries / capacity))))
+    if view.bookshelf_restore_focus then
+        for index, comic in ipairs(entries) do
+            if tostring(comic.id) == view.bookshelf_focused_comic_id then view.page = math.ceil(index / capacity); break end
+        end
+    end
+    for index = (view.page - 1) * capacity + 1, math.min(view.page * capacity, #entries) do ids[#ids + 1] = tostring(entries[index].id) end
+    return ids
+end
+
+function Screens:_coverGrid(entries, options)
+    options = options or {}
+    local rows = options.rows or {}
+    local columns, row_count, width, cover_height, gap, row_gap = gridMetrics(self, options, W.column(copy(rows)):getSize().h)
     local capacity = columns * row_count
     if options.bookshelf then
         if self.bookshelf_restore_focus or self.bookshelf_grid_capacity and self.bookshelf_grid_capacity ~= capacity then
@@ -1100,10 +1176,15 @@ function Screens:_coverGrid(entries, options)
                 if not currentGrid() then return end
                 self.filter, self.page, self.epoch = "all", 1, self.epoch + 1
                 self:_render(); self:_saveBookshelfView()
-            end, buttonOptions{ borderless = true, bold = true, height_dp = 62, size_dp = 19 })
+            end, buttonOptions{ borderless = true, bold = true, height_dp = 59, size_dp = 19 })
             self.focus[#self.focus + 1] = { clear }
-            rows[#rows + 1] = W.box(W.row{ W.gap(W.dp(22)), text(T("Filter:") .. " " .. (labels[self.filter] or ""),
-                self.width - clear_width - W.dp(22), 19, { bold = true }), clear }, self.width, W.dp(62), { border_px = W.dp(1.5), align = "left" })
+            local label = W.row{ inline(T("Filter:"), 19), W.gap(W.dp(4)), inline(labels[self.filter] or "", 19, { bold = true }) }
+            if self.filter == "updated" then
+                label[#label + 1] = inline(string.format(T(" · %d comics have new chapters"), options.matched or 0), 19)
+            end
+            rows[#rows + 1] = W.box(W.row{ W.gap(W.dp(22)), W.box(label,
+                self.width - clear_width - W.dp(22) - 2 * W.dp(1.5), W.dp(59), { align = "left" }), clear },
+                self.width, W.dp(62), { border_px = W.dp(1.5), align = "left" })
             rows[#rows + 1] = space(26)
         end
     else
@@ -1152,7 +1233,7 @@ function Screens:_coverGrid(entries, options)
     end
     if #entries == 0 and not options.hero then
         rows[#rows + 1] = self:_stateBlock(options.empty_heading or T("No items are available."), options.empty_message or "", options.actions,
-            { top = 74 })
+            options.empty_state_options or { top = 74 })
     elseif #entries == 0 and self.filter ~= "all" then
         rows[#rows + 1] = text(options.empty_message, self.width, 20, { muted = true })
     end
@@ -1241,9 +1322,10 @@ function Screens:_renderBookstoreCategoryPicker(state)
         return self.dialog == dialog and self.bookstore_picker == dialog and self.bookstore_picker_state == state
             and self.route == "bookstore" and self.epoch == state.epoch and accountKey(self.controller) == state.account
     end
-    rows[#rows + 1] = W.row{ text(T("Choose a category"), math.floor(inner * 0.5), 26, { bold = true }),
-        text(T("Official categories · Popularity order"), inner - math.floor(inner * 0.5), 16, { muted = true, align = "right" }) }
-    rows[#rows + 1] = space(26)
+    rows[#rows + 1] = W.row{ W.line(T("Choose a category"), math.floor(inner * 0.5), W.fontSize(26), { bold = true, height = W.dp(33.8) }),
+        W.line(T("Official categories · Popularity order"), inner - math.floor(inner * 0.5), W.fontSize(16),
+            { muted = true, align = "right", height = W.dp(20.8) }) }
+    rows[#rows + 1] = space(22)
     if state.loading or state.error then
         rows[#rows + 1] = text(state.loading and T("Loading categories…")
             or #catalogue.items > 0 and T("Could not update categories. Choose a saved category.")
@@ -1278,6 +1360,9 @@ function Screens:_renderBookstoreCategoryPicker(state)
     local footer, footer_focus = {}, {}
     local cancel = W.button(T("Cancel"), W.dp(200), function() if current() then dialog:onClose() end end,
         buttonOptions{ height_dp = 62, size_dp = 21 })
+    local note = T("Official category list")
+    local timestamp = tonumber(catalogue.updated_at or catalogue.fetched_at)
+    if timestamp and timestamp > 0 then note = string.format(T("Category list updated %s"), os.date("%m-%d %H:%M", timestamp)) end
     if pages > 1 then
         local arrow_width = W.dp(52)
         local previous = W.button("‹", arrow_width, function()
@@ -1289,10 +1374,8 @@ function Screens:_renderBookstoreCategoryPicker(state)
         footer = { previous, text(string.format(T("%d / %d"), state.page, pages), W.dp(80), 20, { align = "center" }), next_page,
             W.gap(inner - W.dp(384)), cancel }
         footer_focus = { previous, next_page, cancel }
+        rows[#rows + 1], rows[#rows + 2] = text(note, inner, 16, { muted = true }), space(10)
     else
-        local note = T("Official category list")
-        local timestamp = tonumber(catalogue.updated_at or catalogue.fetched_at)
-        if timestamp and timestamp > 0 then note = string.format(T("Category list updated %s"), os.date("%m-%d %H:%M", timestamp)) end
         footer = { text(note, inner - W.dp(200), 16, { muted = true }), cancel }
         footer_focus = { cancel }
     end
@@ -1386,31 +1469,48 @@ function Screens:_bookstore()
     end
     return self:_coverGrid(entries, { rows = rows, bookstore = true, toolbar = toolbar,
         empty_heading = empty_heading, empty_message = empty_message, actions = actions,
+        empty_state_options = { title_size = 32, body_gap = 16, action_width = 320,
+            area_height = self.body_height - W.dp(88), bottom_padding = 110 },
         query = query, feed_identity = feed.identity, can_load_more = feed.can_load_more == true,
         offline = self:_bookshelfSyncState().offline })
 end
 function Screens:_bookstoreSynopsis(comic, page, preserve)
     if not preserve then self:_closeDialog() end
-    local width = self.width - 2 * W.dp(2)
+    local width = self.width
     local extra = comic.extra or {}
-    local synopsis = extra.recommendation or extra.evaluate or T("No synopsis is available.")
+    local synopsis = comic.description or extra.recommendation or extra.evaluate or T("No synopsis is available.")
     local max_height = math.min(W.dp(360), math.max(W.dp(70), Device.screen:getHeight() - W.dp(620)))
     local pages = textPages(synopsis, width, 20, max_height, 0.75)
     page = math.max(1, math.min(page or 1, #pages))
     local epoch, key, dialog = self.epoch, accountKey(self.controller), nil
     local function current() return self.dialog == dialog and self.bookstore_synopsis == dialog
         and self.epoch == epoch and self.route == "bookstore" and accountKey(self.controller) == key end
-    local right_width = width - W.dp(186)
+    local right_width = width - W.dp(180)
     local authors = comic.authors
     if type(authors) == "table" then authors = authors[1]; if type(authors) == "table" then authors = authors.name end end
     local meta = type(authors) == "string" and authors or ""
-    local latest = comic.latest_episode_title or extra.latest_episode_title
+    local latest = comicPublication(comic)
     if latest then meta = meta .. (meta ~= "" and " · " or "") .. latest end
-    local rows, focus = { W.row{ W.cover(comic, W.dp(150), W.dp(200)), W.gap(W.dp(36)), W.column{
-        text(title(comic), right_width, 34, { bold = true, height = W.dp(48), fixed_height = true }), space(14),
-        text(meta, right_width, 18, { muted = true, height = W.dp(56), fixed_height = true }), space(18),
-        text(table.concat(extra.tags or {}, " · "), right_width, 16, { height = W.dp(48), fixed_height = true }),
-    } }, space(28), text(pages[page], width, 20, { line_height = 0.75 }) }, {}
+    local sources = { recommendation = T("Official recommendation"), hot_seller = T("Bestsellers"),
+        internet_hot = T("Trending"), completed = T("Completed picks") }
+    local source = sources[extra.recommendation_section]
+    if source then meta = meta .. (meta ~= "" and " · " or "") .. source end
+    local tags, tag_rows, tag_row, used = comicTags(comic), {}, {}, 0
+    for _, tag in ipairs(tags) do
+        local label = inline(tag, 16)
+        local tag_width = math.min(right_width, label:getSize().w + W.dp(27))
+        if used > 0 and used + W.dp(10) + tag_width > right_width then
+            tag_rows[#tag_rows + 1], tag_rows[#tag_rows + 2], tag_row, used = W.row(tag_row), space(10), {}, 0
+        end
+        if used > 0 then tag_row[#tag_row + 1] = W.gap(W.dp(10)); used = used + W.dp(10) end
+        tag_row[#tag_row + 1], used = W.box(label, tag_width, W.dp(31.8), { border_px = W.dp(1.5) }), used + tag_width
+    end
+    if #tag_row > 0 then tag_rows[#tag_rows + 1] = W.row(tag_row) end
+    local summary = W.column{ W.line(title(comic), right_width, W.fontSize(34), { bold = true, height = W.dp(40.8) }), space(10),
+        text(meta, right_width, 18, { muted = true }), space(16), W.column(tag_rows) }
+    local rows, focus = { W.row{ W.cover(comic, W.dp(150), W.dp(200)), W.gap(W.dp(30)),
+        W.box(summary, right_width, math.max(W.dp(200), summary:getSize().h), { align = "left", valign = "top" }) },
+        space(28), text(pages[page], width, 20, { line_height = 0.75 }) }, {}
     if #pages > 1 then
         local previous = W.button(T("Previous"), W.dp(160), function()
             if current() then self:_bookstoreSynopsis(comic, page - 1, true) end
@@ -1440,9 +1540,9 @@ function Screens:_bookstoreSynopsis(comic, page, preserve)
         else self:_invoke("refreshComic", { tostring(comic.id) }, function(value, error)
             if error then self:_error(error) else stored = value and value.comic or stored; update() end
         end, true) end
-    end, buttonOptions{ height_dp = 68, size_dp = 21, enabled = not pending })
+    end, buttonOptions{ height_dp = 68, size_dp = 22, enabled = not pending })
     local close = W.button(T("Close"), W.dp(160), function() if current() then dialog:onClose() end end,
-        buttonOptions{ height_dp = 68, size_dp = 21 })
+        buttonOptions{ height_dp = 68, size_dp = 22 })
     rows[#rows + 1], focus[#focus + 1] = W.row{ chapters, W.gap(W.dp(16)), follow, W.gap(W.dp(16)), close }, { chapters, follow, close }
     local owner, previous = self, self.bookstore_synopsis
     dialog = W.sheetDialog(W.inset(W.column(rows), W.dp(56), W.dp(56), W.dp(38), W.dp(40)), focus,
@@ -1508,7 +1608,7 @@ function Screens:_searchFilter()
     local buttons = {}
     for _, choice in ipairs({ { "all", T("All") }, { "ongoing", T("Ongoing") }, { "completed", T("Completed") } }) do
         local value = choice[1]
-        buttons[#buttons + 1] = { { text = (self.filter == value and "[x] " or "[ ] ") .. choice[2], callback = function()
+        buttons[#buttons + 1] = { { text = choice[2] .. (self.filter == value and " ✓" or ""), callback = function()
             if self.dialog ~= dialog or self.epoch ~= epoch or accountKey(self.controller) ~= key then return end
             self:_closeDialog(); self.filter, self.page, self.epoch = value, 1, self.epoch + 1; self:_render()
         end } }
@@ -1540,7 +1640,7 @@ function Screens:_search()
     local field = W.button(self.query ~= "" and self.query or T("Enter comic title or author"), field_width - clear_width - 2 * W.dp(1.5),
         function() if current() then self:_editSearch() end end,
         buttonOptions{ borderless = true, align = "left", size_dp = 22, height_dp = 69, padding_h = W.dp(22) })
-    if self.query == "" and field.label_widget then field.label_widget.fgcolor = W.faint end
+    if self.query == "" and field.label_widget then field.label_widget.fgcolor = BB.Color8(0x88) end
     local field_parts, field_focus = { field }, { field }
     if clear_width > 0 then
         local clear = W.button("×", clear_width, function() if current() then self:_searchHome() end end,
@@ -1551,7 +1651,7 @@ function Screens:_search()
     local submit = W.button(T("Search"), W.dp(140), function()
         if not current() then return end
         if self.query == "" then self:_editSearch() else self:_runSearch(self.query) end
-    end, buttonOptions{ primary = true, size_dp = 23, height_dp = 72 })
+    end, buttonOptions{ primary = true, size_dp = 22, height_dp = 72 })
     field_focus[#field_focus + 1] = submit
     self.focus[#self.focus + 1] = field_focus
     self.search_field, self.search_button = field, submit
@@ -1563,50 +1663,71 @@ function Screens:_search()
         local clear = W.button(T("Clear history"), W.dp(100), function()
             if not current() then return end
             local _, error = self.controller:setSetting("search_history", {})
-            if error then self:_error(error) else self:_render() end
+            if error then self:_error(error) else self.page = 1; self:_render() end
         end, buttonOptions{ borderless = true, size_dp = 19, height_dp = 42, align = "right", enabled = #history > 0 })
         self.focus[#self.focus + 1] = { clear }
-        rows[#rows + 1] = W.row{ text(T("Recent searches"), self.width - W.dp(100), 22, { bold = true }), clear }
+        rows[#rows + 1] = W.row{ W.line(T("Recent searches"), self.width - W.dp(100), W.fontSize(22), { bold = true, height = W.dp(28.6) }), clear }
+        rows[#rows + 1] = space(10)
         rows[#rows + 1] = W.rule(self.width, true)
+        local other_rows = { space(46), W.line(T("Other ways"), self.width, W.fontSize(22), { bold = true, height = W.dp(28.6) }),
+            space(10), W.rule(self.width, true),
+            self:_searchLink(T("Open by comic ID"), T("For example mc12345"), function() self:_lookupComicID() end),
+            self:_searchLink(T("Browse Bookstore"), T("Official recommendations and categories"), function() self:showBookstore() end) }
+        -- Allocate history pages after reserving both alternate entry rows.
+        local links_focus = { table.remove(self.focus), table.remove(self.focus) }
+        local fixed = W.column(copy(rows)):getSize().h + W.column(copy(other_rows)):getSize().h
+        local history_capacity = math.max(1, math.min(5, math.floor((self.body_height - fixed - W.dp(60)) / W.dp(68))))
+        self.pages, self.page_ranges = math.max(1, math.ceil(#history / history_capacity)), {}
+        self.page = math.max(1, math.min(self.page or 1, self.pages))
         if #history == 0 then
             rows[#rows + 1] = W.box(text(T("No recent searches"), self.width, 19, { muted = true }), self.width, W.dp(68), { align = "left" })
         end
-        for index, query in ipairs(history) do
-            if index > 5 then break end
-            local history_button = W.button(query .. "  ›", self.width,
-                function() if current() then self:_runSearch(query) end end,
-                buttonOptions{ borderless = true, align = "left", size_dp = 21, height_dp = 67, padding_h = 0 })
+        for index = (self.page - 1) * history_capacity + 1, math.min(self.page * history_capacity, #history) do
+            local query = history[index]
+            local history_button = W.ActionRow:new{ width = self.width, content = W.box(W.row{
+                W.line(query, self.width - W.dp(36), W.fontSize(21), { height = W.dp(27.3) }),
+                W.line("›", W.dp(36), W.fontSize(22), { muted = true, align = "right", height = W.dp(28.6) }) },
+                self.width, W.dp(67), { align = "left" }),
+                callback = function() if current() then self:_runSearch(query) end end }
             self.focus[#self.focus + 1] = { history_button }
             rows[#rows + 1], rows[#rows + 2] = history_button, W.rule(self.width)
         end
-        rows[#rows + 1] = space(38)
-        rows[#rows + 1] = text(T("Other ways"), self.width, 22, { bold = true })
-        rows[#rows + 1] = space(14)
-        rows[#rows + 1] = W.rule(self.width, true)
-        rows[#rows + 1] = self:_searchLink(T("Open by comic ID"), T("For example mc12345"), function() self:_lookupComicID() end)
-        rows[#rows + 1] = self:_searchLink(T("Browse Bookstore"), T("Official recommendations and categories"), function() self:showBookstore() end)
+        if self.pages > 1 then
+            local pager, pager_focus = self:_inlinePager(current)
+            rows[#rows + 1] = W.box(pager, self.width, W.dp(60), { align = "right" })
+            self.focus[#self.focus + 1] = pager_focus
+        end
+        for _, row in ipairs(other_rows) do rows[#rows + 1] = row end
+        self.focus[#self.focus + 1], self.focus[#self.focus + 2] = links_focus[2], links_focus[1]
+        return W.column(rows)
     else
         local results = {}
         for _, comic in ipairs(self.search_results or {}) do
             if self.filter == "all" or self.filter == "completed" and comic.finished
                 or self.filter == "ongoing" and not comic.finished then results[#results + 1] = comic end
         end
-        local chips, chip_focus = {}, {}
-        local choices = { { "all", T("All"), 92 }, { "ongoing", T("Ongoing"), 120 }, { "completed", T("Completed"), 120 } }
+        local chips, chip_focus, chips_width = {}, {}, 0
+        local choices = { { "all", T("All") }, { "ongoing", T("Ongoing") }, { "completed", T("Completed") } }
         for index, choice in ipairs(choices) do
             local value = choice[1]
-            local chip = W.button(choice[2], W.dp(choice[3]), function()
+            local chip_width = inline(choice[2], 18):getSize().w + W.dp(39)
+            local chip = W.button(choice[2], chip_width, function()
                 if not current() or self.filter == value then return end
                 self.filter, self.page, self.epoch = value, 1, self.epoch + 1; self:_render()
-            end, buttonOptions{ primary = self.filter == value, height_dp = 48, size_dp = 19, enabled = not self.status })
-            if index > 1 then chips[#chips + 1] = W.gap(W.dp(12)) end
+            end, buttonOptions{ primary = self.filter == value, height_dp = 46, size_dp = 18, enabled = not self.status })
+            if index > 1 then chips[#chips + 1] = W.gap(W.dp(12)); chips_width = chips_width + W.dp(12) end
             chips[#chips + 1], chip_focus[#chip_focus + 1] = chip, chip
+            chips_width = chips_width + chip_width
         end
-        local summary_width = self.width - W.dp(356)
-        self.focus[#self.focus + 1] = chip_focus
-        rows[#rows + 1] = W.column{ W.box(W.row{ text(string.format(T("“%s” · %d comics"), self.query, #results), summary_width, 20,
-            { bold = true, height = W.dp(32), fixed_height = true }), W.row(chips) }, self.width, W.dp(89), { align = "left" }),
-            W.rule(self.width, true) }
+        local summary_width = self.width - chips_width
+        if #results > 0 or self.filter ~= "all" then
+            self.focus[#self.focus + 1] = chip_focus
+            local count_label = inline(string.format(T("%d comics"), #results), 20, { bold = true })
+            local summary = W.row{ inline(string.format(T("“%s” · "), self.query), 20,
+                { max_width = math.max(1, summary_width - count_label:getSize().w) }), count_label }
+            rows[#rows + 1] = W.column{ W.box(W.row{ W.box(summary, summary_width, W.dp(32), { align = "left" }), W.row(chips) },
+                self.width, W.dp(89), { align = "left" }), W.rule(self.width, true) }
+        end
         if self.status then
             rows[#rows + 1] = self:_stateBlock(T("Searching…"), T("Waiting for search results."), {}, { top = 100 })
         elseif self.search_error then
@@ -1621,7 +1742,8 @@ function Screens:_search()
                         if not current() then return end
                         if self.filter ~= "all" then self.filter, self.page = "all", 1; self:_render() else self:_editSearch() end
                     end }, { text = T("Browse Bookstore"), callback = function() if current() then self:showBookstore() end end },
-                }, { top = 100 })
+                }, { title_size = 32, body_gap = 16, action_width = 320,
+                    area_height = self.body_height - W.column(copy(rows)):getSize().h, bottom_padding = 120 })
         else
             local header_height = W.column(copy(rows)):getSize().h
             local capacity = math.max(1, math.min(6, math.floor((self.body_height - header_height - W.dp(60)) / W.dp(130))))

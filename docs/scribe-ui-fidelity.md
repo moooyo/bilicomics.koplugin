@@ -31,7 +31,7 @@ layout height. This fixes the underlying cause of several density deviations.
 
 ## Verification
 
-The final native matrix passed 4,228 assertions and generated 528 screenshots:
+The earlier partial native matrix passed 4,228 assertions and generated 528 screenshots:
 Chinese and English at 1860x2480, 480x640, 600x800, and 960x720. It includes
 design-coordinate assertions, the Search native keyboard, and the complete
 chapter-jump selection/confirmation flow. Sources were unchanged during the run.
@@ -55,14 +55,17 @@ These retain transaction, source revision, stale callback, and account guards.
   aspect ratio, without stretching.
 - The HTML omits action bars on storage/default settings, while the README's
   global rules require them. The implementation follows the global flow rule.
-- The controller does not expose first-sync cover counters or reliable selected
-  download-byte estimates. The UI gives an honest loading/count description
-  instead of inventing a percentage or size.
+- The complete-page audit subsequently added real first-sync cover counters,
+  exact-revision bytes and sample-based estimates. Unknown remote sizes still
+  remain unknown; see [the preparation data contract](ui-preparation-data.md).
 - Actual charged amounts are not inferred from a quote or wallet change.
   Unreceipted amounts are labeled confirmed quotes; entitlement-only success
   does not claim payment. Detailed evidence remains reachable.
 
 The core page structure and the measured dimensions are now close to the
-approved handoff. Unsupported data fields and the above reference conflicts
+approved handoff. Native font differences and the above reference conflicts
 prevent an honest claim of unconditional 100% pixel restoration. Physical
 e-ink rendering and real payment outcomes were not exercised.
+
+The later [complete-page acceptance](all-pages-acceptance.md) supersedes the
+partial audit above and provides evidence for every chosen artboard and state.

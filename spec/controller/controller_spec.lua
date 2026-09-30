@@ -88,6 +88,20 @@ local initial_requests = #controller.runner.order
 controller:getLibrary("history"); controller:getEpisodes("1"); controller:getWallet(); controller:getStorageSummary()
 check("local_getters_do_not_dispatch_network", #controller.runner.order == initial_requests)
 check("cache_ui_limit_matches_runtime_limit", controller:getSetting("cache_limit_mb", 512) * 1048576 == controller.settings:get("cache_limit_bytes"))
+local original_cache_limit = controller.settings:get("cache_limit_bytes")
+local original_evict, observed_cache_limit = controller.account.pages.evictToLimit, nil
+controller.account.pages.evictToLimit = function(_pages, limit) observed_cache_limit = limit end
+check("decimal_cache_preset_preserves_exact_whole_bytes", controller:setSetting("cache_limit_bytes", 512000000)
+    and controller:getSetting("cache_limit_bytes") == 512000000 and observed_cache_limit == 512000000)
+for _, bad_limit in ipairs({ -1, 1.5, math.huge, 0 / 0 }) do
+    local saved, failure = controller:setSetting("cache_limit_bytes", bad_limit)
+    check("invalid_cache_limit_cannot_change_the_running_budget", saved == nil and failure.kind == "invalid_request"
+        and controller:getSetting("cache_limit_bytes") == 512000000 and observed_cache_limit == 512000000)
+end
+check("legacy_cache_megabyte_api_retains_its_binary_conversion", controller:setSetting("cache_limit_mb", 256)
+    and controller:getSetting("cache_limit_bytes") == 256 * 1048576)
+controller:setSetting("cache_limit_bytes", original_cache_limit)
+controller.account.pages.evictToLimit = original_evict
 
 local secret = "synthetic-session-value"
 local function validated(mid)

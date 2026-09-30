@@ -6,6 +6,7 @@ local Codec = require("bilicomics/storage/codec")
 local ComicID = require("bilicomics/catalog/comic_id")
 local CoverSource = require("bilicomics/cover_source")
 local DownloadService = require("bilicomics/jobs/download_service")
+local DownloadEstimate = require("bilicomics/download_estimate")
 local Files = require("bilicomics/storage/files")
 local Normalize = require("bilicomics/protocol/normalize")
 local PageStore = require("bilicomics/storage/page_store")
@@ -35,6 +36,11 @@ local function id(value) return value ~= nil and tostring(value) or nil end
 local function currentRead(controller, account, generation, read_generation)
     return not controller.closed and controller.account == account and controller.generation == generation
         and (read_generation == nil or controller.read_generation == read_generation)
+end
+local function cachedCoverReady(comic, root, source)
+    return comic.cover_path and pcall(Files.assertRegular, comic.cover_path, root)
+        and (Files.size(comic.cover_path) or 0) > 0 and (comic.extra or {}).cached_cover_identity
+        and (not source and not comic.cover_url or source and (comic.extra or {}).cached_cover_identity == source.identity)
 end
 
 function Controller.new(options)
@@ -84,7 +90,8 @@ end
 
 function Controller:_openAccount(key, session, verified_import)
     self.generation = self.generation + 1
-    self.preparing, self.covers, self.cover_failures, self.quotes, self.purchase_inflight = {}, {}, {}, {}, {}
+    self:_retireCoverRequests(errorValue("account_mismatch", "The cover belongs to an inactive account."))
+    self.preparing, self.covers, self.cover_requests, self.cover_failures, self.quotes, self.purchase_inflight = {}, {}, {}, {}, {}, {}
     self.preloaded, self.errors_shown = {}, {}
     local root = self.root .. "/accounts/" .. Files.component(key)
     Files.mkdir(root)
@@ -174,6 +181,7 @@ function Controller:_closeAccount()
     self.integrations = {}
     self:_releaseOpening(errorValue("closed", "The active account is closing."))
     self.generation = self.generation + 1
+    self:_retireCoverRequests(errorValue("closed", "The active account is closing."))
     account.downloads:close()
     self.runner:close()
     if self.diagnostics_runner then self.diagnostics_runner:close(); self.diagnostics_runner = nil end
@@ -206,6 +214,10 @@ function Controller:suspend()
             if job.kind == "episode_download" then self.suspended_jobs[#self.suspended_jobs + 1] = job.id end
         end
     end
+    self.suspended = true
+    self:_retireCoverRequests(errorValue("canceled", "Cover preparation paused while the device is suspended.", { transmitted = false }))
+    local sync = self.account.bookshelf_sync
+    if sync and sync.phase == "library" and sync.cancel then sync.cancel() end
     self.account.downloads:suspend()
     self.runner:suspend()
     if self.diagnostics_runner then self.diagnostics_runner:suspend() end
@@ -415,13 +427,21 @@ function Controller:getBookshelfSyncState()
     local authenticated = account.session ~= nil and account.session_valid == true and not account.authentication_invalidated
     local offline = not self:_connected()
     local reading_away = self.active_integration ~= nil and (not self.screens or self.screens.route ~= "favorites")
-    local cached = snapshot ~= nil or #account.store:listComics("favorites") > 0
+    local pending = account.bookshelf_sync
+    local cached = snapshot and snapshot.presentation_ready ~= false
+        or not snapshot and #account.store:listComics("favorites") > 0
+    if pending and pending.first_sync then cached = false end
     local stale = snapshot == nil or now < snapshot.last_synced_at or now - snapshot.last_synced_at >= Bookshelf.ttl
-        or account.bookshelf_sync_error ~= nil
-    return { has_cache = cached, syncing = account.bookshelf_sync ~= nil, last_synced_at = snapshot and snapshot.last_synced_at,
+        or snapshot.presentation_ready == false or account.bookshelf_sync_error ~= nil
+    local progress = pending or account.bookshelf_sync_progress or {}
+    return { has_cache = cached == true, syncing = pending ~= nil, last_synced_at = snapshot and snapshot.last_synced_at,
         error = account.bookshelf_sync_error, stale = stale, offline = offline, authenticated = authenticated,
         can_sync = authenticated and not offline and not self.suspended and not reading_away,
-        retry_at = account.bookshelf_sync_retry_at }
+        retry_at = account.bookshelf_sync_retry_at, first_sync = pending and pending.first_sync == true,
+        comics_count = progress.comics_count or snapshot and #snapshot.order_ids or 0,
+        covers_ready = progress.covers_ready or 0, covers_total = progress.covers_total or 0,
+        covers_settled = progress.covers_settled or 0, progress = progress.progress or 0,
+        phase = progress.phase or (cached and "ready" or "idle") }
 end
 
 function Controller:getBookshelfViewState()
@@ -466,26 +486,129 @@ function Controller:syncBookshelf(callback)
         return
     end
     local pending = { waiters = callback and { callback } or {}, task_ids = {}, lists = {}, remaining = 2,
-        favorite_revision = account.favorite_revision }
+        favorite_revision = account.favorite_revision, first_sync = not self:getBookshelfSyncState().has_cache,
+        phase = "library", comics_count = 0, covers_ready = 0, covers_total = 0, covers_settled = 0, progress = 0 }
     account.bookshelf_sync, account.bookshelf_sync_error = pending, nil
     local function current()
         return not self.closed and self.account == account and self.generation == generation and account.bookshelf_sync == pending
     end
     local function finish(value, err)
         if not current() then return end
+        if pending.preparation_timeout then self.ui_manager:unschedule(pending.preparation_timeout) end
+        if not err and pending.first_sync then
+            local snapshot = self:_bookshelfSyncSnapshot()
+            local saved = snapshot and pcall(function()
+                snapshot.presentation_ready = true
+                account.store:putSetting(Bookshelf.sync_key, snapshot)
+            end)
+            if not saved then value, err = nil, errorValue("storage", "The prepared bookshelf could not be published.") end
+        end
+        pending.phase = err and "error" or "ready"
+        pending.progress = not err and 1 or pending.progress
+        account.bookshelf_sync_progress = { phase = pending.phase, comics_count = pending.comics_count,
+            covers_ready = pending.covers_ready, covers_total = pending.covers_total,
+            covers_settled = pending.covers_settled, progress = pending.progress }
         account.bookshelf_sync, account.bookshelf_sync_error = nil, err
         account.bookshelf_sync_retry_at = err and self.clock() + Bookshelf.retry_delay or nil
         for _, waiter in ipairs(pending.waiters) do
             if self.closed or self.account ~= account or self.generation ~= generation then break end
-            Util.callback(waiter, value, err)
+            local ok = pcall(waiter, value, err)
+            if not ok then require("logger").warn("BiliComics bookshelf observer failed") end
         end
         self:_notify()
+    end
+    pending.cancel = function()
+        if not current() then return end
+        local tasks = pending.task_ids
+        finish(nil, errorValue("canceled", "Bookshelf synchronization paused while the device is suspended.", { transmitted = false }))
+        for _, task_id in ipairs(tasks) do account.runner:cancel(task_id) end
+    end
+    local function visibleSelection(items)
+        return pcall(function()
+            local visible, identities = {}, {}
+            if self.screens and self.screens.getInitialBookshelfCoverIDs then
+                local identifiers = self.screens:getInitialBookshelfCoverIDs(items)
+                assert(type(identifiers) == "table", "The initial bookshelf cover selection is unavailable")
+                local seen = {}
+                for _, comic_id in ipairs(identifiers) do
+                    comic_id = tostring(comic_id)
+                    if not seen[comic_id] then
+                        local comic = account.store:getComic(comic_id)
+                        if comic then
+                            visible[#visible + 1], seen[comic_id] = comic, true
+                            identities[#identities + 1] = { id = comic_id, source = comic.cover_url }
+                        end
+                    end
+                end
+            end
+            return visible, Util.hash(identities)
+        end)
+    end
+    local prepareVisibleCovers
+    prepareVisibleCovers = function(items)
+        if not pending.first_sync then finish(items); return end
+        local selected, visible, signature = visibleSelection(items)
+        if not selected then finish(nil, errorValue("storage", "The initial bookshelf view could not be prepared.")); return end
+        pending.phase, pending.comics_count, pending.covers_total = "covers", #items, #visible
+        pending.covers_ready, pending.covers_settled, pending.progress = 0, 0, 0
+        pending.cover_wave = (pending.cover_wave or 0) + 1
+        local wave = pending.cover_wave
+        if #visible == 0 then finish(items); return end
+        if not pending.preparation_deadline then
+            local delay = self.settings:get("worker_timeout", 90) + 5
+            pending.preparation_deadline, pending.cover_ids = self.clock() + delay, {}
+            pending.preparation_timeout = function()
+                if not current() then return end
+                pending.deadline_expired, pending.cover_wave = true, pending.cover_wave + 1
+                for comic_id in pairs(pending.cover_ids) do
+                    local request = self.cover_requests[comic_id]
+                    if request then
+                        request.finish("canceled", false, errorValue("timeout", "Initial cover preparation exceeded its time limit."))
+                        if request.task_id then pcall(request.runner.cancel, request.runner, request.task_id) end
+                    end
+                end
+                local ok, ready_items = pcall(self.getBookshelfItems, self)
+                if ok then prepareVisibleCovers(ready_items)
+                else finish(nil, errorValue("storage", "The prepared bookshelf could not be read.")) end
+            end
+            self.ui_manager:scheduleIn(delay, pending.preparation_timeout)
+        end
+        self:_notify()
+        for _, comic in ipairs(visible) do
+            if not current() then break end
+            pending.cover_ids[tostring(comic.id)] = true
+            local completed = false
+            local function settled(observed)
+                if completed or not current() or wave ~= pending.cover_wave then return end
+                completed = true
+                pending.covers_settled = pending.covers_settled + 1
+                if observed and observed.ready then pending.covers_ready = pending.covers_ready + 1 end
+                pending.progress = pending.covers_settled / pending.covers_total
+                if pending.covers_settled == pending.covers_total then
+                    local ok, ready_items = pcall(self.getBookshelfItems, self)
+                    if not ok then finish(nil, errorValue("storage", "The prepared bookshelf could not be read.")); return end
+                    local reselected, _visible, current_signature = visibleSelection(ready_items)
+                    if not reselected then finish(nil, errorValue("storage", "The initial bookshelf view could not be prepared."))
+                    elseif current_signature ~= signature then
+                        -- Navigation can change a favorite or local resume anchor while A6 is preparing.
+                        -- Reuse cache hits and prepare the newly visible selection before first publication.
+                        prepareVisibleCovers(ready_items)
+                    else finish(ready_items) end
+                else self:_notify() end
+            end
+            local deadline = pending.deadline_expired and self.clock() or pending.preparation_deadline
+            local ok = pcall(self._cacheCover, self, comic, false, nil, settled, deadline)
+            if not ok then settled{ ready = false, status = "error" } end
+        end
     end
     local function received(kind, comics, err)
         if not current() then return end
         if not comics then
             pending.error = pending.error or err or errorValue("protocol", "The bookshelf response is unavailable.")
-        else pending.lists[kind] = comics end
+        else
+            pending.lists[kind] = comics
+            if kind == "favorites" then pending.comics_count = #comics; self:_notify() end
+        end
         pending.remaining = pending.remaining - 1
         if pending.remaining > 0 then return end
         if pending.error then finish(nil, pending.error); return end
@@ -501,12 +624,15 @@ function Controller:syncBookshelf(callback)
                 account.catalog:ingestLibrary("favorites", pending.lists.favorites)
                 account.catalog:ingestLibrary("history", pending.lists.history)
                 for comic_id, favorite in pairs(preserve) do account.store:upsertComic{ id = comic_id, favorite = favorite } end
-                account.store:putSetting(Bookshelf.sync_key,
-                    Bookshelf.syncSnapshot(pending.lists.favorites, account.key, self.clock()))
+                local snapshot = Bookshelf.syncSnapshot(pending.lists.favorites, account.key, self.clock())
+                if pending.first_sync then snapshot.presentation_ready = false end
+                account.store:putSetting(Bookshelf.sync_key, snapshot)
             end)
         end)
         if not saved then finish(nil, errorValue("storage", "The bookshelf could not be saved.")); return end
-        finish(self:getBookshelfItems())
+        local items = self:getBookshelfItems()
+        pending.comics_count = #items
+        prepareVisibleCovers(items)
     end
     for _, kind in ipairs{ "favorites", "history" } do
         if not current() then break end
@@ -557,64 +683,151 @@ function Controller:authorizeDescriptor(descriptor, expected_account)
     return nil, errorValue("locked", "This chapter needs a current online reading entitlement.")
 end
 
-function Controller:_cacheCover(comic, public_bookstore, feed_identity)
-    if not comic or not comic.id or not comic.cover_url or not self:_connected() then return end
+function Controller:_retireCoverRequests(err)
+    local requests = {}
+    for _, request in pairs(self.cover_requests or {}) do requests[#requests + 1] = request end
+    for _, request in ipairs(requests) do
+        request.finish("canceled", false, err)
+        if request.task_id and request.runner then pcall(request.runner.cancel, request.runner, request.task_id) end
+    end
+end
+
+function Controller:_cacheCover(comic, public_bookstore, feed_identity, callback, preparation_deadline)
+    local function observed(status, ready, err)
+        if callback then
+            local ok = pcall(callback, { comic_id = comic and comic.id, status = status, ready = ready == true }, err)
+            if not ok then require("logger").warn("BiliComics cover observer failed") end
+        end
+    end
+    if self.closed or not self.account then observed("canceled", false, errorValue("closed", "The plugin is closed.")); return end
+    if not comic or not comic.id then observed("unavailable", false); return end
+    if preparation_deadline and self.clock() >= preparation_deadline then
+        local source = comic.cover_url and CoverSource.resolve(comic.cover_url)
+        local ready = cachedCoverReady(comic, self.account.root .. "/covers", source)
+        observed(ready and "cached" or "canceled", ready,
+            not ready and errorValue("timeout", "Initial cover preparation exceeded its time limit.") or nil)
+        return
+    end
     if public_bookstore and feed_identity == nil then feed_identity = self:_bookstoreIdentity() end
-    local request_key = public_bookstore and "bookstore:" .. Util.hash(feed_identity or {}) .. ":" .. comic.id or comic.id
-    if self.covers[request_key] then return end
+    local request_key = public_bookstore and "bookstore:" .. Util.hash(feed_identity or {}) .. ":" .. comic.id or tostring(comic.id)
+    local active = self.cover_requests and self.cover_requests[request_key]
+    if active then
+        if callback then active.waiters[#active.waiters + 1] = callback end
+        return active.task_id
+    end
+    if self.covers[request_key] then observed("unavailable", false); return end
     if public_bookstore then
-        if not self:_bookstoreMember(comic.id, feed_identity) then return end
-    elseif self.account.authentication_invalidated or (self.account.session and not self.account.session_valid) then return end
-    local source = CoverSource.resolve(comic.cover_url)
-    if not source then return end
-    if public_bookstore and not self:_bookstoreCoverAllowed(comic.id, source.url, feed_identity) then return end
+        if not self:_bookstoreMember(comic.id, feed_identity) then observed("unavailable", false); return end
+    end
+    local account, generation, original_url = self.account, self.generation, comic.cover_url
+    local root = account.root .. "/covers"
+    local source = original_url and CoverSource.resolve(original_url)
+    local cache_matches = cachedCoverReady(comic, root, source)
+    if cache_matches then observed("cached", true); return end
+    if not source then observed("unavailable", false); return end
+    if public_bookstore and not self:_bookstoreCoverAllowed(comic.id, source.url, feed_identity) then observed("unavailable", false); return end
+    if not public_bookstore and (account.authentication_invalidated or (account.session and not account.session_valid)) then
+        observed("unavailable", false, errorValue("authentication", "The account session is no longer valid.")); return
+    end
+    if self.suspended or not self:_connected() then
+        observed("unavailable", false, errorValue("network", "The uncached cover needs an online connection.", { transmitted = false })); return
+    end
     local cache_identity = tostring(comic.id) .. ":" .. source.identity
     local failure_identity = public_bookstore and "bookstore:" .. cache_identity or cache_identity
-    if (self.cover_failures[failure_identity] or 0) > self.clock() then return end
-    if comic.cover_path and Files.exists(comic.cover_path)
-        and (comic.extra or {}).cached_cover_identity == source.identity then return end
-    local account, original_url = self.account, comic.cover_url
-    local root = account.root .. "/covers"
-    Files.mkdir(root)
+    if (self.cover_failures[failure_identity] or 0) > self.clock() then observed("unavailable", false); return end
+    local created = pcall(Files.mkdir, root)
+    if not created then observed("error", false, errorValue("storage", "The cover directory could not be prepared.")); return end
     local temporary = root .. "/" .. Util.id("cover") .. ".part"
-    self.covers[request_key] = cache_identity
-    self:_submit({ kind = "download_cover", url = source.url, temporary_path = temporary, max_bytes = 4 * 1024 * 1024,
-        minimum_free_bytes = self.settings:get("minimum_free_bytes"),
+    local request = { identity = cache_identity, waiters = callback and { callback } or {},
+        runner = public_bookstore and account.raw_runner or account.runner }
+    self.cover_requests = self.cover_requests or {}
+    self.cover_requests[request_key], self.covers[request_key] = request, cache_identity
+    request.finish = function(status, ready, err)
+        if request.done then return end
+        request.done = true
+        if request.timeout then self.ui_manager:unschedule(request.timeout) end
+        if self.cover_requests[request_key] == request then
+            self.cover_requests[request_key], self.covers[request_key] = nil, nil
+        end
+        if not ready then pcall(os.remove, temporary) end
+        for _, waiter in ipairs(request.waiters) do
+            local ok = pcall(waiter, { comic_id = comic.id, status = status, ready = ready == true }, err)
+            if not ok then require("logger").warn("BiliComics cover observer failed") end
+        end
+        request.waiters = {}
+    end
+    local function current()
+        return not request.done and not self.closed and self.account == account and self.generation == generation
+    end
+    local options = { priority = 60, resource = "image", before_start = function()
+        if not current() then return nil, errorValue("canceled", "The cover request is no longer current.", { transmitted = false }) end
+        if self.suspended or not self:_connected() then
+            return nil, errorValue("network", "The cover request needs an online connection.", { transmitted = false })
+        end
+        local latest = account.store:getComic(comic.id)
+        if not latest or latest.cover_url ~= original_url then
+            return nil, errorValue("canceled", "The requested cover source changed.", { transmitted = false })
+        end
+        return true
+    end }
+    local ok, task = pcall(self._submit, self, { kind = "download_cover", url = source.url, temporary_path = temporary,
+        max_bytes = 4 * 1024 * 1024, minimum_free_bytes = self.settings:get("minimum_free_bytes"),
         public_bookstore = public_bookstore == true, comic_id = public_bookstore and comic.id or nil,
-        feed_identity = public_bookstore and feed_identity or nil },
-        { priority = 60, resource = "image" }, function(result)
-            self.covers[request_key] = nil
-            if public_bookstore and not self:_bookstoreMember(comic.id, feed_identity) then os.remove(temporary); return end
-            local current = account.store:getComic(comic.id)
-            if not current or current.cover_url ~= original_url then
-                os.remove(temporary)
-                if current then self:_cacheCover(current, public_bookstore, feed_identity) end
-                return
-            end
-            if public_bookstore and not self:_bookstoreCoverAllowed(comic.id, source.url, feed_identity) then
-                os.remove(temporary); return
-            end
+        feed_identity = public_bookstore and feed_identity or nil }, options, function(result, err)
+        if not current() then pcall(os.remove, temporary); return end
+        local published, failure, replacement = pcall(function()
+            if public_bookstore and not self:_bookstoreMember(comic.id, feed_identity) then return "unavailable" end
+            local latest = account.store:getComic(comic.id)
+            if not latest or latest.cover_url ~= original_url then return "unavailable", latest end
+            if public_bookstore and not self:_bookstoreCoverAllowed(comic.id, source.url, feed_identity) then return "unavailable" end
             local format = result and result.format
             if not result or result.temporary_path ~= temporary
                 or (format ~= "jpeg" and format ~= "jpg" and format ~= "png" and format ~= "webp") then
-                os.remove(temporary)
-                self.cover_failures[failure_identity] = self.clock() + 300
-                return
+                if not err or (err.kind ~= "canceled" and err.kind ~= "network" and err.kind ~= "authentication") then
+                    self.cover_failures[failure_identity] = self.clock() + 300
+                end
+                return "error"
             end
-            self.cover_failures[failure_identity] = nil
             local path = root .. "/" .. Util.hash(cache_identity) .. "." .. format
             Files.assertRegular(temporary, root)
             Files.assertContained(path, root)
             Files.syncFile(temporary)
             assert(os.rename(temporary, path))
             Files.syncDirectory(root)
-            current.cover_path = path
-            current.extra = current.extra or {}
-            current.extra.cached_cover_url = source.url
-            current.extra.cached_cover_identity = source.identity
-            account.store:upsertComic(current)
-            self:_notify()
+            latest.cover_path = path
+            latest.extra = latest.extra or {}
+            latest.extra.cached_cover_url, latest.extra.cached_cover_identity = source.url, source.identity
+            account.store:upsertComic(latest)
+            self.cover_failures[failure_identity] = nil
+            return "downloaded"
         end)
+        if published and replacement then
+            pcall(os.remove, temporary)
+            if self.cover_requests[request_key] == request then
+                self.cover_requests[request_key], self.covers[request_key] = nil, nil
+            end
+            self:_cacheCover(replacement, public_bookstore, feed_identity, function(next_observation, next_error)
+                request.finish(next_observation.status, next_observation.ready, next_error)
+            end)
+        elseif not published then
+            request.finish("error", false, errorValue("storage", "The downloaded cover could not be saved."))
+        else
+            request.finish(failure, failure == "downloaded", err)
+        end
+        self:_notify()
+    end)
+    if not ok then request.finish("error", false, errorValue("worker", "The cover request could not start."))
+    elseif not request.done then
+        request.task_id = task
+        -- Bound queueing and suspended-worker delays as well as transfer time.
+        request.timeout = function()
+            if request.done then return end
+            request.finish("error", false, errorValue("timeout", "Cover preparation exceeded its time limit."))
+            if request.task_id then pcall(request.runner.cancel, request.runner, request.task_id) end
+        end
+        self.ui_manager:scheduleIn(self.settings:get("worker_timeout", 90) + 5, request.timeout)
+    end
+    return task
 end
 
 function Controller:requestCover(comic_id)
@@ -1458,11 +1671,19 @@ function Controller:downloadEpisodes(comic_id, episode_ids, callback)
         self:_notify(); return jobs
     end)
 end
+function Controller:getDownloadEstimate(comic_id, episode_ids)
+    local account
+    if not self.closed then account = self.account end
+    return DownloadEstimate.estimate(account, comic_id, episode_ids)
+end
+
 function Controller:getDownloads()
     local result, retained = {}, {}
     for _index, job in ipairs(self.account.store:listJobs()) do
         if self.account.downloads then job = self.account.downloads:projectJob(job) end
         if job.kind == "episode_download" and not (job.payload or {}).removed then
+            -- Storage bytes describe this job's own revision, including retained older copies.
+            job.bytes = DownloadEstimate.storedBytes(self.account, job.comic_id, job.episode_id, job.revision)
             local key = job.episode_id .. "/" .. tostring(job.revision)
             if not (job.payload or {}).replaced_by or not retained[key] then result[#result + 1] = job end
             if (job.payload or {}).replaced_by then retained[key] = true end
@@ -1667,8 +1888,11 @@ function Controller:setSetting(key, value)
         return nil, errorValue("invalid_request", "Select a supported reading default.")
     end
     if key == "search_history" then self.account.store:putSetting(key, value)
-    elseif key == "cache_limit_mb" then
-        local limit = math.max(0, tonumber(value) or 256) * 1048576
+    elseif key == "cache_limit_mb" or key == "cache_limit_bytes" then
+        local limit = key == "cache_limit_mb" and math.max(0, tonumber(value) or 256) * 1048576 or value
+        if type(limit) ~= "number" or limit ~= limit or limit < 0 or limit > 9007199254740991 or limit % 1 ~= 0 then
+            return nil, errorValue("invalid_request", "Choose a finite, whole-byte cache limit.")
+        end
         self.settings:set("cache_limit_bytes", limit)
         self.account.pages:evictToLimit(limit)
     else self.settings:set(key, value) end
@@ -1963,6 +2187,16 @@ function Controller:_readerEvent(name, event)
         end
         self:_chapterBoundary(event)
     elseif name == "closed" then
+        if event.reader_generation then
+            local dialogs = {}
+            for dialog in pairs(self.reader_dialogs) do
+                if dialog.reader_generation == event.reader_generation then dialogs[#dialogs + 1] = dialog end
+            end
+            for _, dialog in ipairs(dialogs) do dialog:onClose() end
+            if self.chapter_dialog and self.chapter_dialog.reader_generation == event.reader_generation then
+                self.chapter_dialog:onClose()
+            end
+        end
         self.account.downloads:releaseReader(event.reader_generation)
         for integration in pairs(self.integrations) do
             if integration.generation == event.reader_generation then self.integrations[integration] = nil end
@@ -1977,7 +2211,8 @@ function Controller:_readerEvent(name, event)
                     reader_generation = event.reader_generation }
             end
         end)
-    elseif name == "page_error" then self:_pageError(event.descriptor, event.index or 1, {}, event.error)
+    elseif name == "page_error" then self:_pageError(event.descriptor, event.index or 1,
+        { reader_generation = event.reader_generation }, event.error)
     elseif name == "suspend" then self:suspend()
     elseif name == "resume" then self:resume() end
 end
@@ -2002,6 +2237,24 @@ local function readerCaption(value)
     return text:sub(1, last) .. "…"
 end
 
+local function readerChapterCaption(episode, fallback)
+    episode = episode or {}
+    local title = readerCaption(episode.title or fallback)
+    local number = tonumber(episode.short_title) or tonumber(episode.order or episode.chapter_order)
+    if number and number > 0 and number < math.huge then
+        local label = string.format(_("Episode %s"), tostring(number))
+        if title == "" then return label end
+        local compact_title, compact_label = title:gsub("%s+", ""), label:gsub("%s+", "")
+        if compact_title:find(compact_label, 1, true) == 1
+            and not compact_title:sub(#compact_label + 1, #compact_label + 1):match("%d") then return title end
+        return label .. " · " .. title
+    end
+    local short = readerCaption(episode.short_title)
+    if title == "" then return short ~= "" and short or readerCaption(fallback) end
+    if short ~= "" and short ~= title then return short .. " · " .. title end
+    return title
+end
+
 local function readerOverlayUI()
     local W = require("bilicomics/ui/widgets")
     local CenterContainer = require("ui/widget/container/centercontainer")
@@ -2014,6 +2267,9 @@ local function readerOverlayUI()
     local ui = { W = W, width = screen_width - 2 * margin, focus = {} }
     function ui:text(text, width, size, options)
         return W.text(text, width or self.width, W.fontSize(size), options)
+    end
+    function ui:line(text, width, size, options)
+        return W.line(text, width or self.width, W.fontSize(size), options)
     end
     function ui:space(height) return W.spacePixels(W.dp(height)) end
     function ui:rule(width, dark)
@@ -2035,10 +2291,10 @@ local function readerOverlayUI()
         local label_width = math.floor(self.width * 0.58)
         local chevron_width, gap = W.dp(14), W.dp(14)
         local row = W.ActionRow:new{ width = self.width, callback = callback,
-            content = CenterContainer:new{ dimen = Geom:new{ w = self.width, h = W.dp(72) },
-                W.row{ self:text(label, label_width, 21),
-                    self:text(hint or "", self.width - label_width - gap - chevron_width, 17, { muted = true, align = "right" }),
-                    W.gap(gap), self:text("›", chevron_width, 22, { muted = true, align = "right" }) } } }
+            content = CenterContainer:new{ dimen = Geom:new{ w = self.width, h = W.dp(72) - W.dp(1) },
+                W.row{ self:line(label, label_width, 21),
+                    self:line(hint or "", self.width - label_width - gap - chevron_width, 17, { muted = true, align = "right" }),
+                    W.gap(gap), self:line("›", chevron_width, 22, { muted = true, align = "right" }) } } }
         self.focus[#self.focus + 1] = { row }
         return W.column{ row, self:rule() }
     end
@@ -2054,7 +2310,7 @@ local function readerOverlayUI()
                 bold = true, fgcolor = W.ink, padding = 0 }, W.dp(12), W.dp(12), W.dp(6), W.dp(6)) }
     end
     function ui:sheet(content, dismiss, top, bottom)
-        return W.sheetDialog(W.inset(content, margin, margin, W.dp(top or 30), W.dp(bottom or 36)), self.focus,
+        return W.sheetDialog(W.inset(content, margin, margin, W.dp(top or 30) + W.dp(2), W.dp(bottom or 36)), self.focus,
             { width = screen_width, padding = 0, close_callback = dismiss })
     end
     return ui
@@ -2062,40 +2318,61 @@ end
 
 function Controller:_chapterBoundary(event)
     if self.chapter_dialog then return end
+    local integration = event.reader and event.reader.bilicomics_integration or self.active_integration
+    if integration and (not integration:isCurrent() or self.active_integration ~= integration
+        or event.reader_generation and event.reader_generation ~= integration.generation) then return end
     local next_episode = self:_nextEpisode(event.descriptor)
     local account = self.account
-    local integration = event.reader and event.reader.bilicomics_integration or self.active_integration
     local function current()
-        return not self.closed and self.account == account and (not integration or integration:isCurrent())
+        return not self.closed and self.account == account
+            and (not integration or self.active_integration == integration and integration:isCurrent())
     end
     local properties = {}
     if integration and integration.document.getDocumentProps then properties = integration.document:getDocumentProps() or {} end
     local heading = next_episode and _("End of chapter") or _("Latest available chapter finished")
+    local dialog
     local function dismiss()
-        if self.chapter_dialog then self.ui_manager:close(self.chapter_dialog); self.chapter_dialog = nil end
+        if dialog then
+            self.ui_manager:close(dialog)
+            if self.chapter_dialog == dialog then self.chapter_dialog = nil end
+            dialog = nil
+        end
         if integration then integration:finishTransition() end
     end
     local ui = readerOverlayUI()
     local W = ui.W
-    local content = { ui:text(heading, nil, 30, { bold = true }), ui:space(8),
-        ui:text(string.format(_("Finished: %s"), readerCaption(properties.title or event.descriptor.episode_id)), nil, 18, { muted = true }) }
-    local next_readable = next_episode and DownloadService.isReadable(next_episode, false)
+    local content = { ui:line(heading, nil, 30, { bold = true }), ui:space(8),
+        ui:line(string.format(_("Finished: %s"), readerChapterCaption(properties, event.descriptor.episode_id)), nil, 18, { muted = true }) }
+    local connected = self:_connected()
+    local next_readable = next_episode and DownloadService.isReadable(next_episode, not connected)
+    local next_cached = false
+    if next_episode and not connected and account and account.catalog and account.catalog.getDescriptor and account.pages then
+        local descriptor = account.catalog:getDescriptor(next_episode.id)
+        if descriptor then
+            for number in ipairs(descriptor.pages or {}) do
+                local page = account.pages:getPage(next_episode.id, descriptor.revision, number)
+                if page and page.state == "ready" and page.path and Files.exists(page.path) then next_cached = true; break end
+            end
+        end
+    end
+    if not connected then next_readable = next_readable and next_cached end
     if next_episode then
         local card_width = ui.width - 2 * W.dp(26) - 2 * W.dp(1.5)
         local available = require("bilicomics/ui/model").entitlement(next_episode)
-        local status = next_readable and (available .. " · " .. (self:_connected() and _("Online reading") or _("Offline reading")))
-            or (next_episode.access == "locked" and _("Unread · purchase required before reading") or available)
+        local status = next_readable and (available .. " · " .. (connected and _("Online reading") or _("Cached images available offline")))
+            or (next_episode.access == "locked" and _("Unread · purchase required before reading")
+                or (not connected and (available .. " · " .. _("Connect to read the next chapter")) or available))
         local preload_key = tostring(event.reader_generation) .. ":" .. tostring(next_episode.id)
-        if next_readable and self.preloaded[preload_key] then status = status .. " · " .. _("Preloading started") end
+        if next_readable and connected and self.preloaded[preload_key] then status = status .. " · " .. _("Preloading started") end
         local price = tonumber(next_episode.pay_gold)
         local price_tag
         if next_episode.access == "locked" and price and price == price and price >= 0 and price < math.huge then
             price_tag = ui:tag(string.format(_("%s comic coins"), tostring(price)))
             card_width = card_width - W.dp(20) - price_tag:getSize().w
         end
-        local details = W.column{ ui:text(_("Next chapter"), card_width, 16, { muted = true }), ui:space(6),
-            ui:text(readerCaption(next_episode.title or next_episode.short_title or next_episode.id), card_width, 25, { bold = true }),
-            ui:space(6), ui:text(status, card_width, 17, { muted = true }) }
+        local details = W.column{ ui:line(_("Next chapter"), card_width, 16, { muted = true }), ui:space(6),
+            ui:line(readerChapterCaption(next_episode, next_episode.id), card_width, 25, { bold = true }),
+            ui:space(6), ui:line(status, card_width, 17, { muted = true }) }
         content[#content + 1] = ui:space(24)
         content[#content + 1] = ui:card(price_tag and W.row{ details, W.gap(W.dp(20)), price_tag } or details)
     else
@@ -2151,15 +2428,18 @@ function Controller:_chapterBoundary(event)
         content[#content + 1] = ui:space(16)
         content[#content + 1] = ui:text(_("No automatic purchase. A quote must be confirmed before submitting."), nil, 16, { muted = true })
     end
-    self.chapter_dialog = ui:sheet(W.column(content), dismiss, 34, 38)
-    self.ui_manager:show(self.chapter_dialog)
+    dialog = ui:sheet(W.column(content), dismiss, 34, 38)
+    dialog.reader_generation = event.reader_generation or integration and integration.generation
+    self.chapter_dialog = dialog
+    self.ui_manager:show(dialog)
 end
 
 function Controller:_pageError(descriptor, index, options, err)
     local account = self.account
     local integration = self.active_integration
     if not integration or not integration:isCurrent() or integration.document.descriptor.episode_id ~= descriptor.episode_id
-        or integration.document.descriptor.revision ~= descriptor.revision then return end
+        or integration.document.descriptor.revision ~= descriptor.revision
+        or options and options.reader_generation and options.reader_generation ~= integration.generation then return end
     local key = descriptor.episode_id .. "/" .. descriptor.revision .. "/" .. index
     if self.errors_shown[key] then return end
     self.errors_shown[key] = true
@@ -2224,11 +2504,23 @@ function Controller:_pageError(descriptor, index, options, err)
     buttons[#buttons + 1] = { { text = _("Back to reading"), callback = dismiss } }
     local position = string.format(_("Image %d / %d"), index, #descriptor.pages)
     local properties = integration.document:getDocumentProps() or {}
-    position = position .. " · " .. readerCaption(properties.title or descriptor.episode_id)
-    dialog = W.menuDialog(heading, { { text = position, size = W.fontSize(17), muted = true },
-        { text = message, size = W.fontSize(20), line_height = 0.7 } }, buttons,
-        { placement = "center", width = W.dp(700), left = W.dp(115), top = W.dp(320),
-            title_size = 28, text_size = 20, button_height = 66, close_callback = dismiss })
+    position = position .. " · " .. readerChapterCaption(properties, descriptor.episode_id)
+    local width, border, padding = W.dp(700), W.dp(2), W.dp(40)
+    local inner = width - 2 * (border + padding)
+    local content, focus = { W.line(heading, inner, W.fontSize(28), { bold = true }), W.spacePixels(W.dp(6)),
+        W.line(position, inner, W.fontSize(17), { muted = true }), W.spacePixels(W.dp(16)),
+        W.text(message, inner, W.fontSize(20), { line_height = 1.7 }), W.spacePixels(W.dp(28)) }, {}
+    for row, specs in ipairs(buttons) do
+        if row > 1 then content[#content + 1] = W.spacePixels(W.dp(12)) end
+        local spec = specs[1]
+        local button = W.button(spec.text, inner, spec.callback,
+            { primary = spec.primary, size = W.fontSize(spec.primary and 22 or 21), height_px = W.dp(66) })
+        content[#content + 1], focus[#focus + 1] = button, { button }
+    end
+    dialog = W.sheetDialog(W.inset(W.column(content), padding, padding, W.dp(38), W.dp(36)), focus,
+        { placement = "center", width = width, left = W.dp(115), top = W.dp(320), close_callback = dismiss })
+    dialog.title, dialog.buttons = heading, buttons
+    dialog.reader_generation = integration.generation
     self.reader_dialogs[dialog] = true
     self.ui_manager:show(dialog)
 end
@@ -2244,7 +2536,7 @@ function Controller:showReaderMenu()
     end
     local function close() if dialog then self.ui_manager:close(dialog); self.reader_dialogs[dialog] = nil; dialog = nil end end
     local properties = integration.document:getDocumentProps() or {}
-    local chapter = readerCaption(properties.title or descriptor.episode_id)
+    local chapter = readerChapterCaption(properties, descriptor.episode_id)
     if properties.series then chapter = readerCaption(properties.series) .. " · " .. chapter end
     local ui = readerOverlayUI()
     local W = ui.W
@@ -2258,8 +2550,8 @@ function Controller:showReaderMenu()
     for _, job in ipairs(self:getDownloads()) do
         if job.state == "running" or job.state == "queued" then running = running + 1 end
     end
-    local rows = { W.row{ ui:text(_("Comic actions"), title_width, 26, { bold = true }),
-            ui:text(chapter, ui.width - title_width, 17, { muted = true, align = "right" }) },
+    local rows = { W.row{ ui:line(_("Comic actions"), title_width, 26, { bold = true }),
+            ui:line(chapter, ui.width - title_width, 17, { muted = true, align = "right" }) },
         ui:space(16), ui:progress(index, #descriptor.pages), ui:space(20), ui:rule(nil, true),
         ui:row(_("Chapter catalog"), string.format(_("%d chapters in total"), #self:getEpisodes(descriptor.comic_id)), function()
             if not current() then return end
@@ -2300,6 +2592,7 @@ function Controller:showReaderMenu()
     rows[#rows + 1] = back
     ui.focus[#ui.focus + 1] = { back }
     dialog = ui:sheet(W.column(rows), close)
+    dialog.reader_generation = integration.generation
     self.reader_dialogs[dialog] = true
     self.ui_manager:show(dialog)
 end

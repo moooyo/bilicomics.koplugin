@@ -1,4 +1,5 @@
 return {
+    ["Reduce automatic cache to %s? Older automatic images above this limit will be removed now. Downloads and current reading content are preserved."] = "将自动缓存上限降至 %s？超出上限的较旧缓存会立即清理。手动下载和当前阅读内容会保留。",
     ["Other sign-in methods"] = "其他登录方式",
     ["QR sign-in renews automatically. Imported web sessions need to be replaced when they expire."] = "扫码登录可自动续期。导入的网页会话过期后需要重新导入。",
     ["Session files: .txt, .json or .cookies, up to 128 KiB."] = "会话文件支持 .txt、.json 或 .cookies，大小不超过 128 KiB。",

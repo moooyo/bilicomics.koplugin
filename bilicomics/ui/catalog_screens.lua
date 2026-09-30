@@ -126,6 +126,7 @@ end
 
 function CatalogJumpDialog:refreshResults()
     if not self.input_field or self._closing then return end
+    local previous_bounds = self.dialog_frame.dimen and self.dialog_frame.dimen:copy()
     if self.results_content then self.results_content:free() end
     local content, focus = self.build_results(self)
     self.results_content = content
@@ -133,7 +134,12 @@ function CatalogJumpDialog:refreshResults()
     self.dialog_frame[1] = self.vgroup
     self.layout = { { self._input_widget } }
     for _, row in ipairs(focus) do self.layout[#self.layout + 1] = row end
-    UIManager:setDirty(self, "ui")
+    -- The result count can shrink the frame or move it above the native keyboard.
+    -- Repaint its underlay, but refresh only the old and new dialog footprint.
+    UIManager:setDirty("all", function()
+        local bounds = self.dialog_frame.dimen
+        return "ui", previous_bounds and previous_bounds:combine(bounds) or bounds
+    end)
 end
 
 function CatalogJumpDialog:paintTo(bb, _x, _y)
@@ -557,7 +563,7 @@ function Screens:_chapterRow(comic, episode, current, register_focus)
             { bold = true, align = "center", color = selected and W.paper or color }), W.dp(30), W.dp(30),
             { border_px = W.dp(2), color = downloadable and W.ink or BB.Color8(0xCC),
                 background = selected and W.ink or downloadable and W.paper or BB.Color8(0xEE) })
-        cells[#cells + 1] = W.box(checkbox, columns.checkbox, W.dp(63))
+        cells[#cells + 1] = W.box(checkbox, columns.checkbox, W.dp(63), { align = "left" })
     end
     cells[#cells + 1] = cell(chapterNumber(episode), columns.number, 24, true)
     cells[#cells + 1] = cell(title(episode), columns.title, 21, current_row or highlighted)
@@ -609,7 +615,7 @@ function Screens:_chapterRow(comic, episode, current, register_focus)
     if not self.selecting then
         local actions = button("⋯", columns.actions, function()
             if self:_catalogCurrent(context) then self:_chapterActions(comic, episode) end
-        end, { borderless = true, size = 22, height = 63 })
+        end, { borderless = true, size = 22, height = 63, align = "right", padding_h = 0 })
         controls[#controls + 1], body = actions, W.row{ row, actions }
     end
     local widget = W.column{ body, W.rule1dp(self.width, BB.Color8(0xCC)) }
@@ -624,14 +630,22 @@ function Screens:_catalogSelectionFooter()
     local inner, gap = width - W.dp(112), W.dp(14)
     local cancel_width, download_width = W.dp(150), W.dp(230)
     local total, visible = count(self.selected), 0
+    local episode_ids = {}
+    for id in pairs(self.selected) do episode_ids[#episode_ids + 1] = id end
     for _, episode in ipairs(self.catalog_visible_items or {}) do
         if self.selected[tostring(episode.id)] then visible = visible + 1 end
     end
     local summary_width = inner - cancel_width - download_width - 2 * gap
+    local estimate = self.controller.getDownloadEstimate and self.controller:getDownloadEstimate(self.comic_id, episode_ids)
+    local detail = string.format(T("This page %d · Other pages %d"), visible, total - visible)
+    if total > 0 then
+        detail = detail .. (estimate and tonumber(estimate.bytes) and estimate.bytes > 0
+            and string.format(T(" · About %s"), Model.bytes(estimate.bytes))
+            or T(" · Size unknown"))
+    end
     local summary = W.column{
         lineText(string.format(T("Selected chapters: %d"), total), summary_width, 22, 30, { bold = true }),
-        space(4), lineText(string.format(T("This page %d · Other pages %d"), visible, total - visible), summary_width, 16, 25,
-            { muted = true }),
+        space(4), lineText(detail, summary_width, 16, 25, { muted = true }),
     }
     local cancel = button(T("Cancel"), cancel_width, function()
         if not self:_catalogCurrent(context) then return end
@@ -644,6 +658,7 @@ function Screens:_catalogSelectionFooter()
     local actions = W.row{ summary, W.gap(gap), cancel, W.gap(gap), download }
     local bottom = math.max(0, W.dp(108) - footer_rule:getSize().h - actions:getSize().h - W.dp(20))
     local footer = W.column{ footer_rule, W.inset(actions, W.dp(56), W.dp(56), W.dp(20), bottom) }
+    footer.selection_detail, footer.download_estimate = detail, estimate
     return footer, { cancel, download }
 end
 
@@ -686,9 +701,14 @@ function Screens:_comic()
     if type(comic.finished) == "boolean" then metadata = metadata .. (comic.finished and T("Completed") or T("Ongoing")) .. " · " end
     metadata = metadata .. string.format(T("%d chapters"), #all)
     local overview_width = W.dp(100)
+    local measured_title = TextWidget:new{ text = title(comic), face = Font:getFace("cfont", W.fontSize(34)), bold = true }
+    local title_width = math.min(identity_width - overview_width, measured_title:getSize().w + W.dp(18))
+    measured_title:free()
+    local title_row = self.selecting and lineText(title(comic), identity_width, 34, 48, { bold = true })
+        or W.row{ lineText(title(comic), title_width, 34, 48, { bold = true }),
+            lineText(T("Overview ›"), overview_width, 18, 48) }
     local identity = W.column{
-        W.row{ lineText(title(comic), identity_width - overview_width, 34, 48, { bold = true }),
-            lineText(T("Overview ›"), overview_width, 18, 48, { align = "right" }) },
+        title_row,
         space(7), lineText(metadata, identity_width, 18, 28, { muted = true }),
     }
     local identity_action = W.ActionRow:new{ width = identity_width, content = identity,
@@ -785,7 +805,8 @@ function Screens:_comic()
     if not self.selecting then labels[#labels + 1] = columnLabel("", columns.actions) end
     rows[#rows + 1], rows[#rows + 2] = W.box(W.row(labels), self.width, W.dp(39)), W.rule1dp(self.width, W.ink)
     local header = W.column(rows)
-    local pager_height, row_height = W.dp(70), W.dp(63) + math.max(1, W.dp(1))
+    local pager_dp = self.selecting and 60 or 66
+    local pager_height, row_height = W.dp(pager_dp), W.dp(63) + math.max(1, W.dp(1))
     local available = self.body_height - header:getSize().h
     local per_page = math.max(1, math.min(10, math.floor((available - (#items > 10 and pager_height or 0)) / row_height)))
     local pages = math.max(1, math.ceil(#items / per_page))
@@ -831,11 +852,11 @@ function Screens:_comic()
     if pages > 1 then
         local pager_width = math.floor(self.width / 3)
         local previous = button(T("‹ Previous page"), pager_width, function() self:_changePage(-1) end,
-            { borderless = true, height = 70, size = 20, enabled = self.page > 1, align = "left" })
+            { borderless = true, height = pager_dp, size = 20, enabled = self.page > 1, align = "left" })
         local counter = button(string.format("%d / %d", self.page, pages), self.width - 2 * pager_width,
-            function() self:_catalogJump() end, { borderless = true, height = 70, size = 20 })
+            function() self:_catalogJump() end, { borderless = true, height = pager_dp, size = 20 })
         local next_page = button(T("Next page ›"), pager_width, function() self:_changePage(1) end,
-            { borderless = true, height = 70, size = 20, enabled = self.page < pages, align = "right" })
+            { borderless = true, height = pager_dp, size = 20, enabled = self.page < pages, align = "right" })
         content[#content + 1] = W.row{ previous, counter, next_page }
         self.focus[#self.focus + 1], self.pagination = { previous, counter, next_page }, { previous = previous, counter = counter, next = next_page }
     end

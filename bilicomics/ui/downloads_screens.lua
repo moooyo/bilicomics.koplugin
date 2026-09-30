@@ -33,6 +33,11 @@ end
 local function stopped(job) return job.state == "paused" or job.state == "failed" or job.state == "canceled" end
 local function savedCount(job) return math.max(0, math.floor(tonumber(job.completed) or 0)) end
 local function totalCount(job) return math.max(0, math.floor(tonumber(job.total) or 0)) end
+local function copyBytes(job)
+    local payload = job.payload or {}
+    local bytes = tonumber(job.bytes or payload.bytes or payload.saved_bytes)
+    return bytes and bytes >= 0 and bytes < math.huge and bytes or nil
+end
 local function copyReference(job, short)
     local value = tostring(job.revision or job.id or ""):gsub("[%c]", " ")
     if short and #value > 22 and value:match("^[%w%._%-:]+$") then return value:sub(1, 10) .. "…" .. value:sub(-8) end
@@ -82,7 +87,42 @@ function Screens:_downloadIdentity(job)
             if tostring(item.id) == tostring(job.episode_id) then episode = item; break end
         end
     end
-    return payload.comic_title or title(comic), payload.title or (episode and title(episode)) or tostring(job.episode_id or ""), episode
+    local chapter = payload.title or (episode and title(episode)) or tostring(job.episode_id or "")
+    local number = episode and (tonumber(episode.short_title) or tonumber(episode.order))
+    if number and number > 0 and number < math.huge then chapter = string.format(T("Chapter %s %s"), tostring(number), chapter) end
+    return payload.comic_title or title(comic), chapter, episode
+end
+
+function Screens:_downloadChapterRange(jobs)
+    local numbers, seen = {}, {}
+    for _, job in ipairs(jobs) do
+        local _, _, episode = self:_downloadIdentity(job)
+        local number = episode and tonumber(episode.short_title or episode.order)
+        if not number or number < 0 or number >= math.huge or number % 1 ~= 0 then
+            return string.format(T("%d chapters saved"), #jobs)
+        end
+        if not seen[number] then numbers[#numbers + 1], seen[number] = number, true end
+    end
+    table.sort(numbers)
+    local ranges, first, last = {}, nil, nil
+    local function append()
+        if first then ranges[#ranges + 1] = first == last and tostring(first) or first .. "–" .. last end
+    end
+    for _, number in ipairs(numbers) do
+        if last and number ~= last + 1 then append(); first = nil end
+        first, last = first or number, number
+    end
+    append()
+    local comic = jobs[1] and self.controller:getComic(jobs[1].comic_id) or {}
+    local all = jobs[1] and Model.array(self.controller:getEpisodes(jobs[1].comic_id)) or {}
+    if comic.finished and #all > 0 and #numbers == #all then
+        return string.format(T("Complete series · %d chapters"), #numbers)
+    end
+    if #numbers == 1 then
+        local _, _, episode = self:_downloadIdentity(jobs[1])
+        return string.format(T("Chapter %s · %s"), tostring(numbers[1]), title(episode))
+    end
+    return string.format(T("Chapters %s · %d chapters"), table.concat(ranges, ", "), #numbers)
 end
 
 function Screens:_downloadCopyLabel(job, short)
@@ -143,6 +183,7 @@ end
 
 function Screens:_downloadActions(job, render_jobs)
     local payload, context = job.payload or {}, self:_downloadContext()
+    local revision = job.revision
     local comic_label, chapter_label, episode = self:_downloadIdentity(job)
     local readable = not episode or not episode.access or Model.downloadable(episode)
     local primary, secondary = nil, {}
@@ -150,7 +191,7 @@ function Screens:_downloadActions(job, render_jobs)
         return function()
             if not self:_downloadContextCurrent(context) then return end
             local current = self:_currentDownload(job.id)
-            if current and current.revision ~= job.revision then self:_render(); return end
+            if current and current.revision ~= revision then self:_render(); return end
             if current and not (current.payload or {}).removed then callback(current) end
         end
     end
@@ -303,15 +344,16 @@ function Screens:_jobRow(job, measure, render_jobs)
     if job.state == "running" and not payload.source_refresh and not payload.version_replacement then
         local concurrency = self.controller:getSetting("download_concurrency", 2)
         status_text = string.format(T("Downloading · %d / %d images · Concurrent %d images"), savedCount(job), totalCount(job), concurrency)
+    elseif job.state == "paused" and not job.error and not payload.replaced_by and not payload.source_refresh and not payload.version_replacement then
+        status_text = string.format(T("Paused · %d / %d images · Saved images are kept"), savedCount(job), totalCount(job))
     elseif job.error and not payload.source_refresh and not payload.version_replacement then
         local heading = Model.error(job.error)
         status_text = heading .. " · " .. T("Saved images and reading position are preserved")
     end
     local show_progress = not payload.replaced_by and not job.error and totalCount(job) > 0
     local detail = { line(comic .. " · " .. chapter, info_width, 21,
-            { bold = true, height = W.dp(34), fixed_height = true }), space(6),
-        text(status_text, info_width, 17, { muted = not job.error and not payload.replaced_by,
-            height = W.dp(show_progress and 28 or 52), fixed_height = true }) }
+            { bold = true, height = W.dp(27) }), space(6),
+        text(status_text, info_width, 17, { muted = not job.error and not payload.replaced_by }) }
     if show_progress then
         detail[#detail + 1], detail[#detail + 2] = space(12), W.progress(info_width, W.dp(8), savedCount(job) / totalCount(job))
     end
@@ -321,7 +363,7 @@ function Screens:_jobRow(job, measure, render_jobs)
             { height = W.dp(52), fixed_height = true })
     end
     local detail_content = W.column(detail)
-    local information = W.box(detail_content, info_width, math.max(W.dp(92), detail_content:getSize().h), { align = "left" })
+    local information = W.box(detail_content, info_width, math.max(W.dp(58), detail_content:getSize().h), { align = "left" })
     if #actions > 1 then
         local function more()
             if actions[2].text == T("More actions") then actions[2].callback() else self:_downloadMore(job, actions) end
@@ -375,6 +417,7 @@ end
 function Screens:_downloadRecovery(job, error)
     self:_closeDownloadDialog()
     local context, dialog = self:_downloadContext()
+    local revision = job.revision
     local heading, message, action
     if error ~= false and (error or job.error) then heading, message, action = Model.error(error or job.error)
     else
@@ -390,39 +433,39 @@ function Screens:_downloadRecovery(job, error)
             if self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
             local current = self:_currentDownload(job.id)
             if not current or (current.payload or {}).removed then self:_closeDownloadDialog(); self:_render(); return end
+            if current.revision ~= revision then self:_closeDownloadDialog(); self:_render(); return end
             callback(current)
         end } }
     end
     local can_refresh, can_replace = self:_canRefreshSources(job), self:_canReplaceVersion(job)
+    local payload = job.payload or {}
+    local can_resume = stopped(job) and not payload.removed and not payload.replaced_by
+        and not payload.source_refresh and not payload.version_replacement
     if kind == "account" then
         add(T("Open account"), function() self:showAccount() end)
-        if (self.controller:getAccount() or {}).session_valid == true and stopped(job) then
+        if (self.controller:getAccount() or {}).session_valid == true and can_resume then
             add(T("Retry with current sign-in"), function(current) self:_closeDownloadDialog(); self:_downloadControl(current, context, "resumeJob") end)
         end
     elseif kind == "access" then
         add(T("Review chapter access"), function(current) self:showComic(current.comic_id) end)
     elseif kind == "storage" then
         add(T("Manage storage"), function() self:_downloadOpenStorage() end)
-        add(T("Storage is ready; retry download"), function(current) self:_closeDownloadDialog(); self:_downloadControl(current, context, "resumeJob") end)
+        if can_resume then add(T("Storage is ready; retry download"), function(current) self:_closeDownloadDialog(); self:_downloadControl(current, context, "resumeJob") end) end
     elseif kind == "prerequisite" then
         message = message .. "\n\n" .. T("Close this chapter, pause its other downloads, then review recovery options again. The next operation will check these conditions.")
         add(T("Prerequisites resolved; review options"), function(current) self:_downloadRecovery(current, false) end)
     elseif kind == "unsupported" then
         add(T("Open chapter catalog"), function(current) self:showComic(current.comic_id) end)
     elseif kind == "replace" then
-        message = message .. "\n\n" .. T("A separate new copy starts from the beginning. This copy's saved images and reading position stay separate.")
         if can_replace then add(T("Redownload as new version"), function(current) self:_confirmVersionReplacement(current) end) end
     elseif kind == "retry" then
-        add(T("Retry download"), function(current) self:_closeDownloadDialog(); self:_downloadControl(current, context, "resumeJob") end)
+        if can_resume then add(T("Retry download"), function(current) self:_closeDownloadDialog(); self:_downloadControl(current, context, "resumeJob") end) end
         if can_refresh or can_replace then add(T("Other recovery options"), function(current) self:_downloadRecovery(current, false) end) end
     else
         if can_refresh then add(T("Refresh image sources"), function(current) self:_confirmSourceRefresh(current) end) end
         if can_replace then add(T("Redownload as new version"), function(current) self:_confirmVersionReplacement(current) end) end
     end
     if job.revision and (not episode or not episode.access or Model.downloadable(episode)) then
-        message = message .. "\n\n" .. ((job.payload or {}).replaced_by
-            and T("Only saved images remain readable; missing images cannot be fetched in this copy.")
-            or T("Opening the current copy may fetch missing images using your sign-in and network connection."))
         add((job.payload or {}).replaced_by and T("Open retained copy") or T("Open this copy"), function(current) self:_closeDownloadDialog(); self:_readDownload(current, context) end)
     end
     if job.revision and not (job.payload or {}).version_replacement then
@@ -430,9 +473,8 @@ function Screens:_downloadRecovery(job, error)
     end
     local width, rows = Screen:getWidth() - W.dp(112), {}
     local comic, chapter = self:_downloadIdentity(job)
-    local payload = job.payload or {}
     local kind_label = payload.replaced_by and T("Retained copy") or payload.replaces_job_id and T("New copy") or T("Current copy")
-    local size = tonumber(job.bytes or payload.bytes or payload.saved_bytes)
+    local size = copyBytes(job)
     local copy_summary = string.format(T("%s · Saved %d / %d images"), kind_label, savedCount(job), totalCount(job))
         .. (size and string.format(T(" · Uses %s"), Model.bytes(size)) or "")
     rows[#rows + 1] = { widget = W.column{ space(30), line(comic .. " · " .. chapter, width, 26,
@@ -440,16 +482,26 @@ function Screens:_downloadRecovery(job, error)
         line(copy_summary, width, 18, { muted = true, height = W.dp(28) }),
         space(26), W.rule1dp(width, W.ink), space(32), text(heading, width, 30, { bold = true }), space(12) } }
     for paragraph in (message .. "\n\n"):gmatch("(.-)\n\n") do
-        rows[#rows + 1] = { widget = W.column{ text(paragraph, width, 20, { line_height = 0.7 }), space(24) } }
+        rows[#rows + 1] = { widget = W.column{ text(paragraph, width, 20, { line_height = 0.7 }), space(34) } }
     end
-    rows[#rows + 1] = { widget = W.column{ text(T("Choose a recovery method"), width, 20, { bold = true }), space(18) } }
+    rows[#rows + 1] = { widget = W.column{ text(T("Choose a recovery method"), width, 20, { bold = true }), space(14) } }
+    local estimate = self.controller.getDownloadEstimate and self.controller:getDownloadEstimate(job.comic_id, { tostring(job.episode_id) })
+    local descriptor = estimate and (estimate.descriptors or {})[tostring(job.episode_id)]
+    local replacement_count = descriptor and tostring(descriptor.revision) ~= tostring(job.revision) and tonumber(descriptor.total_pages)
+    if replacement_count and (replacement_count <= 0 or replacement_count >= math.huge or replacement_count % 1 ~= 0) then replacement_count = nil end
+    local replacement_description = replacement_count and string.format(T("Download all %d images%s. A separate new copy starts from the beginning. This copy's saved images and reading position stay separate."),
+        replacement_count, estimate and tonumber(estimate.bytes) and estimate.bytes > 0
+            and string.format(T(", about %s"), Model.bytes(estimate.bytes)) or "")
+        or T("All images will be downloaded, using additional space and network data.")
+            .. " " .. T("A separate new copy starts from the beginning. This copy's saved images and reading position stay separate.")
     local descriptions = {
-        [T("Redownload as new version")] = T("All images will be downloaded, using additional space and network data. The new copy starts at the beginning."),
+        [T("Redownload as new version")] = replacement_description,
         [T("Refresh image sources")] = T("Saved content and reading position are preserved. New image sources are used only after verification succeeds."),
-        [T("Open retained copy")] = T("Only saved images remain readable; missing images cannot be fetched in this copy."),
+        [T("Open retained copy")] = string.format(T("Only the %d saved images remain readable; missing images cannot be fetched in this copy."), savedCount(job)),
         [T("Open this copy")] = T("Opening the current copy may fetch missing images using your sign-in and network connection."),
         [T("Remove download")] = T("Remove saved images from this copy. Reading position and purchase access are preserved."),
     }
+    local captured_text = { self:_downloadTargetText(job), message }
     for index, spec in ipairs(buttons) do
         if spec[1].text == T("Redownload as new version") then
             table.insert(buttons, 1, table.remove(buttons, index)); break
@@ -458,6 +510,8 @@ function Screens:_downloadRecovery(job, error)
     for _, spec in ipairs(buttons) do
         local entry = spec[1]
         local description = descriptions[entry.text]
+        captured_text[#captured_text + 1] = entry.text
+        if description then captured_text[#captured_text + 1] = description end
         local inner = width - W.dp(56)
         local card = FrameContainer:new{ padding = W.dp(22), padding_left = W.dp(26), padding_right = W.dp(26), margin = 0,
             bordersize = W.dp(entry.text == T("Redownload as new version") and 2 or 1.5), color = W.ink, background = W.paper,
@@ -469,10 +523,10 @@ function Screens:_downloadRecovery(job, error)
         row.text = entry.text
         rows[#rows + 1] = { widget = W.column{ row, space(14) }, focus = { row } }
     end
-    rows[#rows + 1] = { widget = text(T("None of these operations purchases a chapter."), width, 16, { muted = true }) }
+    rows[#rows + 1] = { widget = W.column{ space(6), text(T("None of these operations purchases a chapter."), width, 16, { muted = true }) } }
     local close = function() if self.dialog == dialog then self:_closeDownloadDialog() end end
     dialog = downloadFlow(T("Download recovery"), {}, { { { text = T("Back to downloads"), callback = close } } },
-        { body_rows = rows, body_padding_top_px = 0, capture_text = self:_downloadTargetText(job) .. "\n" .. message,
+        { body_rows = rows, body_padding_top_px = 0, capture_text = table.concat(captured_text, "\n"),
             close = close, on_replace = function(replacement, previous)
             UIManager:close(previous); dialog = replacement; self:_showDownloadDialog(replacement)
         end })
@@ -483,6 +537,7 @@ function Screens:_confirmSourceRefresh(job)
     if not self:_canRefreshSources(job) then return end
     self:_closeDownloadDialog()
     local context, dialog, started = self:_downloadContext()
+    local revision = job.revision
     local confirmation = {
         text = self:_downloadTargetText(job) .. "\n\n" .. T("Refresh and verify this copy's image sources?") .. "\n\n"
             .. T("Saved images may be downloaded again, using network data. Saved content and reading position are preserved; new sources are applied only after verification succeeds.")
@@ -491,7 +546,7 @@ function Screens:_confirmSourceRefresh(job)
         ok_callback = function()
             if started or self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
             local current = self:_currentDownload(job.id)
-            if not current or current.revision ~= job.revision or not self:_canRefreshSources(current) then self:_closeDownloadDialog(); self:_render(); return end
+            if not current or current.revision ~= revision or not self:_canRefreshSources(current) then self:_closeDownloadDialog(); self:_render(); return end
             started = true; self:_closeDownloadDialog()
             self.source_refresh_requests = self.source_refresh_requests or {}
             self.source_refresh_requests[job.id] = context
@@ -527,6 +582,7 @@ function Screens:_confirmVersionReplacement(job)
     if not self:_canReplaceVersion(job) then return end
     self:_closeDownloadDialog()
     local context, dialog, started = self:_downloadContext()
+    local revision = job.revision
     local confirmation = {
         text = self:_downloadTargetText(job) .. "\n\n" .. T("Download a separate new copy of this chapter?") .. "\n\n"
             .. T("All images will be downloaded, using additional space and network data. The new copy starts at the beginning.")
@@ -535,7 +591,7 @@ function Screens:_confirmVersionReplacement(job)
         ok_callback = function()
             if started or self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
             local current = self:_currentDownload(job.id)
-            if not current or current.revision ~= job.revision or not self:_canReplaceVersion(current) then self:_closeDownloadDialog(); self:_render(); return end
+            if not current or current.revision ~= revision or not self:_canReplaceVersion(current) then self:_closeDownloadDialog(); self:_render(); return end
             started = true; self:_closeDownloadDialog()
             self.version_replacement_requests = self.version_replacement_requests or {}
             self.version_replacement_requests[job.id] = context
@@ -584,6 +640,7 @@ end
 function Screens:_confirmRemoveDownload(job)
     self:_closeDownloadDialog()
     local context, dialog, started = self:_downloadContext()
+    local revision = job.revision
     local verifying = (job.payload or {}).source_refresh ~= nil
     local confirmation = { text = self:_downloadTargetText(job) .. "\n\n" .. self:_downloadProgress(job) .. "\n\n"
             .. (verifying and T("Stop verification and remove this copy's saved images?") or T("Remove this copy's saved images?"))
@@ -591,7 +648,7 @@ function Screens:_confirmRemoveDownload(job)
         ok_text = T("Remove download"), cancel_text = T("Cancel"), modal = true, ok_callback = function()
             if started or self.dialog ~= dialog or not self:_downloadContextCurrent(context) then return end
             local current = self:_currentDownload(job.id)
-            if not current or current.revision ~= job.revision or (current.payload or {}).removed or (current.payload or {}).version_replacement then
+            if not current or current.revision ~= revision or (current.payload or {}).removed or (current.payload or {}).version_replacement then
                 self:_closeDownloadDialog(); self:_render(); return
             end
             started = true
@@ -608,19 +665,25 @@ function Screens:_confirmRemoveDownload(job)
         end }
     local close = function() if self.dialog == dialog then self:_closeDownloadDialog() end end
     local comic, chapter = self:_downloadIdentity(job)
-    local bytes = tonumber(job.bytes or (job.payload or {}).bytes or (job.payload or {}).saved_bytes)
+    local bytes = copyBytes(job)
     local target = comic .. " · " .. chapter .. (bytes and " · " .. Model.bytes(bytes) or "")
-    dialog = downloadMenu(T("Remove this chapter download?"), {
-        { text = target, size = 20 },
-        { text = self:_downloadCopyLabel(job, true) .. " · " .. self:_downloadProgress(job), size = 16, muted = true },
-        { text = (verifying and T("Stop verification and remove this copy's saved images?") .. "\n" or "")
-            .. T("Tasks using this same copy will stop. Other versions, reading positions, and purchase access are preserved. Offline reading of this copy will no longer be available."),
-            size = 19, muted = true },
-    }, { {
-        { text = confirmation.cancel_text, callback = close },
-        { text = confirmation.ok_text, callback = confirmation.ok_callback, primary = true },
-    } }, { placement = "center", width = Screen:getWidth() - W.dp(230), top = W.dp(420), close = close, capture_text = confirmation.text,
-        selected = { x = 1, y = 1 } })
+    local width, border, padding = Screen:getWidth() - W.dp(230), W.dp(2), W.dp(40)
+    local inner, gap = width - 2 * (border + padding), W.dp(14)
+    local rows = { text(T("Remove this chapter download?"), inner, 28, { bold = true }), space(12), text(target, inner, 20) }
+    if verifying or (job.payload or {}).replaced_by or (job.payload or {}).replaces_job_id then
+        rows[#rows + 1], rows[#rows + 2] = space(10), text(self:_downloadCopyLabel(job, true) .. " · " .. self:_downloadProgress(job), inner, 16, { muted = true })
+    end
+    rows[#rows + 1], rows[#rows + 2] = space(14), text((verifying and T("Stop verification and remove this copy's saved images?") .. "\n" or "")
+        .. T("Removing makes this copy unavailable offline. Reading position and purchase access are preserved."), inner, 19, { muted = true, line_height = 0.7 })
+    local cancel = W.button(confirmation.cancel_text, math.floor((inner - gap) / 2), close, { height_px = W.dp(66), size = W.fontSize(21) })
+    local remove = W.button(confirmation.ok_text, inner - cancel:getSize().w - gap, confirmation.ok_callback,
+        { height_px = W.dp(66), size = W.fontSize(21), primary = true })
+    rows[#rows + 1], rows[#rows + 2] = space(32), W.row{ cancel, W.gap(gap), remove }
+    dialog = W.sheetDialog(W.inset(W.column(rows), padding, padding, W.dp(38), W.dp(36)), { { cancel, remove } },
+        { placement = "center", width = width, border_px = border, top = W.dp(420), close = close, selected = { x = 1, y = 1 } })
+    dialog.download_text = confirmation.text
+    dialog.title, dialog.buttons = T("Remove this chapter download?"), { {
+        { text = confirmation.cancel_text, callback = close }, { text = confirmation.ok_text, callback = confirmation.ok_callback, primary = true } } }
     self:_showDownloadDialog(dialog)
 end
 
@@ -736,13 +799,31 @@ function Screens:_downloads()
     if total_jobs == 0 then
         storage_right = W.button(T("Manage cache ›"), self.width - storage_heading_width, function()
             if self:_downloadContextCurrent(context) then self:_downloadOpenStorage() end
-        end, { borderless = true, align = "right", height_px = W.dp(58), size = W.fontSize(18) })
+        end, { borderless = true, align = "right", height_px = W.dp(44), size = W.fontSize(18) })
         self.focus[#self.focus + 1] = { storage_right }
     else storage_right = text(string.format(T("Device free %s"), free and Model.bytes(free) or T("Unknown")), self.width - storage_heading_width, 18,
         { muted = true, align = "right" }) end
     local amount = naturalText(Model.bytes(used), 36, false, true)
     local usage_label = naturalText(total_jobs == 0 and pinned == 0 and T("Automatic cache") or T("Plugin storage"), 18, true)
     local usage = baselineRow({ amount, usage_label }, storage_heading_width, W.dp(12))
+    if total_jobs == 0 then
+        self.page, self.pages, self.pagination = 1, 1, nil
+        local header = W.column{ space(28), W.row{ usage, storage_right }, space(24), W.rule1dp(self.width, W.ink) }
+        self.download_header = header
+        local action_width, body_width = math.min(self.width, W.dp(340)), math.min(self.width, W.dp(600))
+        local choose = self:_button(T("Choose a comic from the bookshelf"), action_width, function()
+            if self:_downloadContextCurrent(context) then self:showLibrary() end
+        end, { primary = true, size = W.fontSize(23), height_px = W.dp(68) })
+        local explanation = text(T("Open a comic's chapter catalog and choose chapters to download for offline reading."), body_width, 20,
+            { muted = true, align = "center", line_height = 0.7 })
+        local empty = W.column{ text(T("No downloads yet"), self.width, 32, { bold = true, align = "center" }), space(16),
+            W.box(explanation, self.width, explanation:getSize().h),
+            space(42), W.box(choose, self.width, W.dp(68)) }
+        local remaining = self.body_height - header:getSize().h
+        local top = math.max(0, math.floor((remaining - empty:getSize().h - W.dp(110)) / 2))
+        self.download_empty_heading, self.download_storage_header = empty[1], header
+        return W.column{ header, W.box(W.column{ W.spacePixels(top), empty }, self.width, remaining, { valign = "top" }) }
+    end
     if total_jobs > 0 then
         local remaining = naturalText(string.format(T("Device free %s"), free and Model.bytes(free) or T("Unknown")), 18, true)
         local y = amount:getBaseline() - remaining:getBaseline()
@@ -790,6 +871,7 @@ function Screens:_downloads()
     self.focus[#self.focus + 1] = tab_focus
     header_rows[#header_rows + 1], header_rows[#header_rows + 2] = W.row(tabs), W.rule1dp(self.width, Blitbuffer.Color8(0xCC))
     local header = W.column(header_rows)
+    self.download_header = header
     local items = {}
     local function append(group, values)
         for index, value in ipairs(values) do
@@ -803,15 +885,14 @@ function Screens:_downloads()
     if self.filter == "all" then append(T("Retained versions"), buckets.retained) end
     if #items == 0 then
         self.page, self.pages, self.pagination = 1, 1, nil
-        local empty_title = total_jobs == 0 and T("No downloads yet") or self.filter == "complete" and T("No offline-ready chapters")
+        local empty_title = self.filter == "complete" and T("No offline-ready chapters")
             or self.filter == "attention" and T("No downloads need attention") or T("No unfinished downloads")
-        local explanation = total_jobs == 0 and T("Open a comic's chapter catalog and choose chapters to download for offline reading.")
-            or T("Completed and retained copies remain available under All downloads.")
+        local explanation = T("Completed and retained copies remain available under All downloads.")
         local action_width = math.min(self.width, W.dp(340))
-        local button = self:_button(total_jobs == 0 and T("Choose a comic from the bookshelf") or T("Show all downloads"), action_width,
+        local button = self:_button(T("Show all downloads"), action_width,
             function()
                 if not self:_downloadContextCurrent(context) then return end
-                if total_jobs == 0 then self:showLibrary() else self.filter, self.page = "all", 1; self:_render() end
+                self.filter, self.page = "all", 1; self:_render()
             end, { primary = true, size = W.fontSize(23), height_px = W.dp(68) })
         local empty = W.column{ space(124), text(empty_title, self.width, 34, { bold = true, align = "center" }), space(20),
             text(explanation, self.width, 20, { muted = true, align = "center", line_height = 0.7 }), space(44), W.box(button, self.width, W.dp(68)) }
@@ -825,25 +906,34 @@ function Screens:_downloads()
         else
             local group = entry.group
             local comic = self:_downloadIdentity(group.jobs[1])
-            local size, known_size = 0, false
+            local size, known_size = 0, true
             for _, job in ipairs(group.jobs) do
-                local bytes = tonumber(job.bytes or (job.payload or {}).bytes or (job.payload or {}).saved_bytes)
-                if bytes then size, known_size = size + bytes, true end
+                local bytes = copyBytes(job)
+                if bytes then size = size + bytes else known_size = false end
             end
-            local name_width, size_width = math.floor(self.width * 0.44), W.dp(100)
+            local measured_title = naturalText(comic, 20, false, true)
+            local name_width = math.min(math.floor(self.width * 0.44), measured_title:getSize().w)
+            measured_title:free()
+            local size_label = known_size and Model.bytes(size) or ""
+            local measured_size = naturalText(size_label, 17, true)
+            local size_width = math.min(W.dp(100), measured_size:getSize().w)
+            measured_size:free()
+            local gap, arrow_width = W.dp(16), W.dp(22)
+            local range_width = self.width - name_width - size_width - arrow_width - 3 * gap
             local content = W.column{ W.box(W.row{
-                text(comic, name_width, 20, { bold = true }),
-                text(string.format(T("%d chapters saved"), #group.jobs), self.width - name_width - size_width - W.dp(28), 17, { muted = true }),
-                text(known_size and Model.bytes(size) or "", size_width, 17, { muted = true, align = "right" }),
-                text("›", W.dp(28), 22, { muted = true, align = "right" }),
-            }, self.width, W.dp(62)), W.rule1dp(self.width, Blitbuffer.Color8(0xCC)) }
+                line(comic, name_width, 20, { bold = true }), W.gap(gap),
+                line(self:_downloadChapterRange(group.jobs), range_width, 17, { muted = true }), W.gap(gap),
+                line(size_label, size_width, 17, { muted = true, align = "right" }), W.gap(gap),
+                line("›", arrow_width, 22, { muted = true, align = "right" }),
+            }, self.width, W.dp(61)), W.rule1dp(self.width, Blitbuffer.Color8(0xCC)) }
             local action = W.ActionRow:new{ width = self.width, content = content, callback = function()
                 if self:_downloadContextCurrent(context) then self:_downloadComicCopies(group.comic_id) end
             end }
             action.text = comic
             widget, focus = action, { action }
         end
-        if entry.label then widget = W.column{ space(24), text(entry.label, self.width, 18, { bold = true, muted = true }), space(10), widget } end
+        if entry.label then widget = W.column{ space(24), line(entry.label, self.width, 18,
+            { bold = true, muted = true, height = W.dp(22) }), space(10), widget } end
         measured[entry] = { widget = widget, focus = focus }
         return measured[entry]
     end

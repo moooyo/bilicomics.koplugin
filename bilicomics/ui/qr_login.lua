@@ -53,9 +53,13 @@ local function frame(content, width, height, border, fill)
         centered(content, width - border * 2, height - border * 2) }
 end
 local QRFrame = InputContainer:extend{}
-function QRFrame:init() self[1] = self.base end
+function QRFrame:init()
+    self[1] = self.base
+    self.dimen = Geom:new{ x = 0, y = 0, w = W.dp(480), h = W.dp(480) }
+end
 function QRFrame:getSize() return Geom:new{ w = W.dp(480), h = W.dp(480) } end
 function QRFrame:paintTo(bb, x, y)
+    self.dimen.x, self.dimen.y = x, y
     self.base:paintTo(bb, x, y)
     if self.overlay then self.overlay:paintTo(bb, x + W.dp(56), y + W.dp(150)) end
 end
@@ -93,13 +97,15 @@ function QRLogin:_show(status)
             status, self.status = "error", "error"
         end
         if status == "scanned" then
-            overlay = frame(W.column{
-                W.text(_("✓ Code scanned"), W.dp(320), face(30), { bold = true, align = "center" }), space(10),
-                W.text(_("Confirm sign-in on your phone"), W.dp(320), face(19), { align = "center" }),
-            }, W.dp(368), W.dp(146), W.dp(2))
+            local content = W.column{
+                W.text(_("✓ Code scanned"), W.dp(324), face(30), { bold = true, align = "center" }), space(10),
+                W.text(_("Confirm sign-in on your phone"), W.dp(324), face(19), { align = "center" }),
+            }
+            overlay = frame(content, W.dp(368), content:getSize().h + W.dp(64), W.dp(2))
         end
     end
     if status == "expired" or status == "error" then
+        self:_unschedule()
         retry = W.button(_("Get a new code"), W.dp(300), function() self:start() end,
             { primary = true, height_px = W.dp(66), size = face(22) })
         layout[#layout + 1] = { retry }
@@ -146,6 +152,7 @@ function QRLogin:_show(status)
         if owner.dialog == self then owner:close() end
     end
     local previous = self.dialog
+    if previous then dialog.refresh_mode = "ui" end
     self.dialog = dialog
     if previous then UIManager:close(previous) end
     self.on_dialog(dialog)
@@ -165,10 +172,14 @@ function QRLogin:_schedule()
 end
 
 function QRLogin:_poll()
-    if not self:_current() or self.inflight or not self.code then return end
+    if not self:_current() or not self.code then return end
+    if self.status == "expired" or self.status == "error" then self:_unschedule(); return end
     if self.code.expires_at and os.time() >= self.code.expires_at then
+        self.sequence, self.inflight = self.sequence + 1, false
+        self:_unschedule()
         self:_show("expired"); self.controller:cancelQRLogin(); return
     end
+    if self.inflight then self:_schedule(); return end
     self.inflight = true
     local sequence, completed = self.sequence, false
     local function done(result, err)
@@ -190,6 +201,8 @@ function QRLogin:_poll()
     end
     local ok = pcall(function() self.controller:pollQRLogin(self.code.key, done) end)
     if not ok then done(nil, { kind = "internal" }) end
+    -- Keep expiry visible even while the current network request is outstanding.
+    if self.inflight and self:_current() then self:_schedule() end
 end
 
 function QRLogin:start()

@@ -186,8 +186,10 @@ end
 
 function Model.bytes(value)
     value = tonumber(value) or 0
-    if value >= 1073741824 then return string.format("%.1f GiB", value / 1073741824) end
-    return string.format("%.1f MiB", value / 1048576)
+    if value ~= value or value == math.huge or value == -math.huge then return _("Unknown") end
+    value = math.max(0, value)
+    if value >= 1000000000 then return string.format("%.1f GB", value / 1000000000) end
+    return string.format("%.1f MB", value / 1000000)
 end
 
 function Model.error(error)

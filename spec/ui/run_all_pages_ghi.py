@@ -35,9 +35,7 @@ def screen_size(value):
 
 def source_hashes(plugin):
     names = set(ui_source_names(plugin))
-    names.update(path.relative_to(plugin).as_posix() for path in (plugin / "bilicomics").rglob("*.lua"))
-    names.update(path.relative_to(plugin).as_posix() for path in (plugin / "spec/ui").glob("all_pages_*spec.lua"))
-    names.update(("spec/ui/scribe_handoff_spec.lua", "spec/ui/fidelity_geometry.lua", "spec/ui/run_scribe_handoff.py",
+    names.update(("spec/ui/all_pages_ghi_spec.lua", "spec/ui/fidelity_geometry.lua", "spec/ui/run_all_pages_ghi.py",
                   "spec/ui/run_bookshelf_grid.py", "spec/ui/run_ui_sources.py"))
     return {name: hashlib.sha256((plugin / name).read_bytes()).hexdigest()
             for name in sorted(names)}
@@ -55,7 +53,7 @@ def isolation_prefix():
     raise RuntimeError("The host cannot provide the required isolated network namespace.")
 
 
-def run_case(runtime, plugin, output, size, language, prefix, timeout, domains=None, extra_modules=None):
+def run_case(runtime, plugin, output, size, language, prefix, timeout):
     width, height = size
     output.mkdir(mode=0o700)
     synthetic_covers(output / "fixtures")
@@ -69,12 +67,8 @@ def run_case(runtime, plugin, output, size, language, prefix, timeout, domains=N
     environment.update(KO_MULTIUSER="1", EMULATE_READER_W=str(width),
                        EMULATE_READER_H=str(height), SDL_AUDIODRIVER="dummy",
                        BILI_SCRIBE_PARENT_NETNS=os.readlink("/proc/self/ns/net"))
-    if domains:
-        environment["BILI_HANDOFF_DOMAINS"] = ",".join(domains)
-    if extra_modules:
-        environment["BILI_HANDOFF_EXTRA_MODULES"] = ",".join(extra_modules)
     command = [*prefix, "xvfb-run", "-a", "-s", f"-screen 0 {width}x{height}x24",
-               str(runtime / "luajit"), str(plugin / "spec/ui/scribe_handoff_spec.lua"),
+               str(runtime / "luajit"), str(plugin / "spec/ui/all_pages_ghi_spec.lua"),
                str(plugin), str(output), language]
     process = subprocess.Popen(command, cwd=runtime, env=environment,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -85,8 +79,8 @@ def run_case(runtime, plugin, output, size, language, prefix, timeout, domains=N
         os.killpg(process.pid, signal.SIGKILL)
         stdout, stderr = process.communicate()
         stderr += "\nThe native Scribe handoff case exceeded its time limit.\n"
-    (output / "scribe-handoff.log").write_text(stdout + stderr, encoding="utf-8")
-    result_path = output / "scribe-handoff-result.json"
+    (output / "all-pages-ghi.log").write_text(stdout + stderr, encoding="utf-8")
+    result_path = output / "all-pages-ghi-result.json"
     try:
         result = json.loads(result_path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -96,8 +90,8 @@ def run_case(runtime, plugin, output, size, language, prefix, timeout, domains=N
             "passed": process.returncode == 0 and result.get("passed") is True,
             "assertion_count": len(result.get("assertions", [])), "failures": failures,
             "screenshot_count": len(result.get("screenshots", [])),
-            "result": f"{output.name}/scribe-handoff-result.json",
-            "log": f"{output.name}/scribe-handoff.log"}
+            "result": f"{output.name}/all-pages-ghi-result.json",
+            "log": f"{output.name}/all-pages-ghi.log"}
     if not result:
         case["error"] = "The native spec did not write a result."
         print((stdout + stderr)[-6000:], flush=True)
@@ -114,9 +108,6 @@ def main():
     parser.add_argument("--pillow", type=Path,
                         default=Path.home() / ".local/share/bilicomics-acceptance/python-deps-pillow-11.3.0")
     parser.add_argument("--timeout", type=int, default=120)
-    parser.add_argument("--domains", nargs="+", choices=("bookshelf", "bookstore", "search", "catalog", "downloads",
-                        "account-settings", "purchase", "qr-sign-in", "recharge", "extra"))
-    parser.add_argument("--extra-modules", nargs="+", default=[])
     args = parser.parse_args()
     if sys.platform != "linux":
         parser.error("Use the authorized Linux or WSL KOReader runtime.")
@@ -127,8 +118,6 @@ def main():
         parser.error("Sizes and languages must be unique.")
     if args.timeout < 1:
         parser.error("The per-case timeout must be positive.")
-    if any(not name.replace("_", "").isalnum() for name in args.extra_modules):
-        parser.error("Extra modules must be named local acceptance modules.")
     if not (runtime / "luajit").is_file() or not (runtime / "reader.lua").is_file():
         parser.error("The official KOReader runtime was not found.")
     if args.pillow.is_dir():
@@ -137,7 +126,7 @@ def main():
     prefix = isolation_prefix()
     os.umask(0o077)
     output.mkdir(parents=True, exist_ok=False, mode=0o700)
-    report = {"spec": "native-scribe-handoff", "scope": "Actual KOReader widgets and framebuffer; synthetic controller and original art only",
+    report = {"spec": "native-all-pages-ghi", "scope": "Actual KOReader widgets and framebuffer; synthetic controller and original art only",
               "environment": "User-authorized local WSL or designated Linux verification host",
               "runtime_version": (runtime / "git-rev").read_text().strip(),
               "runtime_luajit_sha256": hashlib.sha256((runtime / "luajit").read_bytes()).hexdigest(),
@@ -145,12 +134,11 @@ def main():
               "actual_recharge_created": False, "source_sha256": before, "cases": [], "passed": False,
               "started_at": datetime.now(timezone.utc).isoformat(),
               "density_scope": "Independent Scribe handoff expectations; historical UI density assertions are not rewritten"}
-    report_path = output / "scribe-handoff-verification.json"
+    report_path = output / "all-pages-ghi-verification.json"
     for language in args.languages:
         for size in args.sizes:
             case_output = output / f"{language}-{size[0]}x{size[1]}"
-            report["cases"].append(run_case(runtime, plugin, case_output, size, language, prefix, args.timeout,
-                                             args.domains, args.extra_modules))
+            report["cases"].append(run_case(runtime, plugin, case_output, size, language, prefix, args.timeout))
             report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     report["source_sha256_after"] = source_hashes(plugin)
     report["source_unchanged"] = before == report["source_sha256_after"]

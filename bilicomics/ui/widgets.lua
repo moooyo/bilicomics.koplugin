@@ -129,9 +129,21 @@ function W.button(text, width, callback, options)
         align = options.align or "center", callback = callback, enabled = options.enabled ~= false,
         avoid_text_truncation = true,
     }
+    if options.align == "right" then
+        -- Native Button handles left/center; keep its fixed bounds for right labels.
+        function button.label_container:paintTo(bb, x, y)
+            local size = self[1]:getSize()
+            self[1]:paintTo(bb, x + self.dimen.w - size.w, y + math.floor((self.dimen.h - size.h) / 2))
+        end
+    end
+    local native_focus = button.onFocus
+    function button:onFocus()
+        if not self.enabled then return true end
+        return native_focus(self)
+    end
     if options.enabled == false then
         button.frame.color = W.divider
-        button.label_widget.fgcolor = W.faint
+        button.label_widget.fgcolor = options.disabled_color or (options.borderless and BB.Color8(0xBB) or W.faint)
     end
     if options.primary and options.enabled ~= false then
         button.frame.background, button.frame.color, button[1].invert = BB.Color8(0xEE), W.ink, true
@@ -215,13 +227,15 @@ function W.header(title, total_width, options)
     local ok, value = pcall(function() return Device:getPowerDevice():getCapacity() end)
     if ok and tonumber(value) then battery = string.format(_("Battery %d%%"), value) end
     local connection = online and _("Online") or _("Offline")
-    local status_parts = { TextWidget:new{ text = connection, face = Font:getFace("cfont", W.fontSize(16)),
-        fgcolor = online and W.muted or W.ink, bold = not online } }
-    if battery then status_parts[#status_parts + 1] = TextWidget:new{ text = " · " .. battery,
-        face = Font:getFace("cfont", W.fontSize(16)), fgcolor = W.muted } end
+    local connection_widget = TextWidget:new{ text = connection, face = Font:getFace("cfont", W.fontSize(16)),
+        fgcolor = online and W.muted or W.ink, bold = not online }
+    local battery_widget = TextWidget:new{ text = battery and " · " .. battery or "",
+        face = Font:getFace("cfont", W.fontSize(16)), fgcolor = W.muted }
+    local status_parts = { connection_widget, battery_widget }
     local status = W.row(status_parts)
+    local time_widget = W.text(os.date("%H:%M"), math.floor(status_width * 0.25), W.fontSize(16), { muted = true })
     local strip = W.inset(W.row{
-        W.text(os.date("%H:%M"), math.floor(status_width * 0.25), W.fontSize(16), { muted = true }),
+        time_widget,
         W.box(status, status_width - math.floor(status_width * 0.25), status:getSize().h, { align = "right" }),
     }, margin, margin, W.dp(15), 0)
     local buttons = {}
@@ -242,8 +256,30 @@ function W.header(title, total_width, options)
     local bar = W.row{ back,
         W.box(W.line(title, math.max(1, total_width - 2 * side), W.font.page,
             { bold = true, align = "center", height = W.dp(48) }), total_width - 2 * side, bar_height), more }
-    local header = W.column{ W.box(strip, total_width, W.dp(40)), bar, W.rule(total_width, true) }
+    local header = W.column{ W.box(strip, total_width, W.dp(40), { background = W.paper }), bar, W.rule(total_width, true) }
     header.status_strip, header.title_bar = header[1], bar
+    header.time_widget, header.connection_widget, header.battery_widget = time_widget, connection_widget, battery_widget
+    function header:refreshStatus(network_state)
+        if network_state ~= nil then online = network_state == true end
+        local changed, time = false, os.date("%H:%M")
+        if time_widget.text ~= time then time_widget:setText(time); changed = true end
+        local current_connection = online and _("Online") or _("Offline")
+        if connection_widget.text ~= current_connection then
+            connection_widget.bold, connection_widget.fgcolor = not online, online and W.muted or W.ink
+            connection_widget.face = Font:getFace("cfont", W.fontSize(16))
+            connection_widget:setText(current_connection); changed = true
+        end
+        local available, capacity = pcall(function() return Device:getPowerDevice():getCapacity() end)
+        local current_battery = available and tonumber(capacity) and " · " .. string.format(_("Battery %d%%"), capacity) or ""
+        if battery_widget.text ~= current_battery then battery_widget:setText(current_battery); changed = true end
+        if changed then status:resetLayout() end
+        return changed
+    end
+    local native_header_paint = header.paintTo
+    function header:paintTo(bb, x, y)
+        self:refreshStatus()
+        native_header_paint(self, bb, x, y)
+    end
     return header, buttons
 end
 
@@ -471,6 +507,14 @@ function Panel:onSwipePage(_, gesture)
     return true
 end
 function Panel:onShow() UIManager:setDirty(self, self.refresh_mode or "flashui"); return true end
+function Panel:onNetworkConnected()
+    local header = self.header or self.content and self.content[1]
+    if header and header.refreshStatus then header:refreshStatus(true); UIManager:setDirty(self, "ui", header.status_strip.dimen) end
+end
+function Panel:onNetworkDisconnected()
+    local header = self.header or self.content and self.content[1]
+    if header and header.refreshStatus then header:refreshStatus(false); UIManager:setDirty(self, "ui", header.status_strip.dimen) end
+end
 function Panel:onCloseWidget() UIManager:setDirty(nil, "ui"); return true end
 W.Panel = Panel
 
@@ -530,21 +574,28 @@ function W.sheetDialog(content, focus, options)
         dismissable = options.dismissable, next_page = options.next_page, previous_page = options.previous_page }
 end
 
-local function specButtons(spec, width, height)
+local function specButtons(spec, width, height, gap_pixels)
     local widgets, focus = {}, {}
-    local gap = W.dp(16)
+    local gap = gap_pixels or W.dp(16)
     local flexible, remaining = 0, width - gap * math.max(0, #spec - 1)
     for _, entry in ipairs(spec) do
         if entry.width then remaining = remaining - entry.width else flexible = flexible + 1 end
     end
     for index, entry in ipairs(spec) do
         if index > 1 then widgets[#widgets + 1] = W.gap(gap) end
-        local button = W.button(entry.text, entry.width or math.floor(remaining / math.max(1, flexible)), entry.callback,
-            { primary = entry.primary == true or entry.invert == true, bold = entry.font_bold or entry.bold,
-                enabled = entry.enabled, borderless = entry.borderless, align = entry.align,
-                height_px = entry.height_px or height, size = entry.font_size or entry.size or W.fontSize(21) })
-        button.id, button.spec = entry.id, entry
-        widgets[#widgets + 1], focus[#focus + 1] = button, button
+        local cell_width = entry.width or math.floor(remaining / math.max(1, flexible))
+        if entry.static then
+            widgets[#widgets + 1] = W.line(entry.text, cell_width, entry.font_size or entry.size or W.fontSize(21),
+                { height = entry.height_px or height, bold = entry.font_bold or entry.bold,
+                    muted = entry.muted, color = entry.color, align = entry.align or "left" })
+        else
+            local button = W.button(entry.text, cell_width, entry.callback,
+                { primary = entry.primary == true or entry.invert == true, bold = entry.font_bold or entry.bold,
+                    enabled = entry.enabled, borderless = entry.borderless, align = entry.align,
+                    height_px = entry.height_px or height, size = entry.font_size or entry.size or W.fontSize(21) })
+            button.id, button.spec = entry.id, entry
+            widgets[#widgets + 1], focus[#focus + 1] = button, button
+        end
     end
     return W.row(widgets), focus
 end
@@ -676,11 +727,13 @@ function W.flowDialog(title, paragraphs, buttons, options)
     if not options.body then for _, focus in ipairs(options.layout or {}) do layout[#layout + 1] = focus end end
     if #pages > 1 then
         local pager, focus = specButtons({
-            { text = "‹", enabled = current_page > 1, callback = function() dialog:onPreviousPage() end },
-            { text = current_page .. " / " .. #pages, enabled = false },
-            { text = "›", enabled = current_page < #pages, callback = function() dialog:onNextPage() end },
-        }, width, W.dp(52))
-        content_rows[#content_rows + 1], layout[#layout + 1] = pager, focus
+            { text = "‹", width = W.dp(46), size = W.fontSize(30), borderless = true,
+                enabled = current_page > 1, callback = function() dialog:onPreviousPage() end },
+            { text = current_page .. " / " .. #pages, width = W.dp(80), static = true, align = "center", size = W.fontSize(20) },
+            { text = "›", width = W.dp(46), size = W.fontSize(30), borderless = true,
+                enabled = current_page < #pages, callback = function() dialog:onNextPage() end },
+        }, W.dp(172), W.dp(52), 0)
+        content_rows[#content_rows + 1], layout[#layout + 1] = W.box(pager, width, W.dp(52)), focus
     end
     layout[#layout + 1] = footer_buttons
     local body = W.box(W.inset(W.column(content_rows), margin, margin, padding_top, padding_bottom),
@@ -698,6 +751,9 @@ function W.flowDialog(title, paragraphs, buttons, options)
         local replacement = W.flowDialog(title, paragraphs, buttons, options)
         local visible = options._visible_dialog or dialog
         if options.on_replace then
+            -- The next page borrows the same paragraph/row widgets. Closing the
+            -- old shell must not free those resources before a return page turn.
+            visible[1] = W.box(nil, total_width, total_height)
             options._visible_dialog = replacement
             options.on_replace(replacement, visible)
         else
@@ -709,6 +765,7 @@ function W.flowDialog(title, paragraphs, buttons, options)
         end
     end
     dialog = Panel:new{ content = W.column{ header, body, footer }, layout = layout, selected = selected,
+        refresh_mode = options.refresh_mode,
         close_callback = function()
             if options.dismissable == false or options.no_back then return end
             if close then close() else UIManager:close(options._visible_dialog or dialog) end
@@ -750,11 +807,13 @@ function W.menuDialog(title, paragraphs, buttons, options)
         end
         if #pages > 1 then
             local pager, focus = specButtons({
-                { text = "‹", enabled = page > 1, callback = function() dialog:onPreviousPage() end },
-                { text = page .. " / " .. #pages, enabled = false },
-                { text = "›", enabled = page < #pages, callback = function() dialog:onNextPage() end },
-            }, inner, W.dp(52))
-            content[#content + 1], layout[#layout + 1] = pager, focus
+                { text = "‹", width = W.dp(46), size = W.fontSize(30), borderless = true,
+                    enabled = page > 1, callback = function() dialog:onPreviousPage() end },
+                { text = page .. " / " .. #pages, width = W.dp(80), static = true, align = "center", size = W.fontSize(20) },
+                { text = "›", width = W.dp(46), size = W.fontSize(30), borderless = true,
+                    enabled = page < #pages, callback = function() dialog:onNextPage() end },
+            }, W.dp(172), W.dp(52), 0)
+            content[#content + 1], layout[#layout + 1] = W.box(pager, inner, W.dp(52)), focus
         end
         return W.inset(W.column(content), padding, padding, padding, padding), layout
     end

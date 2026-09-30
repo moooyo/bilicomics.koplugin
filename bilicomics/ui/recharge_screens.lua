@@ -33,9 +33,11 @@ local function singleText(value, size, color, bold, max_width)
         forced_height = W.dp(44), forced_baseline = W.dp(37), max_width = max_width }
 end
 local function keyValue(label, value, width, receipt)
+    local label_width = math.max(W.dp(170), math.min(math.floor(width * 0.42),
+        singleText(label, 20):getSize().w + W.dp(16)))
     return W.column{ W.rule1dp(width, BB.Color8(0xCC)), box(W.row{
-        W.text(label, W.dp(170), face(20), { muted = true }),
-        W.text(value, width - W.dp(170), face(20), { align = receipt and "right" or "left" }),
+        W.text(label, label_width, face(20), { muted = true }),
+        W.text(value, width - label_width, face(20), { align = receipt and "right" or "left" }),
     }, width, W.dp(receipt and 66 or 70) - W.dp(1)) }
 end
 
@@ -50,7 +52,14 @@ function AmountTile:paintTo(bb, x, y)
     self.dimen.x, self.dimen.y = x, y
     self.content:paintTo(bb, x, y)
     if self.check then self.check:paintTo(bb, x + self.width - W.dp(36), y + W.dp(10)) end
-    if self.focused then bb:paintRect(x, y + self.dimen.h - W.dp(5), self.width, W.dp(5), BB.Color8(0x11)) end
+    if self.focused then
+        local inset, stroke = W.dp(4), math.max(1, W.dp(2))
+        if self.selected then
+            bb:paintBorder(x + inset - stroke, y + inset - stroke,
+                self.width - inset * 2 + stroke * 2, self.dimen.h - inset * 2 + stroke * 2, stroke, W.paper, 0)
+        end
+        bb:paintBorder(x + inset, y + inset, self.width - inset * 2, self.dimen.h - inset * 2, stroke, W.ink, 0)
+    end
 end
 function AmountTile:onFocus() self.focused = true; return true end
 function AmountTile:onUnfocus() self.focused = false; return true end
@@ -105,7 +114,12 @@ end
 
 local function timeLabel(value)
     if not integer(value) or value <= 0 or value > 253402300799 then return nil end
-    local ok, result = pcall(os.date, "!%Y-%m-%d %H:%M UTC", value)
+    local ok, result = pcall(function()
+        if os.date("%Y-%m-%d", value) == os.date("%Y-%m-%d") then
+            return string.format(T("Today %s"), os.date("%H:%M", value))
+        end
+        return os.date("%Y-%m-%d %H:%M", value)
+    end)
     return ok and result or nil
 end
 
@@ -194,7 +208,7 @@ function Screens:_rechargeNewState()
     self:_closeDialog()
     local account = self.controller:getAccount() or {}
     local name = text(account.name or account.id or T("Current account"), 48)
-    if account.id ~= nil and tostring(account.id) ~= name then name = name .. " (" .. text(account.id, 32) .. ")" end
+    if account.id ~= nil and tostring(account.id) ~= name then name = name .. " (UID " .. text(account.id, 32) .. ")" end
     local state = { active = true, sequence = 0, epoch = self.epoch, account_key = accountKey(self.controller),
         generation = self.controller.generation, account_name = name, options_page = 1 }
     self.recharge_state = state
@@ -243,10 +257,8 @@ function Screens:_rechargeDialog(state, heading, paragraphs, buttons, options)
     end
     options.close_callback = function() self:_rechargeDismiss(state) end
     options.body_padding_px = options.body_padding_px or (options.body and 0 or nil)
-    options.on_page = function(page)
-        options.page = page
-        self:_rechargeDialog(state, heading, paragraphs, buttons, options)
-    end
+    -- Keep the owner and native body resources alive while changing flow pages.
+    options.on_page = nil
     if options.qr_url and not options.body then
         local rows = { space(38) }
         for _, paragraph in ipairs(paragraphs or {}) do
@@ -259,6 +271,10 @@ function Screens:_rechargeDialog(state, heading, paragraphs, buttons, options)
         options.body, options.body_padding_px = W.column(rows), 0
     end
     dialog = W.flowDialog(heading, paragraphs, buttons, options)
+    if previous and previous.fullpage and previous.title == heading and previous.recharge_phase == state.phase then
+        dialog.refresh_mode = "ui"
+    end
+    dialog.recharge_phase = state.phase
     dialog.recharge_text = table.concat(description, "\n")
     self:_rechargeOwnDialog(state, dialog, previous)
     return dialog
@@ -334,22 +350,22 @@ function Screens:_rechargeAmountsView(state)
     if not state.amount_input and state.options[1] then
         state.amount_input, state.option = yuan(state.options[1].amount_cents), state.options[1]
     end
-    local wallet, width, rows, layout = self.controller:getWallet() or {}, self.width, { space(12) }, {}
+    local wallet, width, rows, layout = self.controller:getWallet() or {}, self.width, {}, {}
     local receiving = string.format(T("Receiving account: %s"), state.account_name)
     local balance = string.format(T("Current %s manga coins"), tostring(wallet.remain_gold or "—"))
     rows[#rows + 1] = box(W.row{
-        W.text(receiving, math.floor(width * 0.68), face(21)),
-        W.text(balance, width - math.floor(width * 0.68), face(19), { align = "right", bold = true }),
+        W.text(receiving, math.floor(width * 0.68), face(20)),
+        W.text(balance, width - math.floor(width * 0.68), face(20), { align = "right", bold = true }),
     }, width, W.dp(88))
     rows[#rows + 1] = W.rule1dp(width, BB.Color8(0x11))
-    rows[#rows + 1] = space(28)
+    rows[#rows + 1] = space(34)
     local fetched = timeLabel(state.config.fetched_at)
     rows[#rows + 1] = W.row{
-        W.text(T("Choose recharge amount"), math.floor(width * 0.40), face(24), { bold = true }),
+        W.text(T("Choose amount"), math.floor(width * 0.40), face(22), { bold = true }),
         W.text(fetched and string.format(T("Official amounts · Fetched %s"), fetched) or T("Official amounts"),
-            width - math.floor(width * 0.40), face(17), { muted = true, align = "right" }),
+            width - math.floor(width * 0.40), face(16), { muted = true, align = "right" }),
     }
-    rows[#rows + 1] = space(22)
+    rows[#rows + 1] = space(16)
     local tile_width = math.floor((width - W.dp(36)) / 3)
     local grid, focus = {}, {}
     local first, last = (state.options_page - 1) * 6 + 1, math.min(state.options_page * 6, #state.options)
@@ -404,11 +420,13 @@ function Screens:_rechargeAmountsView(state)
     local notes = rules and string.format(T("Custom amount allowed: CNY %s to %s."), yuan(rules.min_cents), yuan(rules.max_cents))
         or T("The server has not enabled arbitrary amounts. Typed amounts must match an official option.")
     if type(state.config.notice) == "string" and state.config.notice ~= "" then notes = notes .. "\n" .. text(state.config.notice, 180) end
+    notes = notes .. "\n" .. T("Creating a code does not confirm payment or credit. The next screen checks the matching order record.")
+        .. "\n" .. T("Complete payment by scanning with WeChat or Alipay on your phone.")
     rows[#rows + 1] = W.text(notes, width, face(17), { muted = true, line_height = 1.8 })
     local summary = state.amount_input and string.format(T("CNY %s"), state.amount_input) or T("Choose recharge amount")
     if state.option and state.option.coin_amount ~= nil then summary = summary .. " · " .. string.format(T("%s manga coins"), text(state.option.coin_amount, 40)) end
     self:_rechargeDialog(state, T("Recharge manga coins"), { receiving, balance, notes }, { {
-        { text = summary, borderless = true, font_bold = true },
+        { text = summary, static = true, align = "left", font_bold = true },
         { text = T("Next: review amount"), width = W.dp(340), primary = true, enabled = state.amount_input ~= nil,
             callback = function() self:_rechargeReviewAmount(state, state.amount_input, state.option) end },
     } }, { body = W.column(rows), layout = layout, selected = { x = 1, y = 1 } })
@@ -556,7 +574,7 @@ function Screens:_rechargeOrderView(state)
     local wallet = self.controller:getWallet() or {}
     local key = table.concat({ tostring(orderId(order)), phase, tostring(order.order_id), tostring(order.amount_cents),
         tostring(order.code_url), tostring(order.qr_validated), tostring(order.expires_at), tostring(state.poll_error),
-        tostring(state.manual_check), tostring(wallet.updated_at) }, "|")
+        tostring(state.manual_check), tostring(wallet.updated_at), tostring(wallet.remain_gold), tostring(wallet.stale) }, "|")
     if state.display_key == key and state.dialog and self.dialog == state.dialog then return end
     if state.dialog and not self:_rechargeVisible(state) then return end
     state.display_key = key
@@ -649,7 +667,17 @@ function Screens:_rechargeOrderView(state)
     end
     self:_rechargeDialog(state, heading, paragraphs, { actions }, {
         body = W.column(rows), selected = { x = #actions, y = 1 },
+        page = state.dialog and state.dialog.title == heading and state.dialog.page or nil,
     })
+end
+function Screens:_rechargeRefreshVisible()
+    local state = self.recharge_state
+    if state and state.phase == "order" and self:_rechargeVisible(state) then
+        local previous = state.dialog
+        self:_rechargeOrderView(state)
+        return state.dialog ~= previous
+    end
+    return false
 end
 function Screens:_rechargeSchedule(state)
     if not self:_rechargeCurrent(state) or not state.order or state.phase ~= "order" then return end

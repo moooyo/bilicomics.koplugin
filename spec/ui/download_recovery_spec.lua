@@ -46,7 +46,7 @@ local function rawError(kind, status)
 end
 
 local allowed = { getDownloads = true, getComic = true, getEpisode = true, getEpisodes = true,
-    getStorageSummary = true, getAccount = true, getSetting = true, resumeJob = true, pauseJob = true,
+    getStorageSummary = true, getDownloadEstimate = true, getAccount = true, getSetting = true, resumeJob = true, pauseJob = true,
     cancelJob = true, removeDownload = true, refreshDownloadSources = true, cancelSourceRefresh = true }
 local controller = { jobs = {}, calls = {}, waiting = {}, forbidden = {}, generation = 1,
     account_key = "bili_ui_fixture_a", account = { key = "bili_ui_fixture_a" },
@@ -71,6 +71,10 @@ end
 function controller:getStorageSummary()
     record("getStorageSummary")
     return { automatic_bytes = 1048576, pinned_bytes = 2097152 }
+end
+function controller:getDownloadEstimate(_comic_id, ids)
+    record("getDownloadEstimate")
+    return { total_chapters = #ids, known_chapters = 0, estimated = true }
 end
 function controller:getSetting(_key, fallback)
     record("getSetting")

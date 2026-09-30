@@ -28,8 +28,11 @@ local function keyValue(label, value, width, options)
 end
 
 local function tag(label, width)
-    local content = text(label, width - W.dp(20), 17, { bold = true, color = W.paper, align = "center" })
-    return FrameContainer:new{ padding = W.dp(6), margin = 0, bordersize = 0, background = W.ink, content }
+    local label_widget = TextWidget:new{ text = label, max_width = width - W.dp(20),
+        face = Font:getFace("cfont", W.fontSize(16)), bold = true, fgcolor = W.paper, padding = 0 }
+    local content = W.box(label_widget, label_widget:getSize().w, W.dp(16))
+    return FrameContainer:new{ padding = 0, padding_top = W.dp(6), padding_bottom = W.dp(6),
+        padding_left = W.dp(10), padding_right = W.dp(10), margin = 0, bordersize = 0, background = W.ink, content }
 end
 
 local function short(value, limit)
@@ -43,6 +46,14 @@ local function short(value, limit)
         end
     end
     return text
+end
+
+local function amountText(value)
+    local value_text = Model.purchaseNumber(value)
+    if not value_text then return "?" end
+    local sign, integer, decimal = value_text:match("^([%-]?)(%d+)(%.?%d*)$")
+    if not integer then return value_text end
+    return sign .. integer:reverse():gsub("(%d%d%d)", "%1,"):reverse():gsub("^,", "") .. decimal
 end
 
 local function purchaseDate(value)
@@ -172,8 +183,20 @@ function Screens:_purchaseChapter(state, quote)
 end
 
 function Screens:_purchaseContext(state, quote)
-    local chapter = self:_purchaseChapter(state, quote)
+    local chapter = self:_purchaseChapterLabel(state, quote)
     return short(title(state.comic or {}), 34) .. "\n" .. short(chapter, 40)
+end
+
+function Screens:_purchaseChapterLabel(state, quote)
+    local chapter, chapter_id = self:_purchaseChapter(state, quote)
+    local episode = state.episode or {}
+    if tostring(episode.id or "") ~= chapter_id then
+        for _, candidate in ipairs(Model.array(self.controller:getEpisodes((quote or {}).comic_id or (state.comic or {}).id))) do
+            if tostring(candidate.id) == chapter_id then episode = candidate; break end
+        end
+    end
+    local number = episode.order or episode.short_title
+    return number and string.format(T("Chapter %s · %s"), tostring(number), chapter) or chapter
 end
 
 function Screens:_purchaseSummary(state, quote, purpose, width)
@@ -198,7 +221,7 @@ function Screens:_purchaseSummary(state, quote, purpose, width)
 end
 
 local function totalAmount(quote, width, spread_label)
-    local amount = TextWidget:new{ text = tostring(quote.amount or "?"),
+    local amount = TextWidget:new{ text = amountText(quote.amount),
         face = Font:getFace("cfont", W.fontSize(quote.can_afford == false and 44 or 48)), bold = true, fgcolor = W.ink, padding = 0 }
     local unit = TextWidget:new{ text = asset(quote.method), face = Font:getFace("cfont", W.fontSize(20)), fgcolor = W.ink, padding = 0 }
     local label = TextWidget:new{ text = T("Total"), face = Font:getFace("cfont", W.fontSize(20)), fgcolor = W.ink, padding = 0 }
@@ -556,37 +579,53 @@ function Screens:_purchaseRecoveryButtons(state, error, buttons, current)
     local _error_heading, _error_message, route = Model.error(error)
     local kind = type(error) == "table" and error.kind
     if route == "account" then
-        buttons[#buttons + 1] = { action(T("Open account"), function() if current() then self:showAccount() end end) }
+        buttons[#buttons + 1] = { action(T("Open account"), function() if current() then self:showAccount() end end,
+            { enabled = not state.submitting and not state.continuing }) }
     elseif kind == "storage" or kind == "low_space" or kind == "persistence_pending" then
         buttons[#buttons + 1] = { action(T("Check storage"), function()
             if not current() then return end
             if self._showStorageSettings then self:_showStorageSettings() else self:showAccount() end
-        end) }
+        end, { enabled = not state.submitting and not state.continuing }) }
     end
 end
 
 function Screens:_purchaseInlineEntries(state, which)
     local source, entries = state.quote or state.options_quote or {}, {}
-    local function add(selection, label, available, detail, reference)
+    local function add(selection, label, available, detail, reference, original)
         for _, entry in ipairs(entries) do if Model.samePurchaseSelection(entry.selection, selection) then return end end
         entries[#entries + 1] = { selection = selection, label = label, available = available ~= false,
-            detail = detail, reference = reference }
+            detail = detail, reference = reference, original = original }
     end
     if which == "scope" then
-        local function rangeDetail(selection)
+        local function rangeDetail(selection, count)
             if Model.ordinalRange(source) and Model.samePurchaseSelection(selection, Model.purchaseScope(source.scope)) then
-                return Model.purchaseRangeLabel(selection)
+                local episodes, orders, contiguous = Model.array(self.controller:getEpisodes(source.comic_id)), {}, true
+                local by_id = {}; for _, episode in ipairs(episodes) do by_id[tostring(episode.id)] = tonumber(episode.order) end
+                for _, id in ipairs(source.episode_ids or {}) do
+                    local order = by_id[tostring(id)]
+                    if not order then contiguous = false; break end
+                    orders[#orders + 1] = order
+                end
+                table.sort(orders)
+                for index = 2, #orders do if orders[index] ~= orders[index - 1] + 1 then contiguous = false end end
+                if contiguous and #orders > 1 and selection.batch_limit ~= 0 then
+                    return string.format(T("Chapters %s–%s (expected)"), orders[1], orders[#orders])
+                end
+                count = #(source.episode_ids or {})
             end
+            if tonumber(count) and tonumber(count) >= 1 then return string.format(T("%s chapters (expected)"), count) end
             return T("Expected chapter range")
         end
+        local single_amounts = (source.scope or {}).kind ~= "batch" and source.amounts or {}
         add(Model.purchaseScope({ kind = "single", order = (state.scope or {}).order }), T("Only this chapter"), true,
-            (self:_purchaseChapter(state)))
+            (self:_purchaseChapterLabel(state)), Model.purchaseNumber((single_amounts or {}).display),
+            Model.purchaseNumber((single_amounts or {}).original))
         if state.purpose ~= "download" then
             for _, offer in ipairs(source.batch_offers or {}) do
                 if type(offer.scope) == "table" and offer.scope.kind == "batch" then
                     local selection = Model.purchaseScope(offer.scope)
-                    add(selection, requestedRange(selection), offer.available, rangeDetail(selection),
-                        Model.purchaseNumber(offer.display_amount))
+                    add(selection, requestedRange(selection), offer.available, rangeDetail(selection, offer.amount),
+                        Model.purchaseNumber(offer.display_amount), Model.purchaseNumber(offer.original_amount))
                 end
             end
             for _, option in ipairs(source.scopes or {}) do
@@ -601,12 +640,25 @@ function Screens:_purchaseInlineEntries(state, which)
             end
         end
     else
+        local wallet = self.controller:getWallet() or {}
+        local selected_payment = Model.purchasePayment(state.payment)
         for _, option in ipairs(source.payments or {}) do
             local payment = Model.purchasePayment(option)
-            add(payment, paymentName(payment), option.available,
-                option.available == false and T("Unavailable for this selection") or nil)
+            if payment.method == selected_payment.method then payment = selected_payment end
+            local balance_value = wallet.remain_gold
+            if payment.method == "coupon" then balance_value = wallet.remain_coupon end
+            local balance = not wallet.error and Model.purchaseNumber(balance_value)
+            local detail = payment.method == "coupon" and balance and string.format(T("Available %s coupons · single chapter only"), amountText(balance))
+                or balance and string.format(T("Available %s %s"), amountText(balance), asset(payment.method))
+            if not detail then detail = payment.method == "coupon" and T("Coupon balance unavailable · single chapter only") or T("Balance unavailable") end
+            if option.available == false then detail = T("Unavailable for this selection") end
+            add(payment, payment.method == "coin" and T("Coins") or paymentName(payment), option.available, detail)
         end
-        add(Model.purchasePayment({ method = "coin" }), T("Coins without discount"), true)
+        local has_coin = false
+        for _, entry in ipairs(entries) do if entry.selection.method == "coin" then has_coin = true; break end end
+        if not has_coin then
+            add(selected_payment.method == "coin" and selected_payment or Model.purchasePayment({ method = "coin" }), T("Coins"), true)
+        end
         add(Model.purchasePayment(state.payment), paymentName(state.payment), true)
     end
     return entries
@@ -628,8 +680,9 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
     end
     local function section(label, hint)
         local right = hint and W.dp(330) or 0
-        add(W.box(W.row{ text(label, width - right, 22, { bold = true }),
-            right > 0 and text(hint, right, 16, { muted = true, align = "right" }) or W.gap(0) }, width, W.dp(62)))
+        add(W.column{ space(hint and 26 or 30), W.row{
+            line(label, width - right, 22, { bold = true, height = W.dp(28) }),
+            right > 0 and line(hint, right, 16, { muted = true, align = "right", height = W.dp(28) }) or W.gap(0) }, space(8) })
     end
     local function extraButtons(entries)
         for _, entry in ipairs(entries) do
@@ -649,15 +702,27 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         local label_width = width - W.dp(52) - price_width
         local detail = entry.detail
         if which == "payment" and selected and quote.balance ~= nil then
-            detail = string.format(T("Available %s %s"), tostring(quote.balance), asset(quote.method))
+            detail = quote.method == "coupon" and string.format(T("Available %s coupons · single chapter only"), amountText(quote.balance))
+                or string.format(T("Available %s %s"), amountText(quote.balance), asset(quote.method))
         end
-        local label = W.column{ text(entry.label, label_width, 21, { bold = selected, muted = not entry.available }),
-            detail and space(5) or space(0), detail and text(detail, label_width, 16, { muted = true }) or space(0) }
-        local price = selected and tostring(quote.amount or "?") .. " " .. asset(quote.method)
-            or entry.reference and string.format(T("Reference %s"), entry.reference) or ""
+        local label = W.column{ line(entry.label, label_width, 21, { bold = selected, muted = not entry.available, height = W.dp(28) }),
+            detail and space(4) or space(0), detail and line(detail, label_width, 16, { muted = true, height = W.dp(21) }) or space(0) }
+        local price = selected and amountText(quote.amount) .. " " .. asset(quote.method)
+            or entry.reference and amountText(entry.reference) .. " " .. asset("coin") or T("Price unavailable")
+        local reference = selected and quote.method == "coin" and Model.purchaseNumber((quote.amounts or {}).original)
+            or not selected and entry.original
+        local display_amount = selected and Model.purchaseNumber(quote.amount) or entry.reference
+        if tonumber(reference) == tonumber(display_amount) then reference = nil end
+        local price_detail = reference and string.format(T("Original price %s"), amountText(reference))
+            or not selected and entry.reference and T("Reference price")
+        if reference and not selected and entry.reference then price_detail = T("Reference price") .. " · " .. price_detail end
+        local price_content = price_width > 0 and W.column{
+            line(price, price_width, 22, { bold = true, muted = not entry.available or not selected and not entry.reference,
+                align = "right", height = W.dp(28) }),
+            price_detail and space(2) or space(0), price_detail and line(price_detail, price_width, 15,
+                { muted = true, align = "right", height = W.dp(20) }) or space(0) } or W.gap(0)
         local content = W.column{ W.box(W.row{ circle, W.gap(W.dp(22)), label,
-            price_width > 0 and text(price, price_width, selected and 22 or 16,
-                { bold = selected, muted = not selected, align = "right" }) or W.gap(0) }, width, W.dp(80)),
+            price_content }, width, W.dp(80)),
             W.rule1dp(width, Blitbuffer.Color8(0xCC)) }
         local row = W.ActionRow:new{ width = width, content = content, enabled = entry.available,
             callback = function()
@@ -671,14 +736,14 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
     if state.submitting and not intent then
         add(self:_purchaseSummary(state, quote, purpose, width))
         add(W.column{ space(34), W.row{ tag(T("Locked"), W.dp(88)), W.gap(W.dp(14)),
-            text(T("Submitted purchase terms"), width - W.dp(104), 22, { bold = true }) }, space(24) })
+            line(T("Submitted purchase terms"), width - W.dp(104), 22, { bold = true, height = W.dp(28) }) }, space(14), W.rule1dp(width, W.ink) })
         add(keyValue(T("Purchase range"), (quote.scope or {}).kind == "batch"
             and (Model.ordinalRange(quote) and Model.purchaseRangeLabel(quote.scope) or T("Batch selection"))
-            or self:_purchaseChapter(state, quote), width))
+            or T("Only this chapter") .. " · " .. self:_purchaseChapterLabel(state, quote), width))
         add(keyValue(T("Payment method"), paymentName(quote.payment), width))
-        add(keyValue(T("Total"), tostring(quote.amount or "?") .. " " .. asset(quote.method), width, { bold = true }))
+        add(keyValue(T("Total"), amountText(quote.amount) .. " " .. asset(quote.method), width, { bold = true }))
         add(keyValue(T("Submitted at"), purchaseDate(state.submitted_at), width))
-        add(W.column{ space(56), text(T("Submitting purchase…"), width, 32, { bold = true, align = "center" }), space(18),
+        add(W.column{ space(56), text(T("Submitting purchase…"), width, 32, { bold = true, align = "center" }), space(14),
             text(T("One purchase request has been sent. It will not be repeated before the result is confirmed."), width, 19,
                 { muted = true, align = "center", line_height = 0.7 }), space(8),
             text(T("Keep the connection available and wait a moment."), width, 19, { muted = true, align = "center" }) })
@@ -693,12 +758,17 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         if confirmed then
             local mark = FrameContainer:new{ padding = 0, margin = 0, bordersize = 0, background = W.ink,
                 W.box(text("✓", W.dp(88), 50, { color = W.paper, bold = true, align = "center" }), W.dp(88), W.dp(88)) }
+            local chapter = self:_purchaseChapterLabel(state, submitted_quote)
+            local access = ((intent.access_evidence or {})[tostring(submitted_quote.episode_id)] or {})
+            local permanent = access.access == "owned" and (access.expires_at == nil or tonumber(access.expires_at) == 0)
+            local chapter_status = permanent and string.format(T("%s · permanently unlocked"), chapter)
+                or string.format(T("%s · reading access confirmed"), chapter)
             add(W.column{ space(72), W.box(mark, width, W.dp(88)), space(28),
                 text(intentHeading(intent), width, 36, { bold = true, align = "center" }), space(12),
-                text(self:_purchaseChapter(state, submitted_quote), width, 21, { align = "center" }), space(44), W.rule1dp(width, W.ink) })
+                text(chapter_status, width, 21, { align = "center" }), space(44), W.rule1dp(width, W.ink) })
         else
-            add(W.column{ space(44), tag(rejected and T("Rejected") or T("Pending confirmation"), W.dp(126)), space(20),
-                text(heading, width, 36, { bold = true }), space(18) })
+            add(W.column{ space(44), tag(rejected and T("Rejected") or T("Pending confirmation"), W.dp(126)), space(18),
+                text(heading, width, 36, { bold = true }), space(14) })
             paragraph(intent.persistence_pending and T("The result is waiting for local storage. Do not purchase again.")
                 or rejected and T("The purchase was not accepted. Get a new quote before trying again.")
                 or T("The connection was interrupted and this purchase cannot yet be confirmed. It will not be submitted again. Refresh the result to confirm chapter access."), 20,
@@ -707,10 +777,12 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         local amount = Model.purchaseNumber(submitted_quote.amount)
         if confirmed then
             local wallet = self.controller:getWallet() or {}
-            local balance = not wallet.error and Model.purchaseNumber(submitted_quote.method == "coupon" and wallet.remain_coupon or wallet.remain_gold)
+            local balance_value = wallet.remain_gold
+            if submitted_quote.method == "coupon" then balance_value = wallet.remain_coupon end
+            local balance = not wallet.error and Model.purchaseNumber(balance_value)
             add(keyValue(intent.transaction_evidence == "server_accepted" and T("Confirmed quote") or T("Submitted quote"),
-                amount and tostring(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"), width, { height = 66, align = "right" }))
-            add(keyValue(T("Current balance"), balance and tostring(balance) .. " " .. asset(submitted_quote.method) or T("Unknown"), width,
+                amount and amountText(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"), width, { height = 66, align = "right" }))
+            add(keyValue(T("Current balance"), balance and amountText(balance) .. " " .. asset(submitted_quote.method) or T("Unknown"), width,
                 { height = 66, align = "right" }))
             add(keyValue(T("Confirmed at"), purchaseDate(intent.access_confirmed_at), width, { height = 66, align = "right" }))
             if intent.transaction_evidence ~= "server_accepted" or intent.range_outcome_pending then
@@ -719,13 +791,14 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
                     16, { muted = true, line_height = 0.7 })
             end
         else
-            add(W.column{ space(20), W.rule1dp(width, W.ink) })
-            section(T("Terms submitted"))
+            add(W.column{ space(20), W.rule1dp(width, W.ink), space(32),
+                line(T("Terms submitted"), width, 20, { bold = true, height = W.dp(26) }), space(12), W.rule1dp(width, W.ink) })
             add(keyValue(T("Chapters"), self:_purchaseContext(state, submitted_quote):gsub("\n", " · "), width, { height = 66 }))
-            add(keyValue(T("Submitted quote"), (amount and tostring(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"))
+            add(keyValue(T("Submitted quote"), (amount and amountText(amount) .. " " .. asset(submitted_quote.method) or T("Not confirmed"))
                 .. " · " .. paymentName(submitted_quote.payment), width, { height = 66 }))
             add(keyValue(T("Submitted at"), purchaseDate(intent.created_at), width, { height = 66 }))
             add(keyValue(T("Record ID"), short(intent.id, 60), width, { height = 66 }))
+            add(space(18))
             paragraph(T("Submitted terms are a reference, not proof of payment.")
                 .. (not rejected and "\n" .. T("Further purchases for this comic are paused until this result is confirmed.") or ""),
                 16, { muted = true, line_height = 0.7 })
@@ -770,8 +843,8 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
         local total_rows = quote.can_afford == false and { totalAmount(quote, total_inner, true) } or { W.row{
             W.column{ line(permanent and T("Permanent ownership after purchase") or T("Chapter reading access"), total_label_width, 17,
                     { muted = true, height = W.dp(29) }),
-                line(amount and balance and string.format(T("Balance after payment: %s %s"), math.max(0, balance - amount), asset(quote.method))
-                    or string.format(T("Available: %s %s"), tostring(quote.balance or "?"), asset(quote.method)), total_label_width, 17,
+                line(amount and balance and string.format(T("Balance after payment: %s %s"), amountText(math.max(0, balance - amount)), asset(quote.method))
+                    or string.format(T("Available: %s %s"), amountText(quote.balance), asset(quote.method)), total_label_width, 17,
                     { muted = true, height = W.dp(29) }) },
             totalAmount(quote, W.dp(248)) } }
         if quote.can_afford == false then
@@ -779,12 +852,12 @@ function Screens:_purchaseLayout(state, quote, intent, purpose, heading, paragra
             total_rows[#total_rows + 1] = W.rule1dp(total_inner, Blitbuffer.Color8(0xCC))
             total_rows[#total_rows + 1] = space(14)
             total_rows[#total_rows + 1] = W.row{ line(T("Available balance"), math.floor(total_inner / 2), 19, { muted = true, height = W.dp(28) }),
-                line(tostring(quote.balance or "?") .. " " .. asset(quote.method), total_inner - math.floor(total_inner / 2), 19,
+                line(amountText(quote.balance) .. " " .. asset(quote.method), total_inner - math.floor(total_inner / 2), 19,
                     { align = "right", height = W.dp(28) }) }
             total_rows[#total_rows + 1] = space(8)
             total_rows[#total_rows + 1] = W.row{ line(T("Insufficient balance, short by"), math.floor(total_inner / 2), 20,
                     { bold = true, height = W.dp(28) }),
-                line(amount and balance and tostring(amount - balance) .. " " .. asset(quote.method) or T("Unknown"),
+                line(amount and balance and amountText(amount - balance) .. " " .. asset(quote.method) or T("Unknown"),
                     total_inner - math.floor(total_inner / 2), 20, { bold = true, align = "right", height = W.dp(28) }) }
         end
         add(W.column{ space(30), FrameContainer:new{ padding = W.dp(22), padding_left = W.dp(26), padding_right = W.dp(26), margin = 0,
@@ -936,7 +1009,7 @@ function Screens:_purchaseDialog()
             action(T("Refresh quote"), function() if current() then self:_quote(nil, nil) end end),
         }
     elseif quote then
-        local amount = tostring(quote.amount or "?")
+        local amount = amountText(quote.amount)
         local batch, ordinal = (quote.scope or {}).kind == "batch", Model.ordinalRange(quote)
         heading = state.submitting and T("Submitting purchase…") or quote.can_afford == false and T("Insufficient balance") or heading
         paragraphs[#paragraphs + 1] = { text = string.format(T("Total: %s %s"), amount, asset(quote.method)), size = 21, bold = true }
@@ -996,7 +1069,7 @@ function Screens:_purchaseDialog()
     local body_rows, footer, flow_heading = self:_purchaseLayout(state, quote, intent, purpose, heading, paragraphs, buttons,
         current, intentCurrent, visible)
     dialog = dialogWithSummary(flow_heading, paragraphs, footer, { body_rows = body_rows, page = state.flow_page,
-        body_padding_top_px = 0,
+        body_padding_top_px = 0, body_padding_bottom_px = 0,
         on_page = function(page) if visible() then state.flow_page = page; self:_purchaseDialog() end end,
         dismissable = not state.submitting, no_back = state.submitting,
         selected = not state.submitting and { x = 1, y = 1 } or nil,

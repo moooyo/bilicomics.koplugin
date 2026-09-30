@@ -1,0 +1,549 @@
+{
+  "passed": true,
+  "network_isolated": true,
+  "runtime": "v2026.07.1",
+  "execution_host": "DESKTOP-SLJSE8G",
+  "execution_kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "source_sha256": {
+    "bilicomics/controller.lua": "f604462b38edcc39f6bea7c8a11a9c3d2bde691287ea554e303cadcd1e4449f9",
+    "bilicomics/bookshelf_state.lua": "c87e8f1f91a87c08be313842e3044cf2a4a32ed690837738a1eeb399b3fcb2b0",
+    "bilicomics/download_estimate.lua": "7ca753553ac56ca3b077b8e4472efa957f5beb377d422e1e9f37857079321cd3",
+    "spec/controller/ui_preparation_spec.lua": "a193b323bfd1d9b5430cde3237a8c0fe2ff8e5367885887b2b78550356fccdd7",
+    "spec/controller/download_estimate_spec.lua": "3f10c749f84c84121e447b595044fe4fcc79d1207f4cdfece728572f0307e444",
+    "spec/controller/bookshelf_finishing_spec.lua": "fad15fbb79fab323968f3cabd0631c11c3c43ae5772c5dae37f1ba29bbdaaa60",
+    "spec/controller/cover_thumbnail_spec.lua": "320bae36f1851f96e1cb1275a0c961cc42f160bd2c86c74f85ec56a111a7ee29",
+    "spec/controller/run_ui_preparation.py": "57f12e6590abdfedb867bf62bc8a3eff415f925a05626924c99ff2d4527f58f5"
+  },
+  "source_after_sha256": {
+    "bilicomics/controller.lua": "f604462b38edcc39f6bea7c8a11a9c3d2bde691287ea554e303cadcd1e4449f9",
+    "bilicomics/bookshelf_state.lua": "c87e8f1f91a87c08be313842e3044cf2a4a32ed690837738a1eeb399b3fcb2b0",
+    "bilicomics/download_estimate.lua": "7ca753553ac56ca3b077b8e4472efa957f5beb377d422e1e9f37857079321cd3",
+    "spec/controller/ui_preparation_spec.lua": "a193b323bfd1d9b5430cde3237a8c0fe2ff8e5367885887b2b78550356fccdd7",
+    "spec/controller/download_estimate_spec.lua": "3f10c749f84c84121e447b595044fe4fcc79d1207f4cdfece728572f0307e444",
+    "spec/controller/bookshelf_finishing_spec.lua": "fad15fbb79fab323968f3cabd0631c11c3c43ae5772c5dae37f1ba29bbdaaa60",
+    "spec/controller/cover_thumbnail_spec.lua": "320bae36f1851f96e1cb1275a0c961cc42f160bd2c86c74f85ec56a111a7ee29",
+    "spec/controller/run_ui_preparation.py": "57f12e6590abdfedb867bf62bc8a3eff415f925a05626924c99ff2d4527f58f5"
+  },
+  "source_unchanged": true,
+  "suites": [
+    {
+      "suite": "ui_preparation",
+      "returncode": 0,
+      "passed": true,
+      "result": {
+        "assertions": [
+          {
+            "name": "cover cache alone does not certify a first bookshelf",
+            "passed": true
+          },
+          {
+            "name": "offline cache hits are actual ready covers and do not dispatch",
+            "passed": true
+          },
+          {
+            "name": "A6 library-phase counts come from received favorites before publication",
+            "passed": true
+          },
+          {
+            "name": "A6 exposes observed staged counts without partial first presentation",
+            "passed": true
+          },
+          {
+            "name": "A6 fetches only actual visible uncached official covers",
+            "passed": true
+          },
+          {
+            "name": "A6 publishes once after every visible cover terminal result",
+            "passed": true
+          },
+          {
+            "name": "duplicate cover completion cannot increment observed counts",
+            "passed": true
+          },
+          {
+            "name": "failed covers settle A6 without inventing successful counts",
+            "passed": true
+          },
+          {
+            "name": "failed first presentation retains existing cover retry backoff",
+            "passed": true
+          },
+          {
+            "name": "queued cover cannot start after connectivity changes",
+            "passed": true
+          },
+          {
+            "name": "offline rejection finishes the staged first presentation",
+            "passed": true
+          },
+          {
+            "name": "suspension settles visible preparation without a permanently pending A6",
+            "passed": true
+          },
+          {
+            "name": "suspended cover late callback cannot republish",
+            "passed": true
+          },
+          {
+            "name": "suspension cancels incomplete library collection instead of publishing partial favorites",
+            "passed": true
+          },
+          {
+            "name": "A6 cover queueing has a finite preparation deadline",
+            "passed": true
+          },
+          {
+            "name": "a missing worker callback cannot leave A6 indefinitely pending",
+            "passed": true
+          },
+          {
+            "name": "concurrent visible observers share one existing worker",
+            "passed": true
+          },
+          {
+            "name": "an account switch retires cover observers but suppresses obsolete bookshelf callbacks",
+            "passed": true
+          },
+          {
+            "name": "late retired cover workers cannot update a new account",
+            "passed": true
+          },
+          {
+            "name": "changed cover sources keep A6 pending for the current visible source",
+            "passed": true
+          },
+          {
+            "name": "changed cover source observers settle once with the final cache",
+            "passed": true
+          },
+          {
+            "name": "D2 controller exposes observed current-revision extrapolation",
+            "passed": true
+          },
+          {
+            "name": "D2 controller leaves incomplete selection size unknown",
+            "passed": true
+          },
+          {
+            "name": "F1 F2 F3 storage bytes belong to the displayed copy revision",
+            "passed": true
+          },
+          {
+            "name": "download size enrichment is read-only",
+            "passed": true
+          },
+          {
+            "name": "cover persistence failures settle A6 without reporting an unavailable thumbnail as ready",
+            "passed": true
+          },
+          {
+            "name": "the real responsive selector queues actual initial visible covers for filter",
+            "passed": true
+          },
+          {
+            "name": "persisted filter changes the real first presentation selection",
+            "passed": true
+          },
+          {
+            "name": "A6 revalidates filter before publishing the first grid",
+            "passed": true
+          },
+          {
+            "name": "the fresh filter first grid publishes once after its visible covers settle",
+            "passed": true
+          },
+          {
+            "name": "the real responsive selector queues actual initial visible covers for sort",
+            "passed": true
+          },
+          {
+            "name": "persisted sort changes the real first presentation selection",
+            "passed": true
+          },
+          {
+            "name": "A6 revalidates sort before publishing the first grid",
+            "passed": true
+          },
+          {
+            "name": "the fresh sort first grid publishes once after its visible covers settle",
+            "passed": true
+          },
+          {
+            "name": "the real responsive selector queues actual initial visible covers for local resume",
+            "passed": true
+          },
+          {
+            "name": "persisted local resume changes the real first presentation selection",
+            "passed": true
+          },
+          {
+            "name": "A6 revalidates local resume before publishing the first grid",
+            "passed": true
+          },
+          {
+            "name": "the fresh local resume first grid publishes once after its visible covers settle",
+            "passed": true
+          },
+          {
+            "name": "the real responsive selector queues actual initial visible covers for favorite",
+            "passed": true
+          },
+          {
+            "name": "persisted favorite changes the real first presentation selection",
+            "passed": true
+          },
+          {
+            "name": "A6 revalidates favorite before publishing the first grid",
+            "passed": true
+          },
+          {
+            "name": "the fresh favorite first grid publishes once after its visible covers settle",
+            "passed": true
+          },
+          {
+            "name": "first preparation retains one overall deadline across changing views",
+            "passed": true
+          },
+          {
+            "name": "the overall deadline settles the fresh visible selection without new requests or invented readiness",
+            "passed": true
+          },
+          {
+            "name": "F2 current descriptor metadata uses the new 32-page revision instead of the retained 24-page job",
+            "passed": true
+          },
+          {
+            "name": "F2 declared-page size estimates do not fabricate validated descriptor metadata",
+            "passed": true
+          },
+          {
+            "name": "F2 changed source markers cannot revive the preceding validated descriptor count or size",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "count": 47
+      },
+      "output": "/home/moooyo/.local/share/bilicomics-acceptance/all-pages-final-real-controller/ui_preparation"
+    },
+    {
+      "suite": "download_estimate",
+      "returncode": 0,
+      "passed": true,
+      "result": {
+        "scope": "Synthetic download size estimation with real SQLite and filesystem evidence; no network operations",
+        "passed": true,
+        "count": 21,
+        "cases": [
+          "An empty selection is exactly zero without an account",
+          "Fully cached chapters use actual bytes and deduplicate numeric and string IDs",
+          "Partial chapters extrapolate their own observed page mean",
+          "A zero-sample current descriptor supplies its authoritative page count",
+          "Declared episode counts permit same-comic extrapolation without a descriptor",
+          "Missing or invalid declared counts remain unknown",
+          "Unknown foreign and invalid selected entries prevent a complete estimate",
+          "Other-comic samples cannot supply a mean",
+          "A retained older revision never supplies current estimate evidence",
+          "A missing authoritative revision cannot revive Catalog's legacy fallback",
+          "A replacement marker rejects stale current and local revision evidence",
+          "A retired revision cannot contribute through Catalog's legacy fallback",
+          "Missing mismatched empty and non-ready files are not observed bytes",
+          "Files outside the account page root and symbolic links are excluded",
+          "Wrong descriptor account comic episode and revision identities are rejected",
+          "Invalid descriptor geometry cannot supply authoritative page evidence",
+          "Stored bytes distinguish verified zero from an unavailable descriptor",
+          "Incomplete selections preserve the computable chapter subtotal",
+          "Selected descriptor metadata reports exact partial and unknown current copies",
+          "Declared counts and rejected revisions cannot fabricate descriptor metadata",
+          "Estimation reads real storage without repairs writes or network dispatch"
+        ]
+      },
+      "output": "/home/moooyo/.local/share/bilicomics-acceptance/all-pages-final-real-controller/download_estimate"
+    },
+    {
+      "suite": "bookshelf_finishing",
+      "returncode": 0,
+      "passed": true,
+      "result": {
+        "network_workers_executed": false,
+        "scheduler_scope": "Controller wiring with a controlled runner; real worker concurrency is covered separately",
+        "spec": "finishing-bookshelf-controller",
+        "passed": true,
+        "host": "test-env",
+        "tests": [
+          {
+            "passed": true,
+            "name": "Uncached getters and unauthenticated automatic entry never dispatch"
+          },
+          {
+            "passed": true,
+            "name": "A successful empty bookshelf is cached and stays distinct from no cache after restart"
+          },
+          {
+            "passed": true,
+            "name": "Corrupt or cross account snapshot metadata cannot certify an empty bookshelf cache"
+          },
+          {
+            "passed": true,
+            "name": "Legacy favorites are usable stale cache and synchronize in server order"
+          },
+          {
+            "passed": true,
+            "name": "The fifteen minute boundary refreshes once and manual refresh bypasses freshness"
+          },
+          {
+            "passed": true,
+            "name": "Both library responses publish atomically when favorites completes first"
+          },
+          {
+            "passed": true,
+            "name": "Both library responses publish atomically when history completes first"
+          },
+          {
+            "passed": true,
+            "name": "A failed favorites response retains the entire preceding snapshot"
+          },
+          {
+            "passed": true,
+            "name": "A failed history response retains the entire preceding snapshot"
+          },
+          {
+            "passed": true,
+            "name": "A snapshot storage failure rolls back both libraries and their comic mutations"
+          },
+          {
+            "passed": true,
+            "name": "Submission exceptions finish single flight and allow a clean manual retry"
+          },
+          {
+            "passed": true,
+            "name": "Repeated worker completion cannot publish a partial result or invoke waiters twice"
+          },
+          {
+            "passed": true,
+            "name": "Malformed and duplicate synchronized identities never replace usable cache"
+          },
+          {
+            "passed": true,
+            "name": "Local exact anchors survive conflicting chapter level server history"
+          },
+          {
+            "passed": true,
+            "name": "A completed concurrent following change to false wins over old sync data"
+          },
+          {
+            "passed": true,
+            "name": "A completed concurrent following change to true wins over old sync data"
+          },
+          {
+            "passed": true,
+            "name": "An in flight following operation preserves prior state until its confirmed completion"
+          },
+          {
+            "passed": true,
+            "name": "A late library completion after account does not notify or publish"
+          },
+          {
+            "passed": true,
+            "name": "A late library completion after close does not notify or publish"
+          },
+          {
+            "passed": true,
+            "name": "Automatic entry respects reader activity suspension offline state and invalid authentication"
+          },
+          {
+            "passed": true,
+            "name": "Offline cache and failure backoff stay usable while manual retry can immediately recover"
+          },
+          {
+            "passed": true,
+            "name": "Automatic retry begins at sixty seconds and a clock rollback makes cache stale"
+          },
+          {
+            "passed": true,
+            "name": "View changes merge preserve focus and persist across a restart"
+          },
+          {
+            "passed": true,
+            "name": "View state and sync snapshots are account scoped and reject stale account saves"
+          },
+          {
+            "passed": true,
+            "name": "Corrupt view fields normalize safely and a failed save retains prior persistent view"
+          },
+          {
+            "passed": true,
+            "name": "Concurrency settings initialize the runner persist and notify both live schedulers"
+          },
+          {
+            "passed": true,
+            "name": "Invalid concurrency values cannot change persistent settings or scheduler policy"
+          },
+          {
+            "passed": true,
+            "name": "A concurrency persistence failure cannot alter the effective setting or runtime policy"
+          },
+          {
+            "passed": true,
+            "name": "A native settings write failure is detected even when LuaSettings flush returns normally"
+          },
+          {
+            "passed": true,
+            "name": "Reader close returns on the next tick and newer reader or opening state suppresses it"
+          },
+          {
+            "passed": true,
+            "name": "Closing the active reader cannot return while another tracked reader is still open"
+          }
+        ],
+        "synthetic_data": true
+      },
+      "output": "/home/moooyo/.local/share/bilicomics-acceptance/all-pages-final-real-controller/bookshelf_finishing"
+    },
+    {
+      "suite": "cover_thumbnail",
+      "returncode": 0,
+      "passed": true,
+      "result": {
+        "tests": [
+          {
+            "passed": true,
+            "name": "official_jpeg_width_transform"
+          },
+          {
+            "passed": true,
+            "name": "official_uppercase_jpeg_fallback"
+          },
+          {
+            "passed": true,
+            "name": "official_png_fallback_png"
+          },
+          {
+            "passed": true,
+            "name": "official_png_fallback_webp"
+          },
+          {
+            "passed": true,
+            "name": "official_png_fallback_avif"
+          },
+          {
+            "passed": true,
+            "name": "opaque_image_url_is_preserved_1"
+          },
+          {
+            "passed": true,
+            "name": "opaque_image_url_is_preserved_2"
+          },
+          {
+            "passed": true,
+            "name": "opaque_image_url_is_preserved_3"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_1"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_2"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_3"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_4"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_5"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_6"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_7"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_8"
+          },
+          {
+            "passed": true,
+            "name": "unsupported_or_ambiguous_url_is_rejected_9"
+          },
+          {
+            "passed": true,
+            "name": "library_refresh_keeps_hidden_covers_out_of_worker_queue"
+          },
+          {
+            "passed": true,
+            "name": "search_results_keep_hidden_covers_out_of_worker_queue"
+          },
+          {
+            "passed": true,
+            "name": "only_explicit_visible_item_dispatches_its_cover"
+          },
+          {
+            "passed": true,
+            "name": "offline_cover_does_not_dispatch"
+          },
+          {
+            "passed": true,
+            "name": "cover_dispatch_uses_thumbnail_with_existing_budget"
+          },
+          {
+            "passed": true,
+            "name": "repeated_visible_card_requests_share_one_worker"
+          },
+          {
+            "passed": true,
+            "name": "cover_commits_an_atomic_strategy_bound_cache"
+          },
+          {
+            "passed": true,
+            "name": "matching_strategy_cache_avoids_transfer"
+          },
+          {
+            "passed": true,
+            "name": "legacy_original_cache_is_replaced"
+          },
+          {
+            "passed": true,
+            "name": "failed_thumbnail_keeps_five_minute_backoff"
+          },
+          {
+            "passed": true,
+            "name": "failed_thumbnail_retries_at_backoff_boundary"
+          },
+          {
+            "passed": true,
+            "name": "old_url_failure_does_not_delay_new_thumbnail"
+          },
+          {
+            "passed": true,
+            "name": "obsolete_cover_result_is_removed"
+          },
+          {
+            "passed": true,
+            "name": "changed_source_is_dispatched_after_old_result"
+          },
+          {
+            "passed": true,
+            "name": "changed_source_retries_after_old_failure"
+          },
+          {
+            "passed": true,
+            "name": "account_generation_discards_obsolete_cover"
+          }
+        ],
+        "count": 33,
+        "passed": true,
+        "scope": "Production controller, native SQLite and controlled asynchronous workers; synthetic accounts only"
+      },
+      "output": "/home/moooyo/.local/share/bilicomics-acceptance/all-pages-final-real-controller/cover_thumbnail"
+    }
+  ]
+}
