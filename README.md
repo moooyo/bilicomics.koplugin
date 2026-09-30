@@ -2,9 +2,19 @@
 
 A Bilibili Comics plugin with its own comic library UI and KOReader's native reader. The implementation follows [the agreed plan](docs/implementation-plan.md) and [the UI design](design/ui-spec.md).
 
+[![Package plugin](https://github.com/moooyo/bilicomics.koplugin/actions/workflows/package.yml/badge.svg)](https://github.com/moooyo/bilicomics.koplugin/actions/workflows/package.yml)
+
 ## Development status
 
-The latest approved UI is implemented in the native plugin, including the compact
+The current UI implements the complete Scribe handoff using existing KOReader
+widgets. All 43 selected pages and supplemental states passed the
+[complete-page acceptance](docs/all-pages-acceptance.md). The current local
+candidate is `dist/bilicomics-0.1.0-dev.zip`, with an adjacent file-hash manifest.
+Download the automatically verified package from the
+[Package plugin workflow](https://github.com/moooyo/bilicomics.koplugin/actions/workflows/package.yml)
+as described below.
+
+The earlier recharge UI is implemented in the native plugin, including the compact
 bookshelf and QR recharge flow. The payment-code view uses one action row with
 Check credit on the left and Close on the right. Manual recharge input must match
 an amount from the current official configuration. The installable candidate is
@@ -25,7 +35,7 @@ synthetic suites pass; actual parallel workers and focused UI/controller checks
 also pass. Fresh phone-confirmed login, restart, and a complete real 45-page
 online/download/offline workflow passed on the same production source, including
 observed two-image concurrency. See [the final acceptance](docs/finishing-acceptance.md).
-The canonical archive and `dist/bilicomics-finishing-preview.zip` have identical bytes.
+At that snapshot, the canonical archive and `dist/bilicomics-finishing-preview.zip` had identical bytes.
 
 The current [Bookstore subject browsing](docs/bookstore-categories.md) adds the
 official category selector to the compact recommendation grid. Navigation is Bookshelf,
@@ -93,10 +103,28 @@ Runtime checks must run through `ssh test-env` unless local verification is expl
 
 The packaging script is `tools/package.py`. Execute it on the remote environment after integration checks; it writes a deterministic ZIP and file-hash manifest. Native protocol binaries and their platform compatibility remain explicit package dependencies.
 
-The latest approved UI candidate is `dist/bilicomics-ui-recharge-20260915.zip`.
-The preceding finishing candidate remains `dist/bilicomics-0.1.0-dev.zip`, with its exact adjacent
-manifest. The [finishing package/source record](spec/package/finishing-acceptance-binding.json)
-identifies this revision and its complete remote acceptance. No session, acquired
+The [Package plugin workflow](.github/workflows/package.yml) runs on pushes to
+`main`, pull requests targeting `main`, `v*` tag pushes and manual dispatch.
+It uses Python 3.12 and the existing production allowlist, then verifies archive
+integrity, native library hashes, license notices, private-data exclusions and
+byte-identical repeat packaging. The prebuilt native libraries are included;
+this workflow does not compile or claim additional device compatibility.
+
+Open [Actions](https://github.com/moooyo/bilicomics.koplugin/actions/workflows/package.yml),
+choose a successful run and download `bilicomics-<commit SHA>` from **Artifacts**
+or the run summary. Manual builds use **Run workflow**. Artifacts are retained
+for 30 days and contain `bilicomics-0.1.0-dev.zip`, its `.manifest.json`, and
+`result.json` with the packaging checks. Extract the downloaded artifact first,
+then extract the plugin ZIP and copy `bilicomics.koplugin` into KOReader's
+`plugins` directory. These artifacts are not GitHub Releases.
+
+The current Scribe UI candidate is `dist/bilicomics-0.1.0-dev.zip`;
+the [package receipt](spec/package/scribe-ui-acceptance.json) records its
+UI acceptance. The recharge and finishing candidates are historical snapshots:
+`dist/bilicomics-ui-recharge-20260915.zip` and
+`dist/bilicomics-finishing-preview.zip`. The
+[finishing package/source record](spec/package/finishing-acceptance-binding.json)
+identifies that earlier revision and its complete remote acceptance. No session, acquired
 comic content or diagnostic loader is included.
 
 The earlier 101-file stabilization candidate is retained under

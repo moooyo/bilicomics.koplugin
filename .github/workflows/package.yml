@@ -1,0 +1,57 @@
+name: Package plugin
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Build and verify plugin
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Build and verify package
+        run: >-
+          python spec/package/verify_package.py
+          --source .
+          --output "$RUNNER_TEMP/package-verification"
+
+      - name: Upload verified package
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: bilicomics-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/package-verification/bilicomics-0.1.0-dev.zip
+            ${{ runner.temp }}/package-verification/bilicomics-0.1.0-dev.manifest.json
+            ${{ runner.temp }}/package-verification/result.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+      - name: Write download summary
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        run: |
+          printf '## Verified plugin package\n\n[Download ZIP, manifest and verification report](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
