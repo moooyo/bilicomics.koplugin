@@ -16,7 +16,12 @@ def synthetic_covers(directory):
     from PIL import Image, ImageDraw, ImageFont
 
     directory.mkdir()
-    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+    font_path = next((str(path) for path in (
+        Path(os.environ.get("BILI_FIXTURE_FONT", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")),
+        Path("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"),
+    ) if path.is_file()), None)
+    if font_path is None:
+        raise RuntimeError("Supply BILI_FIXTURE_FONT or an installed regular synthetic-cover font.")
     label_font = ImageFont.truetype(font_path, 22)
     title_font = ImageFont.truetype(font_path, 36)
     names = ("MOONLIT\nOBSERVATORY", "THE LAST\nPAPER CRANE", "LIGHTHOUSE\nIN THE CLOUDS", "GARDEN OF\nQUIET STARS", "SILVER\nMOUNTAIN")

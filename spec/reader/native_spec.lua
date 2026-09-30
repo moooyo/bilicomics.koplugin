@@ -1,4 +1,4 @@
--- Execute only inside the isolated official runtime on test-env.
+-- Execute only inside an isolated official runtime authorized for verification.
 require("setupkoenv")
 local plugin_root, output, mode = assert(arg[1]), assert(arg[2]), arg[3] or "render"
 package.path = plugin_root .. "/?.lua;" .. package.path
@@ -107,7 +107,7 @@ local function render()
     check("provider page count", document:getPageCount() == #records)
     check("missing geometry is local", document:getNativePageDimensions(2).h == 1600 and hints == 0)
     local target = BB.new(600, 400)
-    local loading_background, unavailable_background = 245, 235
+    local loading_background, unavailable_background = 255, 255
     document:drawPage(target, 0, 0, Geom:new{ x = 0, y = 650, w = 600, h = 400 }, 1, 1, 0, 1, 1)
     check("native crop", math.abs(target:getPixel(300, 100):getR() - 100) <= 2)
     check("ready image is not decorated with placeholder content", solidPixels(target, 100, 2))
@@ -132,8 +132,10 @@ local function render()
     local tiny_region = Geom:new{ x = 70, y = 600, w = 8, h = 8 }
     local hints_before_tiny = hints
     document:drawPage(tiny, 0, 0, tiny_region, 2, 1, 0, 1, 1)
-    check("tiny missing region is drawable without acquiring twice", tiny:getPixel(4, 7):getR() == loading_background
-        and tiny:getPixel(4, 0):getR() < loading_background and hints == hints_before_tiny + 1
+    check("tiny missing region has a bounded frame without acquiring twice", tiny:getPixel(4, 6):getR() == loading_background
+        and tiny:getPixel(4, 0):getR() == 0xCC and tiny:getPixel(4, 7):getR() == 0xCC
+        and tiny:getPixel(0, 4):getR() == 0xCC and tiny:getPixel(7, 4):getR() == 0xCC
+        and hints == hints_before_tiny + 1
         and next(document._document.active) == nil)
     document:drawPageInverted(tiny_inverted, 0, 0, tiny_region, 2, 1, 0, 1, 1)
     check("tiny inverted region complements its entire edge and background", invertedPixels(tiny, tiny_inverted))
@@ -143,16 +145,16 @@ local function render()
     clipped:fill(BB.Color8(sentinel))
     document:drawPage(clipped, 12, 10, tiny_region, 2, 1, 0, 1, 1)
     check("tiny positioned placeholder leaves neighboring pixels unchanged",
-        clipped:getPixel(16, 17):getR() == loading_background and unchangedOutside(clipped, 12, 10, 20, 18, sentinel))
+        clipped:getPixel(16, 16):getR() == loading_background and unchangedOutside(clipped, 12, 10, 20, 18, sentinel))
     clipped:fill(BB.Color8(sentinel))
     local clipped_region = Geom:new{ x = 0, y = 400, w = 240, h = 160 }
     document:drawPage(clipped, -80, -40, clipped_region, 2, 1, 0, 1, 1)
     check("negative offset clips background and text to the visible intersection",
-        clipped:getPixel(159, 119):getR() == loading_background and unchangedOutside(clipped, 0, 0, 160, 120, sentinel))
+        clipped:getPixel(158, 118):getR() == loading_background and unchangedOutside(clipped, 0, 0, 160, 120, sentinel))
     clipped:fill(BB.Color8(sentinel))
     document:drawPageInverted(clipped, -80, -40, clipped_region, 2, 1, 0, 1, 1)
     check("negative offset inverted placeholder preserves pixels outside its region",
-        clipped:getPixel(159, 119):getR() == 255 - loading_background and unchangedOutside(clipped, 0, 0, 160, 120, sentinel))
+        clipped:getPixel(158, 118):getR() == 255 - loading_background and unchangedOutside(clipped, 0, 0, 160, 120, sentinel))
     clipped:fill(BB.Color8(sentinel))
     document:drawPage(clipped, 10, -7, tiny_region, 2, 1, 0, 1, 1)
     check("one row intersection does not overrun its clipped height",

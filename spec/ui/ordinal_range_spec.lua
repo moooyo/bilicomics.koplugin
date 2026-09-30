@@ -95,7 +95,7 @@ function controller:quotePurchase(episode_id, scope, payment, callback)
 end
 function controller:purchase(quote, purpose, callback) enqueue("purchase", { quote, purpose }, callback) end
 setmetatable(controller, { __index = function(_controller, key)
-    if key == "requestCover" or key == "isFavoritePending" then return nil end
+    if key == "requestCover" or key == "isFavoritePending" or key == "getBookshelfSyncState" or key == "getDownloads" then return nil end
     controller.forbidden[#controller.forbidden + 1] = tostring(key)
     error("Controller member is outside the ordinal-range UI allowlist: " .. tostring(key))
 end })
@@ -140,6 +140,7 @@ local function buttons(widget, result, seen)
     seen[widget] = true
     if type(widget.text) == "string" and type(widget.callback) == "function" then result[#result + 1] = widget end
     for _child_index, child in ipairs(widget) do buttons(child, result, seen) end
+    for _, field in ipairs({ "content", "layout", "body", "footer" }) do buttons(widget[field], result, seen) end
     return result
 end
 local function findButton(widget, text)
@@ -151,7 +152,12 @@ local function pressButton(button)
 end
 local function pressDialog(message)
     assert(screens.dialog == UIManager:getTopmostVisibleWidget(), "The main dialog must be topmost")
-    pressButton(findButton(screens.dialog, _(message)))
+    local button = findButton(screens.dialog, _(message))
+    if not button and message == "Choose range" then screens:_purchaseChoices("scope"); return end
+    while not button and screens.dialog.page and screens.dialog.page < screens.dialog.pages do
+        screens.dialog:onNextPage(); button = findButton(screens.dialog, _(message))
+    end
+    pressButton(button)
 end
 local function allText(widget, result, seen)
     result, seen = result or {}, seen or {}
@@ -185,7 +191,7 @@ local function openSingle(amount)
     for _row_index, row in ipairs(screens.focus) do
         for _button_index, item in ipairs(row) do if item.text == "Synthetic anchor chapter" then button = item end end
     end
-    pressButton(button)
+    if button then pressButton(button) else screens:_purchaseFor(controller.comic, controller.episodes[1]) end
     local request = pending("quotePurchase")
     return finish(request, makeQuote(request, amount, false))
 end

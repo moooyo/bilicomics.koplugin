@@ -145,12 +145,25 @@ check("success_feedback_contains_no_secret_or_input_path", not screens.dialog.ti
     and not screens.dialog.title:find(fixtures, 1, true))
 before = #requests
 selectFile("too-large.txt")
-check("oversize_selection_never_reaches_controller", #requests == before and screens.dialog.title:find("128 KiB", 1, true))
+local function dialogText()
+    local values, seen = {}, {}
+    local function collect(widget)
+        if type(widget) ~= "table" or seen[widget] then return end
+        seen[widget] = true
+        if type(widget.text) == "string" then values[#values + 1] = widget.text end
+        if type(widget.title) == "string" then values[#values + 1] = widget.title end
+        for _, child in ipairs(widget) do collect(child) end
+        for _, field in ipairs({ "content", "body", "footer", "buttons" }) do collect(widget[field]) end
+    end
+    collect(screens.dialog)
+    return table.concat(values, "\n")
+end
+check("oversize_selection_never_reaches_controller", #requests == before and dialogText():find("128 KiB", 1, true))
 capture("session-file-error")
 selectFile("session.txt")
 requests[#requests].callback(nil, { kind = "invalid_session", message = "SESSDATA=synthetic-session-file " .. fixtures }); flush()
-check("validation_error_does_not_echo_cookie_or_path", not screens.dialog.title:find("synthetic-session-file", 1, true)
-    and not screens.dialog.title:find(fixtures, 1, true))
+check("validation_error_does_not_echo_cookie_or_path", not dialogText():find("synthetic-session-file", 1, true)
+    and not dialogText():find(fixtures, 1, true))
 check("failure_feedback_stays_above_controller_refresh", UIManager:getTopmostVisibleWidget() == screens.dialog)
 selectFile("session.txt")
 local closed_task = requests[#requests]

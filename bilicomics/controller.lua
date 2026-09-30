@@ -1676,6 +1676,10 @@ function Controller:setSetting(key, value)
 end
 function Controller:getStorageSummary()
     local summary = { total_bytes = 0, automatic_bytes = 0, pinned_bytes = 0, ready_pages = 0, missing_pages = 0, failed_pages = 0 }
+    local filesystem = require("bilicomics/jobs/storage_budget").summary(self.account.root)
+    if filesystem then
+        summary.free_bytes, summary.capacity_bytes = filesystem.free_bytes, filesystem.capacity_bytes
+    end
     for _index, page in ipairs(self.account.store:listAllPages()) do
         if page.state == "ready" then
             summary.ready_pages = summary.ready_pages + 1
@@ -1990,61 +1994,142 @@ function Controller:_prefetchConfigured(event)
     end
 end
 
+local function readerCaption(value)
+    local text = tostring(value or ""):gsub("[%c]", " ")
+    if #text <= 120 then return text end
+    local last = 120
+    while last > 0 and text:byte(last + 1) >= 128 and text:byte(last + 1) <= 191 do last = last - 1 end
+    return text:sub(1, last) .. "…"
+end
+
+local function readerOverlayUI()
+    local W = require("bilicomics/ui/widgets")
+    local CenterContainer = require("ui/widget/container/centercontainer")
+    local FrameContainer = require("ui/widget/container/framecontainer")
+    local Geom = require("ui/geometry")
+    local screen_width = require("device").screen:getWidth()
+    local margin = W.dp(56)
+    local ui = { W = W, width = screen_width - 2 * margin, focus = {} }
+    function ui:text(text, width, size, options)
+        return W.text(text, width or self.width, W.fontSize(size), options)
+    end
+    function ui:space(height) return W.spacePixels(W.dp(height)) end
+    function ui:rule(width)
+        return W.rule(width or self.width)
+    end
+    function ui:button(text, callback, width, primary, height)
+        local button = W.button(text, width or self.width, callback,
+            { primary = primary, size = W.fontSize(primary and 23 or 22), height_px = W.dp(height or 68) })
+        return button
+    end
+    function ui:progress(index, total)
+        return W.progress(self.width, W.dp(8), index / math.max(1, total))
+    end
+    function ui:row(label, hint, callback)
+        local label_width = math.floor(self.width * 0.58)
+        local row = W.ActionRow:new{ width = self.width, callback = callback,
+            content = CenterContainer:new{ dimen = Geom:new{ w = self.width, h = W.dp(72) },
+                W.row{ self:text(label, label_width, 21),
+                    self:text(hint or "", self.width - label_width, 17, { muted = true, align = "right" }) } } }
+        self.focus[#self.focus + 1] = { row }
+        return W.column{ row, self:rule() }
+    end
+    function ui:card(content)
+        return FrameContainer:new{ padding = 0, margin = 0, bordersize = W.dp(1.5), radius = 0,
+            color = W.ink, background = W.paper,
+            W.inset(content, W.dp(26), W.dp(26), W.dp(22), W.dp(22)) }
+    end
+    function ui:tag(text)
+        local TextWidget = require("ui/widget/textwidget")
+        local Font = require("ui/font")
+        return FrameContainer:new{ padding = W.dp(4), margin = 0, bordersize = W.dp(1.5), radius = 0,
+            color = W.ink, background = W.paper, W.row{ W.gap(W.dp(5)),
+                TextWidget:new{ text = text, face = Font:getFace("cfont", W.fontSize(18)),
+                    bold = true, fgcolor = W.ink, padding = 0 }, W.gap(W.dp(5)) } }
+    end
+    function ui:sheet(content, dismiss)
+        return W.sheetDialog(W.inset(content, margin, margin, W.dp(30), W.dp(36)), self.focus,
+            { width = screen_width, padding = 0, close_callback = dismiss })
+    end
+    return ui
+end
+
 function Controller:_chapterBoundary(event)
     if self.chapter_dialog then return end
-    local ButtonDialog = require("ui/widget/buttondialog")
     local next_episode = self:_nextEpisode(event.descriptor)
     local account = self.account
     local integration = event.reader and event.reader.bilicomics_integration or self.active_integration
     local function current()
         return not self.closed and self.account == account and (not integration or integration:isCurrent())
     end
-    local function caption(value)
-        local text = tostring(value or ""):gsub("[%c]", " ")
-        if #text <= 120 then return text end
-        local last = 120
-        while last > 0 and text:byte(last + 1) >= 128 and text:byte(last + 1) <= 191 do last = last - 1 end
-        return text:sub(1, last) .. "…"
-    end
     local properties = {}
     if integration and integration.document.getDocumentProps then properties = integration.document:getDocumentProps() or {} end
     local heading = next_episode and _("End of chapter") or _("Latest available chapter finished")
-    if properties.series then heading = heading .. "\n" .. caption(properties.series) end
-    heading = heading .. "\n" .. string.format(_("Finished: %s"), caption(properties.title or event.descriptor.episode_id))
-    if next_episode then
-        heading = heading .. "\n" .. string.format(_("Next: %s"), caption(next_episode.title or next_episode.short_title or next_episode.id))
-    else
-        heading = heading .. "\n" .. _("Check the catalog for future updates.")
-    end
     local function dismiss()
         if self.chapter_dialog then self.ui_manager:close(self.chapter_dialog); self.chapter_dialog = nil end
         if integration then integration:finishTransition() end
     end
-    local buttons = {}
+    local ui = readerOverlayUI()
+    local W = ui.W
+    local content = { ui:text(heading, nil, 30, { bold = true }), ui:space(12),
+        ui:text(string.format(_("Finished: %s"), readerCaption(properties.title or event.descriptor.episode_id)), nil, 20) }
+    local next_readable = next_episode and DownloadService.isReadable(next_episode, false)
     if next_episode then
-        if DownloadService.isReadable(next_episode, false) then
-            buttons[#buttons + 1] = { { text = _("Read next chapter"), callback = function()
+        local card_width = ui.width - 2 * W.dp(26) - 2 * W.dp(1.5)
+        local available = require("bilicomics/ui/model").entitlement(next_episode)
+        local status = next_readable and (available .. " · " .. (self:_connected() and _("Online reading") or _("Offline reading")))
+            or (next_episode.access == "locked" and _("Unread · purchase required before reading") or available)
+        local preload_key = tostring(event.reader_generation) .. ":" .. tostring(next_episode.id)
+        if next_readable and self.preloaded[preload_key] then status = status .. " · " .. _("Preloading started") end
+        local details = { ui:text(_("Next chapter"), card_width, 16, { muted = true }), ui:space(6),
+            ui:text(readerCaption(next_episode.title or next_episode.short_title or next_episode.id), card_width, 25, { bold = true }),
+            ui:space(10), ui:text(status, card_width, 17, { muted = true }) }
+        local price = tonumber(next_episode.pay_gold)
+        if next_episode.access == "locked" and price and price == price and price >= 0 and price < math.huge then
+            details[#details + 1] = ui:space(12)
+            details[#details + 1] = ui:tag(string.format(_("%s comic coins"), tostring(price)))
+        end
+        content[#content + 1] = ui:space(26)
+        content[#content + 1] = ui:card(W.column(details))
+    else
+        content[#content + 1] = ui:space(20)
+        content[#content + 1] = ui:text(_("Check the catalog for future updates."), nil, 19, { muted = true })
+    end
+    local primary
+    if next_episode then
+        if next_readable then
+            primary = ui:button(_("Read next chapter"), function()
                 if not current() then return end
                 dismiss(); self:readEpisode(event.descriptor.comic_id, next_episode.id, function(_value, err)
                     if err and self.screens then self.screens:_error(err) end
                 end)
-            end } }
+            end, nil, true)
         elseif next_episode.access == "locked" then
-            buttons[#buttons + 1] = { { text = _("Review next chapter purchase"), callback = function()
+            primary = ui:button(_("Review next chapter purchase quote"), function()
                 if not current() then return end
                 dismiss()
                 if self.screens then
                     self.screens:showComic(event.descriptor.comic_id)
                     self.screens:_purchaseFor(self:getComic(event.descriptor.comic_id), next_episode)
                 end
-            end } }
+            end, nil, true)
         end
     end
-    buttons[#buttons + 1] = { { text = _("Chapter catalog"), callback = function()
+    if primary then
+        content[#content + 1] = ui:space(26)
+        content[#content + 1] = primary
+        ui.focus[#ui.focus + 1] = { primary }
+        if not next_readable then
+            content[#content + 1] = ui:space(14)
+            content[#content + 1] = ui:text(_("No automatic purchase. A quote must be confirmed before submitting."), nil, 17, { muted = true })
+        end
+    end
+    local gap, catalog_width = W.dp(16), math.floor((ui.width - 2 * W.dp(16)) / 3)
+    local catalog = ui:button(_("Chapter catalog"), function()
         if not current() then return end
         dismiss(); if self.screens then self.screens:showComic(event.descriptor.comic_id) end
-    end } }
-    buttons[#buttons + 1] = { { text = _("Close chapter and return to bookshelf"), callback = function()
+    end, catalog_width, false, 64)
+    local bookshelf = ui:button(_("Return to bookshelf"), function()
         if not current() then return end
         dismiss()
         self.ui_manager:nextTick(function()
@@ -2054,10 +2139,12 @@ function Controller:_chapterBoundary(event)
                 if not self.closed and self.account == account and self.screens then self.screens:showLibrary() end
             end)
         end)
-    end } }
-    buttons[#buttons + 1] = { { text = _("Stay in this chapter"), callback = dismiss } }
-    self.chapter_dialog = ButtonDialog:new{ modal = true, title = heading, width_factor = 0.94,
-        buttons = buttons, tap_close_callback = dismiss }
+    end, catalog_width, false, 64)
+    local stay = ui:button(_("Stay in this chapter"), dismiss, ui.width - 2 * catalog_width - 2 * gap, false, 64)
+    content[#content + 1] = ui:space(16)
+    content[#content + 1] = W.row{ catalog, W.gap(gap), bookshelf, W.gap(gap), stay }
+    ui.focus[#ui.focus + 1] = { catalog, bookshelf, stay }
+    self.chapter_dialog = ui:sheet(W.column(content), dismiss)
     self.ui_manager:show(self.chapter_dialog)
 end
 
@@ -2069,8 +2156,12 @@ function Controller:_pageError(descriptor, index, options, err)
     local key = descriptor.episode_id .. "/" .. descriptor.revision .. "/" .. index
     if self.errors_shown[key] then return end
     self.errors_shown[key] = true
-    local ButtonDialog = require("ui/widget/buttondialog")
+    local W = require("bilicomics/ui/widgets")
     local heading, message, action = require("bilicomics/ui/model").error(err)
+    local kind = err and err.kind
+    if kind == "network" or kind == "connectivity" or kind == "timeout" or kind == "transport" then
+        message = _("Check the connection and retry. Downloaded chapters remain available offline; the reading position is saved.")
+    end
     local dialog
     local function current()
         return not self.closed and self.account == account and self.active_integration == integration and integration:isCurrent()
@@ -2112,7 +2203,7 @@ function Controller:_pageError(descriptor, index, options, err)
             buttons[#buttons + 1] = { { text = _("Close chapter and open downloads"), callback = function() openRecovery("downloads") end } }
         end
     else
-        buttons[#buttons + 1] = { { text = _("Retry image"), callback = function()
+        buttons[#buttons + 1] = { { text = _("Retry image"), primary = true, callback = function()
             if not current() then return end
             dismiss()
             self.errors_shown[key] = nil
@@ -2120,11 +2211,17 @@ function Controller:_pageError(descriptor, index, options, err)
             self:_requestReaderPage(account, descriptor, index,
                 { retry = true, reader_generation = integration.generation, priority = 0 })
         end } }
+        buttons[#buttons + 1] = { { text = _("Close chapter and open downloads"), callback = function() openRecovery("downloads") end } }
     end
+    if buttons[1] and buttons[1][1] then buttons[1][1].primary = true end
     buttons[#buttons + 1] = { { text = _("Back to reading"), callback = dismiss } }
     local position = string.format(_("Image %d / %d"), index, #descriptor.pages)
-    dialog = ButtonDialog:new{ modal = true, title = heading .. "\n" .. position .. "\n\n" .. message,
-        width_factor = 0.94, buttons = buttons, tap_close_callback = dismiss }
+    local properties = integration.document:getDocumentProps() or {}
+    position = position .. " · " .. readerCaption(properties.title or descriptor.episode_id)
+    dialog = W.menuDialog(heading, { { text = position, size = W.fontSize(17), muted = true },
+        { text = message, size = W.fontSize(20), line_height = 0.7 } }, buttons,
+        { placement = "center", width = W.dp(700), left = W.dp(115), top = W.dp(320),
+            title_size = 28, text_size = 20, button_height = 66, close_callback = dismiss })
     self.reader_dialogs[dialog] = true
     self.ui_manager:show(dialog)
 end
@@ -2134,44 +2231,54 @@ function Controller:showReaderMenu()
     if not integration or not integration:isCurrent() then if self.screens then self.screens:showLibrary() end; return end
     local descriptor = integration.document.descriptor
     local account = self.account
-    local ButtonDialog = require("ui/widget/buttondialog")
     local dialog
     local function current()
         return not self.closed and self.account == account and self.active_integration == integration and integration:isCurrent()
     end
     local function close() if dialog then self.ui_manager:close(dialog); self.reader_dialogs[dialog] = nil; dialog = nil end end
     local properties = integration.document:getDocumentProps() or {}
-    local chapter = tostring(properties.title or descriptor.episode_id):gsub("[%c]", " ")
-    if #chapter > 120 then
-        local last = 120
-        while last > 0 and chapter:byte(last + 1) >= 128 and chapter:byte(last + 1) <= 191 do last = last - 1 end
-        chapter = chapter:sub(1, last) .. "…"
+    local chapter = readerCaption(properties.title or descriptor.episode_id)
+    if properties.series then chapter = readerCaption(properties.series) .. " · " .. chapter end
+    local ui = readerOverlayUI()
+    local W = ui.W
+    local title_width = W.dp(190)
+    local index = math.max(1, math.min(#descriptor.pages, integration.reader.paging:getTopPage()))
+    local saved, running = 0, 0
+    for page = 1, #descriptor.pages do
+        local spec = integration.document:getLocalPage(page)
+        if spec.state == "ready" and spec.path then saved = saved + 1 end
     end
-    local buttons = {
-        { { text = _("Chapter catalog"), callback = function()
+    for _, job in ipairs(self:getDownloads()) do
+        if job.state == "running" or job.state == "queued" then running = running + 1 end
+    end
+    local rows = { W.row{ ui:text(_("Comic actions"), title_width, 26, { bold = true }),
+            ui:text(chapter, ui.width - title_width, 17, { muted = true, align = "right" }) },
+        ui:space(24), ui:text(string.format(_("Image %d / %d"), index, #descriptor.pages), nil, 17, { muted = true }),
+        ui:space(10), ui:progress(index, #descriptor.pages), ui:space(18),
+        ui:row(_("Chapter catalog"), string.format(_("%d chapters in total"), #self:getEpisodes(descriptor.comic_id)), function()
             if not current() then return end
             close(); if self.screens then self.screens:showComic(descriptor.comic_id) end
-        end } },
-        { { text = _("Download this chapter"), callback = function()
+        end),
+        ui:row(_("Download this chapter"), string.format(_("Cached %d / %d images"), saved, #descriptor.pages), function()
             if not current() then return end
             close(); self:downloadEpisodes(descriptor.comic_id, { descriptor.episode_id }, function(_value, err)
                 if not self.screens or self.closed or self.account ~= account then return end
                 if err then self.screens:_error(err) else self.screens:showDownloads() end
             end)
-        end } },
-        { { text = _("Manage downloads"), callback = function()
+        end),
+        ui:row(_("Manage downloads"), string.format(_("%d tasks in progress"), running), function()
             if not current() then return end
             close(); if self.screens then self.screens:showDownloads() end
-        end } },
+        end),
     }
     if integration.reader.menu and integration.reader.menu.onShowMenu then
-        buttons[#buttons + 1] = { { text = _("Native reading menu"), callback = function()
+        rows[#rows + 1] = ui:row(_("Reader settings"), _("KOReader native menu"), function()
             if not current() then return end
             close()
             self.ui_manager:nextTick(function() if current() then integration.reader.menu:onShowMenu() end end)
-        end } }
+        end)
     end
-    buttons[#buttons + 1] = { { text = _("Close chapter and return to bookshelf"), callback = function()
+    rows[#rows + 1] = ui:row(_("Close chapter and return to bookshelf"), "", function()
         if not current() then return end
         close()
         self.ui_manager:nextTick(function()
@@ -2181,10 +2288,12 @@ function Controller:showReaderMenu()
                 if not self.closed and self.account == account and self.screens then self.screens:showLibrary() end
             end)
         end)
-    end } }
-    buttons[#buttons + 1] = { { text = _("Back to reading"), callback = close } }
-    dialog = ButtonDialog:new{ modal = true, title = _("Comic actions") .. "\n" .. chapter,
-        width_factor = 0.94, buttons = buttons, tap_close_callback = close }
+    end)
+    local back = ui:button(_("Back to reading"), close, nil, true)
+    rows[#rows + 1] = ui:space(24)
+    rows[#rows + 1] = back
+    ui.focus[#ui.focus + 1] = { back }
+    dialog = ui:sheet(W.column(rows), close)
     self.reader_dialogs[dialog] = true
     self.ui_manager:show(dialog)
 end

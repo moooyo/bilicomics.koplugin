@@ -105,7 +105,7 @@ function controller:removeDownload(job_id, callback)
     self.waiting[#self.waiting + 1] = { method = "removeDownload", job_id = job_id, callback = callback }
 end
 setmetatable(controller, { __index = function(_controller, key)
-    if key == "replaceDownloadVersion" then return nil end
+    if key == "replaceDownloadVersion" or key == "getBookshelfSyncState" then return nil end
     controller.forbidden[#controller.forbidden + 1] = tostring(key)
     error("Controller member is outside the download recovery allowlist: " .. tostring(key))
 end })
@@ -139,7 +139,8 @@ local function findButton(widget, text, seen)
 end
 local function screenButton(message)
     for _row_index, row in ipairs(screens.focus or {}) do
-        for _button_index, button in ipairs(row) do if button.text == _(message) then return button end end
+        for _button_index, button in ipairs(row) do if button.text == _(message)
+            or button.text == _(message) .. " ›" then return button end end
     end
 end
 local function press(message)
@@ -158,23 +159,32 @@ local function pressDialogText(text)
     button.callback()
 end
 local function pressDialog(message) pressDialogText(_(message)) end
+local function confirmationButton(dialog, column)
+    local specs = assert(dialog.buttons and dialog.buttons[#dialog.buttons], "Expected confirmation actions")
+    local spec = assert(specs[column], "The confirmation action is absent")
+    local button = findButton(dialog, spec.text)
+    while not button and dialog.page and dialog.page < dialog.pages do
+        dialog:onNextPage(); button = findButton(dialog, spec.text)
+    end
+    return assert(button, "The native confirmation action is not reachable")
+end
 local function pressAction(message)
     if screenButton(message) then press(message); return end
     press("More actions")
     check("more_actions_opens_a_visible_native_menu", dialogShown())
-    check("more_actions_distinguishes_stopping_from_removing", contains(screens.dialog.title,
+    check("more_actions_distinguishes_stopping_from_removing", contains(screens.dialog.download_text,
         _("Stopping keeps saved images. Removing deletes this copy's saved images.")))
     pressDialog(message)
 end
 local function confirm()
     local dialog = assert(screens.dialog)
-    assert(type(dialog.ok_callback) == "function", "Expected a native ConfirmBox")
-    pressDialogText(dialog.ok_text)
+    local submit = confirmationButton(dialog, 2)
+    pressDialogText(submit.text)
 end
 local function cancelConfirm()
     local dialog = assert(screens.dialog)
-    assert(type(dialog.ok_callback) == "function", "Expected a native ConfirmBox")
-    pressDialogText(dialog.cancel_text)
+    local cancel = confirmationButton(dialog, 1)
+    pressDialogText(cancel.text)
 end
 local function visibleText(widget, result, seen)
     result, seen = result or {}, seen or {}
@@ -182,6 +192,7 @@ local function visibleText(widget, result, seen)
     seen[widget] = true
     if type(widget.text) == "string" then result[#result + 1] = widget.text end
     if type(widget.title) == "string" then result[#result + 1] = widget.title end
+    if type(widget.download_text) == "string" then result[#result + 1] = widget.download_text end
     for _child_index, child in ipairs(widget) do visibleText(child, result, seen) end
     return table.concat(result, "\n")
 end
@@ -237,8 +248,8 @@ local refresh_disclosures = {
     { "closed_chapter_success_only_resume_and_no_purchase", "Close this chapter before proceeding. After verification succeeds, the download resumes. No purchase is made." },
 }
 local function checkRefreshConfirmation()
-    local text = assert(screens.dialog).text
-    check("refresh_confirmation_has_an_explicit_submit_action", screens.dialog.ok_text == _("Refresh image sources"))
+    local text = assert(screens.dialog).download_text
+    check("refresh_confirmation_has_an_explicit_submit_action", screens.dialog.footer_buttons[2].text == _("Refresh image sources"))
     checkTarget("refresh_confirmation", text, assert(controller.jobs[1]))
     for _disclosure_index, disclosure in ipairs(refresh_disclosures) do
         check("refresh_confirmation_" .. disclosure[1], contains(text, _(disclosure[2])))
@@ -248,8 +259,8 @@ end
 local function openRecovery()
     if screenButton("Review recovery") then press("Review recovery") else pressAction("Recovery options") end
     check("recovery_opens_a_visible_native_dialog", dialogShown())
-    checkTarget("recovery", screens.dialog.title, assert(controller.jobs[1]))
-    check("opening_a_partial_current_copy_discloses_network_use", contains(screens.dialog.title,
+    checkTarget("recovery", screens.dialog.download_text, assert(controller.jobs[1]))
+    check("opening_a_partial_current_copy_discloses_network_use", contains(screens.dialog.download_text,
         _("Opening the current copy may fetch missing images using your sign-in and network connection.")))
 end
 local function openRefreshConfirmation()
@@ -282,10 +293,11 @@ local function run()
 
     openRefreshConfirmation()
     local old_confirmation = screens.dialog
+    local old_confirmation_callback = confirmationButton(old_confirmation, 2).callback
     confirm()
     check("confirmation_dispatches_one_exact_job", callCount("refreshDownloadSources") == refresh_count + 1
         and controller.waiting[1].job_id == job.id)
-    old_confirmation.ok_callback()
+    old_confirmation_callback()
     check("repeated_confirmation_cannot_dispatch_twice", callCount("refreshDownloadSources") == refresh_count + 1)
     check("index_stage_replaces_resume_with_cancel", screenButton("Cancel verification") ~= nil
         and screenButton("Resume") == nil and contains(visibleText(screens.widget), _("Fetching image sources…")))
@@ -332,11 +344,11 @@ local function run()
     cancel_count = callCount("cancelSourceRefresh")
     local remove_count = callCount("removeDownload")
     pressAction("Remove download")
-    checkTarget("removal_confirmation", screens.dialog.text, job)
-    check("removal_reports_saved_image_count", contains(screens.dialog.text, string.format(_("Saved (recorded): %d/%d"), 3, 12)))
-    check("removal_explains_canceling_verification", contains(screens.dialog.text,
+    checkTarget("removal_confirmation", screens.dialog.download_text, job)
+    check("removal_reports_saved_image_count", contains(screens.dialog.download_text, string.format(_("Saved (recorded): %d/%d"), 3, 12)))
+    check("removal_explains_canceling_verification", contains(screens.dialog.download_text,
         _("Stop verification and remove this copy's saved images?")))
-    check("removal_explains_exact_copy_scope_and_preserved_reading_and_access", contains(screens.dialog.text,
+    check("removal_explains_exact_copy_scope_and_preserved_reading_and_access", contains(screens.dialog.download_text,
         _("Tasks using this same copy will stop. Other versions, reading positions, and purchase access are preserved. Offline reading of this copy will no longer be available.")))
     capture("remove-during-verification")
     cancelConfirm()
@@ -426,8 +438,8 @@ local function run()
         check(name .. "_is_safe_chinese", hasChinese(heading) and hasChinese(message) and safeText(heading .. "\n" .. message))
         reset("failed", err)
         openRecovery()
-        check(name .. "_recovery_exposes_the_typed_error", contains(screens.dialog.title, heading)
-            and contains(screens.dialog.title, message))
+        check(name .. "_recovery_exposes_the_typed_error", contains(visibleText(screens.dialog), heading)
+            and contains(visibleText(screens.dialog), message))
         capture("error-" .. name)
         screens:_closeDialog()
     end

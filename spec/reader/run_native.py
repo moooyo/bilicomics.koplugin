@@ -1,4 +1,4 @@
-"""Generate synthetic assets and exercise the provider on remote test-env only."""
+"""Generate synthetic assets and exercise the provider in an authorized runtime."""
 import argparse
 import json
 import os
@@ -9,7 +9,7 @@ import sys
 
 def main():
     if sys.platform != "linux":
-        raise RuntimeError("Run only on the authorized remote verification host")
+        raise RuntimeError("Run inside the authorized Linux verification runtime")
     parser = argparse.ArgumentParser()
     parser.add_argument("--runtime", type=Path, required=True)
     parser.add_argument("--plugin", type=Path, required=True)

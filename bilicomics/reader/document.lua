@@ -213,45 +213,50 @@ end
 function ComicDocument:_placeholder(target, x, y, rect, index, inverted)
     local _, failure = self:isPageReady(index)
     local unavailable = failure and failure.kind ~= "page_missing"
-    local gray = unavailable and 235 or 245
+    local gray = 255
     if inverted then gray = 255 - gray end
     local left, top = math.max(0, math.floor(x)), math.max(0, math.floor(y))
     local right = math.min(target:getWidth(), math.ceil(x + rect.w))
     local bottom = math.min(target:getHeight(), math.ceil(y + rect.h))
     local width, height = right - left, bottom - top
     if width > 0 and height > 0 then
+        local stroke = 1
+        if not self._thumbnail_mode then
+            pcall(function() stroke = require("bilicomics/ui/widgets").dp(1) end)
+        end
+        stroke = math.min(math.max(1, stroke), width, height)
+        local border = Blitbuffer.Color8(inverted and 0x33 or 0xCC)
         target:paintRect(left, top, width, height, Blitbuffer.Color8(gray))
-        target:paintRect(left, top, width, math.min(3, height), Blitbuffer.Color8(inverted and 175 or 80))
+        target:paintRect(left, top, width, stroke, border)
+        target:paintRect(left, bottom - stroke, width, stroke, border)
+        target:paintRect(left, top, stroke, height, border)
+        target:paintRect(right - stroke, top, stroke, height, border)
         -- A bounded temporary buffer keeps glyph painting inside even cropped native tiles.
         -- Unavailable thumbnails still return nil through the dedicated thumbnail paths.
         if not self._thumbnail_mode and width >= 160 and height >= 64 then
             local heading, detail, notice
             pcall(function()
-                local Font = require("ui/font")
-                local TextWidget = require("ui/widget/textwidget")
                 local W = require("bilicomics/ui/widgets")
                 local _ = require("bilicomics/ui/i18n")
-                local text_width = math.min(width - 24, 540)
-                local ink = inverted and Blitbuffer.COLOR_WHITE or Blitbuffer.COLOR_BLACK
-                heading = TextWidget:new{
-                    text = string.format(unavailable and _("Image unavailable · %d / %d") or _("Loading image · %d / %d"),
-                        index, #self.descriptor.pages),
-                    face = Font:getFace("cfont", W.font and W.font.body or 18),
-                    bold = true, fgcolor = ink, padding = 0, max_width = text_width,
-                }
-                detail = TextWidget:new{
-                    text = unavailable and _("Open comic actions for recovery.") or _("Waiting for the image to load."),
-                    face = Font:getFace("cfont", W.font and W.font.meta or 14),
-                    fgcolor = ink, padding = 0, max_width = text_width,
-                }
+                local inset = math.min(W.dp(24), math.floor(width / 8))
+                local text_width = math.max(1, math.min(width - 2 * inset, W.dp(600)))
+                local ink = inverted and Blitbuffer.Color8(0xEE) or W.ink
+                heading = W.text(string.format(unavailable and _("Reader image unavailable · %d / %d")
+                    or _("Reader loading image · %d / %d"), index, #self.descriptor.pages),
+                    text_width, W.fontSize(28), { bold = true, align = "center", color = ink })
+                detail = W.text(unavailable and _("Open comic actions for recovery.")
+                    or _("The image will appear when ready. Cached images are available offline."),
+                    text_width, W.fontSize(20), { align = "center", line_height = 0.7,
+                        color = inverted and Blitbuffer.Color8(0xAA) or W.muted })
                 local heading_size, detail_size = heading:getSize(), detail:getSize()
-                local show_detail = heading_size.h + detail_size.h + 16 <= height
-                local notice_height = heading_size.h + (show_detail and detail_size.h + 8 or 0)
-                if notice_height > height - 8 then return end
+                local gap = W.dp(16)
+                local show_detail = heading_size.h + detail_size.h + gap + 2 * inset <= height
+                local notice_height = heading_size.h + (show_detail and detail_size.h + gap or 0)
+                if notice_height > height - 2 * inset then return end
                 notice = Blitbuffer.new(text_width, notice_height, target:getType())
                 notice:fill(Blitbuffer.Color8(gray))
                 heading:paintTo(notice, math.floor((text_width - heading_size.w) / 2), 0)
-                if show_detail then detail:paintTo(notice, math.floor((text_width - detail_size.w) / 2), heading_size.h + 8) end
+                if show_detail then detail:paintTo(notice, math.floor((text_width - detail_size.w) / 2), heading_size.h + gap) end
                 target:blitFrom(notice, left + math.floor((width - text_width) / 2),
                     top + math.floor((height - notice_height) / 2), 0, 0, text_width, notice_height)
             end)

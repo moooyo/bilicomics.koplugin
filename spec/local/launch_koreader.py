@@ -126,8 +126,8 @@ def main() -> int:
     runtime, source = args.runtime.resolve(), args.plugin.resolve()
     if not (runtime / "luajit").is_file() or not (runtime / "reader.lua").is_file():
         raise RuntimeError("The official KOReader runtime was not found")
-    if not (480 <= args.width <= 900 and 640 <= args.height <= 1200):
-        raise RuntimeError("Use a visible desktop window between 480x640 and 900x1200")
+    if not (480 <= min(args.width, args.height) and max(args.width, args.height) <= 4096):
+        raise RuntimeError("Use an acceptance framebuffer from 480 through 4096 pixels per side")
     if args.autoclose < 0 or args.autoclose > 30:
         raise RuntimeError("Use an acceptance auto-close delay from 0 through 30 seconds")
     import_file = None

@@ -118,6 +118,7 @@ function controller:removeDownload(job_id, callback)
     enqueue("removeDownload", job_id, callback)
 end
 setmetatable(controller, { __index = function(_controller, key)
+    if key == "getBookshelfSyncState" then return nil end
     controller.forbidden[#controller.forbidden + 1] = tostring(key)
     error("Controller member is outside the version replacement allowlist: " .. tostring(key))
 end })
@@ -149,11 +150,13 @@ local function findButton(widget, text, seen)
 end
 local function screenRow(message)
     for _row_index, row in ipairs(screens.focus or {}) do
-        for _button_index, button in ipairs(row) do if button.text == _(message) then return row end end
+        for _button_index, button in ipairs(row) do if button.text == _(message)
+            or button.text == _(message) .. " ›" then return row end end
     end
 end
 local function rowButton(row, message)
-    for _button_index, button in ipairs(row or {}) do if button.text == _(message) then return button end end
+    for _button_index, button in ipairs(row or {}) do if button.text == _(message)
+        or button.text == _(message) .. " ›" then return button end end
 end
 local function screenButton(message) return rowButton(screenRow(message), message) end
 local function pressButton(button)
@@ -162,18 +165,30 @@ local function pressButton(button)
 end
 local function press(message) pressButton(screenButton(message)) end
 local function dialogShown() return screens.dialog ~= nil and UIManager:isWidgetShown(screens.dialog) end
+local function dialogButton(text)
+    local dialog = assert(screens.dialog, "No native dialog is open")
+    while dialog.page and dialog.page > 1 do
+        dialog:onPreviousPage(); dialog = assert(screens.dialog)
+    end
+    while true do
+        local button = findButton(dialog, text)
+        if button then return button end
+        if not dialog.page or dialog.page >= dialog.pages then return end
+        dialog:onNextPage(); dialog = assert(screens.dialog)
+    end
+end
 local function pressDialog(message)
     assert(dialogShown(), "No native dialog is open")
-    pressButton(findButton(screens.dialog, _(message)))
+    pressButton(dialogButton(_(message)))
 end
 local function rowActionButton(row, message)
     local button = rowButton(row, message)
     if button then return button end
     pressButton(rowButton(row, "More actions"))
     check("more_actions_opens_a_visible_native_menu", dialogShown())
-    check("more_actions_distinguishes_stopping_from_removing", contains(screens.dialog.title,
+    check("more_actions_distinguishes_stopping_from_removing", contains(screens.dialog.download_text,
         _("Stopping keeps saved images. Removing deletes this copy's saved images.")))
-    return assert(findButton(screens.dialog, _(message)), "Missing visible row menu action: " .. message)
+    return assert(dialogButton(_(message)), "Missing visible row menu action: " .. message)
 end
 local function pressAction(message)
     local button = screenButton(message)
@@ -188,28 +203,41 @@ local function visitRow(message)
         pressButton(screens.pagination.next)
     end
 end
-local filter_labels = { all = "All downloads", active = "Unfinished downloads", complete = "Ready offline" }
+local filter_labels = { all = "All", active = "In progress", attention = "Needs attention", complete = "Ready offline" }
+local function filterButton(value)
+    local prefix = _(filter_labels[value]) .. " "
+    for _row_index, row in ipairs(screens.focus or {}) do
+        for _button_index, button in ipairs(row) do
+            if type(button.text) == "string" and button.text:sub(1, #prefix) == prefix
+                and button.text:sub(#prefix + 1):match("^%d+$") then return button end
+        end
+    end
+end
 local function chooseFilter(value)
     local current = screens.filter
-    local trigger = assert(findButton(screens.widget, _(filter_labels[current]) .. " ▾"), "Missing visible download filter")
-    pressButton(trigger)
-    check("download_filter_opens_an_explicit_picker", dialogShown() and screens.dialog.title == _("Filter downloads"))
-    check("opening_filter_does_not_cycle_the_selection", screens.filter == current)
-    for key, label in pairs(filter_labels) do
-        check("download_filter_exposes_" .. key, findButton(screens.dialog, (key == current and "[x] " or "[ ] ") .. _(label)) ~= nil)
+    for key in pairs(filter_labels) do
+        local button = filterButton(key)
+        check("download_filter_exposes_" .. key, button and button.enabled ~= false and type(button.callback) == "function")
     end
-    pressButton(findButton(screens.dialog, (value == current and "[x] " or "[ ] ") .. _(filter_labels[value])))
+    check("download_filter_exposes_explicit_tabs", not dialogShown() and filterButton(current) ~= nil)
+    check("reading_filter_tabs_does_not_cycle_the_selection", screens.filter == current)
+    pressButton(filterButton(value))
     check("download_filter_applies_only_the_selected_option", screens.filter == value and screens.page == 1 and not dialogShown())
+end
+local function confirmationButton(dialog, column)
+    local specs = assert(dialog.buttons and dialog.buttons[#dialog.buttons], "Expected confirmation actions")
+    local spec = assert(specs[column], "The confirmation action is absent")
+    return assert(dialogButton(spec.text), "The native confirmation action is not reachable")
 end
 local function confirm()
     local dialog = assert(screens.dialog)
-    assert(dialogShown() and type(dialog.ok_callback) == "function", "Expected a native ConfirmBox")
-    pressButton(findButton(dialog, dialog.ok_text))
+    assert(dialogShown(), "Expected a native confirmation")
+    pressButton(confirmationButton(dialog, 2))
 end
 local function cancelConfirm()
     local dialog = assert(screens.dialog)
-    assert(dialogShown() and type(dialog.ok_callback) == "function", "Expected a native ConfirmBox")
-    pressButton(findButton(dialog, dialog.cancel_text))
+    assert(dialogShown(), "Expected a native confirmation")
+    pressButton(confirmationButton(dialog, 1))
 end
 local function visibleText(widget, result, seen)
     result, seen = result or {}, seen or {}
@@ -217,6 +245,7 @@ local function visibleText(widget, result, seen)
     seen[widget] = true
     if type(widget.text) == "string" then result[#result + 1] = widget.text end
     if type(widget.title) == "string" then result[#result + 1] = widget.title end
+    if type(widget.download_text) == "string" then result[#result + 1] = widget.download_text end
     for _child_index, child in ipairs(widget) do visibleText(child, result, seen) end
     return table.concat(result, "\n")
 end
@@ -230,7 +259,8 @@ local function capture(name)
     local row_number = 0
     for _row_index, row in ipairs(screens.focus or {}) do
         local has_action = false
-        for _button_index, button in ipairs(row) do if action_labels[button.text] then has_action = true end end
+        for _button_index, button in ipairs(row) do if action_labels[button.text]
+            or action_labels[button.text:gsub(" ›$", "")] then has_action = true end end
         if has_action then
             row_number = row_number + 1
             check(name .. "_action_row_" .. row_number .. "_has_at_most_two_buttons", #row <= 2, #row)
@@ -273,9 +303,9 @@ local function openRecovery()
     if screenButton("Review recovery") then press("Review recovery") else pressAction("Recovery options") end
     check("recovery_opens_a_visible_native_dialog", dialogShown())
     local job = assert(controller.jobs[1])
-    checkTarget("recovery", screens.dialog.title, job)
+    checkTarget("recovery", screens.dialog.download_text, job)
     if job.revision then
-        check("opening_a_partial_current_copy_discloses_network_use", contains(screens.dialog.title,
+        check("opening_a_partial_current_copy_discloses_network_use", contains(screens.dialog.download_text,
             _("Opening the current copy may fetch missing images using your sign-in and network connection.")))
     end
 end
@@ -285,9 +315,9 @@ local replacement_disclosures = {
     { "independent_retained_reading_closed_chapter_and_no_purchase", "This copy's saved images and reading position stay in an independent retained copy. Close every version of this chapter before proceeding. No purchase is made." },
 }
 local function checkReplacementConfirmation()
-    local text = assert(screens.dialog).text
+    local text = assert(screens.dialog).download_text
     checkTarget("replacement_confirmation", text, assert(controller.jobs[1]))
-    check("replacement_confirmation_is_explicit_and_localized", screens.dialog.ok_text == _("Redownload as new version")
+    check("replacement_confirmation_is_explicit_and_localized", confirmationButton(screens.dialog, 2).text == _("Redownload as new version")
         and hasChinese(text) and safeText(text))
     for _disclosure_index, disclosure in ipairs(replacement_disclosures) do
         check("replacement_confirmation_" .. disclosure[1], contains(text, _(disclosure[2])))
@@ -308,9 +338,9 @@ local function run()
     local old_job = reset("failed", rawError("unknown_history"))
     local replacements = callCount("replaceDownloadVersion")
     openRecovery()
-    check("unverifiable_history_directs_recovery_to_a_separate_new_copy", findButton(screens.dialog, _("Refresh image sources")) == nil
-        and findButton(screens.dialog, _("Redownload as new version")) ~= nil)
-    check("unverifiable_history_explains_retained_reading", contains(screens.dialog.title,
+    check("unverifiable_history_directs_recovery_to_a_separate_new_copy", dialogButton(_("Refresh image sources")) == nil
+        and dialogButton(_("Redownload as new version")) ~= nil)
+    check("unverifiable_history_explains_retained_reading", contains(screens.dialog.download_text,
         _("A separate new copy starts from the beginning. This copy's saved images and reading position stay separate.")))
     capture("recovery-options")
     pressDialog("Redownload as new version")
@@ -323,10 +353,11 @@ local function run()
 
     openReplacementConfirmation()
     local original_confirmation = screens.dialog
+    local original_confirmation_callback = confirmationButton(original_confirmation, 2).callback
     confirm()
     check("confirmation_submits_the_exact_old_job_once", callCount("replaceDownloadVersion") == replacements + 1
         and pending("replaceDownloadVersion").job_id == old_job.id)
-    original_confirmation.ok_callback()
+    original_confirmation_callback()
     check("stale_confirmation_cannot_submit_twice", callCount("replaceDownloadVersion") == replacements + 1)
     check("preparation_has_explicit_progress_and_cancel", contains(visibleText(screens.widget), _("Preparing new version…"))
         and screenButton("Cancel preparation") ~= nil and screenButton("Resume") == nil)
@@ -361,11 +392,11 @@ local function run()
         and rowButton(retained_row, "Resume") == nil and rowButton(retained_row, "Refresh image sources") == nil
         and rowButton(retained_row, "Redownload as new version") == nil)
     pressButton(rowButton(retained_row, "More actions"))
-    checkTarget("retained_copy_menu", screens.dialog.title, old_job)
-    check("retained_copy_menu_offers_current_copy_and_removal", findButton(screens.dialog, _("Show current copy")) ~= nil
-        and findButton(screens.dialog, _("Remove download")) ~= nil)
-    check("retained_copy_menu_cannot_resume_refresh_or_replace", findButton(screens.dialog, _("Resume")) == nil
-        and findButton(screens.dialog, _("Refresh image sources")) == nil and findButton(screens.dialog, _("Redownload as new version")) == nil)
+    checkTarget("retained_copy_menu", screens.dialog.download_text, old_job)
+    check("retained_copy_menu_offers_current_copy_and_removal", dialogButton(_("Show current copy")) ~= nil
+        and dialogButton(_("Remove download")) ~= nil)
+    check("retained_copy_menu_cannot_resume_refresh_or_replace", dialogButton(_("Resume")) == nil
+        and dialogButton(_("Refresh image sources")) == nil and dialogButton(_("Redownload as new version")) == nil)
     pressDialog("Show current copy")
     check("show_current_copy_navigates_to_its_actual_page", screens.filter == "all" and screenButton("Pause") ~= nil)
     retained_row = assert(visitRow("Open retained copy"))
@@ -385,10 +416,10 @@ local function run()
     retained_row = assert(visitRow("Open retained copy"))
     local removed = callCount("removeDownload")
     pressButton(rowActionButton(retained_row, "Remove download"))
-    checkTarget("retained_removal_confirmation", screens.dialog.text, old_job)
-    check("retained_removal_reports_saved_images", contains(screens.dialog.text, string.format(_("Saved (recorded): %d/%d"), 3, 12)))
-    check("retained_removal_explains_exact_copy_scope", contains(screens.dialog.text, _("Remove this copy's saved images?")))
-    check("retained_removal_preserves_other_versions_reading_and_purchase_access", contains(screens.dialog.text,
+    checkTarget("retained_removal_confirmation", screens.dialog.download_text, old_job)
+    check("retained_removal_reports_saved_images", contains(screens.dialog.download_text, string.format(_("Saved (recorded): %d/%d"), 3, 12)))
+    check("retained_removal_explains_exact_copy_scope", contains(screens.dialog.download_text, _("Remove this copy's saved images?")))
+    check("retained_removal_preserves_other_versions_reading_and_purchase_access", contains(screens.dialog.download_text,
         _("Tasks using this same copy will stop. Other versions, reading positions, and purchase access are preserved. Offline reading of this copy will no longer be available.")))
     cancelConfirm()
     check("canceling_old_version_removal_keeps_both_rows", callCount("removeDownload") == removed and #controller.jobs == 2)
@@ -401,16 +432,19 @@ local function run()
 
     local complete_job = reset("complete")
     complete_job.id, complete_job.completed = "complete-current-version", 12
-    screens:refresh(); press("Read offline")
+    screens:refresh()
+    pressButton(findButton(screens.widget, controller.comic.title))
+    check("complete_download_opens_its_comic_copies", dialogShown())
+    pressDialog("Read offline")
     check("complete_download_also_reads_by_exact_job", pending("readDownload").job_id == complete_job.id)
     finish("readDownload", { job_id = complete_job.id })
 
     for _state_index, state in ipairs({ "paused", "failed", "canceled" }) do
         old_job = reset(state)
         openRecovery()
-        check(state .. "_recoverable_job_keeps_both_explicit_methods", findButton(screens.dialog, _("Refresh image sources")) ~= nil
-            and findButton(screens.dialog, _("Redownload as new version")) ~= nil)
-        check(state .. "_retained_partial_job_offers_new_version", findButton(screens.dialog, _("Redownload as new version")) ~= nil)
+        check(state .. "_recoverable_job_keeps_both_explicit_methods", dialogButton(_("Refresh image sources")) ~= nil
+            and dialogButton(_("Redownload as new version")) ~= nil)
+        check(state .. "_retained_partial_job_offers_new_version", dialogButton(_("Redownload as new version")) ~= nil)
         capture(state .. "-recovery")
         screens:_closeDialog()
     end
@@ -421,7 +455,7 @@ local function run()
         screens:refresh()
         if screenButton("Review recovery") or screenButton("Recovery options") or screenButton("More actions") then
             openRecovery()
-            check(case.name .. "_cannot_start_new_version", findButton(screens.dialog, _("Redownload as new version")) == nil)
+            check(case.name .. "_cannot_start_new_version", dialogButton(_("Redownload as new version")) == nil)
         else check(case.name .. "_cannot_start_new_version", screenButton("Redownload as new version") == nil) end
         screens:_closeDialog()
     end
@@ -438,10 +472,10 @@ local function run()
         finish("refreshDownloadSources", nil, old_job.error)
         local heading, message = Model.error(old_job.error)
         check(kind .. "_feedback_opens_direct_new_version_recovery", dialogShown()
-            and contains(screens.dialog.title, heading)
-            and contains(screens.dialog.title, message) and findButton(screens.dialog, _("Redownload as new version")) ~= nil)
-        checkTarget(kind .. "_feedback", screens.dialog.title, old_job)
-        check(kind .. "_feedback_does_not_repeat_unverifiable_source_refresh", findButton(screens.dialog, _("Refresh image sources")) == nil)
+            and contains(visibleText(screens.dialog), heading)
+            and contains(screens.dialog.download_text, message) and dialogButton(_("Redownload as new version")) ~= nil)
+        checkTarget(kind .. "_feedback", screens.dialog.download_text, old_job)
+        check(kind .. "_feedback_does_not_repeat_unverifiable_source_refresh", dialogButton(_("Refresh image sources")) == nil)
         capture("source-error-" .. kind)
         pressDialog("Redownload as new version"); cancelConfirm()
     end
@@ -475,7 +509,7 @@ local function run()
 
     old_job = reset("paused")
     press("More actions")
-    local stale_menu_action = assert(findButton(screens.dialog, _("Recovery options")))
+    local stale_menu_action = assert(dialogButton(_("Recovery options")))
     pressDialog("Close")
     stale_menu_action.callback()
     check("closed_more_menu_ignores_its_stale_recovery_action", not dialogShown())

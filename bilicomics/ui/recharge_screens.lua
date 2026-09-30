@@ -1,9 +1,11 @@
-local ButtonDialog = require("ui/widget/buttondialog")
+local BB = require("ffi/blitbuffer")
 local CenterContainer = require("ui/widget/container/centercontainer")
 local Device = require("device")
-local Font = require("ui/font")
+local FrameContainer = require("ui/widget/container/framecontainer")
 local Geom = require("ui/geometry")
+local GestureRange = require("ui/gesturerange")
 local InputDialog = require("ui/widget/inputdialog")
+local InputContainer = require("ui/widget/container/inputcontainer")
 local QRWidget = require("ui/widget/qrwidget")
 local UIManager = require("ui/uimanager")
 local W = require("bilicomics/ui/widgets")
@@ -11,6 +13,42 @@ local Helpers = require("bilicomics/ui/screen_helpers")
 local T = require("bilicomics/ui/i18n")
 local accountKey = Helpers.accountKey
 local font = W.font or { title = 21, body = 18, status = 15, meta = 14, micro = 13 }
+
+local function space(value) return W.spacePixels(W.dp(value)) end
+local function face(value) return W.fontSize(value) end
+local function centered(content, width, height)
+    return CenterContainer:new{ dimen = Geom:new{ w = width, h = height }, content }
+end
+local function box(content, width, height, border, background)
+    border = border or 0
+    return FrameContainer:new{ padding = 0, margin = 0, radius = 0, bordersize = border,
+        color = BB.Color8(0x11), background = background or W.paper,
+        centered(content, width - border * 2, height - border * 2) }
+end
+local function keyValue(label, value, width)
+    return W.column{ W.rule1dp(width, BB.Color8(0xCC)), box(W.row{
+        W.text(label, W.dp(160), face(20), { muted = true }),
+        W.text(value, width - W.dp(160), face(20), { height = W.dp(52), fixed_height = true }),
+    }, width, W.dp(70)) }
+end
+
+local AmountTile = InputContainer:extend{}
+function AmountTile:init()
+    self[1] = self.content
+    self.dimen = Geom:new{ x = 0, y = 0, w = self.width, h = W.dp(150) }
+    self.ges_events = { TapSelect = { GestureRange:new{ ges = "tap", range = self.dimen } } }
+    if self.selected then self.check = W.text("✓", W.dp(28), face(20), { bold = true, color = W.paper, background = BB.Color8(0x11) }) end
+end
+function AmountTile:paintTo(bb, x, y)
+    self.dimen.x, self.dimen.y = x, y
+    self.content:paintTo(bb, x, y)
+    if self.check then self.check:paintTo(bb, x + self.width - W.dp(36), y + W.dp(10)) end
+    if self.focused then bb:paintRect(x, y + self.dimen.h - W.dp(5), self.width, W.dp(5), BB.Color8(0x11)) end
+end
+function AmountTile:onFocus() self.focused = true; return true end
+function AmountTile:onUnfocus() self.focused = false; return true end
+function AmountTile:onTapSelect() if self.callback then self.callback() end; return true end
+AmountTile.onSelect = AmountTile.onTapSelect
 
 local function integer(value)
     return type(value) == "number" and value == value and value >= 0 and value <= 9007199254740991 and value % 1 == 0
@@ -180,57 +218,57 @@ function Screens:_rechargeDialog(state, heading, paragraphs, buttons, options)
     if not self:_rechargeCurrent(state) then return nil end
     options = options or {}
     local dialog, previous = nil, state.dialog
-    for row_index, row in ipairs(buttons) do
-        for button_index, button in ipairs(row) do
-            local callback = button.callback
-            button.font_size, button.font_bold = button.font_size or font.status, button.font_bold == true
-            button.height, button.avoid_text_truncation = button.height or W.scale(34), true
+    for _, row in ipairs(buttons) do
+        for _, button in ipairs(row) do
+            local callback = button.recharge_callback or button.callback
+            button.recharge_callback = callback
+            button.font_size, button.font_bold = button.font_size or face(22), button.font_bold == true
             button.callback = function()
                 if not self:_rechargeCurrent(state) or state.dialog ~= dialog or self.dialog ~= dialog then return end
                 if callback then callback() end
             end
         end
     end
-    dialog = ButtonDialog:new{ title = heading, title_face = Font:getFace("cfont", font.title), use_info_style = false,
-        title_padding = W.scale(7), title_margin = 0, buttons = buttons, modal = true, width_factor = 0.94,
-        selected = options.selected or { x = 1, y = #buttons }, dismissable = true }
-    local width, rows, description = dialog:getAddedWidgetAvailableWidth(), {}, { heading }
-    for paragraph_index, paragraph in ipairs(paragraphs or {}) do
+    local width, description = self.width, { heading }
+    for _, paragraph in ipairs(paragraphs or {}) do
         local item = type(paragraph) == "table" and paragraph or { text = paragraph }
-        if item.text and item.text ~= "" then
-            if #rows > 0 then rows[#rows + 1] = W.space(4) end
-            rows[#rows + 1] = W.text(item.text, width, item.size or font.status, { bold = item.bold == true })
-            description[#description + 1] = item.text
+        if item.text and item.text ~= "" then description[#description + 1] = item.text end
+    end
+    options.close_callback = function() self:_rechargeDismiss(state) end
+    options.body_padding_px = options.body_padding_px or (options.body and 0 or nil)
+    options.on_page = function(page)
+        options.page = page
+        self:_rechargeDialog(state, heading, paragraphs, buttons, options)
+    end
+    if options.qr_url and not options.body then
+        local rows = { space(38) }
+        for _, paragraph in ipairs(paragraphs or {}) do
+            local item = type(paragraph) == "table" and paragraph or { text = paragraph }
+            rows[#rows + 1] = W.text(item.text, width, item.size or face(20), { bold = item.bold, align = "center" })
+            rows[#rows + 1] = space(14)
         end
+        local qr = self:_rechargeQR(options.qr_url, width)
+        rows[#rows + 1] = qr
+        options.body, options.body_padding_px = W.column(rows), 0
     end
-    if options.qr_url then
-        rows[#rows + 1] = W.space(8)
-        local measuring_rows = {}
-        for index, row in ipairs(rows) do measuring_rows[index] = row end
-        local content_height = W.column(measuring_rows):getSize().h
-        local frame_height = dialog.movable and dialog.movable:getSize().h or dialog:getSize().h
-        local quiet_zone = W.scale(42)
-        local remaining = Device.screen:getHeight() - frame_height - content_height - quiet_zone * 2 - W.scale(8)
-        local size = math.floor(math.max(W.scale(80), math.min(width - W.scale(24), Device.screen:getHeight() * 0.30, W.scale(230), remaining)))
-        -- QRWidget silently truncates longer inputs, which must never change a payment URL.
-        local ok, qr = false, nil
-        if #options.qr_url <= 2953 then
-            ok, qr = pcall(QRWidget.new, QRWidget, { text = options.qr_url, width = size, height = size, scale_factor = 1 })
-        end
-        if ok and qr.image and qr.image:getWidth() > 0 then
-            rows[#rows + 1] = CenterContainer:new{ dimen = Geom:new{ w = width, h = size + quiet_zone * 2 }, not_focusable = true, qr }
-        else rows[#rows + 1] = W.text(T("The payment code could not be displayed. Keep this order and check its result; no replacement order will be created automatically."), width, font.meta) end
-    end
-    if #rows > 0 then
-        local summary = W.column(rows)
-        summary.parent, summary.not_focusable = dialog, true
-        dialog:addWidget(summary)
-    end
+    dialog = W.flowDialog(heading, paragraphs, buttons, options)
     dialog.recharge_text = table.concat(description, "\n")
     self:_rechargeOwnDialog(state, dialog, previous)
     return dialog
 end
 
+function Screens:_rechargeQR(url, width)
+    local ok, qr = false, nil
+    if type(url) == "string" and #url <= 2953 then
+        -- Native QR encoding must preserve the complete official payment URL.
+        ok, qr = pcall(QRWidget.new, QRWidget, { text = url, width = W.dp(412), height = W.dp(412), scale_factor = 1 })
+    end
+    if ok and qr.image and qr.image:getWidth() > 0 then
+        return centered(box(qr, W.dp(460), W.dp(460), W.dp(2)), width, W.dp(460))
+    end
+    return W.text(T("The payment code could not be displayed. Keep this order and check its result; no replacement order will be created automatically."),
+        width, face(19), { align = "center", muted = true, line_height = 1.6 })
+end
 function Screens:_rechargeCloseButton(state)
     return { text = T("Close"), is_enter_default = true, callback = function() self:_rechargeDismiss(state) end }
 end
@@ -283,33 +321,84 @@ end
 function Screens:_rechargeAmountsView(state)
     if not self:_rechargeCurrent(state) or not state.config then return end
     state.phase = "amounts"
-    local rules, buttons = customRules(state.config), {}
+    local rules = customRules(state.config)
     local pages = math.max(1, math.ceil(#state.options / 6))
     state.options_page = math.max(1, math.min(state.options_page or 1, pages))
-    for index = (state.options_page - 1) * 6 + 1, math.min(state.options_page * 6, #state.options) do
+    if not state.amount_input and state.options[1] then
+        state.amount_input, state.option = yuan(state.options[1].amount_cents), state.options[1]
+    end
+    local wallet, width, rows, layout = self.controller:getWallet() or {}, self.width, { space(12) }, {}
+    local receiving = string.format(T("Receiving account: %s"), state.account_name)
+    local balance = string.format(T("Current %s manga coins"), tostring(wallet.remain_gold or "—"))
+    rows[#rows + 1] = box(W.row{
+        W.text(receiving, math.floor(width * 0.68), face(21)),
+        W.text(balance, width - math.floor(width * 0.68), face(19), { align = "right", bold = true }),
+    }, width, W.dp(88))
+    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0x11))
+    rows[#rows + 1] = space(28)
+    local fetched = timeLabel(state.config.fetched_at)
+    rows[#rows + 1] = W.row{
+        W.text(T("Choose recharge amount"), math.floor(width * 0.40), face(24), { bold = true }),
+        W.text(fetched and string.format(T("Official amounts · Fetched %s"), fetched) or T("Official amounts"),
+            width - math.floor(width * 0.40), face(17), { muted = true, align = "right" }),
+    }
+    rows[#rows + 1] = space(22)
+    local tile_width = math.floor((width - W.dp(36)) / 3)
+    local grid, focus = {}, {}
+    local first, last = (state.options_page - 1) * 6 + 1, math.min(state.options_page * 6, #state.options)
+    for index = first, last do
         local option = state.options[index]
-        if (index - 1) % 2 == 0 then buttons[#buttons + 1] = {} end
-        local row = buttons[#buttons]
-        row[#row + 1] = { text = string.format(T("CNY %s"), yuan(option.amount_cents)), callback = function()
-            self:_rechargeReviewAmount(state, yuan(option.amount_cents), option)
-        end }
-    end
-    if pages > 1 then
-        buttons[#buttons + 1] = {
-            { text = T("Previous"), enabled = state.options_page > 1, callback = function() state.options_page = state.options_page - 1; self:_rechargeAmountsView(state) end },
-            { text = string.format("%d / %d", state.options_page, pages), enabled = false },
-            { text = T("Next"), enabled = state.options_page < pages, callback = function() state.options_page = state.options_page + 1; self:_rechargeAmountsView(state) end },
+        local selected = state.amount_input == yuan(option.amount_cents)
+        if #focus == 3 then
+            rows[#rows + 1], layout[#layout + 1] = W.row(grid), focus
+            rows[#rows + 1], grid, focus = space(18), {}, {}
+        end
+        if #grid > 0 then grid[#grid + 1] = W.gap(W.dp(18)) end
+        local color, background = selected and W.paper or BB.Color8(0x11), selected and BB.Color8(0x11) or W.paper
+        local tile_rows = {
+            W.text(option.coin_amount ~= nil and text(option.coin_amount, 40) or T("Official amount"), tile_width - W.dp(24),
+                face(option.coin_amount ~= nil and 36 or 25), { bold = true, color = color, background = background, align = "center" }),
+            space(5),
         }
+        if option.coin_amount ~= nil then tile_rows[#tile_rows + 1] = W.text(T("Manga coins"), tile_width - W.dp(24), face(17), { color = color, background = background, align = "center" }) end
+        tile_rows[#tile_rows + 1], tile_rows[#tile_rows + 2] = space(12),
+            W.text(string.format(T("CNY %s"), yuan(option.amount_cents)), tile_width - W.dp(24), face(22), { color = color, background = background, align = "center" })
+        local tile = AmountTile:new{
+            content = box(W.column(tile_rows), tile_width, W.dp(150), W.dp(1.5), selected and BB.Color8(0x11) or W.paper),
+            width = tile_width, selected = selected, callback = function()
+                if not self:_rechargeCurrent(state) or state.phase ~= "amounts" then return end
+                state.amount_input, state.option = yuan(option.amount_cents), option
+                self:_rechargeAmountsView(state)
+            end,
+        }
+        grid[#grid + 1], focus[#focus + 1] = tile, tile
     end
-    buttons[#buttons + 1] = { { text = rules and T("Enter an amount") or T("Enter amount (official options)"), callback = function() self:_rechargeInputAmount(state) end } }
-    buttons[#buttons + 1] = { self:_rechargeCloseButton(state) }
-    local paragraphs = { string.format(T("Receiving account: %s"), state.account_name),
-        rules and string.format(T("Custom amount allowed: CNY %s to %s."), yuan(rules.min_cents), yuan(rules.max_cents))
-            or T("The server has not enabled arbitrary amounts. Typed amounts must match an official option.") }
-    if type(state.config.notice) == "string" and state.config.notice ~= "" then paragraphs[#paragraphs + 1] = text(state.config.notice, 180) end
-    self:_rechargeDialog(state, T("Choose recharge amount"), paragraphs, buttons)
+    if #grid > 0 then rows[#rows + 1], layout[#layout + 1] = W.row(grid), focus end
+    if pages > 1 then
+        rows[#rows + 1] = space(16)
+        local previous = W.button("‹", W.dp(80), function() state.options_page = state.options_page - 1; self:_rechargeAmountsView(state) end,
+            { enabled = state.options_page > 1, borderless = true, height_px = W.dp(52), size = face(30) })
+        local next_page = W.button("›", W.dp(80), function() state.options_page = state.options_page + 1; self:_rechargeAmountsView(state) end,
+            { enabled = state.options_page < pages, borderless = true, height_px = W.dp(52), size = face(30) })
+        rows[#rows + 1] = centered(W.row{ previous, W.text(string.format("%d / %d", state.options_page, pages), W.dp(80), face(20), { align = "center" }), next_page }, width, W.dp(52))
+        layout[#layout + 1] = { previous, next_page }
+    end
+    rows[#rows + 1] = space(22)
+    local input = W.button((rules and T("Enter another amount") or T("Enter another amount · Must match an official option")) .. " ›", width,
+        function() self:_rechargeInputAmount(state) end, { borderless = true, align = "left", size = face(21), height_px = W.dp(78) })
+    rows[#rows + 1], layout[#layout + 1] = input, { input }
+    local notes = rules and string.format(T("Custom amount allowed: CNY %s to %s."), yuan(rules.min_cents), yuan(rules.max_cents))
+        or T("The server has not enabled arbitrary amounts. Typed amounts must match an official option.")
+    if type(state.config.notice) == "string" and state.config.notice ~= "" then notes = notes .. "\n" .. text(state.config.notice, 180) end
+    rows[#rows + 1] = W.text(notes, width, face(17), { muted = true, line_height = 1.8 })
+    local summary = state.amount_input and string.format(T("CNY %s"), state.amount_input) or T("Choose recharge amount")
+    if state.option and state.option.coin_amount ~= nil then summary = summary .. " · " .. string.format(T("%s manga coins"), text(state.option.coin_amount, 40)) end
+    self:_rechargeDialog(state, T("Recharge manga coins"), { receiving, balance, notes }, { {
+        { text = summary, borderless = true, font_bold = true },
+        { text = T("Next: review amount"), width = W.dp(340), primary = true, enabled = state.amount_input ~= nil,
+            callback = function() self:_rechargeReviewAmount(state, state.amount_input, state.option) end },
+    } }, { body = W.column(rows), layout = layout, selected = { x = 1, y = 1 } })
 end
-
 function Screens:_rechargeValidateAmount(state, input)
     local cents, normalized = decimalInput(input)
     if not cents then return nil, nil, T("Enter a positive yuan amount with no more than two decimal places.") end
@@ -352,23 +441,44 @@ function Screens:_rechargeReviewAmount(state, input, option)
     local normalized, selected, error = self:_rechargeValidateAmount(state, input)
     if not normalized then self:_rechargeInputAmount(state, input, error); return end
     state.phase, state.amount_input, state.option = "confirm", normalized, selected or option
-    local paragraphs = { string.format(T("Receiving account: %s"), state.account_name),
-        { text = string.format(T("Recharge amount: CNY %s"), normalized), size = font.title, bold = true } }
+    local width, wallet = self.width, self.controller:getWallet() or {}
+    local amount_label = string.format(T("Recharge amount: CNY %s"), normalized)
+    local official = string.format(T("CNY %s"), normalized)
+    if state.option and state.option.coin_amount ~= nil then official = official .. " · " .. string.format(T("%s manga coins"), text(state.option.coin_amount, 40)) end
+    local rows = {
+        space(60), W.text(T("Recharge amount"), width, face(18), { muted = true, align = "center" }),
+        space(12), W.text(string.format(T("CNY %s"), normalized), width, face(68), { bold = true, align = "center" }),
+    }
     if state.option and state.option.coin_amount ~= nil then
-        paragraphs[#paragraphs + 1] = string.format(T("Official option shows %s manga coins."), text(state.option.coin_amount, 40))
+        rows[#rows + 1], rows[#rows + 2] = space(18), W.text(string.format(T("Credit %s manga coins"), text(state.option.coin_amount, 40)),
+            width, face(21), { align = "center" })
     end
-    for offer_index, key in ipairs({ "first_text", "activity_text" }) do
-        local value = state.option and state.option[key] or state.config[key]
-        if type(value) == "string" and value ~= "" then paragraphs[#paragraphs + 1] = text(value, 180) end
+    rows[#rows + 1], rows[#rows + 2] = space(46), W.rule1dp(width, BB.Color8(0x11))
+    rows[#rows + 1] = keyValue(T("Receiving account"), state.account_name, width)
+    rows[#rows + 1] = keyValue(T("Official option"), official, width)
+    rows[#rows + 1] = keyValue(T("Payment method"), T("Scan with WeChat or Alipay on your phone"), width)
+    rows[#rows + 1] = keyValue(T("Current balance"), string.format(T("%s manga coins"), tostring(wallet.remain_gold or "—")), width)
+    rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
+    local body_rows = { { widget = W.column(rows) } }
+    local paragraphs = { string.format(T("Receiving account: %s"), state.account_name), amount_label }
+    if state.option and state.option.coin_amount ~= nil then paragraphs[#paragraphs + 1] = string.format(T("Official option shows %s manga coins."), text(state.option.coin_amount, 40)) end
+    for _, field in ipairs({ "first_text", "activity_text" }) do
+        local value = state.option and state.option[field] or state.config[field]
+        if type(value) == "string" and value ~= "" then
+            local offer = text(value, 180)
+            paragraphs[#paragraphs + 1] = offer
+            body_rows[#body_rows + 1] = { widget = W.column{ space(22), W.text(offer, width, face(17), { muted = true, line_height = 1.8 }) } }
+        end
     end
-    paragraphs[#paragraphs + 1] = T("Create one official payment QR code, then choose WeChat or Alipay on your phone to complete payment.")
-    paragraphs[#paragraphs + 1] = T("Creating a code does not confirm payment or credit. The next screen checks the matching order record.")
+    local notice = T("Creating a code generates one official payment order. Closing does not undo it; the result remains in Recharge orders.")
+    local safeguard = T("Creating a code does not confirm payment or credit. The next screen checks the matching order record.")
+    paragraphs[#paragraphs + 1], paragraphs[#paragraphs + 2] = notice, safeguard
+    body_rows[#body_rows + 1] = { widget = W.column{ space(26), W.text(notice .. "\n" .. safeguard, width, face(17), { muted = true, line_height = 1.8 }) } }
     self:_rechargeDialog(state, T("Review recharge"), paragraphs, { {
-        { text = T("Cancel"), is_enter_default = true, callback = function() self:_rechargeAmountsView(state) end },
-        { text = T("Create payment QR"), callback = function() self:_rechargeCreate(state) end },
-    } }, { selected = { x = 1, y = 1 } })
+        { text = T("Back to edit"), width = W.dp(220), is_enter_default = true, callback = function() self:_rechargeAmountsView(state) end },
+        { text = T("Create payment QR"), primary = true, callback = function() self:_rechargeCreate(state) end },
+    } }, { body_rows = body_rows, body_padding_px = 0, selected = { x = 1, y = 1 } })
 end
-
 function Screens:_rechargeCreate(state)
     if not self:_rechargeCurrent(state) or not self:_rechargeVisible(state) or state.phase ~= "confirm"
         or state.inflight or state.submitted or not state.config then return end
@@ -429,50 +539,104 @@ function Screens:_rechargeOrderView(state)
     local code_allowed = (phase == "pending" or phase == "unknown") and order.qr_validated == true
         and type(order.code_url) == "string" and order.code_url ~= ""
         and type(order.order_id) == "string" and order.order_id ~= "" and integer(order.amount_cents) and order.amount_cents > 0
+    local wallet = self.controller:getWallet() or {}
     local key = table.concat({ tostring(orderId(order)), phase, tostring(order.order_id), tostring(order.amount_cents),
-        tostring(order.code_url), tostring(order.qr_validated), tostring(order.expires_at), tostring(state.poll_error), tostring(state.manual_check) }, "|")
+        tostring(order.code_url), tostring(order.qr_validated), tostring(order.expires_at), tostring(state.poll_error),
+        tostring(state.manual_check), tostring(wallet.updated_at) }, "|")
     if state.display_key == key and state.dialog and self.dialog == state.dialog then return end
     if state.dialog and not self:_rechargeVisible(state) then return end
     state.display_key = key
+    local reference = type(order.order_id) == "string" and order.order_id ~= "" and order.order_id or text(orderId(order), 80)
     local paragraphs = {
         string.format(T("Receiving account: %s"), state.account_name),
-        { text = string.format(T("Recharge amount: CNY %s"), yuan(order.amount_cents)), size = font.title, bold = true },
+        { text = string.format(T("Recharge amount: CNY %s"), yuan(order.amount_cents)), size = face(30), bold = true },
         type(order.order_id) == "string" and order.order_id ~= "" and string.format(T("Order: %s"), order.order_id)
             or string.format(T("Local record: %s"), text(orderId(order), 80)),
     }
-    local actions = {}
+    local width, rows, actions, heading = self.width, {}, {}, stateLabel(order)
+    local snapshot = order.metadata and order.metadata.config_snapshot or {}
+    local option = type(snapshot.option) == "table" and snapshot.option or nil
+    local coins = option and option.coin_amount
+    local amount = string.format(T("CNY %s"), yuan(order.amount_cents))
+    if coins ~= nil then amount = amount .. " · " .. string.format(T("%s manga coins"), text(coins, 40)) end
     if phase == "credited" then
+        heading = T("Recharge result")
+        rows = { space(72), centered(box(W.text("✓", W.dp(80), face(50), { color = W.paper, background = BB.Color8(0x11), bold = true, align = "center" }),
+            W.dp(88), W.dp(88), 0, BB.Color8(0x11)), width, W.dp(88)), space(28),
+            W.text(T("Recharge credited"), width, face(36), { bold = true, align = "center" }), space(16) }
+        local credited = order.history_evidence and order.history_evidence.product_amount
+        if integer(credited) then
+            rows[#rows + 1] = W.text(string.format(T("+%s manga coins"), tostring(credited)), width, face(48), { bold = true, align = "center" })
+        else
+            rows[#rows + 1] = W.text(T("Credit confirmed for this order"), width, face(24), { align = "center" })
+        end
+        rows[#rows + 1] = space(16)
+        local updated_balance = wallet.updated_at and order.credited_observed_at and wallet.updated_at >= order.credited_observed_at and not wallet.stale
+        rows[#rows + 1] = W.text(updated_balance and string.format(T("Current balance %s manga coins"), tostring(wallet.remain_gold or "—"))
+            or T("Balance is refreshing; return to Account to check it."), width, face(20), { align = "center" })
+        rows[#rows + 1], rows[#rows + 2] = space(46), W.rule1dp(width, BB.Color8(0x11))
+        rows[#rows + 1] = keyValue(T("Order number"), reference, width)
+        rows[#rows + 1] = keyValue(T("Amount"), string.format(T("CNY %s"), yuan(order.amount_cents)), width)
+        rows[#rows + 1] = keyValue(T("Credit confirmed at"), timeLabel(order.credited_observed_at) or T("Unknown"), width)
+        rows[#rows + 1] = W.rule1dp(width, BB.Color8(0xCC))
         paragraphs[#paragraphs + 1] = T("Recharge credited. Return to Account to view your manga coin balance.")
-    elseif phase == "unsaved" then
-        paragraphs[#paragraphs + 1] = T("The local order record could not be saved. Restore writable storage and check this order again. This view cannot show a completed receipt yet.")
-    elseif phase == "failed_not_submitted" then
-        paragraphs[#paragraphs + 1] = T("This request was not submitted as a payment order. Reload the official amounts before explicitly creating another order.")
-    elseif phase == "expired" then
-        paragraphs[#paragraphs + 1] = T("This payment code is no longer valid. If you already paid, check the same order for credit. A new order will not be created automatically.")
-    elseif phase == "creating" then
-        paragraphs[#paragraphs + 1] = T("Order creation is still being recorded. Do not send another request. Reopen Recharge orders to review the result.")
+        actions = {
+            { text = T("View recharge orders"), width = W.dp(260), callback = function() self:_rechargeOrdersView(state) end },
+            { text = T("Return to Account"), primary = true, callback = function() self:_rechargeClose(); self:showAccount() end },
+        }
     elseif code_allowed then
-        paragraphs[#paragraphs + 1] = T("Scan the official code with WeChat or Alipay.")
+        heading = T("Waiting for payment")
+        rows = { space(42), W.text(T("Awaiting payment confirmation"), width, face(30), { bold = true, align = "center" }),
+            space(10), W.text(T("Scan the official code with WeChat or Alipay."), width, face(19), { muted = true, align = "center" }),
+            space(40), self:_rechargeQR(order.code_url, width), space(32),
+            W.text(amount, width, face(30), { bold = true, align = "center" }), space(10),
+            W.text(string.format(T("Order: %s"), reference) .. " · " .. string.format(T("Receiving account: %s"), state.account_name),
+                width, face(17), { muted = true, align = "center" }), space(6),
+        }
         local expiry = timeLabel(order.expires_at)
-        paragraphs[#paragraphs + 1] = { text = expiry and string.format(T("Valid until: %s"), expiry)
-            or T("Payment code expiry follows the payment page on your phone."), size = font.micro }
+        local expiry_text = expiry and string.format(T("Valid until: %s"), expiry) or T("Payment code expiry follows the payment page on your phone.")
+        rows[#rows + 1] = W.text(expiry_text, width, face(16), { muted = true, align = "center" })
+        paragraphs[#paragraphs + 1], paragraphs[#paragraphs + 2] = T("Scan the official code with WeChat or Alipay."), expiry_text
     else
-        paragraphs[#paragraphs + 1] = T("This order has no usable payment code. Check its result or reopen it from Recharge orders.")
+        local notice = phase == "unsaved" and T("The local order record could not be saved. Restore writable storage and check this order again. This view cannot show a completed receipt yet.")
+            or phase == "failed_not_submitted" and T("This request was not submitted as a payment order. Reload the official amounts before explicitly creating another order.")
+            or phase == "expired" and T("This payment code is no longer valid. If you already paid, check the same order for credit. A new order will not be created automatically.")
+            or phase == "creating" and T("Order creation is still being recorded. Do not send another request. Reopen Recharge orders to review the result.")
+            or T("This order has no usable payment code. Check its result or reopen it from Recharge orders.")
+        paragraphs[#paragraphs + 1] = notice
+        rows = { space(80), W.text(stateLabel(order), width, face(34), { bold = true, align = "center" }),
+            space(24), W.text(amount, width, face(30), { bold = true, align = "center" }), space(28),
+            W.text(notice, width, face(20), { muted = true, align = "center", line_height = 1.7 }),
+            space(44), keyValue(T("Receiving account"), state.account_name, width), keyValue(T("Order number"), reference, width),
+        }
     end
     if state.poll_error and phase ~= "credited" and phase ~= "failed_not_submitted" then
-        paragraphs[#paragraphs + 1] = { text = T("The latest check could not confirm credit. The order is still unresolved."), size = font.meta }
+        local error_text = T("The latest check could not confirm credit. The order is still unresolved.")
+        paragraphs[#paragraphs + 1] = error_text
+        rows[#rows + 1], rows[#rows + 2] = space(20), W.text(error_text, width, face(18), { muted = true, align = "center" })
     end
-    if phase ~= "credited" and phase ~= "failed_not_submitted" and phase ~= "creating" then
-        actions[#actions + 1] = { text = state.inflight and T("Checking credit…") or T("Check credit"), enabled = not state.inflight,
-            callback = function() self:_rechargePoll(state, true) end }
+    if phase ~= "credited" then
+        if phase ~= "failed_not_submitted" and phase ~= "creating" then
+            actions[#actions + 1] = { text = state.inflight and T("Checking credit…") or T("Check credit"), primary = true,
+                enabled = not state.inflight, callback = function() self:_rechargePoll(state, true) end }
+        end
+        local close = self:_rechargeCloseButton(state)
+        close.width = #actions > 0 and W.dp(240) or nil
+        actions[#actions + 1] = close
+        local closing = T("Closing stops automatic checks; the order is not canceled.")
+        paragraphs[#paragraphs + 1] = { text = closing, size = face(16) }
+        local note = W.text(closing, width, face(16), { muted = true, align = "center" })
+        local body_height = Device.screen:getHeight() - W.dp(224)
+        local measured_rows = {}
+        for index, row in ipairs(rows) do measured_rows[index] = row end
+        local content_height = W.column(measured_rows):getSize().h
+        rows[#rows + 1] = W.spacePixels(math.max(W.dp(16), body_height - content_height - note:getSize().h - W.dp(16)))
+        rows[#rows + 1], rows[#rows + 2] = note, space(16)
     end
-    paragraphs[#paragraphs + 1] = { text = T("Closing stops automatic checks; the order is not canceled."), size = font.micro }
-    actions[#actions + 1] = self:_rechargeCloseButton(state)
-    self:_rechargeDialog(state, stateLabel(order), paragraphs, { actions }, {
-        qr_url = code_allowed and order.code_url or nil, selected = { x = #actions, y = 1 },
+    self:_rechargeDialog(state, heading, paragraphs, { actions }, {
+        body = W.column(rows), selected = { x = #actions, y = 1 },
     })
 end
-
 function Screens:_rechargeSchedule(state)
     if not self:_rechargeCurrent(state) or not state.order or state.phase ~= "order" then return end
     local phase = effectiveState(state.order)

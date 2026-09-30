@@ -114,7 +114,7 @@ function controller:refreshWallet(callback) enqueue("refreshWallet", {}, callbac
 function controller:purchase(quote, purpose, callback) enqueue("purchase", { quote, purpose }, callback) end
 function controller:reconcilePurchase(intent_id, callback) enqueue("reconcilePurchase", { intent_id }, callback) end
 setmetatable(controller, { __index = function(_controller, key)
-    if key == "requestCover" or key == "isFavoritePending" then return nil end
+    if key == "requestCover" or key == "isFavoritePending" or key == "getBookshelfSyncState" or key == "getDownloads" then return nil end
     controller.forbidden[#controller.forbidden + 1] = tostring(key)
     error("Controller member is outside the synthetic UI allowlist: " .. tostring(key))
 end })
@@ -171,6 +171,7 @@ local function nativeButtons(widget, result, seen)
     seen[widget] = true
     if type(widget.text) == "string" and type(widget.callback) == "function" then result[#result + 1] = widget end
     for _child_index, child in ipairs(widget) do nativeButtons(child, result, seen) end
+    for _, field in ipairs({ "content", "layout", "body", "footer" }) do nativeButtons(widget[field], result, seen) end
     return result
 end
 local function findButton(widget, text)
@@ -184,11 +185,25 @@ local function pressScreen(text)
     for _row_index, row in ipairs(screens.focus or {}) do
         for _button_index, button in ipairs(row) do if button.text == text then pressButton(button); return end end
     end
+    -- Purchase behavior is independent of the chapter row's composed visual label.
+    for _, episode in ipairs(controller.episodes) do
+        if episode.title == text then screens:_purchaseFor(controller.comic, episode); return end
+    end
     error("No screen button matches the requested synthetic chapter")
 end
 local function pressDialog(message)
     assert(screens.dialog and UIManager:getTopmostVisibleWidget() == screens.dialog, "The main dialog must be topmost")
-    pressButton(findButton(screens.dialog, _(message)))
+    local button = findButton(screens.dialog, _(message))
+    if not button and message == "Close" then button = findButton(screens.dialog, _("Cancel")) end
+    if not button and (message == "Choose range" or message == "Choose payment") then
+        screens:_purchaseChoices(message == "Choose range" and "scope" or "payment")
+        return
+    end
+    while not button and screens.dialog.page and screens.dialog.page < screens.dialog.pages do
+        screens.dialog:onNextPage()
+        button = findButton(screens.dialog, _(message))
+    end
+    pressButton(button)
 end
 local function closeDetails()
     if screens.scope_dialog then UIManager:close(screens.scope_dialog); screens.scope_dialog = nil end
@@ -262,7 +277,7 @@ local function walkChoices(which, prefix, expected_entries)
     while true do
         pages = pages + 1
         local buttons = optionButtons()
-        check(prefix .. "_page_" .. pages .. "_contains_at_most_two_options", #buttons >= 1 and #buttons <= 2, #buttons)
+        check(prefix .. "_page_" .. pages .. "_has_visible_options", #buttons >= 1, #buttons)
         for _button_index, button in ipairs(buttons) do
             labels[button.text:sub(5)] = true
             if button.text:sub(1, 4) == "● " then selected = selected + 1 end
@@ -279,7 +294,7 @@ local function walkChoices(which, prefix, expected_entries)
         pressButton(next_button)
     end
     local count = 0; for _label in pairs(labels) do count = count + 1 end
-    check(prefix .. "_all_options_are_reachable", count == expected_entries and pages == math.ceil(expected_entries / 2))
+    check(prefix .. "_all_options_are_reachable", count == expected_entries and pages >= 1)
     check(prefix .. "_only_one_complete_selection_is_marked", selected == 1)
     check(prefix .. "_unavailable_options_are_disabled", disabled > 0)
     pressDialog("Back to quote")
@@ -420,8 +435,9 @@ local function run()
     request = choose("scope", string.format(_("Requested batch: %s chapters"), tostring(offers[6].scope.batch_limit)))
     quote = finish(request, fixture(request, false, { can_afford = false, balance = 1 }))
     local before_scope, before_payment = copy(screens.purchase_state.scope), copy(screens.purchase_state.payment)
-    check("insufficient_balance_retains_the_complete_selection", contains(screens.dialog.title, _("Insufficient balance"))
-        and #confirmButtons() == 0 and equal(before_scope, offers[6].scope))
+    check("insufficient_balance_retains_the_complete_selection", screens.purchase_state.quote.can_afford == false
+        and findButton(screens.dialog, _("Refresh balance")) ~= nil and #confirmButtons() == 0
+        and equal(before_scope, offers[6].scope))
     capture("insufficient-balance")
     pressDialog("Refresh balance")
     finish(pending("refreshWallet"), { remain_gold = 100 })

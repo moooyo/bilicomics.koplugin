@@ -13,6 +13,20 @@ function Budget.scope(path)
     return string.format("device:%.0f", device)
 end
 
+function Budget.summary(path)
+    local ok, summary = pcall(function()
+        local status = ffi.new("struct statvfs[1]")
+        if ffi.C.statvfs(path, status) ~= 0 then return nil end
+        local unit = tonumber(status[0].f_frsize)
+        local available = tonumber(status[0].f_bavail) * unit
+        local capacity = tonumber(status[0].f_blocks) * unit
+        if available < 0 or available >= math.huge or capacity <= 0 or capacity >= math.huge then return nil end
+        return { free_bytes = available, capacity_bytes = capacity }
+    end)
+    if not ok or not summary then return nil, Util.error("storage", "Available storage could not be determined.") end
+    return summary
+end
+
 function Budget.available(path)
     local ok, available = pcall(function()
         local status = ffi.new("struct statvfs[1]")
